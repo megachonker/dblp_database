@@ -1,17 +1,26 @@
 # Projet info 1
 
-extraire les structure principal du program & difficultée
-analise argument d'entrée
-gestion structure
-    ouverture DB
-        parsing
-            verifier si ces une lgne par balise (rassurant)
-        structure
-        export
-    Ouverture Bin
-        import structure
-Analise graph
-output
+##  analise argument d'entrée
+##  gestion structure
+### ouverture DB
+### parsing
+### structure
+-   maloc
+**structure BD**
+list des entrer
+ 
+### export
+##  Ouverture Bin
+### import structure
+##  Analise graph
+##  front end:
+### gestion des erreur
+### argument CLI:
+-   logique des arg
+### interface:
+-   cli graph ?
+-   color
+-   window?
 repartition task
 
 git:
@@ -34,14 +43,6 @@ make:
     test.c
         test de toute les fonction
 
-front end:
-    gestion des erreur
-    argument CLI:
-        logique des arg
-    interface:
-        cli graph ?
-        color
-        window?
 
 optimisation:
     parsing/structure minimal
