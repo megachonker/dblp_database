@@ -2,14 +2,49 @@
 
 ##  analise argument d'entrée
 ##  gestion structure
-### ouverture DB
-### parsing
-### structure
--   maloc
+## structure
+### champ garder
+-   title
+-   author
+### liste de tout les champ
+-  address
+-  article
+-  author
+-  book
+-  booktitle
+-  cdrom
+-  chapter
+-  cite
+-  crossref
+-  dblp
+-  !DOCTYPE
+-  editor
+-  ee
+-  incollection
+-  inproceedings
+-  isbn
+-  journal
+-  mastersthesis
+-  month
+-  note
+-  number
+-  pages
+-  phdthesis
+-  proceedings
+-  publisher
+-  publnr
+-  school
+-  series
+-  title
+-  url
+-  volume
+-  www
+-  ?xml
+-  year
 **structure BD**
 list des entrer
  
-### export
+## export
 ##  Ouverture Bin
 ### import structure
 ##  Analise graph
