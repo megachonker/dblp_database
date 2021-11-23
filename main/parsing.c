@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include "parsing.h"
+
 
 typedef struct minimal
 {
@@ -8,6 +10,13 @@ typedef struct minimal
     char ** liste_auteur;
     int nombre_auteur;
 }minimal;
+
+typedef struct tableaux_fiche
+{
+    minimal ** address;
+    int taille;
+}tableaux_fiche;
+
 
 
 void printM_titre(minimal OwO){
@@ -54,4 +63,18 @@ void appendAuteurM(char ** liste_auteur,int indice, char * nomsauteur){
         liste_auteur = addrListeauteur;
     }
     liste_auteur[indice] = nomsauteur;
+}
+
+void appendTabmeaux(tableaux_fiche * table, minimal * a_ajouter){
+    char ** addrListFiche = realloc(table,sizeof(tableaux_fiche)*(table->taille+1));
+ 
+    if (!addrListFiche)
+    {
+        fprintf(stderr,"appendTabmeaux: allocation imposible");
+    }else if (table != addrListFiche)
+    {
+        table = addrListFiche;
+    }
+    table[table->taille] = a_ajouter;
+    table->taille++;
 }
