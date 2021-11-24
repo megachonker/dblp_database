@@ -88,5 +88,5 @@ optimisation:
     on va lire 2 foit toute les structure pour l'écriture deu fichier
 
 
-
-renome les les fiche par article
+tableaux_fiche => tableaux d'article
+l'adresse ces l'artile
