@@ -1,8 +1,9 @@
 # Projet info 1
 
 ##  analise argument d'entrée
-##  gestion structure
+-   a faire dans un nouveaux programe
 ## structure
+-   bonne
 ### champ garder
 -   title
 -   author
@@ -84,3 +85,5 @@ optimisation:
     cache de recherche
     compilateur flag
     paralle test
+    on va lire 2 foit toute les structure pour l'écriture deu fichier
+
