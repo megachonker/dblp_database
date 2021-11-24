@@ -5,6 +5,7 @@ typedef struct minimal
 {
     char * titre;
     char ** liste_auteur;
+    //add une uid pour un auteur
     int nombre_auteur;
 }minimal;
 
@@ -14,6 +15,7 @@ typedef struct tableaux_fiche
     int taille;
 }tableaux_fiche;
 
+void parse(FILE * inputDB);
 
 char * getanchor(char * recherche, char * ligne);
 
