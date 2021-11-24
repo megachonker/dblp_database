@@ -15,10 +15,10 @@ if (!p)\
 
 
 
-void printM_titre(minimal OwO){
+void printM_titre(fiche_minimal OwO){
     printf("titre: %s\n",OwO.titre);
 }
-void printM_liste_auteur(minimal UwU){
+void printM_liste_auteur(fiche_minimal UwU){
     printf("auteurs: ");
     for (int i = 0; i < UwU.nombre_auteur; i++)
     {
@@ -29,7 +29,7 @@ void printM_liste_auteur(minimal UwU){
     printf(".\n");
 }
 
-void printM(minimal OwU){
+void printM(fiche_minimal OwU){
     printM_titre(OwU);
     printM_liste_auteur(OwU);   
 }
@@ -38,7 +38,7 @@ void printTabmeaux(tableaux_fiche UwO){
 
     for (int i = 0; i < UwO.taille; i++)
     {
-        printM(*(UwO.address[i]));
+        printM(*(UwO.fiche[i]));
     }
 }
 
@@ -64,8 +64,8 @@ char * getanchor(char * recherche, char * ligne){
     return NULL;
 }
 
-void appendAuteurM(minimal * mafiche,char * nomsauteur){
-    void * addrListeauteur = realloc(mafiche->liste_auteur,sizeof(minimal)*(mafiche->nombre_auteur+1));
+void appendAuteurM(fiche_minimal * mafiche,char * nomsauteur){
+    void * addrListeauteur = realloc(mafiche->liste_auteur,sizeof(fiche_minimal)*(mafiche->nombre_auteur+1));
  
     if (!addrListeauteur)
     {
@@ -78,9 +78,9 @@ void appendAuteurM(minimal * mafiche,char * nomsauteur){
     mafiche->nombre_auteur++;
 }
 
-void appendTabmeaux(tableaux_fiche * table, minimal * a_ajouter){
+void appendTabmeaux(tableaux_fiche * table, fiche_minimal * a_ajouter){
 
-    void * addrListFiche = realloc(table->address,sizeof(tableaux_fiche)*(table->taille+1));
+    void * addrListFiche = realloc(table->fiche,sizeof(tableaux_fiche)*(table->taille+1));
  
     if (!addrListFiche)
     {
@@ -88,9 +88,9 @@ void appendTabmeaux(tableaux_fiche * table, minimal * a_ajouter){
         exit(1);
     }else if (table != addrListFiche)
     {
-        table->address = addrListFiche;
+        table->fiche = addrListFiche;
     }
-    table->address[table->taille] = a_ajouter;
+    table->fiche[table->taille] = a_ajouter;
     table->taille++;   
 }
 
@@ -98,11 +98,11 @@ tableaux_fiche  parse(FILE * inputDB){
 
     char ligne[BALISESIZE];
     int indice_struct = 0;
-    minimal * fichelocalM = calloc(1,sizeof(minimal));
+    fiche_minimal * fichelocalM = calloc(1,sizeof(fiche_minimal));
     fichelocalM->nombre_auteur = 0;
     tableaux_fiche tableaux_allfiche;
     tableaux_allfiche.taille = 0;
-    tableaux_allfiche.address = NULL;
+    tableaux_allfiche.fiche = NULL;
 
     while (fgets(ligne,BALISESIZE,inputDB))
     {
@@ -130,7 +130,7 @@ tableaux_fiche  parse(FILE * inputDB){
             // printM_titre(*fichelocalM);
             // printM_liste_auteur(*fichelocalM);
             appendTabmeaux(&tableaux_allfiche,fichelocalM);
-            fichelocalM = calloc(1,sizeof(minimal));
+            fichelocalM = calloc(1,sizeof(fiche_minimal));
             exitIfNull(fichelocalM, "new calloc null")
             fichelocalM->nombre_auteur = 0;
         }
@@ -140,3 +140,14 @@ tableaux_fiche  parse(FILE * inputDB){
     // printTabmeaux(tableaux_allfiche);
     return tableaux_allfiche;
 }
+
+
+// void serialize(tableaux_fiche mastertab){
+//     for (int i = 0; i < mastertab.taille; i++)
+//     {
+//         for (size_t i = 0; i < count; i++)
+//         {
+//             /* code */
+//         }       
+//     }
+// }

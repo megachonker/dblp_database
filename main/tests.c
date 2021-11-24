@@ -12,7 +12,16 @@ int main()
     {
         fprintf(stderr,"imposible d'ouvrire le fichier");
     }
-    printTabmeaux(parse(inputDB));
+    // printTabmeaux(parse(inputDB));
+
+    tableaux_fiche tableaux_fiche = parse(inputDB);
+
+    for (int i = 0; i < tableaux_fiche.taille; i++)
+    {
+            printM((*(tableaux_fiche.fiche[i])));
+
+    }
+    
 
     return 0;
 }
