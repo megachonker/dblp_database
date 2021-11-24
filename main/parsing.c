@@ -36,7 +36,7 @@ void printM(minimal OwU){
 
 void printTabmeaux(tableaux_fiche UwO){
 
-    for (size_t i = 0; i < UwO.taille; i++)
+    for (int i = 0; i < UwO.taille; i++)
     {
         printM(*(UwO.address[i]));
     }
@@ -94,7 +94,7 @@ void appendTabmeaux(tableaux_fiche * table, minimal * a_ajouter){
     table->taille++;   
 }
 
-void parse(FILE * inputDB){
+tableaux_fiche  parse(FILE * inputDB){
 
     char ligne[BALISESIZE];
     int indice_struct = 0;
@@ -130,13 +130,13 @@ void parse(FILE * inputDB){
             // printM_titre(*fichelocalM);
             // printM_liste_auteur(*fichelocalM);
             appendTabmeaux(&tableaux_allfiche,fichelocalM);
-            fichelocalM = calloc(1,sizeof(minimal));;
+            fichelocalM = calloc(1,sizeof(minimal));
             exitIfNull(fichelocalM, "new calloc null")
             fichelocalM->nombre_auteur = 0;
         }
         
         indice_struct++;
     }
-    printTabmeaux(tableaux_allfiche);
-
+    // printTabmeaux(tableaux_allfiche);
+    return tableaux_allfiche;
 }

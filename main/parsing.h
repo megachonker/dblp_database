@@ -15,7 +15,7 @@ typedef struct tableaux_fiche
     int taille;
 }tableaux_fiche;
 
-void parse(FILE * inputDB);
+tableaux_fiche  parse(FILE * inputDB);
 
 char * getanchor(char * recherche, char * ligne);
 
@@ -25,5 +25,8 @@ void appendTabmeaux(tableaux_fiche * table, minimal * a_ajouter);
 
 void printM_titre(minimal OwO);
 void printM_liste_auteur(minimal UwU);
+void printM(minimal UwO);
+void printTabmeaux(tableaux_fiche OwU);
+
 
 #endif
