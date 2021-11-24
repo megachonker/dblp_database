@@ -17,7 +17,8 @@ typedef struct tableaux_fiche
 
 char * getanchor(char * recherche, char * ligne);
 
-void appendAuteurM(char ** liste_auteur,int indice, char * nomsauteur);
+
+void appendAuteurM(minimal * mafiche,char * nomsauteur);
 void appendTabmeaux(tableaux_fiche * table, minimal * a_ajouter);
 
 void printM_titre(minimal OwO);

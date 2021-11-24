@@ -7,7 +7,7 @@
 #define exitIfNull(p,msg)\
 if (!p)\
 {\
-    fprintf(stderr,msg)\
+    fprintf(stderr,msg);\
 }\
 
 
@@ -32,11 +32,11 @@ void printM_liste_auteur(minimal UwU){
     printf("auteurs: ");
     for (int i = 0; i < UwU.nombre_auteur; i++)
     {
-        printf("%s ",UwU.liste_auteur[i]);
+        printf("%s",UwU.liste_auteur[i]);
         if (i+1<UwU.nombre_auteur)
-            printf(",");
+            printf(", ");
     }
-    printf("\n");
+    printf(".\n");
 }
 
 
@@ -44,7 +44,9 @@ char * getanchor(char * recherche, char * ligne){
     char critaire[20] = "<";
     strcat(critaire,recherche);
     if(strstr(ligne,critaire)){ //slow ?
-        char * start = strchr(ligne,'>') +1;
+        char * start = strchr(ligne,'>');
+        exitIfNull(start,"getanchor: pas de start")
+        start++;
         int diff = strcspn(start,"<");
         char * out  = calloc(1,diff);
         if (!out)
@@ -58,17 +60,19 @@ char * getanchor(char * recherche, char * ligne){
     return NULL;
 }
 
-void appendAuteurM(char ** liste_auteur,int indice, char * nomsauteur){
-    char ** addrListeauteur = realloc(liste_auteur,sizeof(minimal)*(indice+1));
+void appendAuteurM(minimal * mafiche,char * nomsauteur){
+    // char ** liste_auteur,int indice, char * nomsauteur){
+    void * addrListeauteur = realloc(mafiche->liste_auteur,sizeof(minimal)*(mafiche->nombre_auteur+1));
  
     if (!addrListeauteur)
     {
         fprintf(stderr,"appendAuteurM: allocation imposible");
-    }else if (liste_auteur != addrListeauteur)
+    }else if (mafiche->liste_auteur != addrListeauteur)
     {
-        liste_auteur = addrListeauteur;
+        mafiche->liste_auteur = addrListeauteur;
     }
-    liste_auteur[indice] = nomsauteur;
+    mafiche->liste_auteur[mafiche->nombre_auteur] = nomsauteur;
+    mafiche->nombre_auteur++;
 }
 
 void appendTabmeaux(tableaux_fiche * table, minimal * a_ajouter){

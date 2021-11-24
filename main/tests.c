@@ -2,11 +2,20 @@
 #include <stdlib.h>
 #include "parsing.h"
 
+#define BALISESIZE 200
 
 
 //int argc, char const *argv[]
 int main()
 {
+
+
+
+    // char ligne[10000] = "<title bibtex=Deciding the {V}apnik-{\v{C}}ervonenkis Dimension is {$\\Sigma^{\text{p}}_3$}-Complete>Deciding the Vapnik-&#268;ervonenkis Dimension in &#8721;<sup>p</sup><sub>3</sub>-Complete.</title>";
+
+    
+    // printf("%s",getanchor("title",ligne));
+    
     FILE * inputDB = fopen("./DATA/dblp.xml","r");
     if (!inputDB)
     {
@@ -15,15 +24,16 @@ int main()
     
 
 
-    char ligne[100];
+    char ligne[BALISESIZE];
     int indice_struct = 0;
     // printf("auteur:");
     minimal * fichelocalM = calloc(1,sizeof(minimal));
+    fichelocalM->nombre_auteur = 0;
     // tableaux_fiche tableaux_allfiche = calloc(1,sizeof(tableaux_fiche));
     tableaux_fiche tableaux_allfiche;
 
     
-    while (fgets(ligne,100,inputDB))
+    while (fgets(ligne,BALISESIZE,inputDB))
     {
         int flagt = 0;
 
@@ -37,7 +47,7 @@ int main()
         if (tmpauteur)
         {
             // printf(" %s,",tmpauteur);
-            appendAuteurM(fichelocalM->liste_auteur,indice_struct,tmpauteur);
+            appendAuteurM(fichelocalM,tmpauteur);
         }else{
             fichelocalM->titre = getanchor("title",ligne);
             if (fichelocalM->titre)
@@ -58,7 +68,7 @@ int main()
         }
         
         indice_struct++;
-        fgets(ligne,100,inputDB);
+        fgets(ligne,BALISESIZE,inputDB);
     }
 
     return 0;
