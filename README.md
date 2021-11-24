@@ -88,5 +88,4 @@ optimisation:
     on va lire 2 foit toute les structure pour l'écriture deu fichier
 
 
-tableaux_fiche => tableaux d'article
-l'adresse ces l'artile
+l'adresse => fiche
