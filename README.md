@@ -86,3 +86,7 @@ optimisation:
     compilateur flag
     paralle test
     on va lire 2 foit toute les structure pour l'écriture deu fichier
+
+
+
+renome les les fiche par article
