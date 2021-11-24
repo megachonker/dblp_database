@@ -89,3 +89,4 @@ optimisation:
 
 
 l'adresse => fiche
+minimal => fiche_minimal
