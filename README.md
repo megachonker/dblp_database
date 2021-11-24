@@ -87,6 +87,3 @@ optimisation:
     paralle test
     on va lire 2 foit toute les structure pour l'écriture deu fichier
 
-
-l'adresse => fiche
-minimal => fiche_minimal
