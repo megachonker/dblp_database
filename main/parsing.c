@@ -4,19 +4,25 @@
 #include "parsing.h"
 
 
-typedef struct minimal
-{
-    char * titre;
-    char ** liste_auteur;
-    int nombre_auteur;
-}minimal;
+#define exitIfNull(p,msg)\
+if (!p)\
+{\
+    fprintf(stderr,msg)\
+}\
 
-typedef struct tableaux_fiche
-{
-    minimal ** address;
-    int taille;
-}tableaux_fiche;
 
+// typedef struct minimal
+// {
+//     char * titre;
+//     char ** liste_auteur;
+//     int nombre_auteur;
+// }minimal;
+
+// typedef struct tableaux_fiche
+// {
+//     minimal ** address;
+//     int taille;
+// }tableaux_fiche;
 
 
 void printM_titre(minimal OwO){
@@ -24,7 +30,7 @@ void printM_titre(minimal OwO){
 }
 void printM_liste_auteur(minimal UwU){
     printf("auteurs: ");
-    for (size_t i = 0; i < UwU.nombre_auteur; i++)
+    for (int i = 0; i < UwU.nombre_auteur; i++)
     {
         printf("%s ",UwU.liste_auteur[i]);
         if (i+1<UwU.nombre_auteur)
@@ -66,15 +72,18 @@ void appendAuteurM(char ** liste_auteur,int indice, char * nomsauteur){
 }
 
 void appendTabmeaux(tableaux_fiche * table, minimal * a_ajouter){
-    char ** addrListFiche = realloc(table,sizeof(tableaux_fiche)*(table->taille+1));
+    // *table->address;
+    // table->address;
+    void * addrListFiche = realloc(table->address,sizeof(tableaux_fiche)*(table->taille+1));
  
     if (!addrListFiche)
     {
         fprintf(stderr,"appendTabmeaux: allocation imposible");
     }else if (table != addrListFiche)
     {
-        table = addrListFiche;
+        table->address = addrListFiche;
     }
-    table[table->taille] = a_ajouter;
+    table->address[table->taille] = a_ajouter;
     table->taille++;
+    
 }
