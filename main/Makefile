@@ -8,6 +8,9 @@ go:	tests
 tests:	tests.o parsing.o
 	$(CC) -o tests  $^ $(CFLAGS) $(LDLIBS)
 
+main:	main.o parsing.o
+	$(CC) -o main  $^ $(CFLAGS) $(LDLIBS)
+
 %.o: %.c
 	$(CC) -o $@ -c $< $(CFLAGS)
 
