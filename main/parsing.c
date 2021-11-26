@@ -5,6 +5,8 @@
 
 #define BALISESIZE 1000
 
+//s->name = strdup(buffer)
+//fait un alloc d'une valeur
 
 #define exitIfNull(p,msg)\
 if (!p)\
@@ -141,13 +143,48 @@ tableaux_fiche  parse(FILE * inputDB){
     return tableaux_allfiche;
 }
 
+//utiliser l'addresse pour pas copier ?
+void serialize(tableaux_fiche mastertab){
+    FILE * output = fopen("./DATA/SerializedStruc.data","w");
+    exitIfNull(output,"serialize: imposible d'ouvrire le fichier")
 
-// void serialize(tableaux_fiche mastertab){
-//     for (int i = 0; i < mastertab.taille; i++)
-//     {
-//         for (size_t i = 0; i < count; i++)
-//         {
-//             /* code */
-//         }       
-//     }
-// }
+    for (int i = 0; i < mastertab.taille; i++)
+    {
+        fprintf(output,"%s\n",mastertab.fiche[i]->titre);
+        fprintf(output,"%i\n",mastertab.fiche[i]->nombre_auteur);
+        for (int  u = 0; u < mastertab.fiche[i]->nombre_auteur; u++)
+        {
+            fprintf(output,"%s\n",mastertab.fiche[i]->liste_auteur[u]);
+        }       
+    }
+}
+
+tableaux_fiche deserialisation(){
+    FILE * input = fopen("./DATA/SerializedStruc.data","r");
+    exitIfNull(input,"serialize: imposible lire le fichier")
+
+    char ligne[BALISESIZE];
+    fiche_minimal * fichelocalM = calloc(1,sizeof(fiche_minimal));
+    fichelocalM->nombre_auteur = 0;
+    tableaux_fiche tableaux_allfiche;
+    tableaux_allfiche.taille = 0;
+    tableaux_allfiche.fiche = NULL;
+
+
+    while (fgets(ligne,BALISESIZE,input))
+    {
+        fichelocalM->titre = strdup(ligne);
+        fgets(ligne,BALISESIZE,input);
+        fichelocalM->nombre_auteur = atoi(ligne);
+        for (int i = 0; i < fichelocalM->nombre_auteur; i++)
+        {
+            fgets(ligne,BALISESIZE,input);
+            appendAuteurM(fichelocalM,ligne);
+        }
+        appendTabmeaux(&tableaux_allfiche,fichelocalM);
+        fichelocalM = calloc(1,sizeof(fiche_minimal));
+        exitIfNull(fichelocalM, "new calloc null")
+        fichelocalM->nombre_auteur = 0;
+    }
+    return tableaux_allfiche;
+}

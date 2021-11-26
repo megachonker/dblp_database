@@ -4,9 +4,9 @@
 typedef struct fiche_minimal
 {
     char * titre;
+    int nombre_auteur;
     char ** liste_auteur;
     //add une uid pour un auteur
-    int nombre_auteur;
 }fiche_minimal;
 
 typedef struct tableaux_fiche
@@ -29,5 +29,6 @@ void printM(fiche_minimal UwO);
 void printTabmeaux(tableaux_fiche OwU);
 
 void serialize(tableaux_fiche mastertab);
+tableaux_fiche deserialisation();
 
 #endif
