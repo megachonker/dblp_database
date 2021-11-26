@@ -14,14 +14,13 @@ int main()
     }
     // printTabmeaux(parse(inputDB));
 
-    tableaux_fiche tableaux_fiche = parse(inputDB);
+    tableaux_fiche tableaux_fichee = parse(inputDB);
+    printf("tableaux charger");
 
-    for (int i = 0; i < tableaux_fiche.taille; i++)
-    {
-            printM((*(tableaux_fiche.fiche[i])));
+    // serialize(tableaux_fiche);
+    tableaux_fiche coucou = deserialisation();
 
-    }
-    
+    printTabmeaux(coucou);
 
     return 0;
 }
