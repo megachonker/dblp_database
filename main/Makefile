@@ -1,9 +1,14 @@
 CC ?= gcc
 CFLAGS ?= -Wall -Wextra -g
 LDLIBS ?= -lm
+BENCHNUMBER ?= deserialisedb
 
-go:	tests
-	./tests
+# go:	tests
+# 	./tests
+
+bench:	bench.o parsing.o
+	$(CC) -o bench  $^ $(CFLAGS) $(LDLIBS)
+	# bench $(BENCHNUMBER)
 
 tests:	tests.o parsing.o
 	$(CC) -o tests  $^ $(CFLAGS) $(LDLIBS)
@@ -16,7 +21,7 @@ main:	main.o parsing.o
 
 clean:
 	rm -rf *.o
-	rm -f tests
+	rm -f tests bench main
 
 
 
