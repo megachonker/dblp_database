@@ -14,11 +14,12 @@ int main()
     }
     // printTabmeaux(parse(inputDB));
 
-    tableaux_fiche tableaux_fichee = parse(inputDB);
-    printf("tableaux charger");
 
-    // serialize(tableaux_fiche);
-    tableaux_fiche coucou = deserialisation();
+    // tableaux_fiche tableaux_fichee = parse(inputDB);
+    // // printf("tableaux charger");
+
+    // serialize(tableaux_fichee);
+    tableaux_fiche coucou = deserialisation("./DATA/SerializedStruc.data"); //utiliser des address pour eviter la copie ?? 
 
     printTabmeaux(coucou);
 

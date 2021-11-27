@@ -18,17 +18,17 @@ if (!p)\
 
 
 void printM_titre(fiche_minimal OwO){
-    printf("titre: %s\n",OwO.titre);
+    printf("titre:    %s",OwO.titre);
 }
 void printM_liste_auteur(fiche_minimal UwU){
-    printf("auteurs: ");
+    printf("auteurs:\n- ");
     for (int i = 0; i < UwU.nombre_auteur; i++)
     {
         printf("%s",UwU.liste_auteur[i]);
         if (i+1<UwU.nombre_auteur)
-            printf(", ");
+            printf("- ");
     }
-    printf(".\n");
+    printf("\n");
 }
 
 void printM(fiche_minimal OwU){
@@ -95,14 +95,14 @@ void appendTabmeaux(tableaux_fiche * table, fiche_minimal * a_ajouter){
     table->fiche[table->taille] = a_ajouter;
     table->taille++;   
 }
-
-tableaux_fiche  parse(FILE * inputDB){
+//on retourne pas l'original mais une copie ?
+tableaux_fiche parse(FILE * inputDB){
 
     char ligne[BALISESIZE];
     int indice_struct = 0;
     fiche_minimal * fichelocalM = calloc(1,sizeof(fiche_minimal));
     fichelocalM->nombre_auteur = 0;
-    tableaux_fiche tableaux_allfiche;
+    tableaux_fiche tableaux_allfiche;// ce n'es pas maloc donc a la sortie de la fonction l'object est détruit ? ? ??
     tableaux_allfiche.taille = 0;
     tableaux_allfiche.fiche = NULL;
 
@@ -144,7 +144,7 @@ tableaux_fiche  parse(FILE * inputDB){
 }
 
 //utiliser l'addresse pour pas copier ?
-void serialize(tableaux_fiche mastertab){
+void serialize(const tableaux_fiche mastertab){
     FILE * output = fopen("./DATA/SerializedStruc.data","w");
     exitIfNull(output,"serialize: imposible d'ouvrire le fichier")
 
@@ -159,8 +159,8 @@ void serialize(tableaux_fiche mastertab){
     }
 }
 
-tableaux_fiche deserialisation(){
-    FILE * input = fopen("./DATA/SerializedStruc.data","r");
+tableaux_fiche deserialisation(char * path){
+    FILE * input = fopen(path,"r");
     exitIfNull(input,"serialize: imposible lire le fichier")
 
     char ligne[BALISESIZE];
@@ -173,13 +173,18 @@ tableaux_fiche deserialisation(){
 
     while (fgets(ligne,BALISESIZE,input))
     {
+        if (feof(input))
+        {
+            exit(3);
+        }
+        
         fichelocalM->titre = strdup(ligne);
         fgets(ligne,BALISESIZE,input);
-        fichelocalM->nombre_auteur = atoi(ligne);
-        for (int i = 0; i < fichelocalM->nombre_auteur; i++)
+        int nbhauteur = atoi(ligne);
+        for (int i = 0; i < nbhauteur; i++)
         {
             fgets(ligne,BALISESIZE,input);
-            appendAuteurM(fichelocalM,ligne);
+            appendAuteurM(fichelocalM,strdup(ligne));
         }
         appendTabmeaux(&tableaux_allfiche,fichelocalM);
         fichelocalM = calloc(1,sizeof(fiche_minimal));

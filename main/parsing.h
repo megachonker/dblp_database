@@ -1,5 +1,6 @@
 #ifndef PARSING_H
 #define PARSING_H
+#include <stdio.h>
 
 typedef struct fiche_minimal
 {
@@ -15,7 +16,7 @@ typedef struct tableaux_fiche
     int taille;
 }tableaux_fiche;
 
-tableaux_fiche  parse(FILE * inputDB);
+tableaux_fiche parse(FILE * inputDB);
 
 char * getanchor(char * recherche, char * ligne);
 
