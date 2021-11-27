@@ -16,6 +16,9 @@ if (!p)\
 
 
 
+void enlever_retour_a_la_ligne(char * ligne){
+    ligne[strcspn(ligne, "\n")]=0;    
+}
 
 void printM_titre(fiche_minimal OwO){
     printf("titre:    %s",OwO.titre);
@@ -157,6 +160,9 @@ void serialize(const tableaux_fiche mastertab, FILE * output){
     }
 }
 
+//gratter en efficience en donneant au début les taille des structure
+//grater en fesant une structure avec des dico est des referancement
+
 tableaux_fiche deserialisation(FILE * input){
 
     char ligne[BALISESIZE];
@@ -171,15 +177,18 @@ tableaux_fiche deserialisation(FILE * input){
     {
         if (feof(input))
         {
+            fprintf(stderr,"fin fichier deserialisation\n");
             exit(3);
         }
-        
+        enlever_retour_a_la_ligne(ligne);
         fichelocalM->titre = strdup(ligne);
         fgets(ligne,BALISESIZE,input);
+        enlever_retour_a_la_ligne(ligne);
         int nbhauteur = atoi(ligne);
         for (int i = 0; i < nbhauteur; i++)
         {
             fgets(ligne,BALISESIZE,input);
+            enlever_retour_a_la_ligne(ligne);
             appendAuteurM(fichelocalM,strdup(ligne));
         }
         appendTabmeaux(&tableaux_allfiche,fichelocalM);
