@@ -1,57 +1,98 @@
-#include "../main/parsing.h"
+#include "parsing.h"
 #include <stdio.h>
-/*
-fichier test
+#include <string.h>
+
+
+#define originedb           "DATA/dblp.xml"
+#define smalloriginedb      "DATA/dblp1sur8.xml"
+#define serializedb         "DATA/SerializedStruc.data"
+#define smallserializedb    "DATA/Serialzed1000.data"
 
 
 
-*/
+#define exitIfNull(p,msg)\
+if (!p)\
+{\
+    fprintf(stderr,msg);\
+}\
 
 
 
-// int readdb(FILE * inputDB){
-//     tableaux_fiche tableaux_fichee = parse(inputDB);
-// }
+void readb(){
+    FILE * fichier = fopen(originedb,"r");
+    exitIfNull(fichier,"imposible d'ouvrire");
+    parse(fichier); //utiliser des address pour eviter la copie ?? 
+}
 
-// int writedb(){
-    
-// }
+void readsmaldb(){
+    FILE * fichier = fopen(smalloriginedb,"r");
+    exitIfNull(fichier,"imposible d'ouvrire");
+    parse(fichier); //utiliser des address pour eviter la copie ?? 
+}
 
+void readbCOPY(){
+    FILE * fichier = fopen(originedb,"r");
+    exitIfNull(fichier,"imposible d'ouvrire");
+    tableaux_fiche coucou = parse(fichier); //utiliser des address pour eviter la copie ?? 
+}
+
+void serialized(){
+    FILE * in = fopen(originedb,"r");
+    exitIfNull(in,"imposible d'ouvrire");
+    tableaux_fiche coucou = parse(in); //utiliser des address pour eviter la copie ?? 
+    FILE * out = fopen(serializedb,"w");
+    exitIfNull(out,"imposible d'ouvrire");
+    serialize(coucou,out); //utiliser des address pour eviter la copie ?? 
+}
+
+void deserialisedb(){
+    FILE * fichier = fopen(serializedb,"r");
+    exitIfNull(fichier,"imposible d'ouvrire");
+    deserialisation(fichier);    
+}
+
+void deserialisesmalldb(){
+    FILE * fichier = fopen(smallserializedb,"r");
+    exitIfNull(fichier,"imposible d'ouvrire deserialisesmalldb");
+    deserialisation(fichier);
+}
 
 int main(int argc, char const *argv[])
 {
-    if (argc != 3)
+    if (argc != 2)
     {
         printf("PAS BIEN OPTION");
         return 1;
     }
 
-    FILE * inputDB = fopen(argv[1],"r");
-    if (!inputDB)
-    {
-        fprintf(stderr,"imposible d'ouvrire le fichier %s",argv[1]);
+    const char * compstr = argv[1];
+
+
+    if(strcmp("readb",compstr)==0){
+        // printf("readb\n");
+        readb();    
     }
-
-    tableaux_fiche * tableaux_fichee;
-
-    printf("azer %s",inputDB);
-
-    switch (argv[2][0])
-    {
-    case '1':
-        printf("Parsing");
-        tableaux_fichee = parse("./main/DATA/Serialzed1000.data");
-        break;
-    case '2':
-        printf("Parsing");
-        tableaux_fichee = parse(inputDB);
-        serialize(*tableaux_fichee);
-        break;
-    default:
-        printf("OWO");
-        return 1;
-        break;
-    }    
-
+    else if(strcmp("readbCOPY",compstr)==0){
+        // printf("readbCOPY\n");
+        readbCOPY();    
+    }
+    else if(strcmp("serialized",compstr)==0){
+        // printf("serialized\n");
+        serialized();    
+    }
+    else if(strcmp("deserialisedb",compstr)==0){// N
+        // printf("deserialisedb\n");
+        deserialisedb();    
+    }
+    else if(strcmp("readsmaldb",compstr)==0){
+        // printf("readsmaldb\n");
+        readsmaldb();
+    }
+    else if(strcmp("deserialisesmalldb",compstr)==0){
+        // printf("deserialisesmalldb:\n");
+        deserialisesmalldb();
+    }else{
+        fprintf(stderr,"PAS BON TEST!\n");
+    }
     return 0;
 }
