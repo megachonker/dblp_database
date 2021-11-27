@@ -1,5 +1,5 @@
 # ajjouter des checksum au sortie standar pour etre sur que les data sont integre
-
+# diff DATA/diff DATA/SerializedStruc.data  verrifie si la sortie decerialiser a partire de la base auriginal est la meme que la sortie serialiser d'elle meme
 help(){
     echo "Help"
     echo "./bench TEST NUBERoftime"
