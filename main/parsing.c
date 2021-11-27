@@ -144,9 +144,7 @@ tableaux_fiche parse(FILE * inputDB){
 }
 
 //utiliser l'addresse pour pas copier ?
-void serialize(const tableaux_fiche mastertab){
-    FILE * output = fopen("./DATA/SerializedStruc.data","w");
-    exitIfNull(output,"serialize: imposible d'ouvrire le fichier")
+void serialize(const tableaux_fiche mastertab, FILE * output){
 
     for (int i = 0; i < mastertab.taille; i++)
     {
@@ -159,9 +157,7 @@ void serialize(const tableaux_fiche mastertab){
     }
 }
 
-tableaux_fiche deserialisation(char * path){
-    FILE * input = fopen(path,"r");
-    exitIfNull(input,"serialize: imposible lire le fichier")
+tableaux_fiche deserialisation(FILE * input){
 
     char ligne[BALISESIZE];
     fiche_minimal * fichelocalM = calloc(1,sizeof(fiche_minimal));

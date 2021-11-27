@@ -29,7 +29,7 @@ void printM_liste_auteur(fiche_minimal UwU);
 void printM(fiche_minimal UwO);
 void printTabmeaux(tableaux_fiche OwU);
 
-void serialize(tableaux_fiche mastertab);
+void serialize(tableaux_fiche mastertab, FILE * outfichier);
 tableaux_fiche deserialisation();
 
 #endif
