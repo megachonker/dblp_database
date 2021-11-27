@@ -2,8 +2,15 @@
 #include "tps_unit_test.h"
 
 
-struct ll_list;
-typedef struct ll_list ll_list;
+typedef struct ll_list {
+    struct ll_node *first;
+    size_t size;
+}ll_list;
+
+typedef struct ll_node {
+    int value;
+    struct ll_node *next;
+} ll_node;
 
 /**
  * create a node with the given value
