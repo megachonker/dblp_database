@@ -1,12 +1,14 @@
+# ajjouter des checksum au sortie standar pour etre sur que les data sont integre
+
 help(){
     echo "Help"
     echo "./bench TEST NUBERoftime"
     echo ' les diférant test disponible
     - readb
     - readbCOPY
+    - readsmaldb
     - serialized
     - deserialisedb
-    - readsmaldb
     - deserialisesmalldb'
 }
 
@@ -23,13 +25,15 @@ moyenne(){
 
     for nbtest in $(seq $NUBMER);
     do
-        echo "lunch number $nbtest:"
+        # echo "lunch number $nbtest:"
         lunch $1
     done
 }
 
-if [[ ! $# -eq 2 ]] ; then
+if [[  $# -eq 0 ]] ; then
     echo "./bench BENCHTYPE NUBLOOP"
+    help
+    exit
 fi
 # reply=$(seq 10)
 # _describe './abench.sh' "('cmd1:description1' 'cmd2:description2')"
