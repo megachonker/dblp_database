@@ -1,27 +1,25 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "parsing.h"
+#include "creation_sommets_G.h"
+
+#define exitIfNull(p,msg)\
+if (!p)\
+{\
+    fprintf(stderr,msg);\
+}\
 
 
+tableaux_fiche default_loading_Struct(){
+    FILE * inputDB = fopen("DATA/SerializedStruc.data","r");
+    exitIfNull(inputDB,"INPUT PAS CHEMAIN")
+    return deserialisation(inputDB);
+}
 
-//int argc, char const *argv[]
 int main()
 {
-    FILE * inputDB = fopen("./DATA/dblp.xml","r");
-    if (!inputDB)
-    {
-        fprintf(stderr,"imposible d'ouvrire le fichier");
-    }
-    // printTabmeaux(parse(inputDB));
-
-
-    // tableaux_fiche tableaux_fichee = parse(inputDB);
-    // // printf("tableaux charger");
-
-    // serialize(tableaux_fichee);
-    tableaux_fiche coucou = deserialisation("./DATA/SerializedStruc.data"); //utiliser des address pour eviter la copie ?? 
-
-    printTabmeaux(coucou);
+    tableaux_fiche mesfiches = default_loading_Struct();
+    creation_de_la_liste_des_listes_de_sommet_des_sous_graphes_connexes(mesfiches);
 
     return 0;
 }
