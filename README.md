@@ -1,9 +1,10 @@
 # Projet info 1
 
 ##  analise argument d'entrée
--   a faire dans un nouveaux programe
+-   en coure de création
 ## structure
--   bonne
+-   le parsing ok
+-   liste chainer en cour
 ### champ garder
 -   title
 -   author
@@ -46,15 +47,20 @@
 list des entrer
  
 ## export
-##  Ouverture Bin
-### import structure
+-   export OK
+## import structure
+-   import ok
 ##  Analise graph
+-   pas encore
 ##  front end:
+-   pas encore
 ### gestion des erreur
+- pas encore
 ### argument CLI:
 -   logique des arg
 ### interface:
--   cli graph ?
+-   cli en core
+-   graph ?
 -   color
 -   window?
 repartition task
@@ -70,8 +76,12 @@ git:
 
 make:
     clean
+    -   ok
     update database
+    - pas encore
     benchmark
+    - lancement ok
+    -   pas d'interpretation
     test.sh
         comprendre
         addapter
@@ -85,5 +95,4 @@ optimisation:
     cache de recherche
     compilateur flag
     paralle test
-    on va lire 2 foit toute les structure pour l'écriture deu fichier
-
+    on va lire 2 foit toute les structure pour l'écriture deu fichier => négligable si convertion ?
