@@ -20,8 +20,8 @@ main:	main.o parsing.o
 	$(CC) -o $@ -c $< $(CFLAGS)
 
 
-DATA/dblp1sur8.xml:	DATA/dblp.xml
-	head DATA/dblp.xml -n 10966843 > DATA/dblp1sur8.xml
+# DATA/dblp1sur8.xml:	DATA/dblp.xml
+# 	head DATA/dblp.xml -n 10966843 > DATA/dblp1sur8.xml
 
 clean:
 	rm -rf *.o
