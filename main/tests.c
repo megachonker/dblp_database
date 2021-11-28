@@ -14,8 +14,16 @@ if (!p)\
 
 
 //2go de tableaux ?
-#define MAXnameSIZE 2
-#define MAXarraySIZE 22000000
+#define MAXarraySIZE 21143793
+
+#define MaxTitre 5
+#define MaxHauteur 2994451
+
+
+//soucis la mémoir
+//soucis sommet auteur pointeur sur des auteur tot heuvre 
+//soucis check que les tab d'addresse sont nu dans les for if
+
 
 tableaux_fiche default_loading_Struct(){
     FILE * inputDB = fopen("DATA/SerializedStruc.data","r");
@@ -27,14 +35,32 @@ typedef struct hauteurToHeurvre
 {
     char * hauteur;
     fiche_minimal * heuvre;
-    // char heuvre[MAXnameSIZE];
 }hauteurToHeurvre;
+
+typedef struct Sommet_hauteur
+{
+    char * hauteur;
+    fiche_minimal * heuvre[MAXarraySIZE];//faire une liste chainer ou des malloc
+    // int size;
+}Sommet_hauteur;
+
+
+hauteurToHeurvre HauteurHeuvre[MAXarraySIZE];
+Sommet_hauteur list_sommet[MaxHauteur];
+
 
 int comphauteur(const void * a, const void * b){
     //moche
     hauteurToHeurvre * aa = (hauteurToHeurvre*)a;
     hauteurToHeurvre * bb = (hauteurToHeurvre*)b;
     int result = strcmp(aa->hauteur,bb->hauteur);
+    // printf("r %i",result);
+    // if (aa->hauteur==bb->hauteur)
+    // {
+    //     return 0;
+    // }
+    
+    
     // if ( result == 0)
     // {
         // optimisation de la mort
@@ -42,8 +68,8 @@ int comphauteur(const void * a, const void * b){
     return result;
 }
 
-void printHauteur_Heuvre(hauteurToHeurvre * OwI,int maxsize){
-    for (int i = 0; i < maxsize; i++)
+void printHauteur_Heuvre(hauteurToHeurvre * OwI,int sizeHauteurHeuvre ){
+    for (int i = 0; i < sizeHauteurHeuvre ; i++)
     {
         printf("%s => %s\n",OwI[i].hauteur,OwI[i].heuvre->titre);
     }
@@ -57,19 +83,64 @@ int convertStruct(tableaux_fiche input, hauteurToHeurvre * arrayout ){
         {   
             arrayout[indice].heuvre = input.fiche[i];
             arrayout[indice].hauteur = input.fiche[i]->liste_auteur[u];
-            // memcpy(arrayout[indice].hauteur,input.fiche[i]->liste_auteur[u],MAXnameSIZE);
             indice++;
         }
     }
     return indice;
 }
 
-void sort_tableaux_fiche(hauteurToHeurvre * HauteurHeuvre,int maxsize){
-    qsort(HauteurHeuvre,maxsize,sizeof(hauteurToHeurvre),comphauteur);
+void sort_tableaux_fiche(hauteurToHeurvre * HauteurHeuvre,int sizeHauteurHeuvre ){
+    qsort(HauteurHeuvre,sizeHauteurHeuvre ,sizeof(hauteurToHeurvre),comphauteur);
 }
 
+void new_titre_to_auteur(Sommet_hauteur* list,const hauteurToHeurvre * in){//on pass le pointeur plus rapide 
+    for (int i = 0; i < MaxHauteur; i++)
+    {
+        //on va j'usqua la fin du tableaux pour trouver un élément nul
+        if(!list[i].hauteur){
+            list[i].hauteur = in->hauteur;
+            list[i].heuvre[0] = in->heuvre;
+        }
+    }
+}
 
-hauteurToHeurvre HauteurHeuvre[MAXarraySIZE];
+void add_titre_to_auteur(Sommet_hauteur * list,const hauteurToHeurvre HtH){//ces plus logic comme ça mais pluslent ?
+    //on enumere tout les somet
+    for (int i = 0; i < MaxHauteur; i++)
+    {
+        //on match quand un sommet hauteur match avec l'auteur qu'on veux add
+        if(list[i].hauteur == HtH.hauteur){
+            //on detecte la fin du tableaux  est on add
+            for (int u = 0; u < MaxTitre; u++)// on cherche a chaque foit sinon on doit stoquer uen variable de taille de tab est ces chian
+            {
+                //quand ces vide ?
+                if (!list[i].heuvre[u])
+                {
+                    list[i].heuvre[u] = HtH.heuvre;
+                }
+            }  
+        }
+    }
+    
+}
+
+void unique_HtH(const hauteurToHeurvre * liste,int sizeHauteurHeuvre,Sommet_hauteur* list_sommet){
+    for (int j = 0; j < sizeHauteurHeuvre; j=j)//on incrémenta pas la
+    {
+        //quand chaque élément de la liste est un hauteur qu'on va ajouter
+        new_titre_to_auteur(list_sommet,&liste[j]);
+        int i = 1;
+        if (liste[j].hauteur == liste[j+i].hauteur && i+j < sizeHauteurHeuvre)
+        {
+            while (liste[j].hauteur == liste[j+i].hauteur && i+j < sizeHauteurHeuvre)
+            {
+                add_titre_to_auteur(list_sommet,liste[i+j]);
+                i++;// truc de simon ?
+            }
+        }
+        j+=i;//mais ici
+    }
+}
 
 
 int main()
@@ -78,11 +149,11 @@ int main()
     exitIfNull(inputDB,"INPUT PAS CHEMAIN")
     tableaux_fiche mesfiches = deserialisation(inputDB);
 
-    int maxsize = convertStruct(mesfiches,HauteurHeuvre);
-    // printHauteur_Heuvre(HauteurHeuvre,maxsize);
-    sort_tableaux_fiche(HauteurHeuvre,maxsize);
-    printHauteur_Heuvre(HauteurHeuvre,maxsize);
-    
+    int sizeHauteurHeuvre = convertStruct(mesfiches,HauteurHeuvre);
+    // printHauteur_Heuvre(HauteurHeuvre);
+    sort_tableaux_fiche(HauteurHeuvre,sizeHauteurHeuvre );
+    printHauteur_Heuvre(HauteurHeuvre,sizeHauteurHeuvre );
+    unique_HtH(HauteurHeuvre,sizeHauteurHeuvre,list_sommet);
 
     //liste des hauteur trier
     //dans la fonction de trie si 2 foit meme hauteur crée un structure SommetHauteur qui liste les hauteur
