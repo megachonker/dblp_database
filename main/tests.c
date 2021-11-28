@@ -14,8 +14,13 @@ if (!p)\
 
 
 //2go de tableaux ?
-#define MAXnameSIZE 20
+#define MAXnameSIZE 2
 #define MAXarraySIZE 22000000
+
+#define MaxTitre 0
+#define MaxHauteur 0
+
+
 
 tableaux_fiche default_loading_Struct(){
     FILE * inputDB = fopen("DATA/SerializedStruc.data","r");
@@ -25,15 +30,36 @@ tableaux_fiche default_loading_Struct(){
 
 typedef struct hauteurToHeurvre
 {
-    char hauteur[MAXnameSIZE];
-    char heuvre[MAXnameSIZE];
+    char * hauteur;
+    fiche_minimal * heuvre;
+    int size;//chort  pour grater de la place ? 
+    // char heuvre[MAXnameSIZE];
 }hauteurToHeurvre;
+
+// typedef struct Sommet_hauteur
+// {
+//     char * hauteur;
+//     fiche_minimal heuvre[MAXarraySIZE];
+//     int size;
+// }Sommet_hauteur;
+
+
+hauteurToHeurvre HauteurHeuvre[MAXarraySIZE];
+// Sommet_hauteur list_sommet[MaxHauteur];
+
 
 int comphauteur(const void * a, const void * b){
     //moche
     hauteurToHeurvre * aa = (hauteurToHeurvre*)a;
     hauteurToHeurvre * bb = (hauteurToHeurvre*)b;
     int result = strcmp(aa->hauteur,bb->hauteur);
+    // printf("r %i",result);
+    // if (aa->hauteur==bb->hauteur)
+    // {
+    //     return 0;
+    // }
+    
+    
     // if ( result == 0)
     // {
         // optimisation de la mort
@@ -41,10 +67,10 @@ int comphauteur(const void * a, const void * b){
     return result;
 }
 
-void printHauteur_Heuvre(hauteurToHeurvre * OwI,int maxsize){
-    for (int i = 0; i < maxsize; i++)
+void printHauteur_Heuvre(hauteurToHeurvre * OwI){
+    for (int i = 0; i < OwI->size; i++)
     {
-        printf("%s => %s\n",OwI[i].hauteur,OwI[i].heuvre);
+        printf("%s => %s\n",OwI[i].hauteur,OwI[i].heuvre->titre);
     }
 }
 
@@ -54,20 +80,44 @@ int convertStruct(tableaux_fiche input, hauteurToHeurvre * arrayout ){
     {
         for (int u = 0; u < input.fiche[i]->nombre_auteur; u++)
         {   
+            arrayout[indice].heuvre = input.fiche[i];
+            arrayout[indice].hauteur = input.fiche[i]->liste_auteur[u];
+            // memcpy(arrayout[indice].hauteur,input.fiche[i]->liste_auteur[u],MAXnameSIZE);
             indice++;
-            strcpy(arrayout[indice].heuvre,input.fiche[i]->titre);
-            strcpy(arrayout[indice].hauteur,input.fiche[i]->liste_auteur[u]);
         }
     }
     return indice;
 }
 
-void sort_tableaux_fiche(hauteurToHeurvre * HauteurHeuvre,int maxsize){
-    qsort(HauteurHeuvre,maxsize,sizeof(hauteurToHeurvre),comphauteur);
+void sort_tableaux_fiche(hauteurToHeurvre * HauteurHeuvre){
+    qsort(HauteurHeuvre,HauteurHeuvre->size,sizeof(hauteurToHeurvre),comphauteur);
 }
 
+// void add_titre_to_auteur(Sommet_hauteur * list,char * auteur, char * titre){
+//     for (int i = 0; i < list->size; i++)
+//     {
+//         if(list->hauteur == auteur){
+//             list[i];
+//         }
+//     }
+    
+// }
 
-hauteurToHeurvre HauteurHeuvre[MAXarraySIZE];
+// void unique_HtH(hauteurToHeurvre * liste){
+//     for (int j = 0; j < liste->size; j++)
+//     {
+//         int i = 1;
+//         if (liste[j].hauteur == liste[j+i].hauteur && i+j < liste->size)
+//         {
+//             while (liste[j].hauteur == liste[j+i].hauteur && i+j < liste->size)
+//             {
+//                 add_titre_to_auteur(list_sommet,liste[j].hauteur,liste[i+j].heuvre->titre);
+//                 i++;
+//             }
+//         }        
+//     }
+    
+// }
 
 
 int main()
@@ -76,9 +126,11 @@ int main()
     exitIfNull(inputDB,"INPUT PAS CHEMAIN")
     tableaux_fiche mesfiches = deserialisation(inputDB);
 
-    int maxsize = convertStruct(mesfiches,HauteurHeuvre);
-    sort_tableaux_fiche(HauteurHeuvre,maxsize);
-    printHauteur_Heuvre(HauteurHeuvre,maxsize);
+    HauteurHeuvre->size = convertStruct(mesfiches,HauteurHeuvre);
+    // printHauteur_Heuvre(HauteurHeuvre);
+    sort_tableaux_fiche(HauteurHeuvre);
+    printHauteur_Heuvre(HauteurHeuvre);
+
 
     //liste des hauteur trier
     //dans la fonction de trie si 2 foit meme hauteur crée un structure SommetHauteur qui liste les hauteur
