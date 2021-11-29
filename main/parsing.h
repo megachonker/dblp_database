@@ -11,7 +11,7 @@ typedef struct fiche_minimal
 
 typedef struct tableaux_fiche
 {
-    fiche_minimal ** fiche;
+    fiche_minimal ** fiche;   
     int taille;
 }tableaux_fiche;
 
