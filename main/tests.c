@@ -19,6 +19,7 @@ int main()
     // printf("auteur:");
     minimal * fichelocalM = calloc(1,sizeof(minimal));
     tableaux_fiche ** tableaux_allfiche = calloc(1,sizeof(tableaux_fiche));
+    tableaux_allfiche;
     while (fgets(ligne,100,inputDB))
     {
         int flagt = 0;
@@ -45,7 +46,7 @@ int main()
 
         if (flagt == 1)
         {
-            tableaux_allfiche
+            tableaux_allfiche;
             minimal * fichelocalM = calloc(1,sizeof(minimal));
         }
         
