@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 typedef struct ll_node {
-    int value;
+    void* value;
     struct ll_node *next;
 } ll_node;
 
@@ -24,7 +24,7 @@ ll_list * ll_create(void) {
     return list;
 }
 
-void ll_append(ll_list *list, int value) {
+void ll_append(ll_list *list, void* value) {
     
     list->size=list->size + 1;
     
@@ -48,7 +48,7 @@ void ll_append(ll_list *list, int value) {
     it->next = new_element;
 }
 
-int ll_get(const ll_list *list, unsigned int value_idx) {
+void* ll_get(const ll_list *list, unsigned int value_idx) {
 
     ll_node *it = list->first;
 
@@ -76,7 +76,7 @@ void ll_free(ll_list *list) {
     return;
 }
 
-void ll_prepend(ll_list *list, int value) {
+void ll_prepend(ll_list *list, void *value) {
 
     ll_node *new_element = malloc(sizeof(ll_node));
     if(new_element == NULL) {
@@ -96,12 +96,12 @@ size_t ll_size(ll_list*list) {
     return list->size;
 }
 
-int ll_first(ll_list *list) {
+void* ll_first(ll_list *list) {
     
     return list->first->value;
 }
 
-int ll_last(ll_list *list) {
+void* ll_last(ll_list *list) {
     
     size_t size=ll_size(list);
     ll_node *pointeur_element_parcour=list->first;
@@ -172,7 +172,7 @@ void ll_pop_last(ll_list*list) {
 
 
 
-void ll_insert(ll_list*list, int value, int idx)
+void ll_insert(ll_list*list, void *value, int idx)
 {
    
     if(list->first==NULL)
