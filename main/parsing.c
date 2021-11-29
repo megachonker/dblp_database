@@ -5,6 +5,8 @@
 
 #define BALISESIZE 1000
 
+//s->name = strdup(buffer)
+//fait un alloc d'une valeur
 
 #define exitIfNull(p,msg)\
 if (!p)\
@@ -14,19 +16,22 @@ if (!p)\
 
 
 
+void enlever_retour_a_la_ligne(char * ligne){
+    ligne[strcspn(ligne, "\n")]=0;    
+}
 
 void printM_titre(fiche_minimal OwO){
-    printf("titre: %s\n",OwO.titre);
+    printf("titre:    %s",OwO.titre);
 }
 void printM_liste_auteur(fiche_minimal UwU){
-    printf("auteurs: ");
+    printf("auteurs:\n- ");
     for (int i = 0; i < UwU.nombre_auteur; i++)
     {
         printf("%s",UwU.liste_auteur[i]);
         if (i+1<UwU.nombre_auteur)
-            printf(", ");
+            printf("- ");
     }
-    printf(".\n");
+    printf("\n");
 }
 
 void printM(fiche_minimal OwU){
@@ -93,14 +98,14 @@ void appendTabmeaux(tableaux_fiche * table, fiche_minimal * a_ajouter){
     table->fiche[table->taille] = a_ajouter;
     table->taille++;   
 }
-
-tableaux_fiche  parse(FILE * inputDB){
+//on retourne pas l'original mais une copie ?
+tableaux_fiche parse(FILE * inputDB){
 
     char ligne[BALISESIZE];
     int indice_struct = 0;
     fiche_minimal * fichelocalM = calloc(1,sizeof(fiche_minimal));
     fichelocalM->nombre_auteur = 0;
-    tableaux_fiche tableaux_allfiche;
+    tableaux_fiche tableaux_allfiche;// ce n'es pas maloc donc a la sortie de la fonction l'object est détruit ? ? ??
     tableaux_allfiche.taille = 0;
     tableaux_allfiche.fiche = NULL;
 
@@ -141,13 +146,55 @@ tableaux_fiche  parse(FILE * inputDB){
     return tableaux_allfiche;
 }
 
+//utiliser l'addresse pour pas copier ?
+void serialize(const tableaux_fiche mastertab, FILE * output){
 
-// void serialize(tableaux_fiche mastertab){
-//     for (int i = 0; i < mastertab.taille; i++)
-//     {
-//         for (size_t i = 0; i < count; i++)
-//         {
-//             /* code */
-//         }       
-//     }
-// }
+    for (int i = 0; i < mastertab.taille; i++)
+    {
+        fprintf(output,"%s\n",mastertab.fiche[i]->titre);
+        fprintf(output,"%i\n",mastertab.fiche[i]->nombre_auteur);
+        for (int  u = 0; u < mastertab.fiche[i]->nombre_auteur; u++)
+        {
+            fprintf(output,"%s\n",mastertab.fiche[i]->liste_auteur[u]);
+        }       
+    }
+}
+
+//gratter en efficience en donneant au début les taille des structure
+//grater en fesant une structure avec des dico est des referancement
+
+tableaux_fiche deserialisation(FILE * input){
+
+    char ligne[BALISESIZE];
+    fiche_minimal * fichelocalM = calloc(1,sizeof(fiche_minimal));
+    fichelocalM->nombre_auteur = 0;
+    tableaux_fiche tableaux_allfiche;
+    tableaux_allfiche.taille = 0;
+    tableaux_allfiche.fiche = NULL;
+
+
+    while (fgets(ligne,BALISESIZE,input))
+    {
+        if (feof(input))
+        {
+            fprintf(stderr,"fin fichier deserialisation\n");
+            exit(3);
+        }
+        enlever_retour_a_la_ligne(ligne);
+        fichelocalM->titre = strdup(ligne);
+        fgets(ligne,BALISESIZE,input);
+        enlever_retour_a_la_ligne(ligne);
+        int nbhauteur = atoi(ligne);
+        for (int i = 0; i < nbhauteur; i++)
+        {
+            fgets(ligne,BALISESIZE,input);
+            enlever_retour_a_la_ligne(ligne);
+            appendAuteurM(fichelocalM,strdup(ligne));
+        }
+        appendTabmeaux(&tableaux_allfiche,fichelocalM);
+        fichelocalM = calloc(1,sizeof(fiche_minimal));
+        exitIfNull(fichelocalM, "new calloc null")
+        fichelocalM->nombre_auteur = 0;
+    }
+    return tableaux_allfiche;
+}

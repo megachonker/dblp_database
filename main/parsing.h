@@ -1,12 +1,13 @@
 #ifndef PARSING_H
 #define PARSING_H
+#include <stdio.h>
 
 typedef struct fiche_minimal
 {
     char * titre;
+    int nombre_auteur;
     char ** liste_auteur;
     //add une uid pour un auteur
-    int nombre_auteur;
 }fiche_minimal;
 
 typedef struct tableaux_fiche
@@ -15,7 +16,7 @@ typedef struct tableaux_fiche
     int taille;
 }tableaux_fiche;
 
-tableaux_fiche  parse(FILE * inputDB);
+tableaux_fiche parse(FILE * inputDB);
 
 char * getanchor(char * recherche, char * ligne);
 
@@ -28,6 +29,7 @@ void printM_liste_auteur(fiche_minimal UwU);
 void printM(fiche_minimal UwO);
 void printTabmeaux(tableaux_fiche OwU);
 
-void serialize(tableaux_fiche mastertab);
+void serialize(tableaux_fiche mastertab, FILE * outfichier);
+tableaux_fiche deserialisation();
 
 #endif
