@@ -256,3 +256,16 @@ void ll_remove(ll_list*list, int idx)
         free(intermediaire_ptr);
     }
 }
+
+
+ll_node * ll_search_addr(ll_list*list,void * address){
+    ll_node *it = list->first;
+
+    for(unsigned int i = 0; i < list->size; i++) {
+        if(it->value == address){
+            return it;
+        }
+        it = it->next;
+    }
+    return NULL;
+}
