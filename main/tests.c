@@ -61,27 +61,6 @@ int convertStruct(tableaux_fiche input, ll_list * list_chainer_auteur ){
 }
 
 
-void add_titre_to_auteur(Sommet_hauteur * list,const hauteurToHeurvre HtH){//ces plus logic comme ça mais pluslent ?
-    //on enumere tout les somet
-    for (int i = 0; i < MaxHauteur; i++)
-    {
-        //on match quand un sommet hauteur match avec l'auteur qu'on veux add
-        if(list[i].hauteur == HtH.hauteur){
-            //on detecte la fin du tableaux  est on add
-            for (int u = 0; u < MaxTitre; u++)// on cherche a chaque foit sinon on doit stoquer uen variable de taille de tab est ces chian
-            {
-                //quand ces vide ?
-                if (!list[i].heuvre[u])
-                {
-                    list[i].heuvre[u] = HtH.heuvre;
-                }
-            }  
-        }
-    }
-    
-}
-
-
 int main()
 {
     FILE * inputDB = fopen("DATA/SerializedStruc.data","r");
