@@ -48,43 +48,124 @@ comparer_l_auteur_k_et_traiter_les_listes_de_sommet_sGc(char *auteur_k,ll_list *
 
 */
 
-
-comparer_l_auteur_k_et_traiter_les_listes_de_sommet_sGc(char *auteurk,ll_node *liste_courante, ll_list *liste_des_listes_des_sommets_sGc)
+typedef enum comparaison_auteur
 {
-    if(!strcmp(auteurk,liste_courante->value)==0)
+    auteur_pas_trouvé,
+    auteur_trouvé_dans_sGcj
+}comparaison_auteur;
+
+
+void mettre_tous_les_ak_de_sGcn_dans_sGcj_sauf_ceux_qui_y_sont_deja(ll_list *sGcn, ll_list *sGcj)
+{
+    ll_node *it_sGcj=sGcj->first;
+    ll_node *it_sGcn=sGcn->first
+    
+    for(int l=0; l<Ai->nombre_auteur; l++)
     {
-        ll_list sommets_sGc;
-        append(liste_des_listes_des_sommets_sGc);
+        comparaison_auteur *comparaison_auteur=auteur_pas_trouvé;
+
+        for(int r=0; r<sGcj->size; r++)
+        {
+            if(it_sGcj->value!=Ai->liste_auteur[l])
+            {
+                comparaison_auteur=auteur_trouvé_dans_sGcj;
+            }
+  
+            it_sGcj=it_sGcj->next;
+        }
+
+        if(comparaison_auteur!=auteur_trouvé_dans_sGcj)
+            append(sGcj,Ai->liste_auteur[l]);
+}
+
+
+
+
+
+void mettre_tous_les_ak_de_Ai_dans_sGcj_sauf_ceux_qui_y_sont_deja(fiche_minimal *Ai, ll_list *sGcj)
+{ 
+    
+    ll_node *it_sGcj=sGcj->first;
+    
+    for(int l=0; l<Ai->nombre_auteur; l++)
+    {
+        comparaison_auteur *comparaison_auteur=auteur_pas_trouvé;
+
+        for(int r=0; r<sGcj->size; r++)
+        {
+            if(it_sGcj->value!=Ai->liste_auteur[l])
+            {
+                comparaison_auteur=auteur_trouvé_dans_sGcj;
+            }
+  
+            it_sGcj=it_sGcj->next;
+        }
+
+        if(comparaison_auteur!=auteur_trouvé_dans_sGcj)
+            append(sGcj,Ai->liste_auteur[l]);
     }
 }
 
 
-void parcours_liste_des_auteurs_d_un_article_pour_voir_si_il_faut_fusionner_cetaines_listes_deja_cree(char* auteurk, ll_list *liste_courante,    ll_list *liste_des_listes_des_sommets_sGc)
+
+
+
+
+comparer_l_auteur_k_et_traiter_les_listes_de_sommet_sGc(comparaison_auteur *comparaison_auteur, char *auteur_k,ll_node *it_auteur_liste_courante, ll_list *liste_des_listes_des_sommets_sGc)
 {
-    ll_node *it_auteur_liste_courante=&(liste_courante->first);
+    if(!strcmp(auteur_k,it_auteur_liste_courante->value)==0)
+    {
+        *comparaison_auteur=auteur_trouvé_dans_sGcj;
+    }
+    else
+    {
+        *comparaison_auteur=auteur_pas_trouvé;
+    }
+}
+
+
+void parcours_liste_des_auteurs_d_un_article_pour_voir_si_il_faut_fusionner_cetaines_listes_deja_cree(comparaison_auteur *comparaison_auteur,char* auteur_k, ll_list *liste_courante,    ll_list *liste_des_listes_des_sommets_sGc)
+{
+    ll_node *it_auteur_liste_courante=liste_courante->first;
     
     for(int n=0; n<(liste_courante->size)-1; n++) /*et pour toutes ces listes crées, on regarde tout les auteurs contenu dedans*/
     {
-        comparer_l_auteur_k_et_traiter_les_listes_de_sommet_sGc(auteurk,   it_auteur_liste_courante, liste_des_listes_des_sommets_sGc);
-        it_auteur_liste_courante=liste_courante->next; /*là y'a possibilité de dépasser la taille de la liste si je me suis loupé*/
+        comparer_l_auteur_k_et_traiter_les_listes_de_sommet_sGc(comparaison_auteur, auteur_k,   it_auteur_liste_courante, liste_des_listes_des_sommets_sGc);
+        it_auteur_liste_courante=it_auteur_liste_courante->next; /*là y'a possibilité de dépasser la taille de la liste si je me suis loupé*/
     }
 }
 
 
 
 
-void voir_si_l_auteur_a_coecrit_article_deja_traité(char * auteurk, ll_list *liste_des_listes_des_sommets_sGc)
+void voir_si_l_auteur_a_coecrit_article_deja_traité(fiche_minimal *fiche_i, char *auteur_k, ll_list *liste_des_listes_des_sommets_sGc)
 {
     ll_node *liste_courante=liste_des_listes_des_sommets_sGc->first;
-    parcours_liste_des_auteurs_d_un_article_pour_voir_si_il_faut_fusionner_cetaines_listes_deja_cree(auteurk, liste_courante,  liste_des_listes_des_sommets_sGc);
+
+    comparaison_auteur *comparaison_auteur=auteur_pas_trouvé;
 
     for(int j=0; j < liste_des_listes_des_sommets_sGc->size; j++) /* et pour tout ces auteurs on regarde toutes les listes crées*/
         {
-            liste_courante=liste_courante->next;
-            parcours_liste_des_auteurs_d_un_article_pour_voir_si_il_faut_fusionner_cetaines_listes_deja_cree(auteurk, liste_courante,  liste_des_listes_des_sommets_sGc);
-        }
-}
+            
+            parcours_liste_des_auteurs_d_un_article_pour_voir_si_il_faut_fusionner_cetaines_listes_deja_cree(comparaison_auteur, auteur_k, liste_courante,  liste_des_listes_des_sommets_sGc);
+            
 
+            if(comparaison_auteur==auteur_trouvé_dans_sGcj)
+            {
+                mettre_tous_les_ak_de_Ai_dans_sGcj_sauf_ceux_qui_y_sont_deja(fiche_i,liste_courante);
+            }
+            
+            
+            liste_courante=liste_courante->next;
+        }
+    
+    if(comparaison_auteur==auteur_pas_trouvé)
+    {
+        ll_append(liste_des_listes_des_sommets_sGc, ll_create());
+        ll_list *nouvelle_liste=ll_get_node(liste_des_listes_des_sommets_sGc, (liste_des_listes_des_sommets_sGc->size)-1);
+        nouvelle_liste->first->value=*auteur_k;
+    }
+}
 
 
 
@@ -93,7 +174,7 @@ void parcours_liste_des_auteurs_d_un_article_pour_voir_si_il_faut_creer_une_nouv
 {
     for(int k=0; k < fiche_i->nombre_auteur; k++)  /*on regarde les auteurs*/
     {        
-        voir_si_l_auteur_a_coecrit_article_deja_traité(fiche_i->liste_auteur[k], liste_des_listes_des_sommets_sGc);
+        voir_si_l_auteur_a_coecrit_article_deja_traité(fiche_i,fiche_i->liste_auteur[k], liste_des_listes_des_sommets_sGc);
     }
 }
 
@@ -107,7 +188,10 @@ ll_list* creation_de_la_liste_des_listes_de_sommet_des_sous_graphes_connexes(tab
     ll_list *liste_des_listes_des_sommets_sGc=ll_create();
     
     ll_list *sommets_sGc0=malloc(sizeof(ll_list));
-    liste_des_listes_des_sommets_sGc->size=1;
+    if(sommets_sGc0==NULL)
+    {
+        return NULL;
+    }
 
     ll_append(liste_des_listes_des_sommets_sGc,sommets_sGc0);
     
