@@ -80,3 +80,9 @@ void ll_insert(ll_list*list, int value, int idx);
  * remove the element at index `idx`
  */
 void ll_remove(ll_list*list, int idx);
+
+/**
+ * va chercher une addresse de pointeur dans la liste chainer
+ * retrourne l'addresse de la node de l'addresse trouver
+ */
+ll_node * ll_search_addr(ll_list*list,void * address);
