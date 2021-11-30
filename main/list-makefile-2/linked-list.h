@@ -22,12 +22,12 @@ ll_list * ll_create(void);
  * append an element to the list with the 
  * given value
  */
-void ll_append(ll_list *list, int value);
+void ll_append(ll_list *list, void* value);
 /** 
  * prepend an element to the list with the 
  * given value
  */
-void ll_prepend(ll_list *list, int value);
+void ll_prepend(ll_list *list, void* value);
 
 
 /** 
@@ -35,13 +35,17 @@ void ll_prepend(ll_list *list, int value);
  * The behavior is undefined if there are less
  * than i+1 elements in the list.
  */
-int ll_get(const ll_list *list, unsigned int i);
+int ll_get(const ll_list *list, int i);
+
+
+// retourne un pointeur vers le ième node de la list
+void *ll_get_node(const ll_list *list, int i);
 
 /** 
  * return 1 if the function succeed
  * 0 if there is an error
  */
-int ll_get_safe(const ll_list *list, unsigned int i, int *value);
+int ll_get_safe(const ll_list *list, unsigned int i, void **value);
 
 
 /** free the list

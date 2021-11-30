@@ -48,7 +48,8 @@ void ll_append(ll_list *list, void* value) {
     it->next = new_element;
 }
 
-void* ll_get(const ll_list *list, unsigned int value_idx) {
+void* ll_get(const ll_list *list, unsigned int value_idx) 
+{
 
     ll_node *it = list->first;
 
@@ -255,4 +256,15 @@ void ll_remove(ll_list*list, int idx)
         place->next=place->next->next;
         free(intermediaire_ptr);
     }
+}
+
+
+void *ll_get_node(const ll_list *list, int idx)
+{
+    ll_node *it = list->first;
+
+    for(int i = 0; i <idx; i++) {
+        it = it->next;
+    }
+    return it;
 }

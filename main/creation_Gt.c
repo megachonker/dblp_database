@@ -58,15 +58,15 @@ typedef enum comparaison_auteur
 void mettre_tous_les_ak_de_sGcn_dans_sGcj_sauf_ceux_qui_y_sont_deja(ll_list *sGcn, ll_list *sGcj)
 {
     ll_node *it_sGcj=sGcj->first;
-    ll_node *it_sGcn=sGcn->first
+    ll_node *it_sGcn=sGcn->first;
     
-    for(int l=0; l<Ai->nombre_auteur; l++)
+    for(int p=0; p<sGcn->size; p++)
     {
         comparaison_auteur *comparaison_auteur=auteur_pas_trouvé;
 
-        for(int r=0; r<sGcj->size; r++)
+        for(int m=0; m<sGcj->size; m++)
         {
-            if(it_sGcj->value!=Ai->liste_auteur[l])
+            if(it_sGcj->value==it_sGcn->value)
             {
                 comparaison_auteur=auteur_trouvé_dans_sGcj;
             }
@@ -74,9 +74,16 @@ void mettre_tous_les_ak_de_sGcn_dans_sGcj_sauf_ceux_qui_y_sont_deja(ll_list *sGc
             it_sGcj=it_sGcj->next;
         }
 
-        if(comparaison_auteur!=auteur_trouvé_dans_sGcj)
-            append(sGcj,Ai->liste_auteur[l]);
+        if(comparaison_auteur==auteur_pas_trouvé)
+            append(sGcj, it_sGcn->value);
+        
+        it_sGcn=it_sGcn->next;
+
+    }
+
+    ll_free(sGcn);
 }
+
 
 
 
@@ -93,7 +100,7 @@ void mettre_tous_les_ak_de_Ai_dans_sGcj_sauf_ceux_qui_y_sont_deja(fiche_minimal 
 
         for(int r=0; r<sGcj->size; r++)
         {
-            if(it_sGcj->value!=Ai->liste_auteur[l])
+            if(it_sGcj->value==Ai->liste_auteur[l])
             {
                 comparaison_auteur=auteur_trouvé_dans_sGcj;
             }
@@ -101,7 +108,7 @@ void mettre_tous_les_ak_de_Ai_dans_sGcj_sauf_ceux_qui_y_sont_deja(fiche_minimal 
             it_sGcj=it_sGcj->next;
         }
 
-        if(comparaison_auteur!=auteur_trouvé_dans_sGcj)
+        if(comparaison_auteur==auteur_pas_trouvé)
             append(sGcj,Ai->liste_auteur[l]);
     }
 }
@@ -111,7 +118,7 @@ void mettre_tous_les_ak_de_Ai_dans_sGcj_sauf_ceux_qui_y_sont_deja(fiche_minimal 
 
 
 
-comparer_l_auteur_k_et_traiter_les_listes_de_sommet_sGc(comparaison_auteur *comparaison_auteur, char *auteur_k,ll_node *it_auteur_liste_courante, ll_list *liste_des_listes_des_sommets_sGc)
+void comparer_l_auteur_k_et_traiter_les_listes_de_sommet_sGc(comparaison_auteur *comparaison_auteur, char *auteur_k,ll_node *it_auteur_liste_courante, ll_list *liste_des_listes_des_sommets_sGc)
 {
     if(!strcmp(auteur_k,it_auteur_liste_courante->value)==0)
     {
@@ -153,6 +160,7 @@ void voir_si_l_auteur_a_coecrit_article_deja_traité(fiche_minimal *fiche_i, cha
             if(comparaison_auteur==auteur_trouvé_dans_sGcj)
             {
                 mettre_tous_les_ak_de_Ai_dans_sGcj_sauf_ceux_qui_y_sont_deja(fiche_i,liste_courante);
+
             }
             
             
