@@ -14,21 +14,33 @@ if (!p)\
 //soucis sommet auteur pointeur sur des auteur tot heuvre 
 //soucis check que les tab d'addresse sont nu dans les for if
 
+typedef struct Sommet_Auteur
+{
+    char * auteur;
+    ll_list * titre_article;
+}Sommet_Auteur;
 
 
 
-int convertStruct(tableaux_fiche input, ll_list * list_chainer ){
+int convertStruct(tableaux_fiche input, ll_list * list_chainer_auteur ){
     int indice = 0;
     for (int i = 0; i < input.taille; i++)
     {
         for (int u = 0; u < input.fiche[i]->nombre_auteur; u++)
-        {   
-            //structure paire
+        {
+            ll_node *list_chainer_article = ll_search_addr(list_chainer_auteur,input.fiche[i]->liste_auteur[u]);
+            if (list_chainer_article)
+            {       
+                ll_append(list_chainer_article,input.fiche[i]->titre);
+            }else{
+                Sommet_Auteur new_sommet;
+                new_sommet.auteur = input.fiche[i]->liste_auteur[u];
+                new_sommet.titre_article = ll_create();
+                ll_append(&new_sommet.titre_article,input.fiche[i]->titre);
+            }
             
-            ll_insert(list_chainer,)
-            list_chainer[indice].heuvre = input.fiche[i];
-            list_chainer[indice].hauteur = input.fiche[i]->liste_auteur[u];
-            indice++;
+            //structure paire
+            // list_chainer[indice].hauteur = input.fiche[i]->liste_auteur[u];
 
 
             
