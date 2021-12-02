@@ -10,7 +10,7 @@ bench:	bench.o parsing.o
 	$(CC) -o bench  $^ $(CFLAGS) $(LDLIBS)
 	# bench $(BENCHNUMBER)
 
-tests:	tests.o parsing.o
+tests:	tests.o parsing.o list.o
 	$(CC) -o tests  $^ $(CFLAGS) $(LDLIBS)
 
 main:	main.o parsing.o
