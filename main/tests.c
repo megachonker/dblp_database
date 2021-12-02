@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "parsing.h"
-#include "list-makefile-2/linked-list.h"
+#include "list.h"
 
 #define exitIfNull(p,msg)\
 if (!p)\
@@ -22,58 +22,35 @@ typedef struct Sommet_Auteur
 
 
 
-int convertStruct(tableaux_fiche input, ll_list * list_chainer_auteur ){
+void convertStruct(tableaux_fiche input, ll_list * list_chainer_auteur ){
     int indice = 0;
     for (int i = 0; i < input.taille; i++)
     {
         for (int u = 0; u < input.fiche[i]->nombre_auteur; u++)
         {
-            ll_node *list_chainer_article = ll_search_addr(list_chainer_auteur,input.fiche[i]->liste_auteur[u]);
-            if (list_chainer_article)
-            {       
-                ll_append(list_chainer_article,input.fiche[i]->titre);
-            }else{
-                Sommet_Auteur new_sommet;
-                new_sommet.auteur = input.fiche[i]->liste_auteur[u];
-                new_sommet.titre_article = ll_create();
-                ll_append(&new_sommet.titre_article,input.fiche[i]->titre);
-            }
-            
-            //structure paire
-            // list_chainer[indice].hauteur = input.fiche[i]->liste_auteur[u];
-
-
-            
-            //verrifier que l'auteur selectioner existe dans la liste chainer
-            //et ajouter le titre associer a la liste chainer 
-
-            //dans la liste chainer faire des insert comme il faut
-            //faire des get auteur
-
-            // ll_list auteur 
-
-            //customiser ll_liste
-            //liste chainer pour ajouter mes article a mes uteur
-
+            add_entry(list_chainer_auteur,input.fiche[i]->liste_auteur[u],input.fiche[i]->titre);
         }
     }
     return indice;
 }
 
-
 int main()
 {
+    // FILE * out = fopen("DATA/SerializedStruc.data","w");
+    // exitIfNull(out,"INPUT PAS CHEMAIN")
+    // FILE * inputDB = fopen("DATA/dblp.xml","r");
+    // exitIfNull(inputDB,"INPUT PAS CHEMAIN")
+    // tableaux_fiche mesfiches = parse(inputDB);
+    // serialize(mesfiches,out);
+
     FILE * inputDB = fopen("DATA/SerializedStruc.data","r");
     exitIfNull(inputDB,"INPUT PAS CHEMAIN")
     tableaux_fiche mesfiches = deserialisation(inputDB);
-
+    // printTabmeaux(mesfiches);
     ll_list * Liste_chainer = ll_create();
-
-
-    int sizeHauteurHeuvre = convertStruct(mesfiches,HauteurHeuvre);
-    // printHauteur_Heuvre(HauteurHeuvre);
-    sort_tableaux_fiche(HauteurHeuvre,sizeHauteurHeuvre );
-    printHauteur_Heuvre(HauteurHeuvre,sizeHauteurHeuvre );
+    convertStruct(mesfiches,Liste_chainer);
+    // printHauteur_Heuvre(Liste_chainer);
+    // printHauteur_Heuvre(Liste_chainer,sizeHauteurHeuvre );
 
     //liste des hauteur trier
     //dans la fonction de trie si 2 foit meme hauteur crée un structure SommetHauteur qui liste les hauteur
