@@ -2,6 +2,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define exitIfNull(p,msg,e)\
+if (!p)\
+{\
+    fprintf(stderr,msg);\
+    exit(e);\
+}\
+
+
+
 typedef struct ll_node {
     void *value;
     struct ll_node *next;
@@ -18,6 +27,9 @@ typedef struct Sommet_Auteur
     char * auteur;
     ll_list * titre_article;
 }Sommet_Auteur;
+
+
+
 
 ll_list * ll_create(void) {
     ll_list * list = malloc(sizeof(ll_list));
@@ -49,6 +61,113 @@ void ll_append(ll_list *list, void *value) {
     it->next = new_element;
 }
 
+
+void ll_prepend(ll_list *list, void *value) {
+
+    ll_node *new_element = malloc(sizeof(ll_node));
+    if(!new_element)
+        exit(1);
+
+    new_element->value=value;
+    new_element->next=list->first;
+
+    list->first=new_element;
+    list->size++;  
+}
+
+void ll_insert(ll_list*list, void * value, int idx)
+{
+    if(list->first==NULL)
+    {    
+        ll_append(list,value); 
+    }
+    else if(idx==0)
+    {   
+        ll_prepend(list,value);
+    }
+    else
+    {
+        list->size++;
+    
+        ll_node *new_node_ptr=malloc(sizeof(ll_node));
+    
+        if(new_node_ptr==NULL)
+        {
+            exit(1);
+        }
+
+        new_node_ptr->value=value;
+        new_node_ptr->next=NULL;
+
+        ll_node *place=list->first;
+        for(int i=0; i<idx-1; i++)
+        {
+            place=place->next;
+        }
+
+        new_node_ptr->next=place->next;
+        place->next=new_node_ptr;
+    }
+}
+
+
+
+void ll_pop_first(ll_list *list){
+    ll_node * second = list->first->next;
+    free(list->first);
+    list->first = second;
+    list->size--;
+}
+
+void ll_pop_last(ll_list*list){
+
+    exitIfNull(list,"pointeur liste null",1)
+    exitIfNull(list->first,"liste vide",1)
+
+    // si la liste n'a qu'un element, je le libère et je fait pointer first vers NULL 
+    if(!list->first->next)
+    {
+        free(list->first);
+        list->first=NULL;
+    }
+
+    ll_node *it = list->first;
+    while(it->next->next) {
+        it = it->next;
+    }
+    free(it->next);
+    it->next = NULL;
+    list->size--;
+}
+
+
+void ll_remove(ll_list*list, int idx)
+{
+    exitIfNull(list,"erreur list n'existe pas",1)
+    exitIfNull(list->first,"erreur aucun element dans la list",1)
+
+    list->size--;
+    
+    if(idx==0)
+    {   
+        ll_pop_first(list);
+    }
+    else if(((size_t)idx==list->size-1))
+    {
+        ll_pop_last(list);
+    }
+    else
+    {
+        ll_node *it = list->first;
+        for(int i = 0; i < idx-1; i++) {
+            it = it->next;
+        }
+        ll_node old = *it;
+        it->next=it->next->next;
+        free(old.next);
+    }
+}
+
 void *ll_get(const ll_list *list, unsigned int value_idx) {
 
     ll_node *it = list->first;
@@ -59,14 +178,17 @@ void *ll_get(const ll_list *list, unsigned int value_idx) {
     return it->value;
 }
 
-void ll_pop_first(ll_list *list){
-    ll_node * second = list->first->next;
-    free(list->first);
-    list->first = second;
-    list->size--;
+void * ll_first(ll_list *list){
+    return list->first->value;
 }
 
-//pop last
+void * ll_last(ll_list *list){
+    return ll_get(list,ll_size(list)-1);
+}
+
+size_t ll_size(ll_list*list) {
+    return list->size;
+}
 
 void ll_free(ll_list *list) {
     if(list == NULL) return;
