@@ -13,8 +13,11 @@ help(){
 }
 
 lunch(){
-    \time -f "%E;%U;%S;%P" ./bench $1
+    time ./bench $1
 }
+# lunch(){
+#     \time -f "%E;%U;%S;%P" ./bench $1
+# }
 
 moyenne(){
     echo "$1"
