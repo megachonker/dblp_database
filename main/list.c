@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <stddef.h>
+
 #define exitIfNull(p,msg,e)\
 if (!p)\
 {\
@@ -18,7 +20,7 @@ typedef struct ll_node {
 
 struct ll_list {
     struct ll_node *first;
-    int size;
+    size_t size;
 };
 
 
@@ -199,44 +201,13 @@ void ll_free(ll_list *list) {
     free(list);
 }
 
-
-// void *ll_find(ll_list *list, int (*match)(void*)) {
-//     ll_node *pointeur = list->first;
-//     while(pointeur->next != NULL) {
-//         pointeur = pointeur->next;
-
-//         if(match(pointeur->value) != 0){
-//             return pointeur->value;
-//         }
-//     }
-//     return NULL;
-// }
-
-
-// void *ll_find_data(ll_list *list, int (*match)(void*,void*), void *data){
-
-//     ll_node *pointeur = list->first;
-//     while(pointeur->next != NULL) {
-//         pointeur = pointeur->next;
-
-//         if(match(pointeur->value,data) != 0){
-//             return pointeur->value;
-//         }
-//     }
-//     return NULL;
-
-//     return NULL;
-// }
-
-// int ll_match_char_equals(void *el, void *data){
-//     if (*(int*)el == *(int*)data)
-//     {
-//         return 1;
-//     }
-    
-//     return 0;
-// }
-
+void ll_print_list_as_char(ll_list *list){
+    ll_node *it = list->first;
+    while(it->next->next) {
+        printf("char*:%s\n",(char*)it->value);
+        it = it->next;
+    }
+}
 
 ll_node * ll_search_auteur(ll_list* list,char * address){
     ll_node *it = list->first;
@@ -244,8 +215,9 @@ ll_node * ll_search_auteur(ll_list* list,char * address){
     for(unsigned int i = 0; i < list->size; i++) {
         Sommet_Auteur * a = (Sommet_Auteur*)it->value;
         char * b = a->auteur;
-        printf("b: %c, addr %c",b,address);
         if( b == address){
+                    printf("b: %s, addr %s\n",b,address);
+
             return it;
         }
         it = it->next;
@@ -255,10 +227,11 @@ ll_node * ll_search_auteur(ll_list* list,char * address){
 
 void add_entry(ll_list * list_chainer_auteur,char * auteur, char* titre){
     ll_node *list_chainer_article = ll_search_auteur(list_chainer_auteur,auteur);
-
     if (list_chainer_article)
-    {       
-        ll_append(list_chainer_article,titre);
+    {
+        Sommet_Auteur * list_chainer_Somet_hauteur = (Sommet_Auteur*) list_chainer_article;
+        printf("append: %s to %s\n",titre,auteur);
+        ll_append(list_chainer_Somet_hauteur->titre_article,titre);
     }else{
         Sommet_Auteur new_sommet;
         new_sommet.auteur = auteur;
