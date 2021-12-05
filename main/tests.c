@@ -9,17 +9,22 @@ if (!p)\
     fprintf(stderr,msg);\
 }\
 
+typedef struct Sommet_Auteur
+{
+    char * auteur;
+    ll_list * titre_article;
+}Sommet_Auteur;
 
 
 //soucis la mémoir
 //soucis sommet auteur pointeur sur des auteur tot heuvre 
 //soucis check que les tab d'addresse sont nu dans les for if
 
-typedef struct Sommet_Auteur
-{
-    char * auteur;
-    ll_list * titre_article;
-}Sommet_Auteur;
+// typedef struct Sommet_Auteur
+// {
+//     char * auteur;
+//     ll_list * titre_article;
+// }Sommet_Auteur;
 
 
 void print_liste_chainer_Auteur_titre(ll_list * list_chainer_auteur){
@@ -69,51 +74,51 @@ int main()
 
     FILE * inputDB = fopen("DATA/SerializedStruc.data","r");
     exitIfNull(inputDB,"INPUT PAS CHEMAIN")
-    tableaux_fiche mesfiches = deserialisation(inputDB);
+    // tableaux_fiche mesfiches = deserialisation(inputDB);
+    ll_list * Liste_chainer = deserialisation_Liste(inputDB);
+
+    print_liste_chainer_Auteur_titre(Liste_chainer);
     // printTabmeaux(mesfiches);
 
-    #include <string.h>
+    // #include <string.h>
 
-    int taill = mesfiches.taille;
-    taill = 100000;
-    for (int i = 0; i < taill; i++)
-    {
-        // char listcomp[100];
-        int nb = mesfiches.fiche[i]->nombre_auteur;
-        for (int j = 0; j < nb; j++)
-        {
-            char * origine = mesfiches.fiche[i]->liste_auteur[j];
+    // int taill = mesfiches.taille;
+    // // taill = 100000;
+    // for (int i = 0; i < taill; i++)
+    // {
+    //     // char listcomp[100];
 
-            for (int u = i+1; u < taill; u++)
-            {
-                int max = mesfiches.fiche[u]->nombre_auteur;
-                for (int p = 0; p < max; p++)
-                {
-                    // if (mesfiches.fiche[u]->nombre_auteur > -1)
-                    // {
-                        if (origine!=mesfiches.fiche[u]->liste_auteur[p])
-                        {
-                            if (strcmp(origine,mesfiches.fiche[u]->liste_auteur[p])==0)
-                            {
-                                // printf("MATCH: %s<=>%s\n",origine,mesfiches.fiche[u]->liste_auteur[p]);
-                                // free(mesfiches.fiche[u]->liste_auteur[p]);
-                                mesfiches.fiche[u]->liste_auteur[p] = origine;
-                            }                         
-                        }                      
-                    // }                
-                }
-                
-            }
+    //     for (int u = i+1; u < taill; u++)
+    //     {
+    //         int max = mesfiches.fiche[u]->nombre_auteur;
+    //         for (int p = 0; p < max; p++)
+    //         {
 
+    //             int nb = mesfiches.fiche[i]->nombre_auteur;
+    //             for (int j = 0; j < nb; j++)
+    //             {
+    //             char * origine = mesfiches.fiche[i]->liste_auteur[j];
 
-
-
-        }  
-            float avancement = ((float)(i+1)/(float)taill)*100;
-            printf("avancement: %f\n",avancement);  
-    }
+    //             // if (mesfiches.fiche[u]->nombre_auteur > -1)
+    //             // {
+    //                 if (origine!=mesfiches.fiche[u]->liste_auteur[p])
+    //                 {
+    //                     if (strcmp(origine,mesfiches.fiche[u]->liste_auteur[p])==0)
+    //                     {
+    //                         // printf("MATCH: %s<=>%s\n",origine,mesfiches.fiche[u]->liste_auteur[p]);
+    //                         // free(mesfiches.fiche[u]->liste_auteur[p]);
+    //                         mesfiches.fiche[u]->liste_auteur[p] = origine;
+    //                     }                         
+    //                 }                      
+    //             }                
+    //         }
+            
+    //     }
+    //         float avancement = ((float)(i+1)/(float)taill)*100;
+    //         printf("avancement: %f\n",avancement);  
+    // }
     
-    printTabmeaux(mesfiches);
+    // printTabmeaux(mesfiches);
 
     // ll_list * Liste_chainer = ll_create();
     // Sommet_Auteur new_sommet;

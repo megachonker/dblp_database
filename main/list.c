@@ -27,12 +27,6 @@ struct ll_list {
 };
 
 
-typedef struct Sommet_Auteur
-{
-    char * auteur;
-    ll_list * titre_article;
-}Sommet_Auteur;
-
 
 
 
@@ -65,6 +59,47 @@ void ll_append(ll_list *list, void *value) {
     }
     it->next = new_element;
 }
+ll_node *ll_get_addr(const ll_list *list, unsigned int value_idx) {
+    if (value_idx+1 == 0)
+    {
+        return list->first;
+    }
+    
+    ll_node *it = list->first;
+
+    for(unsigned int i = 0; i < value_idx; i++) {
+        it = it->next;
+    }
+    return it;
+}
+
+// void ll_concat(ll_list * a, ll_list * b){
+    
+//     ll_node * fin_A = ll_get_addr(a,ll_size(a)-1);
+//     a->size+=b->size;
+//     fin_A->next = b->first;
+//     free(b);
+// }
+
+void stack_append(ll_list * list,char ** buffer,int arraysize){
+    ll_node * fin_A = ll_get_addr(list,ll_size(list)-1);
+
+    for (int u = 0; u < arraysize; u++)
+    {
+        ll_node * new_element = malloc(sizeof(ll_node));
+        exitIfNull(new_element,"stackappendmalockfail\n",1)
+
+        new_element->next = NULL;
+        new_element->value = buffer[u];
+
+        fin_A->next = new_element;
+
+        fin_A = fin_A->next;
+    }
+
+    list->size+=arraysize;
+}
+
 
 void ll_prepend(ll_list *list, void *value) {
     ll_node *new_element = malloc(sizeof(ll_node));
@@ -177,6 +212,7 @@ void *ll_get(const ll_list *list, unsigned int value_idx) {
     }
     return it->value;
 }
+
 
 void * ll_first(ll_list *list){
     return list->first->value;
