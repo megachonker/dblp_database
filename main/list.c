@@ -81,6 +81,8 @@ ll_node *ll_get_addr(const ll_list *list, unsigned int value_idx) {
 //     free(b);
 // }
 
+
+
 void stack_append(ll_list * list,char ** buffer,int arraysize){
     ll_node * fin_A = ll_get_addr(list,ll_size(list)-1);
 
@@ -100,6 +102,24 @@ void stack_append(ll_list * list,char ** buffer,int arraysize){
     list->size+=arraysize;
 }
 
+void * ll_append_fromAddr(ll_list * lisstapparien, void * ll_node_address, void * address_a_add){
+
+    if (ll_node_address == NULL)
+    {
+        ll_append(lisstapparien,address_a_add);
+        return ll_last_addr(lisstapparien);
+    }
+    
+    ll_node * new_element = malloc(sizeof(ll_node));
+    exitIfNull(new_element,"stackappendmalockfail\n",1)
+
+    new_element->next = NULL;
+    new_element->value = address_a_add;
+
+    ((ll_node*)ll_node_address)->next = new_element;
+    lisstapparien->size++;
+    return new_element;
+}
 
 void ll_prepend(ll_list *list, void *value) {
     ll_node *new_element = malloc(sizeof(ll_node));
@@ -220,6 +240,10 @@ void * ll_first(ll_list *list){
 
 void * ll_last(ll_list *list){
     return ll_get(list,ll_size(list)-1);
+}
+
+void * ll_last_addr(ll_list *list){
+    return ll_get_addr(list,ll_size(list)-1);    
 }
 
 size_t ll_size(ll_list*list) {

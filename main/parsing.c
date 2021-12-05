@@ -200,11 +200,16 @@ tableaux_fiche deserialisation(FILE * input){
 }
 
 ll_list * deserialisation_Liste(FILE * input){
+    fseek(input,0,SEEK_END);
+    int maxline = ftell(input);
+    fseek(input,0,SEEK_SET);
+
     char ligne[BALISESIZE];
     ll_list * list_hauteur_heuvre = ll_create();
     Sommet_Auteur * sommet_titre =  malloc(sizeof(Sommet_Auteur));
     exitIfNull(sommet_titre, "new calloc null")
     sommet_titre->titre_article = ll_create();
+    void * addresse_node = NULL;
     while (fgets(ligne,BALISESIZE,input))
     {
         if (feof(input))
@@ -219,23 +224,23 @@ ll_list * deserialisation_Liste(FILE * input){
         int nbhauteur = atoi(ligne);
         //fast append prend une node en entrée et fait plus 1
 
-        char * burst[50];
+        char * burst[6];
 
 
         fgets(ligne,BALISESIZE,input);
         enlever_retour_a_la_ligne(ligne);
         ll_append(sommet_titre->titre_article,strdup(ligne));
-
-        for (int i = 1; i < nbhauteur; i++)
+        //on fait un buffer
+        for (int i = 0; i < nbhauteur-1; i++)
         {
             fgets(ligne,BALISESIZE,input);
             enlever_retour_a_la_ligne(ligne);
-            burst[i] = strdup(ligne); //verifier peut foutre la m aveec en bas
+            burst[i] = strdup(ligne);
         }
         stack_append(sommet_titre->titre_article,burst,nbhauteur);
 
-        ll_append(list_hauteur_heuvre,sommet_titre);
-        printf("%ld: %s\n",38635918-ftell(input),sommet_titre->auteur);        
+        addresse_node = ll_append_fromAddr(list_hauteur_heuvre,addresse_node,sommet_titre);
+        printf("%ld: %s\n",ftell(input),sommet_titre->auteur);        
         sommet_titre = calloc(1,sizeof(sommet_titre));
         exitIfNull(sommet_titre, "new calloc null")
         sommet_titre->titre_article = ll_create();
