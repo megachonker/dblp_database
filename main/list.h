@@ -80,4 +80,6 @@ void add_entry(ll_list * list_chainer_auteur,char * auteur, char* titre);
 
 // void ll_print_auteur_titre(ll_list *list);
 
+void ll_print_list_as_char(ll_list *list);
+
 #endif
