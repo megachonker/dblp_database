@@ -98,7 +98,6 @@ void stack_append(ll_list * list,char ** buffer,int arraysize){
 
         fin_A = fin_A->next;
     }
-
     list->size+=arraysize;
 }
 
@@ -261,9 +260,14 @@ void ll_free(ll_list *list) {
 
 void ll_print_list_as_char(ll_list *list){
     ll_node *it = list->first;
-    while(it->next->next) {
-        Sommet_Auteur * bouboule = it->value;
-        printf("char*:%s\n",bouboule->auteur);
+    char * noms = it->value;
+
+    printf("char:%s\n",noms);
+
+    while(it->next != NULL) {
+        // Sommet_Auteur * bouboule = it->value;
+        noms = it->value;
+        printf("char:%s\n",noms);
         it = it->next;
     }
 }

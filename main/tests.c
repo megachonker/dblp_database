@@ -9,11 +9,11 @@ if (!p)\
     fprintf(stderr,msg);\
 }\
 
-typedef struct Sommet_Auteur
-{
-    char * auteur;
-    ll_list * titre_article;
-}Sommet_Auteur;
+// typedef struct Sommet_Auteur
+// {
+//     char * auteur;
+//     ll_list * titre_article;
+// }Sommet_Auteur;
 
 
 //soucis la mémoir

@@ -224,7 +224,7 @@ ll_list * deserialisation_Liste(FILE * input){
         int nbhauteur = atoi(ligne);
         //fast append prend une node en entrée et fait plus 1
 
-        char * burst[6];
+        char * burst[960810];
 
 
         fgets(ligne,BALISESIZE,input);
@@ -240,7 +240,9 @@ ll_list * deserialisation_Liste(FILE * input){
         stack_append(sommet_titre->titre_article,burst,nbhauteur);
 
         addresse_node = ll_append_fromAddr(list_hauteur_heuvre,addresse_node,sommet_titre);
-        printf("%ld: %s\n",ftell(input),sommet_titre->auteur);        
+        // printf("%f:TITRE: %s\n",(((float)ftell(input)+1)/(float)maxline)*100,sommet_titre->auteur);
+        // printf("%d\n",ll_size(sommet_titre->titre_article));       
+        // ll_print_list_as_char(sommet_titre->titre_article);       
         sommet_titre = calloc(1,sizeof(sommet_titre));
         exitIfNull(sommet_titre, "new calloc null")
         sommet_titre->titre_article = ll_create();
