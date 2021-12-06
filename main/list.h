@@ -4,6 +4,12 @@
 #include <stddef.h>
 struct ll_list;
 typedef struct ll_list ll_list;
+typedef struct Sommet_Auteur
+{
+    char * auteur;
+    ll_list * titre_article;
+}Sommet_Auteur;
+
 
 /**
  * create a node with the given value
@@ -80,4 +86,11 @@ void add_entry(ll_list * list_chainer_auteur,char * auteur, char* titre);
 
 // void ll_print_auteur_titre(ll_list *list);
 
+void ll_print_list_as_char(ll_list *list);
+
+
+void stack_append(ll_list * list,char ** buffer,int arraysize);
+void * ll_append_fromAddr(ll_list * lisstapparien, void * ll_node_address, void * address_a_add);
+
+void * ll_last_addr(ll_list *list);
 #endif

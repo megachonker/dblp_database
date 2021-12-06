@@ -1,6 +1,7 @@
 #ifndef PARSING_H
 #define PARSING_H
 #include <stdio.h>
+#include "list.h"
 
 typedef struct fiche_minimal
 {
@@ -30,6 +31,7 @@ void printM(fiche_minimal UwO);
 void printTabmeaux(tableaux_fiche OwU);
 
 void serialize(tableaux_fiche mastertab, FILE * outfichier);
-tableaux_fiche deserialisation();
+tableaux_fiche deserialisation(FILE * input);
+ll_list * deserialisation_Liste(FILE * input);
 
 #endif
