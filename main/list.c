@@ -216,8 +216,7 @@ ll_node * ll_search_auteur(ll_list* list,char * address){
         Sommet_Auteur * a = (Sommet_Auteur*)it->value;
         char * b = a->auteur;
         if( b == address){
-                    printf("b: %s, addr %s\n",b,address);
-
+            printf("b: %s, addr %s\n",b,address);
             return it;
         }
         it = it->next;
@@ -235,6 +234,8 @@ void add_entry(ll_list * list_chainer_auteur,char * auteur, char* titre){
     }else{
         Sommet_Auteur new_sommet;
         new_sommet.auteur = auteur;
+        printf("Create: %s => %s\n",auteur,titre);
+
         new_sommet.titre_article = ll_create();
         ll_append(new_sommet.titre_article,titre);
         ll_append(list_chainer_auteur,&new_sommet);

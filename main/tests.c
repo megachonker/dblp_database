@@ -23,7 +23,6 @@ typedef struct Sommet_Auteur
 
 
 void convertStruct(tableaux_fiche input, ll_list * list_chainer_auteur ){
-    int indice = 0;
     for (int i = 0; i < input.taille; i++)
     {
         for (int u = 0; u < input.fiche[i]->nombre_auteur; u++)
@@ -31,7 +30,6 @@ void convertStruct(tableaux_fiche input, ll_list * list_chainer_auteur ){
             add_entry(list_chainer_auteur,input.fiche[i]->liste_auteur[u],input.fiche[i]->titre);
         }
     }
-    return indice;
 }
 
 int main()
@@ -43,12 +41,14 @@ int main()
     // tableaux_fiche mesfiches = parse(inputDB);
     // serialize(mesfiches,out);
 
-    FILE * inputDB = fopen("DATA/SerializedStruc.data","r");
+    FILE * inputDB = fopen("DATA/TRUKERSerializedStruc.data","r");
     exitIfNull(inputDB,"INPUT PAS CHEMAIN")
     tableaux_fiche mesfiches = deserialisation(inputDB);
     // printTabmeaux(mesfiches);
     ll_list * Liste_chainer = ll_create();
     convertStruct(mesfiches,Liste_chainer);
+
+
     // printHauteur_Heuvre(Liste_chainer);
     // printHauteur_Heuvre(Liste_chainer,sizeHauteurHeuvre );
 
