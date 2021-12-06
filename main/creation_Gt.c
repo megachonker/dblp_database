@@ -228,7 +228,7 @@ void voir_si_l_auteur_a_coecrit_article_deja_traité(fiche_minimal *fiche_i, cha
                 ll_list *liste_des_ak_de_Ai_mis_dans_sGcj=ll_create();
                 mettre_tous_les_ak_de_Ai_dans_sGcj_sauf_ceux_qui_y_sont_deja(fiche_i, liste_courante, liste_des_ak_de_Ai_mis_dans_sGcj);
 
-                fusion_des_sGc_apres_traitement_de_Ai(liste_des_ak_de_Ai_mis_dans_sGcj, j, liste_des_listes_des_sommets_sGc);
+                fusion_des_sGc_apres_traitement_de_Ai(liste_des_ak_de_Ai_mis_dans_sGcj, j, liste_des_listes_des_sommets_sGc, etat_de_Gt);
                 *etat_de_Gt=traitement_Gt_terminer_pour_Ai;
 
                 break;
