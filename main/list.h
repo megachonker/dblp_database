@@ -93,4 +93,5 @@ void stack_append(ll_list * list,char ** buffer,int arraysize);
 void * ll_append_fromAddr(ll_list * lisstapparien, void * ll_node_address, void * address_a_add);
 
 void * ll_last_addr(ll_list *list);
+void ll_list_link(ll_list * list_chainer_auteur);
 #endif

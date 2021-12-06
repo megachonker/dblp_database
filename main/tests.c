@@ -20,12 +20,6 @@ if (!p)\
 //soucis sommet auteur pointeur sur des auteur tot heuvre 
 //soucis check que les tab d'addresse sont nu dans les for if
 
-// typedef struct Sommet_Auteur
-// {
-//     char * auteur;
-//     ll_list * titre_article;
-// }Sommet_Auteur;
-
 
 void print_liste_chainer_Auteur_titre(ll_list * list_chainer_auteur){
     int siz = ll_size(list_chainer_auteur);
@@ -43,20 +37,8 @@ void print_liste_chainer_Auteur_titre(ll_list * list_chainer_auteur){
     }
 }
 
-void convertStruct(tableaux_fiche input, ll_list * list_chainer_auteur ){
-    for (int i = 0; i < input.taille; i++)
-    {
-        for (int u = 0; u < input.fiche[i]->nombre_auteur; u++)
-        {
-            // printf("%s\n",input.fiche[i]->liste_auteur[u]);
-            // ll_print_list_as_char(list_chainer_auteur);
-            add_entry(list_chainer_auteur,input.fiche[i]->liste_auteur[u],input.fiche[i]->titre);
-            // printf("%s\n",input.fiche[i]->liste_auteur[u]);
-        }
-        float avancement = ((float)(i+1)/(float)input.taille)*100;
-        printf("avancement: %f\n",avancement);
-    }
-}
+
+
 
 int main()
 {
@@ -76,46 +58,17 @@ int main()
     // tableaux_fiche mesfiches = deserialisation(inputDB);
     ll_list * Liste_chainer = deserialisation_Liste(inputDB);
 
+
+
+    ll_list_link(Liste_chainer);
+
     print_liste_chainer_Auteur_titre(Liste_chainer);
+
+
     // printTabmeaux(mesfiches);
 
-    // #include <string.h>
 
-    // int taill = mesfiches.taille;
-    // // taill = 100000;
-    // for (int i = 0; i < taill; i++)
-    // {
-    //     // char listcomp[100];
 
-    //     for (int u = i+1; u < taill; u++)
-    //     {
-    //         int max = mesfiches.fiche[u]->nombre_auteur;
-    //         for (int p = 0; p < max; p++)
-    //         {
-
-    //             int nb = mesfiches.fiche[i]->nombre_auteur;
-    //             for (int j = 0; j < nb; j++)
-    //             {
-    //             char * origine = mesfiches.fiche[i]->liste_auteur[j];
-
-    //             // if (mesfiches.fiche[u]->nombre_auteur > -1)
-    //             // {
-    //                 if (origine!=mesfiches.fiche[u]->liste_auteur[p])
-    //                 {
-    //                     if (strcmp(origine,mesfiches.fiche[u]->liste_auteur[p])==0)
-    //                     {
-    //                         // printf("MATCH: %s<=>%s\n",origine,mesfiches.fiche[u]->liste_auteur[p]);
-    //                         // free(mesfiches.fiche[u]->liste_auteur[p]);
-    //                         mesfiches.fiche[u]->liste_auteur[p] = origine;
-    //                     }                         
-    //                 }                      
-    //             }                
-    //         }
-            
-    //     }
-    //         float avancement = ((float)(i+1)/(float)taill)*100;
-    //         printf("avancement: %f\n",avancement);  
-    // }
     
     // printTabmeaux(mesfiches);
 

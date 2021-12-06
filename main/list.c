@@ -274,14 +274,13 @@ void ll_print_list_as_char(ll_list *list){
 
 ll_node * ll_search_auteur(ll_list* list,char * address){
     ll_node *it = list->first;
-    while(it->next != NULL) {
+    while(it->next != NULL && it->value != address) {
         char *  lfranbnnnce_wuuuuie = ((Sommet_Auteur*)it->value)->auteur;
-        // if(address[0]!='\0'){
         if(strcmp(lfranbnnnce_wuuuuie,address)==0){
+            lfranbnnnce_wuuuuie = address;
             // printf("b: %s;%s\n",lfranbnnnce_wuuuuie,address);
             return it;
         }
-        // }
         it = it->next;
     }
     return NULL;
@@ -309,4 +308,35 @@ void add_entry(ll_list * list_chainer_auteur,char * auteur, char* titre){
         ll_append(new_sommet->titre_article,titre);
         ll_append(list_chainer_auteur,new_sommet);
     }
+}
+
+
+int ll_fill_buffer(Sommet_Auteur * sommet,char ** buffer,int sizebuff){
+    ll_node *it = sommet->titre_article;
+    int i=0;
+    while(it->next) {
+        buffer[i] = it->value;
+        i++;
+        it = it->next;
+    }
+    return i;
+}
+
+//on parcour depuis le début est on cherche les ocurande depuis la fin
+
+//on chope la dernier 
+void ll_list_link(ll_list * list_chainer_auteur){
+    char * buffer[50];
+    Sommet_Auteur * last_Titre = ll_last(list_chainer_auteur);
+    int buffsize = ll_fill_buffer(last_Titre,buffer,50);
+
+    ll_node *it = list_chainer_auteur->first;
+    while(it->next != NULL) {
+        for (int j = 0; j < buffsize; j++)
+        {
+            ll_node  * hit = ll_search_auteur(list_chainer_auteur,buffer[j]);
+        }   
+        it = it->next;
+    }
+    list_chainer_auteur->size;
 }
