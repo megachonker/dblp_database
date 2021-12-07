@@ -278,7 +278,7 @@ ll_node * ll_search_auteur(ll_list* list,char * address){
         char *  lfranbnnnce_wuuuuie = ((Sommet_Auteur*)it->value)->auteur;
         if(strcmp(lfranbnnnce_wuuuuie,address)==0){
             lfranbnnnce_wuuuuie = address;
-            // printf("b: %s;%s\n",lfranbnnnce_wuuuuie,address);
+            printf("b: %s;%s\n",lfranbnnnce_wuuuuie,address);
             return it;
         }
         it = it->next;
@@ -311,10 +311,16 @@ void add_entry(ll_list * list_chainer_auteur,char * auteur, char* titre){
 }
 
 
-int ll_fill_buffer(Sommet_Auteur * sommet,char ** buffer,int sizebuff){
-    ll_node *it = sommet->titre_article;
+int ll_fill_buffer(ll_list * sommet,char ** buffer,int sizebuff){
+    ll_node *it = sommet->first;
     int i=0;
     while(it->next) {
+        if (i>sizebuff)
+        {
+            return(2);
+            fprintf(stderr,"surplus:\n");
+        }
+        
         buffer[i] = it->value;
         i++;
         it = it->next;
@@ -324,19 +330,24 @@ int ll_fill_buffer(Sommet_Auteur * sommet,char ** buffer,int sizebuff){
 
 //on parcour depuis le début est on cherche les ocurande depuis la fin
 
-//on chope la dernier 
-void ll_list_link(ll_list * list_chainer_auteur){
-    char * buffer[50];
-    Sommet_Auteur * last_Titre = ll_last(list_chainer_auteur);
-    int buffsize = ll_fill_buffer(last_Titre,buffer,50);
+//on chope la dernier
 
+#define LUL 50
+
+void ll_list_link(ll_list * list_chainer_auteur){
+    char * buffer[LUL];
+    Sommet_Auteur * last_Titre = ll_last(list_chainer_auteur);
+    // Sommet_Auteur * last_Titre=list_chainer_auteur->first->value;
+    int buffsize = ll_fill_buffer(last_Titre->titre_article,buffer,LUL);
     ll_node *it = list_chainer_auteur->first;
     while(it->next != NULL) {
+        printf("%s\n",((ll_node*)it->next->value)->value);
         for (int j = 0; j < buffsize; j++)
         {
-            ll_node  * hit = ll_search_auteur(list_chainer_auteur,buffer[j]);
+            // ll_node  * hit = 
+            ll_search_auteur(list_chainer_auteur,buffer[j]);
+            printf("HIT %d/%d\n",j,buffsize);
         }   
         it = it->next;
     }
-    list_chainer_auteur->size;
 }

@@ -20,7 +20,6 @@ if (!p)\
 //soucis sommet auteur pointeur sur des auteur tot heuvre 
 //soucis check que les tab d'addresse sont nu dans les for if
 
-
 void print_liste_chainer_Auteur_titre(ll_list * list_chainer_auteur){
     int siz = ll_size(list_chainer_auteur);
     for (int i = 0; i < siz; i++)
@@ -98,6 +97,16 @@ int main()
 
     // creation_de_la_liste_des_listes_de_sommet_des_sous_graphes_connexes(mesfiches);
 
+
+
+
+
+
+
+    //auteur ===> liste cooauteur 
+        // list auteur liste article => liste cooteur
+
+    //les hash avec des chiffreeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeemlkjmlkjmlkjmlkjlmkjlmkjlmklmkjmlkjlkmjlmkjlmkjmlkmlkjmlkjmlkjmlkjmlkjmlkjlmkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkmdv
 
     return 0;
 }
