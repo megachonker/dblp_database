@@ -94,4 +94,6 @@ void * ll_append_fromAddr(ll_list * lisstapparien, void * ll_node_address, void 
 
 void * ll_last_addr(ll_list *list);
 void ll_list_link(ll_list * list_chainer_auteur);
+void print_liste_chainer_Auteur_titre(ll_list * list_chainer_auteur);
+
 #endif

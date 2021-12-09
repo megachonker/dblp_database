@@ -351,3 +351,21 @@ void ll_list_link(ll_list * list_chainer_auteur){
         it = it->next;
     }
 }
+
+//pas testezr apres deplacement
+void print_liste_chainer_Auteur_titre(ll_list * list_chainer_auteur)
+{
+    int siz = ll_size(list_chainer_auteur);
+    for (int i = 0; i < siz; i++)
+    {
+        Sommet_Auteur * monauteur = ll_get(list_chainer_auteur,i);
+        printf("\nAuteur: %s\n",monauteur->auteur);
+        ll_list * listart = monauteur->titre_article;
+        int sizze = ll_size(listart); 
+        for (int j = 1; j < sizze; j++)
+        {
+            char * mtitre = ll_get(listart,j);
+            printf("%s;  \n",mtitre);
+        }
+    }
+}

@@ -9,32 +9,12 @@ if (!p)\
     fprintf(stderr,msg);\
 }\
 
-// typedef struct Sommet_Auteur
-// {
-//     char * auteur;
-//     ll_list * titre_article;
-// }Sommet_Auteur;
-
 
 //soucis la mémoir
 //soucis sommet auteur pointeur sur des auteur tot heuvre 
 //soucis check que les tab d'addresse sont nu dans les for if
 
-void print_liste_chainer_Auteur_titre(ll_list * list_chainer_auteur){
-    int siz = ll_size(list_chainer_auteur);
-    for (int i = 0; i < siz; i++)
-    {
-        Sommet_Auteur * monauteur = ll_get(list_chainer_auteur,i);
-        printf("\nAuteur: %s\n",monauteur->auteur);
-        ll_list * listart = monauteur->titre_article;
-        int sizze = ll_size(listart); 
-        for (int j = 1; j < sizze; j++)
-        {
-            char * mtitre = ll_get(listart,j);
-            printf("%s;  \n",mtitre);
-        }
-    }
-}
+
 
 
 
