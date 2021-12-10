@@ -332,14 +332,14 @@ int ll_fill_buffer(ll_list * sommet,char ** buffer,int sizebuff){
 //on chope la dernier
 
 #define LUL 50
-
+//BROKEN
 void ll_list_link(ll_list * list_chainer_auteur){
     char * buffer[LUL];
     Sommet_Auteur_ListChainer * last_Titre = ll_last(list_chainer_auteur);
     int buffsize = ll_fill_buffer(last_Titre->titre_article,buffer,LUL);
     ll_node *it = list_chainer_auteur->first;
     while(it->next != NULL) {
-        printf("%s\n",((ll_node*)it->next->value)->value);
+        // printf("%s\n",((ll_node*)it->next->value)->value);
         for (int j = 0; j < buffsize; j++)
         {
             ll_search_auteur(list_chainer_auteur,buffer[j]);
