@@ -3,18 +3,26 @@
 #include <stdio.h>
 #include "list.h"
 
+/**
+ * @brief Titre && liste des auteur
+ * 
+ */
 typedef struct fiche_minimal
 {
-    char * titre;
-    int nombre_auteur;
-    char ** liste_auteur;
+    char * titre;           ///< titre de l'heuvre / article
+    int nombre_auteur;      ///< nombre d'auteur
+    char ** liste_auteur;   ///< liste de liste de caractere des noms d'auteur
     //add une uid pour un auteur
 }fiche_minimal;
 
+/**
+ * @brief Contien toute les fiche_minimal
+ * @struct tableaux_fiche
+ */
 typedef struct tableaux_fiche
 {
-    fiche_minimal ** fiche;
-    int taille;
+    fiche_minimal ** fiche; ///< tableaux des fiche_minimal utiliser
+    int taille;             ///<taille tableaux
 }tableaux_fiche;
 
 tableaux_fiche parse(FILE * inputDB);
