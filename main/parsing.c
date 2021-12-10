@@ -134,7 +134,12 @@ tableaux_fiche parse(FILE * inputDB){
         {
             // printM_titre(*fichelocalM);
             // printM_liste_auteur(*fichelocalM);
-            appendTabmeaux(&tableaux_allfiche,fichelocalM);
+
+            if (strcmp(fichelocalM->titre,"Home Page")!=0)
+            {
+                appendTabmeaux(&tableaux_allfiche,fichelocalM);
+            }
+
             fichelocalM = calloc(1,sizeof(fiche_minimal));
             exitIfNull(fichelocalM, "new calloc null")
             fichelocalM->nombre_auteur = 0;
@@ -200,13 +205,13 @@ tableaux_fiche deserialisation(FILE * input){
 }
 
 ll_list * deserialisation_Liste(FILE * input){
-    fseek(input,0,SEEK_END);
-    int maxline = ftell(input);
-    fseek(input,0,SEEK_SET);
+    // fseek(input,0,SEEK_END);
+    // int maxline = ftell(input);
+    // fseek(input,0,SEEK_SET);
 
     char ligne[BALISESIZE];
     ll_list * list_hauteur_heuvre = ll_create();
-    Sommet_Auteur * sommet_titre =  malloc(sizeof(Sommet_Auteur));
+    Sommet_Auteur_ListChainer * sommet_titre =  malloc(sizeof(Sommet_Auteur_ListChainer));
     exitIfNull(sommet_titre, "new calloc null")
     sommet_titre->titre_article = ll_create();
     void * addresse_node = NULL;
