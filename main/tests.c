@@ -19,58 +19,59 @@ if (!p)\
 //soucis sommet auteur pointeur sur des auteur tot heuvre 
 //soucis check que les tab d'addresse sont nu dans les for if
 
-
 //2go de tableaux ?
 #define MAXarraySIZE 21143793
-
-#define MaxTitre 5
-#define MaxHauteur 2994451
 
 /**
  * @brief couple Hauteur <=> Heuvre
  */
-typedef struct hauteurToHeurvre
+typedef struct Paire_HauteurHeurvre
 {
     char * hauteur;
     fiche_minimal * heuvre;
-}hauteurToHeurvre;
+}Paire_HauteurHeurvre;
+
 
 /**
- * @brief Stoque tout les Sommet_hauteur
+ * @brief Un hauteur plusieur heuvre
  * 
- * sous forme de tableaux DYNAMIQUE d'adresse pointant sur Sommet_hauteur
- * ainsie que le nombre d'élément (Sommet_hauteur) stoquer dans le tableaux 
+ */
+typedef struct Sommet_Auteur_TableauxD
+{
+    char * hauteur;
+    fiche_minimal ** heuvre;///<tableaux dynamique d'adresse pointant sur des structure contenant oeuvre
+    int size;               ///<taille du tableaux dynamique
+}Sommet_Auteur_TableauxD;
+
+
+/**
+ * @brief Stoque tout les Sommet_Auteur_TableauxD
+ * 
+ * sous forme de tableaux DYNAMIQUE d'adresse pointant sur Sommet_Auteur_TableauxD
+ * ainsie que le nombre d'élément (Sommet_Auteur_TableauxD) stoquer dans le tableaux 
  */
 typedef struct List_Auteur
 {
-    Sommet_hauteur ** tableaux_Somet_hauteur;
+    Sommet_Auteur_TableauxD * tableaux_Somet_hauteur;
     int taille;
 }List_Auteur;
 
-typedef struct Sommet_hauteur
-{
-    char * hauteur;
-    fiche_minimal * heuvre[MAXarraySIZE];//faire une liste chainer ou des malloc
-    // int size;
-}Sommet_hauteur;
 
-
-hauteurToHeurvre HauteurHeuvre[MAXarraySIZE];
-// Sommet_hauteur list_sommet[MaxHauteur];
+Paire_HauteurHeurvre HauteurHeuvre[MAXarraySIZE];
 
 /**
  * @brief fonction de comparaison pour qsort
  * 
  * elle pourait être mieux
  * 
- * @param a 
- * @param b 
+ * @param [in] a object A
+ * @param [in] b object B
  * @return int 
  */
 int comphauteur(const void * a, const void * b){
     //moche
-    hauteurToHeurvre * aa = (hauteurToHeurvre*)a;
-    hauteurToHeurvre * bb = (hauteurToHeurvre*)b;
+    Paire_HauteurHeurvre * aa = (Paire_HauteurHeurvre*)a;
+    Paire_HauteurHeurvre * bb = (Paire_HauteurHeurvre*)b;
     int result = strcmp(aa->hauteur,bb->hauteur);
     // printf("r %i",result);
     // if (aa->hauteur==bb->hauteur)
@@ -89,10 +90,10 @@ int comphauteur(const void * a, const void * b){
 /**
  * @brief Affiche hauteur <=> Heuvre
  * 
- * @param OwI 
- * @param sizeHauteurHeuvre 
+ * @param [in] OwI  Paire_HauteurHeurvre
+ * @param [in] sizeHauteurHeuvre nombre d'élément 
  */
-void printHauteur_Heuvre(hauteurToHeurvre * OwI,int sizeHauteurHeuvre ){
+void printPaire_HauteurHeurvre(Paire_HauteurHeurvre * OwI,int sizeHauteurHeuvre ){
     for (int i = 0; i < sizeHauteurHeuvre ; i++)
     {
         printf("%s => %s\n",OwI[i].hauteur,OwI[i].heuvre->titre);
@@ -103,14 +104,14 @@ void printHauteur_Heuvre(hauteurToHeurvre * OwI,int sizeHauteurHeuvre ){
  * @brief génère un tableaux d' HauteurToHeurvre 
  * 
  * déplie tableaux_fiche pour généré unt tableaux
- * d'élément hauteurToHeurvre
+ * d'élément Paire_HauteurHeurvre
  * qui est une association auteur <=> heuvre unique
  * 
  * @param [in]  input toute les fiche des oeuvre qui comporte les liste auteur  
  * @param [out] arrayout liste qui associe un auteur a une oeuvre
  * @return nombre d'élément du tableaux
  */
-int convertStruct(tableaux_fiche input, hauteurToHeurvre * arrayout ){
+int convertStruct(tableaux_fiche input, Paire_HauteurHeurvre * arrayout ){
     int indice = 0;
     for (int i = 0; i < input.taille; i++)
     {
@@ -125,9 +126,9 @@ int convertStruct(tableaux_fiche input, hauteurToHeurvre * arrayout ){
 }
 
 /**
- * @brief Trie hauteurToHeurvre Par noms d'auteur
+ * @brief Trie Paire_HauteurHeurvre Par noms d'auteur
  * 
- * trie le tableaux hauteurToHeurvre par auteur
+ * trie le tableaux Paire_HauteurHeurvre par auteur
  * de facon a avoir toute les oeuvre du meme auteur facilement
  * 
  * auteurA => hoeuvreB 
@@ -142,52 +143,60 @@ int convertStruct(tableaux_fiche input, hauteurToHeurvre * arrayout ){
  * @param [in,out]  HauteurHeuvre     Structure a trier
  * @param [in]      sizeHauteurHeuvre taille de la tructure
  */
-void sort_tableaux_fiche(hauteurToHeurvre * HauteurHeuvre,int sizeHauteurHeuvre ){
-    qsort(HauteurHeuvre,sizeHauteurHeuvre ,sizeof(hauteurToHeurvre),comphauteur);
+void sort_tableaux_fiche(Paire_HauteurHeurvre * HauteurHeuvre,int sizeHauteurHeuvre ){
+    qsort(HauteurHeuvre,sizeHauteurHeuvre ,sizeof(Paire_HauteurHeurvre),comphauteur);
 }
 
-void add_titre_to_auteur(Sommet_hauteur * list,const hauteurToHeurvre HtH){//ces plus logic comme ça mais pluslent ?
-    //on enumere tout les somet
-    for (int i = 0; i < MaxHauteur; i++)
-    {
-        //on match quand un sommet hauteur match avec l'auteur qu'on veux add
-        if(list[i].hauteur == HtH.hauteur){
-            //on detecte la fin du tableaux  est on add
-            for (int u = 0; u < MaxTitre; u++)// on cherche a chaque foit sinon on doit stoquer uen variable de taille de tab est ces chian
-            {
-                //quand ces vide ?
-                if (!list[i].heuvre[u])
-                {
-                    list[i].heuvre[u] = HtH.heuvre;
-                }
-            }  
-        }
-    }
-    
+void add_titre_to_auteur(Sommet_Auteur_TableauxD * list,const Paire_HauteurHeurvre HtH){//ces plus logic comme ça mais pluslent ?
+    fiche_minimal ** temparray = reallocarray(list->heuvre,list->size+1,8); //8 taille d'un pointeur 
+    exitIfNull(temparray,"add_titre_to_auteur realockarrayfail\n");
+    list->heuvre = temparray;
+    list->heuvre[list->size] = HtH.heuvre;
+    list->size++;
 }
 
-List_Auteur* unique_HtH(const hauteurToHeurvre * liste,int sizeHauteurHeuvre){
-    List_Auteur * list_sommet = malloc(sizeof(List_Auteur));
-    list_sommet->taille=0;
-    exitIfNull(list_sommet,"Erreur création liste de sommet\n")
+List_Auteur* gen_List_Auteur(const Paire_HauteurHeurvre * liste,int sizeHauteurHeuvre){
+    List_Auteur * listes_Auteur_arrTitre = malloc(sizeof(List_Auteur));
+    exitIfNull(listes_Auteur_arrTitre,"Erreur création liste de List_Auteur\n")
+    listes_Auteur_arrTitre->taille=-1;//moche !
+
+    //on parcoure liste
     for (int j = 0; j < sizeHauteurHeuvre; j=j)//on incrémenta pas la
     {
-        //on add le premier hauteur a notre 
-        list_sommet->tableaux_Somet_hauteur[list_sommet->taille]->hauteur=&liste[j].hauteur;
+        listes_Auteur_arrTitre->taille++;
+        Sommet_Auteur_TableauxD * tb_Somet_h = reallocarray(listes_Auteur_arrTitre->tableaux_Somet_hauteur,listes_Auteur_arrTitre->taille+1,sizeof(Sommet_Auteur_TableauxD));
+        exitIfNull(tb_Somet_h,"Erreur création de Sommet_Auteur_TableauxD\n")
+        listes_Auteur_arrTitre->tableaux_Somet_hauteur = tb_Somet_h;
+
+        //on add le premier hauteure
+        listes_Auteur_arrTitre->tableaux_Somet_hauteur[listes_Auteur_arrTitre->taille].hauteur=liste[j].hauteur;
+        listes_Auteur_arrTitre->tableaux_Somet_hauteur[listes_Auteur_arrTitre->taille].size=0;
+        listes_Auteur_arrTitre->tableaux_Somet_hauteur[listes_Auteur_arrTitre->taille].heuvre = NULL;
         int i = 1;
-        //tant le prochain est le meme auteur
-        while (liste[j].hauteur == liste[j+i].hauteur && i+j < sizeHauteurHeuvre)
+        //tant le prochain est le meme auteur et que on attein pas la fin de la liste
+        while (i+j < sizeHauteurHeuvre && strcmp(liste[j].hauteur,liste[j+i].hauteur) == 0)//ordre important
         {
-            add_titre_to_auteur(list_sommet,liste[i+j]);
+            add_titre_to_auteur(&listes_Auteur_arrTitre->tableaux_Somet_hauteur[listes_Auteur_arrTitre->taille],liste[i+j]);
             i++;// truc de simon ?
         }
-        
+
         j+=i;//mais ici
     }
+    return listes_Auteur_arrTitre;
 }
 
-
-
+void printList_Auteur(List_Auteur OwO){
+    for (int i = 0; i < OwO.taille; i++)
+    {
+        printf("%s:\n",OwO.tableaux_Somet_hauteur[i].hauteur);    
+        for (int j = 0; j < OwO.tableaux_Somet_hauteur[i].size; j++)
+        {
+            printf("    %s\n",OwO.tableaux_Somet_hauteur[i].heuvre[j]->titre);
+        }
+        printf("\n");
+    }
+    
+} 
 
 int main()
 {
@@ -211,15 +220,15 @@ int main()
 
 
     int sizeHauteurHeuvre = convertStruct(mesfiches,HauteurHeuvre);
-    // printHauteur_Heuvre(HauteurHeuvre);
+    // printPaire_HauteurHeurvre(HauteurHeuvre);
     sort_tableaux_fiche(HauteurHeuvre,sizeHauteurHeuvre );
-    printHauteur_Heuvre(HauteurHeuvre,sizeHauteurHeuvre );
-    List_Auteur * malistedauteur = unique_HtH(HauteurHeuvre,sizeHauteurHeuvre);
-   
+    List_Auteur * malistedauteur = gen_List_Auteur(HauteurHeuvre,sizeHauteurHeuvre);
+
+    printList_Auteur(*malistedauteur);
     // printTabmeaux(mesfiches);
 
     // ll_list * Liste_chainer = ll_create();
-    // Sommet_Auteur new_sommet;
+    // Sommet_Auteur_ListChainer new_sommet;
     // new_sommet.auteur = mesfiches.fiche[0]->liste_auteur[0];
     // new_sommet.titre_article = ll_create();
     // ll_append(new_sommet.titre_article,mesfiches.fiche[0]->titre);
@@ -231,8 +240,8 @@ int main()
 
     
 
-    // printHauteur_Heuvre(Liste_chainer);
-    // printHauteur_Heuvre(Liste_chainer,sizeHauteurHeuvre );
+    // printPaire_HauteurHeurvre(Liste_chainer);
+    // printPaire_HauteurHeurvre(Liste_chainer,sizeHauteurHeuvre );
 
 
     //liste des hauteur trier
