@@ -33,9 +33,22 @@ char * getanchor(char * recherche, char * ligne);
 void appendAuteurM(fiche_minimal * mafiche,char * nomsauteur);
 void appendTabmeaux(tableaux_fiche * table, fiche_minimal * a_ajouter);
 
-void printM_titre(fiche_minimal OwO);
-void printM_liste_auteur(fiche_minimal UwU);
+/**
+ * @brief print fiche_minimal
+ * 
+ * print le titre de l'euvre suivit de ces auteur
+ * 
+ * @param UwO 
+ */
 void printM(fiche_minimal UwO);
+
+/**
+ * @brief Print tableaux_fiche
+ * 
+ * print tout les élément de tableaux_fiche en fesant appelle a printM
+ * 
+ * @param [in] OwU 
+ */
 void printTabmeaux(tableaux_fiche OwU);
 
 void serialize(tableaux_fiche mastertab, FILE * outfichier);
