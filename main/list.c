@@ -27,7 +27,7 @@ struct ll_list {
 };
 
 
-
+void * ll_last_addr(ll_list *list);
 
 
 ll_list * ll_create(void) {
@@ -274,7 +274,7 @@ void ll_print_list_as_char(ll_list *list){
 ll_node * ll_search_auteur(ll_list* list,char * address){
     ll_node *it = list->first;
     while(it->next != NULL && it->value != address) {
-        char *  lfranbnnnce_wuuuuie = ((Sommet_Auteur*)it->value)->auteur;
+        char *  lfranbnnnce_wuuuuie = ((Sommet_Auteur_ListChainer*)it->value)->auteur;
         if(strcmp(lfranbnnnce_wuuuuie,address)==0){
             lfranbnnnce_wuuuuie = address;
             printf("b: %s;%s\n",lfranbnnnce_wuuuuie,address);
@@ -290,11 +290,11 @@ void add_entry(ll_list * list_chainer_auteur,char * auteur, char* titre){
     ll_node *list_chainer_article = ll_search_auteur(list_chainer_auteur,auteur);
     if (list_chainer_article)
     {
-        Sommet_Auteur * list_chainer_Somet_hauteur = list_chainer_article->value;
+        Sommet_Auteur_ListChainer * list_chainer_Somet_hauteur = list_chainer_article->value;
         // printf("append: %s to %s\n",titre,auteur);
         ll_append(list_chainer_Somet_hauteur->titre_article,strdup(titre));
     }else{
-        Sommet_Auteur * new_sommet = malloc(sizeof(Sommet_Auteur));
+        Sommet_Auteur_ListChainer * new_sommet = malloc(sizeof(Sommet_Auteur_ListChainer));
         if(new_sommet == NULL) {
             fprintf(stderr, "Allocation error in add_entry\n");
             exit(1);
@@ -335,7 +335,7 @@ int ll_fill_buffer(ll_list * sommet,char ** buffer,int sizebuff){
 
 void ll_list_link(ll_list * list_chainer_auteur){
     char * buffer[LUL];
-    Sommet_Auteur * last_Titre = ll_last(list_chainer_auteur);
+    Sommet_Auteur_ListChainer * last_Titre = ll_last(list_chainer_auteur);
     int buffsize = ll_fill_buffer(last_Titre->titre_article,buffer,LUL);
     ll_node *it = list_chainer_auteur->first;
     while(it->next != NULL) {
@@ -355,7 +355,7 @@ void print_liste_chainer_Auteur_titre(ll_list * list_chainer_auteur)
     int siz = ll_size(list_chainer_auteur);
     for (int i = 0; i < siz; i++)
     {
-        Sommet_Auteur * monauteur = ll_get(list_chainer_auteur,i);
+        Sommet_Auteur_ListChainer * monauteur = ll_get(list_chainer_auteur,i);
         printf("\nAuteur: %s\n",monauteur->auteur);
         ll_list * listart = monauteur->titre_article;
         int sizze = ll_size(listart); 

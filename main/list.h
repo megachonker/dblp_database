@@ -4,11 +4,12 @@
 #include <stddef.h>
 struct ll_list;
 typedef struct ll_list ll_list;
-typedef struct Sommet_Auteur
+
+typedef struct Sommet_Auteur_ListChainer
 {
     char * auteur;
     ll_list * titre_article;
-}Sommet_Auteur;
+}Sommet_Auteur_ListChainer;
 
 
 /**
