@@ -20,42 +20,47 @@ if (!p)\
 
 void readb(){
     FILE * fichier = fopen(originedb,"r");
-    exitIfNull(fichier,"imposible d'ouvrire");
+    exitIfNull(fichier,"imposible d'ouvrire "originedb);
     parse(fichier); //utiliser des address pour eviter la copie ?? 
 }
 
 void readsmaldb(){
     FILE * fichier = fopen(smalloriginedb,"r");
-    exitIfNull(fichier,"imposible d'ouvrire");
+    exitIfNull(fichier,"imposible d'ouvrire "smalloriginedb);
     parse(fichier); //utiliser des address pour eviter la copie ?? 
 }
 
-void readbCOPY(){
-    FILE * fichier = fopen(originedb,"r");
-    exitIfNull(fichier,"imposible d'ouvrire");
-    tableaux_fiche coucou = parse(fichier); //utiliser des address pour eviter la copie ?? 
-}
 
 void serialized(){
     FILE * in = fopen(originedb,"r");
-    exitIfNull(in,"imposible d'ouvrire");
+    exitIfNull(in,"imposible d'ouvrire "originedb);
     tableaux_fiche coucou = parse(in); //utiliser des address pour eviter la copie ?? 
     FILE * out = fopen(serializedb,"w");
-    exitIfNull(out,"imposible d'ouvrire");
+    exitIfNull(out,"imposible d'ouvrire "serializedb);
     serialize(coucou,out); //utiliser des address pour eviter la copie ?? 
 }
 
 void deserialisedb(){
     FILE * fichier = fopen(serializedb,"r");
-    exitIfNull(fichier,"imposible d'ouvrire");
+    exitIfNull(fichier,"imposible d'ouvrire "serializedb);
     deserialisation(fichier);    
 }
 
 void deserialisesmalldb(){
     FILE * fichier = fopen(smallserializedb,"r");
-    exitIfNull(fichier,"imposible d'ouvrire deserialisesmalldb");
+    exitIfNull(fichier,"imposible d'ouvrire "smallserializedb);
     deserialisation(fichier);
 }
+
+
+void bench_all(){
+    readb();
+    readsmaldb();
+    serialized();
+    deserialisedb();
+    deserialisesmalldb();
+}
+
 
 int main(int argc, char const *argv[])
 {
@@ -72,10 +77,6 @@ int main(int argc, char const *argv[])
         // printf("readb\n");
         readb();    
     }
-    else if(strcmp("readbCOPY",compstr)==0){
-        // printf("readbCOPY\n");
-        readbCOPY();    
-    }
     else if(strcmp("serialized",compstr)==0){
         // printf("serialized\n");
         serialized();    
@@ -91,6 +92,9 @@ int main(int argc, char const *argv[])
     else if(strcmp("deserialisesmalldb",compstr)==0){
         // printf("deserialisesmalldb:\n");
         deserialisesmalldb();
+    }
+    else if (strcmp("ALL",compstr)==0){
+        bench_all();
     }else{
         fprintf(stderr,"PAS BON TEST!\n");
     }
