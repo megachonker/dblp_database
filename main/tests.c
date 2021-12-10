@@ -202,30 +202,30 @@ int main()
 {
     //lire tout le fichier pour le metrte en maloc est faire un vieux fseek
 
-    // FILE * out = fopen("DATA/SerializedStruc.data","w");
-    // exitIfNull(out,"INPUT PAS CHEMAIN")
-    // FILE * inputDB = fopen("DATA/dblp.xml","r");
+    FILE * out = fopen("DATA/SerializedStruc.data","w");
+    exitIfNull(out,"INPUT PAS CHEMAIN")
+    FILE * inputDB1 = fopen("DATA/dblp.xml","r");
+    exitIfNull(inputDB1,"INPUT PAS CHEMAIN")
+    tableaux_fiche mesfiches1 = parse(inputDB1);
+    serialize(mesfiches1,out);
+
+
+    // FILE * inputDB = fopen("DATA/SerializedStruc.data","r");
     // exitIfNull(inputDB,"INPUT PAS CHEMAIN")
-    // tableaux_fiche mesfiches = parse(inputDB);
-    // serialize(mesfiches,out);
-
-
-    FILE * inputDB = fopen("DATA/SerializedStruc.data","r");
-    exitIfNull(inputDB,"INPUT PAS CHEMAIN")
-    tableaux_fiche mesfiches = deserialisation(inputDB);
+    // tableaux_fiche mesfiches = deserialisation(inputDB);
 
     // ll_list * Liste_chainer = deserialisation_Liste(inputDB);
     // ll_list_link(Liste_chainer);
     // print_liste_chainer_Auteur_titre(Liste_chainer);
 
 
-    int sizeHauteurHeuvre = convertStruct(mesfiches,HauteurHeuvre);
-    // printPaire_HauteurHeurvre(HauteurHeuvre);
-    sort_tableaux_fiche(HauteurHeuvre,sizeHauteurHeuvre );
-    List_Auteur * malistedauteur = gen_List_Auteur(HauteurHeuvre,sizeHauteurHeuvre);
+    // int sizeHauteurHeuvre = convertStruct(mesfiches,HauteurHeuvre);
+    // // printPaire_HauteurHeurvre(HauteurHeuvre);
+    // sort_tableaux_fiche(HauteurHeuvre,sizeHauteurHeuvre );
+    // List_Auteur * malistedauteur = gen_List_Auteur(HauteurHeuvre,sizeHauteurHeuvre);
 
-    printList_Auteur(*malistedauteur);
-    // printTabmeaux(mesfiches);
+    // printList_Auteur(*malistedauteur);
+    // // printTabmeaux(mesfiches);
 
     // ll_list * Liste_chainer = ll_create();
     // Sommet_Auteur_ListChainer new_sommet;
