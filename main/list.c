@@ -73,13 +73,13 @@ ll_node *ll_get_addr(const ll_list *list, unsigned int value_idx) {
     return it;
 }
 
-// void ll_concat(ll_list * a, ll_list * b){
+void ll_concat(ll_list * a, ll_list * b){
     
-//     ll_node * fin_A = ll_get_addr(a,ll_size(a)-1);
-//     a->size+=b->size;
-//     fin_A->next = b->first;
-//     free(b);
-// }
+    ll_node * fin_A = ll_get_addr(a,ll_size(a)-1);
+    a->size+=b->size;
+    fin_A->next = b->first;
+    free(b);
+}
 
 
 
@@ -265,7 +265,6 @@ void ll_print_list_as_char(ll_list *list){
     printf("char:%s\n",noms);
 
     while(it->next != NULL) {
-        // Sommet_Auteur * bouboule = it->value;
         noms = it->value;
         printf("char:%s\n",noms);
         it = it->next;
@@ -337,14 +336,12 @@ int ll_fill_buffer(ll_list * sommet,char ** buffer,int sizebuff){
 void ll_list_link(ll_list * list_chainer_auteur){
     char * buffer[LUL];
     Sommet_Auteur * last_Titre = ll_last(list_chainer_auteur);
-    // Sommet_Auteur * last_Titre=list_chainer_auteur->first->value;
     int buffsize = ll_fill_buffer(last_Titre->titre_article,buffer,LUL);
     ll_node *it = list_chainer_auteur->first;
     while(it->next != NULL) {
         printf("%s\n",((ll_node*)it->next->value)->value);
         for (int j = 0; j < buffsize; j++)
         {
-            // ll_node  * hit = 
             ll_search_auteur(list_chainer_auteur,buffer[j]);
             printf("HIT %d/%d\n",j,buffsize);
         }   
