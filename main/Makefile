@@ -6,7 +6,7 @@ BENCHNUMBER ?= deserialisedb
 go:	tests
 	./tests
 
-bench:	bench.o parsing.o list.o
+bench:	bench.o parsing.o list.o unwrap.o
 	$(CC) -o bench  $^ $(CFLAGS) $(LDLIBS)
 	# bench $(BENCHNUMBER)
 
