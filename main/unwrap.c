@@ -20,7 +20,7 @@ if (!p)\
 //soucis check que les tab d'addresse sont nu dans les for if
 
 //2go de tableaux ?
-#define MAXarraySIZE 21143793
+
 
 /**
  * @brief couple Hauteur <=> Heuvre
@@ -57,7 +57,10 @@ typedef struct List_Auteur
 }List_Auteur;
 
 
-Paire_HauteurHeurvre HauteurHeuvre[MAXarraySIZE];
+
+
+// #define MAXarraySIZE 21143793
+// Paire_HauteurHeurvre HauteurHeuvre[MAXarraySIZE];
 
 /**
  * @brief fonction de comparaison pour qsort
@@ -73,44 +76,9 @@ int comphauteur(const void * a, const void * b){
     Paire_HauteurHeurvre * aa = (Paire_HauteurHeurvre*)a;
     Paire_HauteurHeurvre * bb = (Paire_HauteurHeurvre*)b;
     int result = strcmp(aa->hauteur,bb->hauteur);
-    // printf("r %i",result);
-    // if (aa->hauteur==bb->hauteur)
-    // {
-    //     return 0;
-    // }
-    
-    
-    // if ( result == 0)
-    // {
-        // optimisation de la mort
-    // }
     return result;
 }
 
-/**
- * @brief Affiche hauteur <=> Heuvre
- * 
- * @param [in] OwI  Paire_HauteurHeurvre
- * @param [in] sizeHauteurHeuvre nombre d'élément 
- */
-void printPaire_HauteurHeurvre(Paire_HauteurHeurvre * OwI,int sizeHauteurHeuvre ){
-    for (int i = 0; i < sizeHauteurHeuvre ; i++)
-    {
-        printf("%s => %s\n",OwI[i].hauteur,OwI[i].heuvre->titre);
-    }
-}
-
-/**
- * @brief génère un tableaux d' HauteurToHeurvre 
- * 
- * déplie tableaux_fiche pour généré unt tableaux
- * d'élément Paire_HauteurHeurvre
- * qui est une association auteur <=> heuvre unique
- * 
- * @param [in]  input toute les fiche des oeuvre qui comporte les liste auteur  
- * @param [out] arrayout liste qui associe un auteur a une oeuvre
- * @return nombre d'élément du tableaux
- */
 int SwapStruct(tableaux_fiche input, Paire_HauteurHeurvre * arrayout ){
     int indice = 0;
     for (int i = 0; i < input.taille; i++)
@@ -125,28 +93,18 @@ int SwapStruct(tableaux_fiche input, Paire_HauteurHeurvre * arrayout ){
     return indice;
 }
 
-/**
- * @brief Trie Paire_HauteurHeurvre Par noms d'auteur
- * 
- * trie le tableaux Paire_HauteurHeurvre par auteur
- * de facon a avoir toute les oeuvre du meme auteur facilement
- * 
- * auteurA => hoeuvreB 
- * auteurA => hoeuvreA
- * auteurA => hoeuvreU
- * auteurA => hoeuvreT
- * auteurB => hoeuvreB 
- * auteurB => hoeuvreA
- * auteurB => hoeuvreU
- * auteurB => hoeuvreT
- * 
- * @param [in,out]  HauteurHeuvre     Structure a trier
- * @param [in]      sizeHauteurHeuvre taille de la tructure
- */
 void sort_tableaux_fiche(Paire_HauteurHeurvre * HauteurHeuvre,int sizeHauteurHeuvre ){
     qsort(HauteurHeuvre,sizeHauteurHeuvre ,sizeof(Paire_HauteurHeurvre),comphauteur);
 }
 
+
+/**
+ * @brief add_titre_to_auteur
+ * 
+ * 
+ * @param [in,out] list  
+ * @param [in] HtH       
+ */
 void add_titre_to_auteur(Sommet_Auteur_TableauxD * list,const Paire_HauteurHeurvre HtH){//ces plus logic comme ça mais pluslent ?
     fiche_minimal ** temparray = reallocarray(list->heuvre,list->size+1,8); //8 taille d'un pointeur 
     exitIfNull(temparray,"add_titre_to_auteur realockarrayfail\n");
@@ -154,6 +112,7 @@ void add_titre_to_auteur(Sommet_Auteur_TableauxD * list,const Paire_HauteurHeurv
     list->heuvre[list->size] = HtH.heuvre;
     list->size++;
 }
+
 
 List_Auteur* gen_List_Auteur(const Paire_HauteurHeurvre * liste,int sizeHauteurHeuvre){
     List_Auteur * listes_Auteur_arrTitre = malloc(sizeof(List_Auteur));
@@ -185,6 +144,9 @@ List_Auteur* gen_List_Auteur(const Paire_HauteurHeurvre * liste,int sizeHauteurH
     return listes_Auteur_arrTitre;
 }
 
+
+
+
 void printList_Auteur(List_Auteur OwO){
     for (int i = 0; i < OwO.taille; i++)
     {
@@ -198,54 +160,23 @@ void printList_Auteur(List_Auteur OwO){
     
 } 
 
-
-void convertStruct(tableaux_fiche input, ll_list * list_chainer_auteur ){
-    for (int i = 0; i < input.taille; i++)
+void printPaire_HauteurHeurvre(Paire_HauteurHeurvre * OwI,int sizeHauteurHeuvre ){
+    for (int i = 0; i < sizeHauteurHeuvre ; i++)
     {
-        for (int u = 0; u < input.fiche[i]->nombre_auteur; u++)
-        {
-            add_entry(list_chainer_auteur,input.fiche[i]->liste_auteur[u],input.fiche[i]->titre);
-        }
-        float avancement = ((float)(i+1)/(float)input.taille)*100;
-        printf("avancement: %f\n",avancement);
+        printf("%s => %s\n",OwI[i].hauteur,OwI[i].heuvre->titre);
     }
 }
 
 
-int main()
-{
-    //lire tout le fichier pour le metrte en maloc est faire un vieux fseek
-
-
-    FILE * inputDB = fopen("DATA/SerializedStruc.data","r");
-    exitIfNull(inputDB,"INPUT PAS CHEMAIN")
-    tableaux_fiche mesfiches = deserialisation(inputDB);
-
-
-    int sizeHauteurHeuvre = SwapStruct(mesfiches,HauteurHeuvre);
-    // printPaire_HauteurHeurvre(HauteurHeuvre);
-    sort_tableaux_fiche(HauteurHeuvre,sizeHauteurHeuvre );
-    List_Auteur * malistedauteur = gen_List_Auteur(HauteurHeuvre,sizeHauteurHeuvre);
-    // printList_Auteur(*malistedauteur);
-    // printTabmeaux(mesfiches);
-
-
-
-    // liste des hauteur trier
-    // dans la fonction de trie si 2 foit meme hauteur crée un structure SommetHauteur qui liste les hauteur
-    // a chaque comparaison qui match on suprime les occurance le mieux est de décaler 
-    // on peut faire une pille de comparaison pour en faire en paralle
-
-    // si  tableaux fiche est déja full trier pour il faudra chercher que les premierre occurance donc gain de tems ?
-
-    // creation_de_la_liste_des_listes_de_sommet_des_sous_graphes_connexes(mesfiches);
-
-
-    // auteur ===> liste cooauteur 
-    //     list auteur liste article => liste cooteur
-
-    // les hash avec des chiffreeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeemlkjmlkjmlkjmlkjlmkjlmkjlmklmkjmlkjlkmjlmkjlmkjmlkmlkjmlkjmlkjmlkjmlkjmlkjlmkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkmdv
-
-    return 0;
-}
+// void convertStruct(tableaux_fiche input, ll_list * list_chainer_auteur ){
+//     for (int i = 0; i < input.taille; i++)
+//     {
+//         for (int u = 0; u < input.fiche[i]->nombre_auteur; u++)
+//         {
+//             add_entry(list_chainer_auteur,input.fiche[i]->liste_auteur[u],input.fiche[i]->titre);
+//         }
+//         float avancement = ((float)(i+1)/(float)input.taille)*100;
+//         printf("avancement: %f\n",avancement);
+//     }
+// }
 
