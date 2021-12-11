@@ -36,7 +36,7 @@ DATA/SerializedStruc.data:	bench DATA/dblp.xml
 DATA/Serialzed1000.data: 	DATA/SerializedStruc.data
 	head DATA/SerializedStruc.data -n 1002 > DATA/Serialzed1000.data
 
-safetest: bench DATA/dblp.xml DATA/dblp1sur8.xml DATA/SerializedStruc.data DATA/Serialzed1000.data
+safetest: bench bench DATA/dblp.xml DATA/dblp1sur8.xml DATA/SerializedStruc.data DATA/Serialzed1000.data
 	valgrind ./bench ALL
 
 
