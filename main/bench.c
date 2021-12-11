@@ -1,4 +1,6 @@
 #include "parsing.h"
+#include "list.h"
+#include "unwrap.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -52,6 +54,47 @@ void deserialisesmalldb(){
     deserialisation(fichier);
 }
 
+// void testListchainer(){
+//     FILE * inputDB = fopen("DATA/SerializedStruc.data","r");
+//     exitIfNull(inputDB,"INPUT PAS CHEMAIN")
+//     ll_list * Liste_chainer = deserialisation_Liste(inputDB);
+//     ll_list_link(Liste_chainer);
+//     print_liste_chainer_Auteur_titre(Liste_chainer);
+//     tableaux_fiche mesfiches = deserialisation(inputDB);
+
+//     ll_list * Liste_chainer = ll_create();
+//     Sommet_Auteur_ListChainer new_sommet;
+//     new_sommet.auteur = mesfiches.fiche[0]->liste_auteur[0];
+//     new_sommet.titre_article = ll_create();
+//     ll_append(new_sommet.titre_article,mesfiches.fiche[0]->titre);
+//     ll_append(Liste_chainer,&new_sommet);
+
+//     convertStruct(mesfiches,Liste_chainer);
+
+//     print_liste_chainer_Auteur_titre(Liste_chainer);
+// }
+
+
+//PABIEN
+#define MAXarraySIZE 21143793
+Paire_HauteurHeurvre HauteurHeuvre[MAXarraySIZE];
+
+void swap(int print){
+    FILE * inputDB = fopen("DATA/SerializedStruc.data","r");
+    exitIfNull(inputDB,"INPUT PAS CHEMAIN")
+    tableaux_fiche mesfiches = deserialisation(inputDB);
+
+
+
+    int sizeHauteurHeuvre = SwapStruct(mesfiches,HauteurHeuvre);
+    // printPaire_HauteurHeurvre(HauteurHeuvre);
+    sort_tableaux_fiche(HauteurHeuvre,sizeHauteurHeuvre);
+    List_Auteur * malistedauteur = gen_List_Auteur(HauteurHeuvre,sizeHauteurHeuvre);
+    if (print==1)
+    {
+        printList_Auteur(*malistedauteur);
+    }
+}
 
 void bench_all(){
     readb();
@@ -59,6 +102,8 @@ void bench_all(){
     serialized();
     deserialisedb();
     deserialisesmalldb();
+    swap(0);
+    swap(1);
 }
 
 
@@ -95,7 +140,14 @@ int main(int argc, char const *argv[])
     }
     else if (strcmp("ALL",compstr)==0){
         bench_all();
-    }else{
+    }
+    else if (strcmp("swap",compstr)==0){
+        swap(0);
+    }
+    else if(strcmp("swaprint",compstr)==0){
+        swap(1);
+    }
+    else{
         fprintf(stderr,"PAS BON TEST!\n");
     }
     return 0;
