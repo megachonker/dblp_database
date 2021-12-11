@@ -37,4 +37,4 @@ fi
 # _describe './abench.sh' "('cmd1:description1' 'cmd2:description2')"
 
 TIMEFMT=$'%E'
-time moyenne $1 $2
+moyenne $1 $2
