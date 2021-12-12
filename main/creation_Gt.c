@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "parsing.h"
-#include "linked-list.h"
+#include "list.h"
 #include <stdlib.h>
 
 #include <string.h>

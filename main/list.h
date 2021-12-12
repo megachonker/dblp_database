@@ -2,8 +2,20 @@
 #ifndef LIST_HEADER_GUARD
 #define LIST_HEADER_GUARD
 #include <stddef.h>
-struct ll_list;
 typedef struct ll_list ll_list;
+
+
+
+typedef struct ll_node {
+    void *value;
+    struct ll_node *next;
+} ll_node;
+
+struct ll_list {
+    struct ll_node *first;
+    size_t size;
+};
+
 
 typedef struct Sommet_Auteur_ListChainer
 {
