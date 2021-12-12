@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
-
+#include <getopt.h>
 /*
 • l'option -c pourra correspondre au calcul du nombre de composantes connexes avec leur diamètre.
 • l'option -p AUTEUR1 -p AUTEUR2 permettra de calculer un plus court chemin entre les deux auteurs indiqués.
