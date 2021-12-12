@@ -16,17 +16,6 @@ if (!p)\
 
 
 
-typedef struct ll_node {
-    void *value;
-    struct ll_node *next;
-} ll_node;
-
-struct ll_list {
-    struct ll_node *first;
-    size_t size;
-};
-
-
 void * ll_last_addr(ll_list *list);
 
 
