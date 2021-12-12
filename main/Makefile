@@ -6,6 +6,8 @@ BENCHNUMBER ?= deserialisedb
 go:	tests
 	./tests
 
+abench.sh: abench.sh bench gen_cache_data
+
 bench:	bench.o parsing.o list.o unwrap.o
 	$(CC) -o bench  $^ $(CFLAGS) $(LDLIBS)
 	# bench $(BENCHNUMBER)
@@ -36,10 +38,12 @@ DATA/SerializedStruc.data:	bench DATA/dblp.xml
 DATA/Serialzed1000.data: 	DATA/SerializedStruc.data
 	head DATA/SerializedStruc.data -n 1002 > DATA/Serialzed1000.data
 
-safetest: bench bench DATA/dblp.xml DATA/dblp1sur8.xml DATA/SerializedStruc.data DATA/Serialzed1000.data
+needed_for_bench: bench DATA/dblp.xml
+
+gen_cache_data: needed_for_bench DATA/dblp1sur8.xml DATA/SerializedStruc.data DATA/Serialzed1000.data
+
+safetest: bench 
 	valgrind ./bench ALL
-
-
 
 clean:
 	rm -f *.o
