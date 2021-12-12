@@ -16,6 +16,11 @@ help(){
     - ALL'
 }
 
+timecheck(){
+    if [[ ! -f "/bin/time" ]]; then
+        echo "installer le packet time MERCI"
+    fi
+}
 
 moyenne(){
     rm -f /tmp/tmpIwI
@@ -41,9 +46,6 @@ if [[  $# -eq 0 ]] ; then
     exit
 fi
 
+timecheck
 
-# reply=$(seq 10)
-# _describe './abench.sh' "('cmd1:description1' 'cmd2:description2')"
-
-TIMEFMT=$'%E'
 moyenne $1 $2
