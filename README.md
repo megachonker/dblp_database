@@ -1,55 +1,9 @@
 # Projet info 1
 
 ##  analise argument d'entrée
--   en coure de création
-## structure
--   le parsing ok
--   liste chainer en cour
-### champ garder
--   title
--   author
+-   a tester
 ### liste de tout les champ
--  address
--  article
--  author
--  book
--  booktitle
--  cdrom
--  chapter
--  cite
--  crossref
--  dblp
--  !DOCTYPE
--  editor
--  ee
--  incollection
--  inproceedings
--  isbn
--  journal
--  mastersthesis
--  month
--  note
--  number
--  pages
--  phdthesis
--  proceedings
--  publisher
--  publnr
--  school
--  series
--  title
--  url
--  volume
--  www
--  ?xml
--  year
-**structure BD**
-list des entrer
- 
-## export
--   export OK
-## import structure
--   import ok
+-   https://dblp.org/faq/16154937.html
 ##  Analise graph
 -   pas encore
 ##  front end:
@@ -65,34 +19,18 @@ list des entrer
 -   window?
 repartition task
 
-git:
-    readme
-    organisation des fichier
-    ajouter les membre
-    gitigniore
-    metre une timeline
+### git:
     pipline test la compilation (voir brench instable)
 
 
-make:
-    clean
-    -   ok
-    update database
-    - pas encore
-    benchmark
-    - lancement ok
-    -   pas d'interpretation
-    test.sh
-        comprendre
-        addapter
-        ajouter test paralele
-    test.c
-        test de toute les fonction
+### make:
+-   rien a faire
 
+### test.sh
+- [ ] faire des test coérant 
 
-optimisation:
-    parsing/structure minimal
+### optimisation:
     cache de recherche
-    compilateur flag
     paralle test
     on va lire 2 foit toute les structure pour l'écriture deu fichier => négligable si convertion ?
+    table de hash
