@@ -3,6 +3,9 @@
 #include <stdio.h>
 #include "list.h"
 
+
+#define BALISESIZE 1000
+
 /**
  * @brief Titre && liste des auteur
  * 

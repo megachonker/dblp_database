@@ -4,7 +4,7 @@
 #include "parsing.h"
 
 
-#define BALISESIZE 1000
+// #define BALISESIZE 1000
 
 //s->name = strdup(buffer)
 //fait un alloc d'une valeur
