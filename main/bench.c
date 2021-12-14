@@ -53,6 +53,16 @@ void deserialisesmalldb(){
     exitIfNull(fichier,"imposible d'ouvrire "smallserializedb);
     deserialisation(fichier);
 }
+// void azelruhezr(){
+
+//     // FILE * inputDB = fopen("DATA/SerializedStruc.data","r");
+//     // FILE * ouputDB = fopen("DATA/SerializedStrucInverse.data","w");
+
+//     // exitIfNull(inputDB,"INPUT PAS CHEMAIN")
+//     // List_Auteur * masterpiece = unwrap_from_file(inputDB);
+//     // unwrap_Serilise(masterpiece,ouputDB);
+//     // printList_Auteur(masterpiece);
+// }
 
 // void testListchainer(){
 //     FILE * inputDB = fopen("DATA/SerializedStruc.data","r");
@@ -74,25 +84,14 @@ void deserialisesmalldb(){
 //     print_liste_chainer_Auteur_titre(Liste_chainer);
 // }
 
-
-//PABIEN
-#define MAXarraySIZE 21143793
-Paire_HauteurHeurvre HauteurHeuvre[MAXarraySIZE];
-
 void swap(int print){
     FILE * inputDB = fopen("DATA/SerializedStruc.data","r");
     exitIfNull(inputDB,"INPUT PAS CHEMAIN")
-    tableaux_fiche mesfiches = deserialisation(inputDB);
+    List_Auteur * malistedauteur = unwrap_from_file(inputDB);
 
-
-
-    int sizeHauteurHeuvre = SwapStruct(mesfiches,HauteurHeuvre);
-    // printPaire_HauteurHeurvre(HauteurHeuvre);
-    sort_tableaux_fiche(HauteurHeuvre,sizeHauteurHeuvre);
-    List_Auteur * malistedauteur = gen_List_Auteur(HauteurHeuvre,sizeHauteurHeuvre);
     if (print==1)
     {
-        printList_Auteur(*malistedauteur);
+        printList_Auteur(malistedauteur);
     }
 }
 
