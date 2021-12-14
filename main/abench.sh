@@ -13,6 +13,8 @@ help(){
     - deserialisesmalldb
     - swap
     - swaprint
+    - unwrwap_gen_cache
+    - unwrap_from_file
     - ALL'
 }
 
