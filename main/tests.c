@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "parsing.h"
-#include "list.h"
+// #include "parsing.h"
+// #include "list.h"
 #include "unwrap.h"
 
-#include <string.h>
+// #include <string.h>
 
 /**
  * @def macro tester si p est null et retourne un message
@@ -16,27 +16,25 @@ if (!p)\
     fprintf(stderr,msg);\
 }\
 
-//PABIEN
-#define MAXarraySIZE 21143793
-Paire_HauteurHeurvre HauteurHeuvre[MAXarraySIZE];
+
 
 int main()
 {
     //lire tout le fichier pour le metrte en maloc est faire un vieux fseek
 
 
-    FILE * inputDB = fopen("DATA/SerializedStruc.data","r");
-    exitIfNull(inputDB,"INPUT PAS CHEMAIN")
-    tableaux_fiche mesfiches = deserialisation(inputDB);
+    // FILE * inputDB = fopen("DATA/SerializedStruc.data","r");
+    // FILE * ouputDB = fopen("DATA/SerializedStrucInverse.data","w");
 
+    // exitIfNull(inputDB,"INPUT PAS CHEMAIN")
+    // List_Auteur * masterpiece = unwrap_from_file(inputDB);
+    // unwrap_Serilise(masterpiece,ouputDB);
+    // printList_Auteur(masterpiece);
 
-    int sizeHauteurHeuvre = SwapStruct(mesfiches,HauteurHeuvre);
-    // printPaire_HauteurHeurvre(HauteurHeuvre);
-    sort_tableaux_fiche(HauteurHeuvre,sizeHauteurHeuvre );
-    List_Auteur * malistedauteur = gen_List_Auteur(HauteurHeuvre,sizeHauteurHeuvre);
-    // printList_Auteur(*malistedauteur);
-    // printTabmeaux(mesfiches);
+    FILE * inputCACHE = fopen("DATA/SerializedStrucInverse.data","w");
 
+    List_Auteur * masterpiece = unwrap_Deserilise(inputCACHE);
+    printList_Auteur(masterpiece);
 
 
     // liste des hauteur trier
