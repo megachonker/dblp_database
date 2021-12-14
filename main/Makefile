@@ -3,14 +3,13 @@ CFLAGS ?= -Wall -Wextra -g -O0
 LDLIBS ?= -lm
 BENCHNUMBER ?= deserialisedb
 
-go:	tests
+go:	tests abench.sh
 	./tests
 
-abench.sh: abench.sh bench gen_cache_data
+abench.sh: bench gen_cache_data
 
 bench:	bench.o parsing.o list.o unwrap.o
 	$(CC) -o bench  $^ $(CFLAGS) $(LDLIBS)
-	# bench $(BENCHNUMBER)
 
 tests:	tests.o parsing.o list.o unwrap.o
 	$(CC) -o tests  $^ $(CFLAGS) $(LDLIBS)
@@ -32,23 +31,25 @@ DATA/dblp.xml:
 DATA/dblp1sur8.xml: DATA/dblp.xml
 	head DATA/dblp.xml -n 10966843 > DATA/dblp1sur8.xml
 
-DATA/SerializedStruc.data:	bench DATA/dblp.xml
-	./bench "serialized"
+#regénère tout les fichier lier a bench quand un .o change Ces regretabkle donc on enleve bench par .O
+DATA/SerializedStruc.data:	DATA/dblp.xml parsing.o
+	./bench serialized
 
 DATA/Serialzed1000.data: 	DATA/SerializedStruc.data
 	head DATA/SerializedStruc.data -n 1002 > DATA/Serialzed1000.data
 
-needed_for_bench: bench DATA/dblp.xml
+#LA
+DATA/SerializedStrucInverse.data: DATA/SerializedStruc.data
+	./bench unwrwap_gen_cache
 
-gen_cache_data: needed_for_bench DATA/dblp1sur8.xml DATA/SerializedStruc.data DATA/Serialzed1000.data
+gen_cache_data: DATA/dblp.xml DATA/dblp1sur8.xml DATA/SerializedStrucInverse.data DATA/Serialzed1000.data DATA/SerializedStruc.data
 
-safetest: bench 
-	valgrind ./bench ALL
 
 clean:
 	rm -f *.o
-	rm -f tests bench main tests
-	rm -f	DATA/dblp1sur8.xml\
+	rm -f tests bench main
+	rm -f DATA/SerializedStrucInverse.data\
+		DATA/dblp1sur8.xml\
 		DATA/SerializedStruc.data\
 		DATA/Serialzed1000.data\
 		
