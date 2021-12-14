@@ -147,13 +147,13 @@ List_Auteur* gen_List_Auteur(const Paire_HauteurHeurvre * liste,int sizeHauteurH
 
 
 
-void printList_Auteur(List_Auteur OwO){
-    for (int i = 0; i < OwO.taille; i++)
+void printList_Auteur(List_Auteur * OwO){
+    for (int i = 0; i < OwO->taille; i++)
     {
-        printf("%s:\n",OwO.tableaux_Somet_hauteur[i].hauteur);    
-        for (int j = 0; j < OwO.tableaux_Somet_hauteur[i].size; j++)
+        printf("%s:\n",OwO->tableaux_Somet_hauteur[i].hauteur);    
+        for (int j = 0; j < OwO->tableaux_Somet_hauteur[i].size; j++)
         {
-            printf("    %s\n",OwO.tableaux_Somet_hauteur[i].heuvre[j]->titre);
+            printf("    %s\n",OwO->tableaux_Somet_hauteur[i].heuvre[j]->titre);
         }
         printf("\n");
     }
@@ -166,6 +166,79 @@ void printPaire_HauteurHeurvre(Paire_HauteurHeurvre * OwI,int sizeHauteurHeuvre 
         printf("%s => %s\n",OwI[i].hauteur,OwI[i].heuvre->titre);
     }
 }
+
+void unwrap_Serilise(const List_Auteur * List_des_Auteur, FILE * output){
+    //fonction d'qui fait la moyenne des hauteur pour pouvoir fair un maloque que une foit en moyenne
+    fprintf(output,"%d\n",List_des_Auteur->taille);
+    for (int i = 0; i < List_des_Auteur->taille; i++)
+    {
+        fprintf(output,"%s\n",List_des_Auteur->tableaux_Somet_hauteur[i].hauteur);
+        fprintf(output,"%d\n",List_des_Auteur->tableaux_Somet_hauteur[i].size);
+        for (int j = 0; j < List_des_Auteur->tableaux_Somet_hauteur[i].size; j++)
+        {
+            fprintf(output,"%s\n",List_des_Auteur->tableaux_Somet_hauteur[i].heuvre[j]->titre);
+        }
+    }
+}
+
+
+//DOUBLON DE PARSING FAIR UN FICHIER UTILS OU ON LE MET
+void enlever_retour_a_la_ligne(char * ligne);
+
+List_Auteur * unwrap_Deserilise(FILE * input){
+    char ligne[BALISESIZE];
+    List_Auteur * master_List_Auteur = malloc(sizeof(List_Auteur));
+    sscanf(ligne,"%i\n",&master_List_Auteur->taille);
+
+    //optimiser car on alloue tout en un malloc ! par contre ça peut echouer a voir
+    Sommet_Auteur_TableauxD * Sommet_Auteur_Tableaux =  malloc(sizeof(Sommet_Auteur_TableauxD)*master_List_Auteur->taille);
+    exitIfNull(Sommet_Auteur_Tableaux, "creation des sommet auteur tableaxD malloc null")
+    master_List_Auteur->tableaux_Somet_hauteur = Sommet_Auteur_Tableaux;
+
+    int i = 0;
+    while (fgets(ligne,BALISESIZE,input))
+    {
+        if (feof(input))
+        {
+            fprintf(stderr,"fin fichier");
+            exit(3);
+        }
+        enlever_retour_a_la_ligne(ligne);
+        master_List_Auteur->tableaux_Somet_hauteur[i].hauteur = strdup(ligne);
+        sscanf(ligne,"%i\n",&master_List_Auteur[i].taille);
+        for (int u = 0; u < master_List_Auteur[i].taille; u++)
+        {
+            fgets(ligne,BALISESIZE,input);
+            enlever_retour_a_la_ligne(ligne);
+
+            /* //! \\ On va fair stoquer le noms de l'oteur dans une addresse structure   //!\\ */
+            master_List_Auteur[i].tableaux_Somet_hauteur[u] = *((Sommet_Auteur_TableauxD*)strdup(ligne));
+        }
+        i++;
+    }
+
+    //Fonction pour associer ces valeur au structure ?
+    //master_List_Auteur[i].tableaux_Somet_hauteur[u]    
+    return master_List_Auteur;
+}
+
+//PABIEN
+#define MAXarraySIZE 21143793
+Paire_HauteurHeurvre HauteurHeuvre[MAXarraySIZE];
+
+List_Auteur * unwrap_from_file(FILE * inputFile){
+
+    tableaux_fiche mesfiches = deserialisation(inputFile);
+
+    int sizeHauteurHeuvre = SwapStruct(mesfiches,HauteurHeuvre);
+    sort_tableaux_fiche(HauteurHeuvre,sizeHauteurHeuvre);
+    List_Auteur * malistedauteur = gen_List_Auteur(HauteurHeuvre,sizeHauteurHeuvre);
+    return malistedauteur;
+}
+
+// List_Auteur * unwrap_de_serilise(FILE * input){
+
+// }
 
 
 // void convertStruct(tableaux_fiche input, ll_list * list_chainer_auteur ){

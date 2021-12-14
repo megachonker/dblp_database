@@ -31,7 +31,7 @@ typedef struct Sommet_Auteur_TableauxD
  */
 typedef struct List_Auteur
 {
-    Sommet_Auteur_TableauxD * tableaux_Somet_hauteur;
+    Sommet_Auteur_TableauxD * tableaux_Somet_hauteur;// LISTE DADRESE DONC ** ??????????????????????
     int taille;
 }List_Auteur;
 
@@ -83,9 +83,9 @@ List_Auteur* gen_List_Auteur(const Paire_HauteurHeurvre * liste,int sizeHauteurH
 /**
  * @brief Affiche la liste final d'Auteur To multiple Titre
  * 
- * @param [in] OwO 
+ * @param [in] OwO une addresse
  */
-void printList_Auteur(List_Auteur OwO);
+void printList_Auteur(List_Auteur * OwO);
 
 
 /**
@@ -108,7 +108,31 @@ void printList_Auteur(List_Auteur OwO);
  */
 void sort_tableaux_fiche(Paire_HauteurHeurvre * HauteurHeuvre,int sizeHauteurHeuvre );
 
+/**
+ * @brief génère un index des auteur a partire d'un fichier
+ * 
+ * il faudrait pouvoir détecter le type de fichier mais de base on assume que ces une liste a inverser
+ * 
+ * @param [in] inputFile fichier générer par serialize() 
+ * @return List_Auteur* Structure  
+ */
+List_Auteur * unwrap_from_file(FILE * inputFile);
 
+/**
+ * @brief Serialise la structeur List_Auteur
+ * 
+ * @param [in] List_des_Auteur 
+ * @param [out] output
+ */
+void unwrap_Serilise(const List_Auteur * List_des_Auteur, FILE * output);
+
+/**
+ * @brief désérialise l'index des Auteur depuis un fichier
+ * 
+ * @param [in] input => unwrap_serilise file 
+ * @return List_Auteur* 
+ */
+List_Auteur * unwrap_Deserilise(FILE * input);
 // /**
 //  * @brief D2PR3CIER génère une liste chainer a partire d'un tableaux
 //  * 
