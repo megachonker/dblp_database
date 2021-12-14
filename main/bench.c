@@ -9,6 +9,7 @@
 #define smalloriginedb      "DATA/dblp1sur8.xml"
 #define serializedb         "DATA/SerializedStruc.data"
 #define smallserializedb    "DATA/Serialzed1000.data"
+#define serializedbunwrap   "DATA/SerializedStrucInverse.data"
 
 
 
@@ -53,16 +54,21 @@ void deserialisesmalldb(){
     exitIfNull(fichier,"imposible d'ouvrire "smallserializedb);
     deserialisation(fichier);
 }
-// void azelruhezr(){
 
-//     // FILE * inputDB = fopen("DATA/SerializedStruc.data","r");
-//     // FILE * ouputDB = fopen("DATA/SerializedStrucInverse.data","w");
+List_Auteur * unwrap_from_filE(){ //E pas inspi
+    FILE * inputDB = fopen(serializedb,"r");
+    exitIfNull(inputDB,"imposible d'ouvrire "smallserializedb)
+    return unwrap_from_file(inputDB);
+}
 
-//     // exitIfNull(inputDB,"INPUT PAS CHEMAIN")
-//     // List_Auteur * masterpiece = unwrap_from_file(inputDB);
-//     // unwrap_Serilise(masterpiece,ouputDB);
-//     // printList_Auteur(masterpiece);
-// }
+void unwrwap_gen_cache(){
+    FILE * ouputDB = fopen(serializedbunwrap,"w");
+    unwrap_Serilise(unwrap_from_filE(),ouputDB);
+}
+
+
+    // FILE * ouputDB = fopen(serializedbunwrap,"w");
+    // exitIfNull(inputDB,"imposible d'ouvrire "serializedbunwrap)
 
 // void testListchainer(){
 //     FILE * inputDB = fopen("DATA/SerializedStruc.data","r");
@@ -103,6 +109,8 @@ void bench_all(){
     deserialisesmalldb();
     swap(0);
     swap(1);
+    unwrwap_gen_cache();
+    unwrap_from_filE();//NON
 }
 
 
@@ -145,6 +153,12 @@ int main(int argc, char const *argv[])
     }
     else if(strcmp("swaprint",compstr)==0){
         swap(1);
+    }else if (strcmp("unwrwap_gen_cache",compstr)==0)
+    {
+        unwrwap_gen_cache();
+    }else if (strcmp("unwrap_from_file",compstr)==0)
+    {
+        unwrap_from_filE();
     }
     else{
         fprintf(stderr,"PAS BON TEST!\n");
