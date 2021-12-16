@@ -31,10 +31,10 @@ int main()
     // unwrap_Serilise(masterpiece,ouputDB);
     // printList_Auteur(masterpiece);
 
-    FILE * inputCACHE = fopen("DATA/SerializedStrucInverse.data","w");
+    // FILE * inputCACHE = fopen("DATA/SerializedStrucInverse.data","r");
 
-    List_Auteur * masterpiece = unwrap_Deserilise(inputCACHE);
-    printList_Auteur(masterpiece);
+    // List_Auteur * masterpiece = unwrap_Deserilise(inputCACHE);
+    // printList_Auteur(masterpiece);
 
 
     // liste des hauteur trier
