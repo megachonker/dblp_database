@@ -1,5 +1,5 @@
 CC ?= gcc
-CFLAGS ?= -Wall -Wextra -g -O0
+CFLAGS ?= -Wall -Wextra -g -O3
 LDLIBS ?= -lm
 BENCHNUMBER ?= deserialisedb
 
