@@ -23,16 +23,15 @@ int main()
     //lire tout le fichier pour le metrte en maloc est faire un vieux fseek
 
 
-    // FILE * inputDB = fopen("DATA/SerializedStruc.data","r");
-    // FILE * ouputDB = fopen("DATA/SerializedStrucInverse.data","w");
+    FILE * inputDB = fopen("DATA/Serialzed1000.data","r");
+    FILE * ouputDB = fopen("DATA/SerializedStrucInverse.data","w");
 
-    // exitIfNull(inputDB,"INPUT PAS CHEMAIN")
-    // List_Auteur * masterpiece = unwrap_from_file(inputDB);
-    // unwrap_Serilise(masterpiece,ouputDB);
-    // printList_Auteur(masterpiece);
+    exitIfNull(inputDB,"INPUT PAS CHEMAIN")
+    List_Auteur * Amasterpiece = unwrap_from_file(inputDB);
+    printList_Auteur(Amasterpiece);
+    unwrap_Serilise(Amasterpiece,ouputDB);
 
     // FILE * inputCACHE = fopen("DATA/SerializedStrucInverse.data","r");
-
     // List_Auteur * masterpiece = unwrap_Deserilise(inputCACHE);
     // printList_Auteur(masterpiece);
 
