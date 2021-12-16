@@ -60,12 +60,17 @@ List_Auteur * unwrap_from_filE(){ //E pas inspi
     exitIfNull(inputDB,"imposible d'ouvrire "smallserializedb)
     return unwrap_from_file(inputDB);
 }
-
 void unwrwap_gen_cache(){
     FILE * ouputDB = fopen(serializedbunwrap,"w");
+    exitIfNull(ouputDB,"imposible d'ouvrire "serializedbunwrap)
     unwrap_Serilise(unwrap_from_filE(),ouputDB);
 }
-
+void unwrwap_deserialise(){
+    FILE * input = fopen(serializedbunwrap,"r");
+    exitIfNull(input,"imposible d'ouvrire "serializedbunwrap)
+    unwrap_Deserilise(input);
+    // printList_Auteur(unwrap_Deserilise(input));
+}
 
     // FILE * ouputDB = fopen(serializedbunwrap,"w");
     // exitIfNull(inputDB,"imposible d'ouvrire "serializedbunwrap)
@@ -111,6 +116,7 @@ void bench_all(){
     swap(1);
     unwrwap_gen_cache();
     unwrap_from_filE();//NON
+    unwrwap_deserialise();
 }
 
 
@@ -159,6 +165,10 @@ int main(int argc, char const *argv[])
     }else if (strcmp("unwrap_from_file",compstr)==0)
     {
         unwrap_from_filE();
+    }
+    else if (strcmp("unwrwap_deserialise",compstr)==0)
+    {
+        unwrwap_deserialise();
     }
     else{
         fprintf(stderr,"PAS BON TEST!\n");

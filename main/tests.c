@@ -22,13 +22,61 @@ int main()
 {
     //lire tout le fichier pour le metrte en maloc est faire un vieux fseek
     // FILE * inputDB = fopen("DATA/Serialzed1000.data","r");
-    FILE * inputDB = fopen("DATA/SerializedStruc.data","r");
-    FILE * ouputDB = fopen("DATA/SerializedStrucInverse.data","w");
+    FILE * inputDBB = fopen("DATA/SerializedStruc.data","r");
+    FILE * ouputDB = fopen("DATA/SerializedStrucInverse.data","r");
 
-    exitIfNull(inputDB,"INPUT PAS CHEMAIN")
-    List_Auteur * masterpiece = unwrap_from_file(inputDB);
+    // FILE * ouputDB = fopen("DATA/SerializedStrucInverse.data","w");
+    exitIfNull(inputDBB,"INPUT PAS CHEMAIN")
+
+    exitIfNull(ouputDB,"INPUT PAS CHEMAIN")
+    List_Auteur * masterpiece = unwrap_Deserilise(ouputDB);
+
     // unwrap_Serilise(masterpiece,ouputDB);
-    printList_Auteur(masterpiece);
+    // printList_Auteur(masterpiece);
+    tableaux_fiche a = deserialisation(inputDBB);
+
+
+
+    /**
+     * @brief comment booster unwrap_resolve
+     * 
+     * soit on génèr a chaque foit est on désérialise plus
+     * soit on paralelise (gain max 8)
+     * trouve une slution pour enlever les FOR FOR
+     * on trie est on fait un algo
+     * on sérialiser La liste inverser AVEC la liste normal ...
+     * 
+     */
+
+    /**
+     * @brief Construct a new for object
+     * 
+     * on va demander de résoudre tout les object manuelment 
+     * on print tout les auteur contenu
+     * 
+     * et pour montrer que le cache marche on print tout les auteur précédent de leur object
+     * 
+     * @param i 
+     */
+    // for (int i = 0; i < masterpiece->taille; i++)
+    // {
+    //     unwrap_resolve(masterpiece,&masterpiece->tableaux_Somet_hauteur[i],&a);
+    //     for (int u = 0; u < masterpiece->tableaux_Somet_hauteur[i].size; u++)
+    //     {
+    //         printM(*masterpiece->tableaux_Somet_hauteur[i].heuvre[u]);
+    //     }
+    //     for (int j = 0; j < i; j++)
+    //     {
+    //         for (int u = 0; u < masterpiece->tableaux_Somet_hauteur[j].size; u++)
+    //         {
+    //             printM(*masterpiece->tableaux_Somet_hauteur[j].heuvre[u]);
+    //         }
+    //     }
+    // }
+
+//erreur du a la non existance des fiche ?
+
+    // printList_Auteur(masterpiece);
 
     // FILE * inputCACHE = fopen("DATA/SerializedStrucInverse.data","r");
     // List_Auteur * masterpiece = unwrap_Deserilise(inputCACHE);
