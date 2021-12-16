@@ -242,8 +242,59 @@ List_Auteur * unwrap_Deserilise(FILE * input){
     }
 
     //Fonction pour associer ces valeur au structure ?
-    //master_List_Auteur[i].tableaux_Somet_hauteur[u]    
+    //master_List_Auteur[i].tableaux_Somet_hauteur[u]
+
     return master_List_Auteur;
+}
+
+void unwrap_sinc(List_Auteur * List_des_Auteur ,const tableaux_fiche input){
+    for (int i = 0; i < List_des_Auteur->taille; i++)
+    {
+        for (int u = 0; u < List_des_Auteur->tableaux_Somet_hauteur[i].size; u++)
+        {
+            for (int j = 0; j < input.taille; j++)
+            {
+                if (strcmp(List_des_Auteur->tableaux_Somet_hauteur[i].heuvre[u]->titre,input.fiche[j]->titre)==0)
+                {
+                    List_des_Auteur->tableaux_Somet_hauteur[i].heuvre[u] = input.fiche[j];
+                    break;
+                } 
+            }
+            // printf("%d/%d et %d/%d\n",i,List_des_Auteur->taille,u,List_des_Auteur->tableaux_Somet_hauteur[i].size);
+        }
+    }
+    
+}
+
+void unwrap_resolve(List_Auteur * List_des_Auteur, Sommet_Auteur_TableauxD * resove, const tableaux_fiche * input){
+    int i = 0;
+    int b = 0;
+    while (i < List_des_Auteur->taille)
+    {
+        if(strcmp(List_des_Auteur->tableaux_Somet_hauteur[i].hauteur,resove->hauteur)==0){
+            b = 1;
+            break;
+        }
+        i++;
+    }
+    if (b == 0)
+    {
+        fprintf(stderr,"L'ors de la résolution je n'ais pas trouver l'autaure qui corespond a %s",List_des_Auteur->tableaux_Somet_hauteur[i].hauteur);
+        exit(3);
+    }
+    
+    for (int u = 0; u < List_des_Auteur->tableaux_Somet_hauteur[i].size; u++)
+    {
+        for (int j = 0; j < input->taille; j++)
+        {
+            if (strcmp(List_des_Auteur->tableaux_Somet_hauteur[i].heuvre[u]->titre,input->fiche[j]->titre)==0)
+            {
+                List_des_Auteur->tableaux_Somet_hauteur[i].heuvre[u] = input->fiche[j];
+                break;
+            } 
+        }
+        // printf("%d/%d\n",u,List_des_Auteur->tableaux_Somet_hauteur[i].size);
+    }
 }
 
 //PABIEN
@@ -258,11 +309,6 @@ List_Auteur * unwrap_from_file(FILE * inputFile){
     List_Auteur * malistedauteur = gen_List_Auteur(HauteurHeuvre,sizeHauteurHeuvre);
     return malistedauteur;
 }
-
-// List_Auteur * unwrap_de_serilise(FILE * input){
-
-// }
-
 
 // void convertStruct(tableaux_fiche input, ll_list * list_chainer_auteur ){
 //     for (int i = 0; i < input.taille; i++)

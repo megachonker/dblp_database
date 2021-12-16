@@ -129,10 +129,16 @@ void unwrap_Serilise(const List_Auteur * List_des_Auteur, FILE * output);
 /**
  * @brief désérialise l'index des Auteur depuis un fichier
  * 
+ * 
  * @param [in] input => unwrap_serilise file 
- * @return List_Auteur* 
+ * @return List_Auteur*
  */
 List_Auteur * unwrap_Deserilise(FILE * input);
+
+
+void unwrap_sinc(List_Auteur * List_des_Auteur ,const tableaux_fiche input);
+void unwrap_resolve(List_Auteur * List_des_Auteur, Sommet_Auteur_TableauxD * resove, const tableaux_fiche * input);
+
 // /**
 //  * @brief D2PR3CIER génère une liste chainer a partire d'un tableaux
 //  * 
