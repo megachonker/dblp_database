@@ -39,7 +39,7 @@ typedef struct Paire_HauteurHeurvre
 typedef struct Sommet_Auteur_TableauxD
 {
     char * hauteur;
-    fiche_minimal ** heuvre;///<tableaux dynamique d'adresse pointant sur des structure contenant oeuvre
+    fiche_minimal ** heuvre;///<tableaux dynamique d'adresse pointant sur des pointeur de structure contenant oeuvre
     int size;               ///<taille du tableaux dynamique
 }Sommet_Auteur_TableauxD;
 
@@ -204,7 +204,7 @@ List_Auteur * unwrap_Deserilise(FILE * input){
     List_Auteur * master_List_Auteur = malloc(sizeof(List_Auteur));
     master_List_Auteur->taille=0;
     fgets(ligne,BALISESIZE,input);
-    exitIfNull(sscanf(ligne,"%i\n",&master_List_Auteur->taille),"nombre de structure manquand ...")
+        exitIfNull(sscanf(ligne,"%i\n",&master_List_Auteur->taille),"nombre de structure manquand ...")
 
     //optimiser car on alloue tout en un malloc ! par contre ça peut echouer a voir
     Sommet_Auteur_TableauxD * Sommet_Auteur_Tableaux =  malloc(sizeof(Sommet_Auteur_TableauxD)*master_List_Auteur->taille);  //<= je fait une liste de quoi ?
@@ -231,7 +231,10 @@ List_Auteur * unwrap_Deserilise(FILE * input){
         {
             fgets(ligne,BALISESIZE,input);
             enlever_retour_a_la_ligne(ligne);
-
+            
+            //on va crée un pointeur dynamique qui pointe sur une fiche Je sais pas si ces bon choix ...
+            master_List_Auteur->tableaux_Somet_hauteur[i].heuvre[u] = malloc(sizeof(8));
+            exitIfNull(master_List_Auteur->tableaux_Somet_hauteur[i].heuvre[u],"allocation nouvel fiche_minimal echouer")
             /* //! \\ On va fair stoquer le noms de l'oteur dans une addresse structure pas encore lier  //!\\ */
             master_List_Auteur->tableaux_Somet_hauteur[i].heuvre[u]->titre = strdup(ligne);//<= générée un tableaux?
         }
