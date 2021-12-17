@@ -1,5 +1,7 @@
+#ifndef LINKED_LIST_H
+#define LINKED_LIST_H
+
 #include <stdio.h>
-#include "tps_unit_test.h"
 
 
 typedef struct ll_list {
@@ -8,7 +10,7 @@ typedef struct ll_list {
 }ll_list;
 
 typedef struct ll_node {
-    int value;
+    void* value;
     struct ll_node *next;
 } ll_node;
 
@@ -35,17 +37,17 @@ void ll_prepend(ll_list *list, void* value);
  * The behavior is undefined if there are less
  * than i+1 elements in the list.
  */
-int ll_get(const ll_list *list, int i);
+void* ll_get(const ll_list *list, unsigned int idx);
 
 
 // retourne un pointeur vers le ième node de la list
-void *ll_get_node(const ll_list *list, int i);
+void *ll_get_node(const ll_list *list, int idx);
 
 /** 
  * return 1 if the function succeed
  * 0 if there is an error
  */
-int ll_get_safe(const ll_list *list, unsigned int i, void **value);
+void *ll_get_safe(const ll_list *list, unsigned int idx, void **value);
 
 
 /** free the list
@@ -55,11 +57,11 @@ void ll_free(ll_list *list);
 
 /** return the first value
  */
-int ll_first(ll_list *list);
+void *ll_first(ll_list *list);
 
 /** return the last value
  */
-int ll_last(ll_list *list);
+void *ll_last(ll_list *list);
 
 /**
  * return  the size of the list
@@ -78,9 +80,12 @@ void ll_pop_first(ll_list*list);
 /**
  * insert an element `value` in the list at index `idx`
  */
-void ll_insert(ll_list*list, int value, int idx);
+void ll_insert(ll_list*list, void* value, int idx);
 
 /**
  * remove the element at index `idx`
  */
 void ll_remove(ll_list*list, int idx);
+
+
+#endif

@@ -2,15 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct ll_node {
-    void* value;
-    struct ll_node *next;
-} ll_node;
-
-struct ll_list {
-    struct ll_node *first;
-    size_t size;
-};
 
 
 ll_list * ll_create(void) {
