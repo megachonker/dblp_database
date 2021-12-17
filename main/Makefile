@@ -6,6 +6,11 @@ BENCHNUMBER ?= deserialisedb
 go:	tests
 	./tests
 
+
+test_creation_Gt:	test_creation_Gt.o creation_Gt.o list-makefile-2/linked-list.o parsing.o
+	$(CC) -o test_creation_Gt -g $^ $(CFLAGS) $(LDLIBS)
+	# bench $(BENCHNUMBER)
+
 bench:	bench.o parsing.o
 	$(CC) -o bench  $^ $(CFLAGS) $(LDLIBS)
 	# bench $(BENCHNUMBER)
