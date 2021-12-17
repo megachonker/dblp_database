@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "parsing.h"
-#include "creation_sommets_G.h"
+#include "creation_sommets_Gt.h"
 
 
 #include <string.h>
