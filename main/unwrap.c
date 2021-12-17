@@ -266,6 +266,21 @@ void unwrap_sinc(List_Auteur * List_des_Auteur ,const tableaux_fiche input){
     
 }
 
+/**
+ * @brief 
+ * 
+ * 
+ * n'ayant pas les object Euvre/auteur
+ *  apres la décérialisation
+ *  ajout fonction résolution qui va ajouterune entrée a chaque foit qu'on l'interroge
+ *  de magnierre a ce qu'il soit possible d'executer l'algo sans avoir tout résolut
+ *
+ *  néamoins recalculer depuit from file est plus rapide ...
+ * 
+ * @param List_des_Auteur 
+ * @param resove 
+ * @param input 
+ */
 void unwrap_resolve(List_Auteur * List_des_Auteur, Sommet_Auteur_TableauxD * resove, const tableaux_fiche * input){
     int i = 0;
     int b = 0;
