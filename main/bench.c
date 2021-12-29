@@ -33,7 +33,6 @@ void readsmaldb(){
     parse(fichier); //utiliser des address pour eviter la copie ?? 
 }
 
-
 void serialized(){
     FILE * in = fopen(originedb,"r");
     exitIfNull(in,"imposible d'ouvrire "originedb);
@@ -43,10 +42,12 @@ void serialized(){
     serialize(coucou,out); //utiliser des address pour eviter la copie ?? 
 }
 
-void deserialisedb(){
+//serialise small db manque 
+
+tableaux_fiche * deserialisedb(){
     FILE * fichier = fopen(serializedb,"r");
     exitIfNull(fichier,"imposible d'ouvrire "serializedb);
-    deserialisation(fichier);    
+    return deserialisation(fichier);    
 }
 
 void deserialisesmalldb(){
@@ -63,13 +64,20 @@ List_Auteur * unwrap_from_filE(){ //E pas inspi
 void unwrwap_gen_cache(){
     FILE * ouputDB = fopen(serializedbunwrap,"w");
     exitIfNull(ouputDB,"imposible d'ouvrire "serializedbunwrap)
-    unwrap_Serilise(unwrap_from_filE(),ouputDB);
+    List_Auteur * malistauteur = unwrap_from_filE();
+    unwrap_Serilise_Index(malistauteur,ouputDB);
+    unwrap_List_Auteur_free(malistauteur);
 }
 void unwrwap_deserialise(){
     FILE * input = fopen(serializedbunwrap,"r");
     exitIfNull(input,"imposible d'ouvrire "serializedbunwrap)
-    unwrap_Deserilise(input);
-    // printList_Auteur(unwrap_Deserilise(input));
+    FILE * fichier = fopen(serializedb,"r");
+    exitIfNull(fichier,"imposible d'ouvrire "serializedb);
+    tableaux_fiche * azer = deserialisation(fichier);   
+    parsing_free(azer);
+    unwrap_List_Auteur_free(unwrap_Deserilise_Index(azer,input));
+
+    // printList_Auteur(unwrap_Deserilise(deserialisedb,input));
 }
 
     // FILE * ouputDB = fopen(serializedbunwrap,"w");
@@ -107,15 +115,9 @@ void swap(int print){
 }
 
 void bench_all(){
-    readb();
-    readsmaldb();
-    serialized();
-    deserialisedb();
-    deserialisesmalldb();
-    swap(0);
-    swap(1);
+    tableaux_fiche * libermoi =deserialisedb();
+    parsing_free(libermoi);
     unwrwap_gen_cache();
-    unwrap_from_filE();//NON
     unwrwap_deserialise();
 }
 
