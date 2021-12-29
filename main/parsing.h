@@ -15,7 +15,8 @@ typedef struct fiche_minimal
     char * titre;           ///< titre de l'heuvre / article
     int nombre_auteur;      ///< nombre d'auteur
     char ** liste_auteur;   ///< liste de liste de caractere des noms d'auteur
-    //add une uid pour un auteur
+    //add une uid pour un auteur :3
+    int ADDR;
 }fiche_minimal;
 
 /**
@@ -55,9 +56,9 @@ void printM(fiche_minimal UwO);
 void printTabmeaux(tableaux_fiche OwU);
 
 void serialize(tableaux_fiche mastertab, FILE * outfichier);
-tableaux_fiche deserialisation(FILE * input);
+tableaux_fiche * deserialisation(FILE * input);
 ll_list * deserialisation_Liste(FILE * input);
 
-
+void parsing_free(tableaux_fiche * DEGAGE);
 
 #endif

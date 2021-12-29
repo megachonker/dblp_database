@@ -106,12 +106,14 @@ tableaux_fiche parse(FILE * inputDB){
     int indice_struct = 0;
     fiche_minimal * fichelocalM = calloc(1,sizeof(fiche_minimal));
     fichelocalM->nombre_auteur = 0;
+    fichelocalM->ADDR = 0;
     tableaux_fiche tableaux_allfiche;// ce n'es pas maloc donc a la sortie de la fonction l'object est détruit ? ? ??
     tableaux_allfiche.taille = 0;
     tableaux_allfiche.fiche = NULL;
 
     while (fgets(ligne,BALISESIZE,inputDB))
     {
+        indice_struct++;
         int flagt = 0;
         
         if (!fichelocalM)
@@ -144,9 +146,8 @@ tableaux_fiche parse(FILE * inputDB){
             fichelocalM = calloc(1,sizeof(fiche_minimal));
             exitIfNull(fichelocalM, "new calloc null")
             fichelocalM->nombre_auteur = 0;
-        }
-        
-        indice_struct++;
+            fichelocalM->ADDR = indice_struct;
+        }        
     }
     // printTabmeaux(tableaux_allfiche);
     return tableaux_allfiche;
@@ -169,16 +170,24 @@ void serialize(const tableaux_fiche mastertab, FILE * output){
 //gratter en efficience en donneant au début les taille des structure
 //grater en fesant une structure avec des dico est des referancement
 
-tableaux_fiche deserialisation(FILE * input){
+/**
+ * @brief génère tableaux_fiche depuis un cache générée par serialize 
+ * 
+ * test avec des maloc 
+ * 
+ * @param [in] input générée par serialize 
+ * @return tableaux_fiche 
+ */
+tableaux_fiche * deserialisation(FILE * input){
 
     char ligne[BALISESIZE];
     fiche_minimal * fichelocalM = calloc(1,sizeof(fiche_minimal));
     fichelocalM->nombre_auteur = 0;
-    tableaux_fiche tableaux_allfiche;
-    tableaux_allfiche.taille = 0;
-    tableaux_allfiche.fiche = NULL;
-
-
+    tableaux_fiche * tableaux_allfiche = malloc(sizeof(tableaux_fiche));
+    exitIfNull(tableaux_allfiche,"tableaux all fiche null dans deserialisation\n")
+    tableaux_allfiche->taille = 0;
+    tableaux_allfiche->fiche = NULL;
+    int indice = 0;
     while (fgets(ligne,BALISESIZE,input))
     {
         if (feof(input))
@@ -187,6 +196,7 @@ tableaux_fiche deserialisation(FILE * input){
             exit(3);
         }
         enlever_retour_a_la_ligne(ligne);
+        fichelocalM->ADDR = indice;
         fichelocalM->titre = strdup(ligne);
         fgets(ligne,BALISESIZE,input);
         enlever_retour_a_la_ligne(ligne);
@@ -197,10 +207,11 @@ tableaux_fiche deserialisation(FILE * input){
             enlever_retour_a_la_ligne(ligne);
             appendAuteurM(fichelocalM,strdup(ligne));
         }
-        appendTabmeaux(&tableaux_allfiche,fichelocalM);
+        appendTabmeaux(tableaux_allfiche,fichelocalM);
         fichelocalM = calloc(1,sizeof(fiche_minimal));
         exitIfNull(fichelocalM, "new calloc null")
         fichelocalM->nombre_auteur = 0;
+        indice++;
     }
     return tableaux_allfiche;
 }
@@ -254,4 +265,18 @@ ll_list * deserialisation_Liste(FILE * input){
         sommet_titre->titre_article = ll_create();
     }
     return list_hauteur_heuvre;
+}
+
+
+void parsing_free(tableaux_fiche * DEGAGE){
+    for (int i = 0; i < DEGAGE->taille; i++)
+    {
+        free(DEGAGE->fiche[i]->titre);
+        for (int u = 0; u < DEGAGE->fiche[i]->nombre_auteur; u++)
+        {
+            free(DEGAGE->fiche[i]->liste_auteur[u]);
+        }
+        free(DEGAGE->fiche[i]);
+    }
+    free(DEGAGE);
 }
