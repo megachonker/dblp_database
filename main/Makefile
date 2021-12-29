@@ -1,7 +1,6 @@
-CC ?= gcc
+CCA ?= cc 
 CFLAGS ?= -Wall -Wextra -g
-LDLIBS ?= -lm
-BENCHNUMBER ?= deserialisedb
+LDLIBS ?= -lm -pthread -ftest-coverage -fprofile-arcs
 
 go:	tests abench.sh
 	./tests
@@ -9,17 +8,32 @@ go:	tests abench.sh
 abench.sh: bench gen_cache_data
 
 bench:	bench.o parsing.o list.o unwrap.o
-	$(CC) -o bench  $^ $(CFLAGS) $(LDLIBS)
+	$(CCA) -o bench  $^ $(CFLAGS) $(LDLIBS)
 
 tests:	tests.o parsing.o list.o unwrap.o
-	$(CC) -o tests  $^ $(CFLAGS) $(LDLIBS)
+	$(CCA) -o tests  $^ $(CFLAGS) $(LDLIBS)
 
 main:	main.o parsing.o
-	$(CC) -o main  $^ $(CFLAGS) $(LDLIBS)
+	$(CCA) -o main  $^ $(CFLAGS) $(LDLIBS)
 
 %.o: %.c
-	$(CC) -o $@ -c $< $(CFLAGS)
+	$(CCA) -o $@ -c $< $(CFLAGS)
 
+%.gcno: %.c
+	$(CCA) -o $@ -c $< $(CFLAGS)
+
+raport: bench.c parsing.c list.c unwrap.c
+	$(CCA) -O0 -o GCOVtests  $^ $(CFLAGS) $(LDLIBS)
+	./GCOVtests unwrwap_deserialise
+	./GCOVtests serialized
+	./GCOVtests unwrwap_gen_cache
+	gcov -abcfu bench.c parsing.c list.c unwrap.c
+	lcov --capture --directory . --output-file coverage.info
+	genhtml coverage.info --output-directory LcovRapport
+	firefox LcovRapport/main/index.html
+
+xml_Update: DATA/dblp.xml
+	if [ $$(curl https://dblp.uni-trier.de/xml/ |grep dblp.xml.gz.md5|grep -o ">202.-..-.."|tr -d ">") != $$(stat DATA/dblp.xml -c %y|cut -d " " -f 1) ];  then rm DATA/dblp.xml ; make DATA/dblp.xml ; fi
 
 DATA/dblp.xml:
 	rm -f dblp.xml.gz
@@ -44,16 +58,14 @@ DATA/SerializedStrucInverse.data: DATA/SerializedStruc.data
 
 gen_cache_data: DATA/dblp.xml DATA/dblp1sur8.xml DATA/SerializedStrucInverse.data DATA/Serialzed1000.data DATA/SerializedStruc.data
 
-
 clean:
-	rm -f *.o
-	rm -f tests bench main
+	rm -f  *.o *.so *.gcno *.gcda *.gcov coverage.info
+	rm -fr tests bench main GCOVtests LcovRapport
+
+cleanall: clean
 	rm -f DATA/SerializedStrucInverse.data\
 		DATA/dblp1sur8.xml\
 		DATA/SerializedStruc.data\
 		DATA/Serialzed1000.data\
-		
-		
-
 
 
