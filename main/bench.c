@@ -74,9 +74,8 @@ void unwrwap_deserialise(){
     FILE * fichier = fopen(serializedb,"r");
     exitIfNull(fichier,"imposible d'ouvrire "serializedb);
     tableaux_fiche * azer = deserialisation(fichier);   
-    parsing_free(azer);
     unwrap_List_Auteur_free(unwrap_Deserilise_Index(azer,input));
-
+    parsing_free(azer);
     // printList_Auteur(unwrap_Deserilise(deserialisedb,input));
 }
 
@@ -115,8 +114,7 @@ void swap(int print){
 }
 
 void bench_all(){
-    tableaux_fiche * libermoi =deserialisedb();
-    parsing_free(libermoi);
+    parsing_free(deserialisedb());
     unwrwap_gen_cache();
     unwrwap_deserialise();
 }
