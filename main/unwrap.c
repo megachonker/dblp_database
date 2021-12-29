@@ -79,6 +79,17 @@ int comphauteur(const void * a, const void * b){
     return result;
 }
 
+/**
+ * @brief génère un tableaux d' HauteurToHeurvre 
+ * 
+ * déplie tableaux_fiche pour généré unt tableaux
+ * d'élément Paire_HauteurHeurvre
+ * qui est une association auteur <=> heuvre unique
+ * 
+ * @param [in]  input toute les fiche des oeuvre qui comporte les liste auteur  
+ * @param [out] arrayout liste qui associe un auteur a une oeuvre
+ * @return nombre d'élément du tableaux
+ */
 int SwapStruct(tableaux_fiche input, Paire_HauteurHeurvre * arrayout ){
     int indice = 0;
     for (int i = 0; i < input.taille; i++)
@@ -195,6 +206,23 @@ void unwrap_Serilise(const List_Auteur * List_des_Auteur, FILE * output){
     }
 }
 
+void unwrap_Serilise_Index(const List_Auteur * List_des_Auteur, FILE * output){
+    //fonction d'qui fait la moyenne des hauteur pour pouvoir fair un maloque que une foit en moyenne
+    fprintf(output,"%d\n",count_isolate_autor(List_des_Auteur));
+    for (int i = 0; i < List_des_Auteur->taille; i++)
+    {
+        if(List_des_Auteur->tableaux_Somet_hauteur[i].size > 0){
+            fprintf(output,"%s\n",List_des_Auteur->tableaux_Somet_hauteur[i].hauteur);
+            fprintf(output,"%d\n",List_des_Auteur->tableaux_Somet_hauteur[i].size);
+            for (int j = 0; j < List_des_Auteur->tableaux_Somet_hauteur[i].size; j++)
+            {
+                fprintf(output,"%d\n",List_des_Auteur->tableaux_Somet_hauteur[i].heuvre[j]->ADDR);
+            }
+        }
+
+    }
+}
+
 
 //DOUBLON DE PARSING FAIR UN FICHIER UTILS OU ON LE MET
 void enlever_retour_a_la_ligne(char * ligne);
@@ -246,6 +274,54 @@ List_Auteur * unwrap_Deserilise(FILE * input){
 
     return master_List_Auteur;
 }
+
+
+List_Auteur * unwrap_Deserilise_Index(tableaux_fiche * tableaux_fiche,FILE * input){
+    char ligne[BALISESIZE];
+    List_Auteur * master_List_Auteur = malloc(sizeof(List_Auteur));
+    master_List_Auteur->taille=0;
+    fgets(ligne,BALISESIZE,input);
+        exitIfNull(sscanf(ligne,"%i\n",&master_List_Auteur->taille),"nombre de structure manquand ...")
+
+    //optimiser car on alloue tout en un malloc ! par contre ça peut echouer a voir
+    Sommet_Auteur_TableauxD * Sommet_Auteur_Tableaux =  malloc(sizeof(Sommet_Auteur_TableauxD)*master_List_Auteur->taille);  //<= je fait une liste de quoi ?
+    exitIfNull(Sommet_Auteur_Tableaux, "creation des sommet auteur tableaxD malloc null")
+    master_List_Auteur->tableaux_Somet_hauteur = Sommet_Auteur_Tableaux; //<=associasioin bonne ?
+
+    int i = 0;
+    while (fgets(ligne,BALISESIZE,input))
+    {
+        if (feof(input))
+        {
+            fprintf(stderr,"fin fichier");
+            exit(3);
+        }
+        enlever_retour_a_la_ligne(ligne);
+        master_List_Auteur->tableaux_Somet_hauteur[i].hauteur = strdup(ligne);
+        fgets(ligne,BALISESIZE,input);
+        exitIfNull(sscanf(ligne,"%i\n", &master_List_Auteur->tableaux_Somet_hauteur[i].size),"auteur qui n'om pas d'article\n");
+        
+        master_List_Auteur->tableaux_Somet_hauteur[i].heuvre = malloc(master_List_Auteur->tableaux_Somet_hauteur[i].size*sizeof(Sommet_Auteur_TableauxD)); //<= bon type ?
+        exitIfNull(master_List_Auteur->tableaux_Somet_hauteur[i].heuvre,"allocation master_List_Auteur->tableaux_Somet_hauteur[i].heuvre echouser...");
+
+        for (int u = 0; u < master_List_Auteur->tableaux_Somet_hauteur[i].size; u++)
+        {
+            fgets(ligne,BALISESIZE,input);
+            enlever_retour_a_la_ligne(ligne);
+            
+            int a = 0;
+            //on fait des sscanf de fgets ... on peut le faire directement
+            sscanf(ligne,"%d",&a);
+            exitIfNull(tableaux_fiche->fiche[a],"serialise index pointeur sur heuvre introuvable\n")
+            master_List_Auteur->tableaux_Somet_hauteur[i].heuvre[u] = tableaux_fiche->fiche[a];
+        }
+        i++;
+    }
+    return master_List_Auteur;
+}
+
+
+
 
 void unwrap_sinc(List_Auteur * List_des_Auteur ,const tableaux_fiche input){
     for (int i = 0; i < List_des_Auteur->taille; i++)
@@ -318,11 +394,29 @@ Paire_HauteurHeurvre HauteurHeuvre[MAXarraySIZE];
 
 List_Auteur * unwrap_from_file(FILE * inputFile){
 
-    tableaux_fiche mesfiches = deserialisation(inputFile);
-    int sizeHauteurHeuvre = SwapStruct(mesfiches,HauteurHeuvre);
+    tableaux_fiche * mesfiches = deserialisation(inputFile);
+    int sizeHauteurHeuvre = SwapStruct(*mesfiches,HauteurHeuvre);
     sort_tableaux_fiche(HauteurHeuvre,sizeHauteurHeuvre);
     List_Auteur * malistedauteur = gen_List_Auteur(HauteurHeuvre,sizeHauteurHeuvre);
     return malistedauteur;
+}
+
+
+void unwrap_List_Auteur_free(List_Auteur * afree){
+    for (int i = 0; i < afree->taille; i++)
+    {
+        free(afree->tableaux_Somet_hauteur[i].hauteur);
+        for (int j = 0; j < afree->tableaux_Somet_hauteur->size; j++)
+        {
+            free(afree->tableaux_Somet_hauteur[i].heuvre[j]->titre);
+            for (int u = 0; u < afree->tableaux_Somet_hauteur[i].heuvre[j]->nombre_auteur; u++)
+            {
+                free(afree->tableaux_Somet_hauteur[i].heuvre[j]->liste_auteur[u]);
+            }
+        }
+        
+    }
+    
 }
 
 // void convertStruct(tableaux_fiche input, ll_list * list_chainer_auteur ){

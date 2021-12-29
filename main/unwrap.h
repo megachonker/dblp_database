@@ -119,7 +119,9 @@ void sort_tableaux_fiche(Paire_HauteurHeurvre * HauteurHeuvre,int sizeHauteurHeu
 List_Auteur * unwrap_from_file(FILE * inputFile);
 
 /**
- * @brief Serialise la structeur List_Auteur
+ * @brief DéPRéCIER! voir unwrap_Serilise_Index
+ * 
+ * Serialise la structeur List_Auteur
  * 
  * @param [in] List_des_Auteur 
  * @param [out] output
@@ -127,7 +129,9 @@ List_Auteur * unwrap_from_file(FILE * inputFile);
 void unwrap_Serilise(const List_Auteur * List_des_Auteur, FILE * output);
 
 /**
- * @brief désérialise l'index des Auteur depuis un fichier
+ * @brief DéPRéCIER! voir unwrap_Deserilise_Index
+ * 
+ * désérialise l'index des Auteur depuis un fichier
  * 
  * 
  * @param [in] input => unwrap_serilise file 
@@ -136,7 +140,42 @@ void unwrap_Serilise(const List_Auteur * List_des_Auteur, FILE * output);
 List_Auteur * unwrap_Deserilise(FILE * input);
 
 
+/**
+ * @brief sérialisation de List_Auteur qui pointe sur des object
+ * 
+ * avec l'indice de l'auteur est l'indice de heuvre écrit en dure
+ * 
+ * @param List_des_Auteur liste utiliser pour les indice 
+ * @param [in,out] output fichier de sortie 
+ */
+void unwrap_Serilise_Index(const List_Auteur * List_des_Auteur, FILE * output);
+
+/**
+ * @brief désérialise une un cache produit par unwrap_Serilise_Index
+ * 
+ * @param [in] List_des_Auteur liste a utilsier pour la deserialisation
+ * @param [out] input 
+ * @return List_Auteur* 
+ */
+List_Auteur * unwrap_Deserilise_Index(const tableaux_fiche * List_des_Auteur, FILE * input);
+
+
 void unwrap_sinc(List_Auteur * List_des_Auteur ,const tableaux_fiche input);
+/**
+ * @brief 
+ * 
+ * 
+ * n'ayant pas les object Euvre/auteur
+ *  apres la décérialisation
+ *  ajout fonction résolution qui va ajouterune entrée a chaque foit qu'on l'interroge
+ *  de magnierre a ce qu'il soit possible d'executer l'algo sans avoir tout résolut
+ *
+ *  néamoins recalculer depuit from file est plus rapide ...
+ * 
+ * @param List_des_Auteur 
+ * @param resove 
+ * @param input 
+ */
 void unwrap_resolve(List_Auteur * List_des_Auteur, Sommet_Auteur_TableauxD * resove, const tableaux_fiche * input);
 
 // /**
@@ -147,4 +186,7 @@ void unwrap_resolve(List_Auteur * List_des_Auteur, Sommet_Auteur_TableauxD * res
 //  * @param list_chainer_auteur 
 //  */
 // void convertStruct(tableaux_fiche input, ll_list * list_chainer_auteur );
+
+void unwrap_List_Auteur_free(List_Auteur * free);
+
 #endif
