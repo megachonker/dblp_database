@@ -32,6 +32,10 @@ raport: bench.c parsing.c list.c unwrap.c
 	genhtml coverage.info --output-directory LcovRapport
 	firefox LcovRapport/main/index.html
 
+doc:
+	doxygen .
+	firefox html/index.html
+
 xml_Update: DATA/dblp.xml
 	if [ $$(curl https://dblp.uni-trier.de/xml/ |grep dblp.xml.gz.md5|grep -o ">202.-..-.."|tr -d ">") != $$(stat DATA/dblp.xml -c %y|cut -d " " -f 1) ];  then rm DATA/dblp.xml ; make DATA/dblp.xml ; fi
 
@@ -58,11 +62,12 @@ DATA/SerializedStrucInverse.data: DATA/SerializedStruc.data
 
 gen_cache_data: DATA/dblp.xml DATA/dblp1sur8.xml DATA/SerializedStrucInverse.data DATA/Serialzed1000.data DATA/SerializedStruc.data
 
+
 clean:
 	rm -f  *.o *.so *.gcno *.gcda *.gcov coverage.info
-	rm -fr tests bench main GCOVtests LcovRapport
+	rm -fr tests bench main GCOVtests LcovRapport html latex
 
-cleanall: clean
+cleanall: clean xml_Update
 	rm -f DATA/SerializedStrucInverse.data\
 		DATA/dblp1sur8.xml\
 		DATA/SerializedStruc.data\
