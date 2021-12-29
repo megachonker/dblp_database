@@ -26,7 +26,32 @@ if (!p)\
 #define MAXarraySIZE 21143793
 Paire_HauteurHeurvre HauteurHeuvre[MAXarraySIZE];
 
+void shift(int decalage){
+for(int p = 0; p < decalage ; p++)
+    printf("\t");
+}
 
+int explore(List_Auteur Auteur_random,int profondeur){
+    if (profondeur > 3)
+    {
+        return 0;
+    }
+    
+    shift(profondeur);
+    printf("%s:\n",Auteur_random.tableaux_Somet_hauteur->hauteur);
+    for (int u = 0; u < Auteur_random.taille; u++)
+    {
+        int nombre_auteur = Auteur_random.tableaux_Somet_hauteur->heuvre[u]->nombre_auteur;
+        shift(profondeur);
+        printf("\t__%d__:%s\n",nombre_auteur,Auteur_random.tableaux_Somet_hauteur->heuvre[u]->titre);
+        for (int j = 0; j < nombre_auteur; j++)
+        {
+            shift(profondeur);
+            printf("\t\t%s\n",Auteur_random.tableaux_Somet_hauteur->heuvre[u]->liste_auteur[j]);
+            // explore(Auteur_random.tableaux_Somet_hauteur->heuvre[u]->liste_auteur[j],profondeur++);
+        }
+    }
+}
 
 int main()
 {
@@ -51,9 +76,19 @@ int main()
     // unwrap_Serilise_Index(malistedauteur,DBinverse);
 
     List_Auteur * malistesortie = unwrap_Deserilise_Index(matablefiche,DBinverse);
-    printList_Auteur(malistesortie);
+    // printList_Auteur(malistesortie);
 
 
+    // Anna Flagg
+
+    //fonction pour générée des fiche random
+    for (int i = 0; i < 10; i++)
+    {
+        printf("__%d__:",i);
+        Sommet_Auteur_TableauxD Auteur_random = malistesortie->tableaux_Somet_hauteur[rand()%malistesortie->taille];
+        // explore(Auteur_random,0);
+    }
+    
 
     // //lire tout le fichier pour le metrte en maloc est faire un vieux fseek
     // // FILE * inputDB = fopen("DATA/Serialzed1000.data","r");
