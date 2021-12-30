@@ -68,15 +68,18 @@ void unwrwap_gen_cache(){
     unwrap_Serilise_Index(malistauteur,ouputDB);
     unwrap_List_Auteur_free(malistauteur);
 }
-void unwrwap_deserialise(){
+void unwrwap_deserialise(int print){
     FILE * input = fopen(serializedbunwrap,"r");
     exitIfNull(input,"imposible d'ouvrire "serializedbunwrap)
     FILE * fichier = fopen(serializedb,"r");
     exitIfNull(fichier,"imposible d'ouvrire "serializedb);
-    tableaux_fiche * azer = deserialisation(fichier);   
-    unwrap_List_Auteur_free(unwrap_Deserilise_Index(azer,input));
+    tableaux_fiche * azer = deserialisation(fichier);
+    List_Auteur * malistauteur =  unwrap_Deserilise_Index(azer,input);
+    if(print == 1){
+        printList_Auteur(malistauteur);
+    }
     parsing_free(azer);
-    // printList_Auteur(unwrap_Deserilise(deserialisedb,input));
+    unwrap_List_Auteur_free(malistauteur);
 }
 
     // FILE * ouputDB = fopen(serializedbunwrap,"w");
@@ -116,7 +119,7 @@ void swap(int print){
 void bench_all(){
     parsing_free(deserialisedb());
     unwrwap_gen_cache();
-    unwrwap_deserialise();
+    unwrwap_deserialise(0);
 }
 
 
@@ -130,7 +133,6 @@ int main(int argc, char const *argv[])
 
     const char * compstr = argv[1];
 
-
     if(strcmp("readb",compstr)==0){
         // printf("readb\n");
         readb();    
@@ -142,6 +144,10 @@ int main(int argc, char const *argv[])
     else if(strcmp("deserialisedb",compstr)==0){// N
         // printf("deserialisedb\n");
         deserialisedb();    
+    }
+    else if(strcmp("deserialisedbprint",compstr)==0){// N
+        // printf("deserialisedb\n");
+        printTabmeaux(*deserialisedb());
     }
     else if(strcmp("readsmaldb",compstr)==0){
         // printf("readsmaldb\n");
@@ -168,7 +174,11 @@ int main(int argc, char const *argv[])
     }
     else if (strcmp("unwrwap_deserialise",compstr)==0)
     {
-        unwrwap_deserialise();
+        unwrwap_deserialise(0);
+    }
+    else if (strcmp("unwrwap_deserialiseprint",compstr)==0)
+    {
+        unwrwap_deserialise(1);
     }
     else{
         fprintf(stderr,"PAS BON TEST!\n");
