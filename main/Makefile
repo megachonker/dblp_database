@@ -19,8 +19,8 @@ main:	main.o parsing.o
 %.o: %.c
 	$(CCA) -o $@ -c $< $(CFLAGS)
 
-%.gcno: %.c
-	$(CCA) -o $@ -c $< $(CFLAGS)
+# %.gcno: %.c
+# 	$(CCA) -o $@ -c $< $(CFLAGS)
 
 raport: bench.c parsing.c list.c unwrap.c
 	$(CCA) -O0 -o GCOVtests  $^ $(CFLAGS) $(LDLIBS)
@@ -33,10 +33,16 @@ raport: bench.c parsing.c list.c unwrap.c
 	firefox LcovRapport/main/index.html
 
 doc:
-	doxygen .
+	doxygen Doxyfile
 	firefox html/index.html
 
-xml_Update: DATA/dblp.xml
+callgrind:	bench
+	valgrind --dump-instr=yes --collect-jumps=yes --tool=callgrind --callgrind-out-file=callgrind_trace ./bench unwrwap_gen_cache
+	kcachegrind callgrind_trace
+	rm callgrind_trace
+# lunch kprok pour profiler le temps d'execution
+
+Update: DATA/dblp.xml
 	if [ $$(curl https://dblp.uni-trier.de/xml/ |grep dblp.xml.gz.md5|grep -o ">202.-..-.."|tr -d ">") != $$(stat DATA/dblp.xml -c %y|cut -d " " -f 1) ];  then rm DATA/dblp.xml ; make DATA/dblp.xml ; fi
 
 DATA/dblp.xml:
@@ -62,12 +68,13 @@ DATA/SerializedStrucInverse.data: DATA/SerializedStruc.data
 
 gen_cache_data: DATA/dblp.xml DATA/dblp1sur8.xml DATA/SerializedStrucInverse.data DATA/Serialzed1000.data DATA/SerializedStruc.data
 
+refresh: clean abench.sh
 
 clean:
 	rm -f  *.o *.so *.gcno *.gcda *.gcov coverage.info
 	rm -fr tests bench main GCOVtests LcovRapport html latex
 
-cleanall: clean xml_Update
+cleanall: clean Update
 	rm -f DATA/SerializedStrucInverse.data\
 		DATA/dblp1sur8.xml\
 		DATA/SerializedStruc.data\
