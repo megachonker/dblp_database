@@ -131,7 +131,7 @@ void sort_tableaux_Article(Paire_ArticleHauteur * ArticleuHauteur,int sizeArticl
  * @param [in] HtH       
  */
 void add_titre_to_auteur(Sommet_Auteur_TableauxD * list,const Paire_HauteurHeurvre HtH){//ces plus logic comme ça mais pluslent ?
-    fiche_minimal ** temparray = reallocarray(list->heuvre,list->size+1,8); //8 taille d'un pointeur 
+    fiche_minimale ** temparray = reallocarray(list->heuvre,list->size+1,8); //8 taille d'un pointeur 
     exitIfNull(temparray,"add_titre_to_auteur realockarrayfail\n");
     list->heuvre = temparray;
     list->heuvre[list->size] = HtH.heuvre;
@@ -424,7 +424,7 @@ void enlever_retour_a_la_ligne(char * ligne);
             
 //             //on va crée un pointeur dynamique qui pointe sur une fiche Je sais pas si ces bon choix ...
 //             master_List_Auteur->tableaux_Somet_hauteur[i].heuvre[u] = malloc(sizeof(8));
-//             exitIfNull(master_List_Auteur->tableaux_Somet_hauteur[i].heuvre[u],"allocation nouvel fiche_minimal echouer")
+//             exitIfNull(master_List_Auteur->tableaux_Somet_hauteur[i].heuvre[u],"allocation nouvel fiche_minimale echouer")
 //             /* //! \\ On va fair stoquer le noms de l'oteur dans une addresse structure pas encore lier  //!\\ */
 //             master_List_Auteur->tableaux_Somet_hauteur[i].heuvre[u]->titre = strdup(ligne);//<= générée un tableaux?
 //         }

@@ -122,7 +122,7 @@ void fusion_des_sGc(ll_list *liste_L_des_a_de_A_mis_dans_sGc, int idx_j_du_sGc_o
 
 
 
-void mettre_tous_les_a_de_A_dans_sGc_sauf_ceux_qui_y_sont_deja(fiche_minimal *A, ll_list *sGc, ll_list *liste_des_a_de_A_mis_dans_sGc)
+void mettre_tous_les_a_de_A_dans_sGc_sauf_ceux_qui_y_sont_deja(fiche_minimale *A, ll_list *sGc, ll_list *liste_des_a_de_A_mis_dans_sGc)
 { 
      
     for(int l=0; l<A->nombre_auteur; l++)
@@ -141,7 +141,7 @@ void mettre_tous_les_a_de_A_dans_sGc_sauf_ceux_qui_y_sont_deja(fiche_minimal *A,
 
 
 
-void voir_si_l_auteur_a_coecrit_article_deja_traiter(fiche_minimal *A, char *auteur_k, ll_list *Gt, stade_de_traitement_de_Gt_pour_l_article_Ai *etat_de_Gt)
+void voir_si_l_auteur_a_coecrit_article_deja_traiter(fiche_minimale *A, char *auteur_k, ll_list *Gt, stade_de_traitement_de_Gt_pour_l_article_Ai *etat_de_Gt)
 {
     ll_node *it_sGc_courant=Gt->first;
 
@@ -182,7 +182,7 @@ void voir_si_l_auteur_a_coecrit_article_deja_traiter(fiche_minimal *A, char *aut
 
 
 
-void parcours_liste_des_auteurs_d_un_article_pour_voir_si_il_faut_creer_une_nouvelle_liste(fiche_minimal *A, ll_list * Gt, stade_de_traitement_de_Gt_pour_l_article_Ai *etat_de_Gt)
+void parcours_liste_des_auteurs_d_un_article_pour_voir_si_il_faut_creer_une_nouvelle_liste(fiche_minimale *A, ll_list * Gt, stade_de_traitement_de_Gt_pour_l_article_Ai *etat_de_Gt)
 {
     for(int k=0; k < A->nombre_auteur; k++)  /*on regarde les auteurs*/
     {        

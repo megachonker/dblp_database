@@ -12,7 +12,7 @@
 typedef struct Paire_HauteurHeurvre
 {
     char * hauteur;
-    fiche_minimal * heuvre;
+    fiche_minimale * heuvre;
 }Paire_HauteurHeurvre;
 
 
@@ -28,14 +28,14 @@ typedef struct Sommet_Auteur_TableauxD
     struct Sommet_Article_TableauxD ** pointeur_Article; ///La magie qui pointe sur  Sommet_Article_TableauxD
     int nbelementmagi;      ///<compteur d'élément Sommet_Article_TableauxD
     char * hauteur;         ///<chaine de caractere maloc
-    fiche_minimal ** heuvre;///<tableaux dynamique d'adresse pointant sur des structure contenant oeuvre
+    fiche_minimale ** heuvre;///<tableaux dynamique d'adresse pointant sur des structure contenant oeuvre
     int size;               ///<taille du tableaux dynamique
 }Sommet_Auteur_TableauxD;
 
 /**
  * @brief Un Article a plusieur Auteur
  * 
- * Chaque Article pointe vers fiche_minimal de la on peut y retrouver le titre de l'article
+ * Chaque Article pointe vers fiche_minimale de la on peut y retrouver le titre de l'article
  * Chaque article pointe ver plusieur Auteur qui provienne de Sommet_Auteur_TableauxD de la on peut y retrouver  l'auteur
  * 
  * Sommet_Auteur_TableauxD on peut ce rediriger ver une autre fiche
@@ -199,9 +199,9 @@ List_Auteur * unwrap_from_file(FILE * inputFile);
  * - noms hauteur
  * - nombre d'article
  * - indice article 
- * *on va écrire ADDR (l'indice) qui est l'indice pour acceder a fiche_minimal en fesant Sommet_Auteur_TableauxD[ADDR]*
+ * *on va écrire ADDR (l'indice) qui est l'indice pour acceder a fiche_minimale en fesant Sommet_Auteur_TableauxD[ADDR]*
  * 
- * @param [in] List_des_Auteur le titre de l'heuvre accesible avec List_Auteur=>Sommet_Auteur_TableauxD=>fiche_minimal => ADDR
+ * @param [in] List_des_Auteur le titre de l'heuvre accesible avec List_Auteur=>Sommet_Auteur_TableauxD=>fiche_minimale => ADDR
  * @param [out] output fichier de sortie 
  */
 void unwrap_Serilise_Index(const List_Auteur * List_des_Auteur, FILE * output);

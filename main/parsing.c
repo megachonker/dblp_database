@@ -17,10 +17,10 @@ void enlever_retour_a_la_ligne(char * ligne){
     ligne[strcspn(ligne, "\n")]=0;    
 }
 
-void printM_titre(fiche_minimal OwO){
+void printM_titre(fiche_minimale OwO){
     printf("titre:    %s",OwO.titre);
 }
-void printM_liste_auteur(fiche_minimal UwU){
+void printM_liste_auteur(fiche_minimale UwU){
     printf("auteurs:\n\t");
     for (int i = 0; i < UwU.nombre_auteur; i++)
     {
@@ -31,7 +31,7 @@ void printM_liste_auteur(fiche_minimal UwU){
     printf("\n");
 }
 
-void printM(fiche_minimal OwU){
+void printM(fiche_minimale OwU){
     printM_titre(OwU);
     printf("\n");
     printM_liste_auteur(OwU);   
@@ -67,8 +67,8 @@ char * getanchor(char * recherche, char * ligne){
     return NULL;
 }
 
-void appendAuteurM(fiche_minimal * mafiche,char * nomsauteur){
-    void * addrListeauteur = realloc(mafiche->liste_auteur,sizeof(fiche_minimal)*(mafiche->nombre_auteur+1));
+void appendAuteurM(fiche_minimale * mafiche,char * nomsauteur){
+    void * addrListeauteur = realloc(mafiche->liste_auteur,sizeof(fiche_minimale)*(mafiche->nombre_auteur+1));
  
     if (!addrListeauteur)
     {
@@ -81,7 +81,7 @@ void appendAuteurM(fiche_minimal * mafiche,char * nomsauteur){
     mafiche->nombre_auteur++;
 }
 
-void appendTabmeaux(tableaux_fiche * table, fiche_minimal * a_ajouter){
+void appendTabmeaux(tableaux_fiche * table, fiche_minimale * a_ajouter){
 
     void * addrListFiche = realloc(table->fiche,sizeof(tableaux_fiche)*(table->taille+1));
  
@@ -115,14 +115,14 @@ void gen_id_fiche(tableaux_fiche * tableaux_allfiche){
 
 static int cmptabfiche(const void * maficheA,const void * maficheB){
     //MAGIE NOIIIIIIIIIIIIIIIIIIIIIREEE
-    struct fiche_minimal* maficheAA = *(struct fiche_minimal**) maficheA;
-    struct fiche_minimal* maficheBB = *(struct fiche_minimal**) maficheB;
+    struct fiche_minimale* maficheAA = *(struct fiche_minimale**) maficheA;
+    struct fiche_minimale* maficheBB = *(struct fiche_minimale**) maficheB;
     // printf("%s <=> %s\n",maficheAA->titre,maficheAA->titre);
     return strcmp(maficheAA->titre,maficheBB->titre);
 }
 
 void sortlist(tableaux_fiche * mesfiche ){
-    // fiche_minimal * start  =  *mesfiche->fiche;
+    // fiche_minimale * start  =  *mesfiche->fiche;
     qsort(mesfiche->fiche,mesfiche->taille,sizeof(mesfiche->fiche),cmptabfiche);   
 }
 
@@ -130,7 +130,7 @@ void sortlist(tableaux_fiche * mesfiche ){
 tableaux_fiche parse(FILE * inputDB){
     printf("début du parsing:\n");
     char ligne[BALISESIZE];
-    fiche_minimal * fichelocalM = calloc(1,sizeof(fiche_minimal));
+    fiche_minimale * fichelocalM = calloc(1,sizeof(fiche_minimale));
     fichelocalM->nombre_auteur = 0;
     fichelocalM->ADDR = 0;
     tableaux_fiche tableaux_allfiche;// ce n'es pas maloc donc a la sortie de la fonction l'object est détruit ? ? ??
@@ -171,7 +171,7 @@ tableaux_fiche parse(FILE * inputDB){
                 appendTabmeaux(&tableaux_allfiche,fichelocalM);
             }
 
-            fichelocalM = calloc(1,sizeof(fiche_minimal));
+            fichelocalM = calloc(1,sizeof(fiche_minimale));
             exitIfNull(fichelocalM, "new calloc null")
             fichelocalM->nombre_auteur = 0;
         }        
@@ -216,7 +216,7 @@ void serialize(const tableaux_fiche mastertab, FILE * output){
 tableaux_fiche * deserialisation(FILE * input){
 
     char ligne[BALISESIZE];
-    fiche_minimal * fichelocalM = calloc(1,sizeof(fiche_minimal));
+    fiche_minimale * fichelocalM = calloc(1,sizeof(fiche_minimale));
     fichelocalM->nombre_auteur = 0;
     tableaux_fiche * tableaux_allfiche = malloc(sizeof(tableaux_fiche));
     exitIfNull(tableaux_allfiche,"tableaux all fiche null dans deserialisation\n")
@@ -243,7 +243,7 @@ tableaux_fiche * deserialisation(FILE * input){
             appendAuteurM(fichelocalM,strdup(ligne));
         }
         appendTabmeaux(tableaux_allfiche,fichelocalM);
-        fichelocalM = calloc(1,sizeof(fiche_minimal));
+        fichelocalM = calloc(1,sizeof(fiche_minimale));
         exitIfNull(fichelocalM, "new calloc null")
         fichelocalM->nombre_auteur = 0;
         indice++;

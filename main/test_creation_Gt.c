@@ -54,7 +54,7 @@ int main(void)
     
     
     
-    fiche_minimal A0;
+    fiche_minimale A0;
 
     A0.liste_auteur = malloc(3*sizeof(char*));
     if(A0.liste_auteur==NULL)
@@ -68,7 +68,7 @@ int main(void)
     A0.nombre_auteur=3;
 
     
-    fiche_minimal A1;
+    fiche_minimale A1;
 
     A1.liste_auteur = malloc(1*sizeof(char*));
     if(A1.liste_auteur==NULL)
@@ -80,7 +80,7 @@ int main(void)
     A1.nombre_auteur=1;
 
 
-    fiche_minimal A2;
+    fiche_minimale A2;
 
     A2.liste_auteur = malloc(2*sizeof(char*));
     if(A2.liste_auteur==NULL)
@@ -95,7 +95,7 @@ int main(void)
 
     tableaux_fiche tab_fiche_situation1;
 
-    tab_fiche_situation1.fiche=malloc(3*sizeof(fiche_minimal));
+    tab_fiche_situation1.fiche=malloc(3*sizeof(fiche_minimale));
     if(tab_fiche_situation1.fiche==NULL)
     {
         printf("%s\n", "erreur de malloc");

@@ -15,22 +15,22 @@
  * 
  * 
  */
-typedef struct fiche_minimal
+typedef struct fiche_minimale
 {
     char * titre;           ///< titre de l'heuvre / article
     int nombre_auteur;      ///< nombre d'auteur contenue dans liste_auteur
     char ** liste_auteur;   ///< liste de liste de caractere des noms d'auteur (Trier gain perf ?)
     // Sommet_Auteur_TableauxD ** pointeur_Auteur_tableaux; ///< Liste de pointeur (meme indice que liste_auteur ) qui reboucle sur Sommet_Auteur_TableauxD avec sont auteur
     //add une uid pour un auteur :3
-    int ADDR;               ///< Indice permetant d'acceder a cette fiche_minimal depuis tableaux_fiche.fiche[ADDR] (initialiser a la création) 
-}fiche_minimal;
+    int ADDR;               ///< Indice permetant d'acceder a cette fiche_minimale depuis tableaux_fiche.fiche[ADDR] (initialiser a la création) 
+}fiche_minimale;
 
 
 
 
 
 /**
- * @brief Contien toute les fiche_minimal
+ * @brief Contien toute les fiche_minimale
  * 
  * doublon avec tableaux_fiche !! ?
  * 
@@ -38,7 +38,7 @@ typedef struct fiche_minimal
  */
 typedef struct tableaux_fiche
 {
-    fiche_minimal ** fiche; ///< tableaux des fiche_minimal utiliser
+    fiche_minimale ** fiche; ///< tableaux des fiche_minimale utiliser
     int taille;             ///<taille tableaux
 }tableaux_fiche;
 
@@ -54,17 +54,17 @@ tableaux_fiche parse(FILE * inputDB);
 char * getanchor(char * recherche, char * ligne);
 
 
-void appendAuteurM(fiche_minimal * mafiche,char * nomsauteur);
-void appendTabmeaux(tableaux_fiche * table, fiche_minimal * a_ajouter);
+void appendAuteurM(fiche_minimale * mafiche,char * nomsauteur);
+void appendTabmeaux(tableaux_fiche * table, fiche_minimale * a_ajouter);
 
 /**
- * @brief print fiche_minimal
+ * @brief print fiche_minimale
  * 
  * print le titre de l'euvre suivit de ces auteur
  * 
  * @param UwO 
  */
-void printM(fiche_minimal UwO);
+void printM(fiche_minimale UwO);
 
 /**
  * @brief Print tableaux_fiche

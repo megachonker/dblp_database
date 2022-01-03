@@ -2,6 +2,8 @@ CCA ?= cc -O0
 CFLAGS ?= -Wall -Wextra -g
 LDLIBS ?= -lm -pthread -ftest-coverage -fprofile-arcs
 
+
+
 go:	tests abench.sh
 	./tests
 

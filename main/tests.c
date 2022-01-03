@@ -64,7 +64,7 @@ int main()
     //crée une nouvel structure qui 
 
 
-    // Structure List_Auteur ou les heuvre sont des id des fiche_minimal contenue dans SerializedStrucInverse
+    // Structure List_Auteur ou les heuvre sont des id des fiche_minimale contenue dans SerializedStrucInverse
     // Structure List_Article ou les article sont des id de SerializedStruct est les heuvre sont 
 
     //List_Article est générée a partire de List_Auteur on le déplie on trie par noms d'article
