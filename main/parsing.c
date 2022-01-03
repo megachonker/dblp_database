@@ -4,10 +4,6 @@
 #include "parsing.h"
 
 
-// #define BALISESIZE 1000
-
-//s->name = strdup(buffer)
-//fait un alloc d'une valeur
 
 #define exitIfNull(p,msg)\
 if (!p)\
@@ -25,18 +21,19 @@ void printM_titre(fiche_minimal OwO){
     printf("titre:    %s",OwO.titre);
 }
 void printM_liste_auteur(fiche_minimal UwU){
-    printf("auteurs:\n- ");
+    printf("auteurs:\n\t");
     for (int i = 0; i < UwU.nombre_auteur; i++)
     {
         printf("%s",UwU.liste_auteur[i]);
         if (i+1<UwU.nombre_auteur)
-            printf("- ");
+            printf("\n\t");
     }
     printf("\n");
 }
 
 void printM(fiche_minimal OwU){
     printM_titre(OwU);
+    printf("\n");
     printM_liste_auteur(OwU);   
 }
 
@@ -99,11 +96,40 @@ void appendTabmeaux(tableaux_fiche * table, fiche_minimal * a_ajouter){
     table->fiche[table->taille] = a_ajouter;
     table->taille++;   
 }
+
+
+/**
+ * @brief chaque fiche a sont id
+ * 
+ * l'id est l'indice pour acceder a la fiche dpuis la structure  tableaux_fiche
+ * 
+ * @param [in,out] tableaux_allfiche 
+ */
+void gen_id_fiche(tableaux_fiche * tableaux_allfiche){
+    for (int i = 0; i < tableaux_allfiche->taille; i++)
+    {
+        tableaux_allfiche->fiche[i]->ADDR = i;
+    }
+}
+
+
+static int cmptabfiche(const void * maficheA,const void * maficheB){
+    //MAGIE NOIIIIIIIIIIIIIIIIIIIIIREEE
+    struct fiche_minimal* maficheAA = *(struct fiche_minimal**) maficheA;
+    struct fiche_minimal* maficheBB = *(struct fiche_minimal**) maficheB;
+    // printf("%s <=> %s\n",maficheAA->titre,maficheAA->titre);
+    return strcmp(maficheAA->titre,maficheBB->titre);
+}
+
+void sortlist(tableaux_fiche * mesfiche ){
+    // fiche_minimal * start  =  *mesfiche->fiche;
+    qsort(mesfiche->fiche,mesfiche->taille,sizeof(mesfiche->fiche),cmptabfiche);   
+}
+
 //on retourne pas l'original mais une copie ?
 tableaux_fiche parse(FILE * inputDB){
-
+    printf("début du parsing:\n");
     char ligne[BALISESIZE];
-    int indice_struct = 0;
     fiche_minimal * fichelocalM = calloc(1,sizeof(fiche_minimal));
     fichelocalM->nombre_auteur = 0;
     fichelocalM->ADDR = 0;
@@ -113,7 +139,6 @@ tableaux_fiche parse(FILE * inputDB){
 
     while (fgets(ligne,BALISESIZE,inputDB))
     {
-        indice_struct++;
         int flagt = 0;
         
         if (!fichelocalM)
@@ -138,7 +163,9 @@ tableaux_fiche parse(FILE * inputDB){
             // printM_titre(*fichelocalM);
             // printM_liste_auteur(*fichelocalM);
 
-            if (strcmp(fichelocalM->titre,"Home Page")!=0)
+            if (strcmp(fichelocalM->titre,"Home Page")!=0 
+            && fichelocalM->nombre_auteur != 0 
+            && strcmp(fichelocalM->titre,"")!=0)//ces con mais fichelocalM->titre ou fichelocalM->titre != '' devrais fonctioner..
             {
                 appendTabmeaux(&tableaux_allfiche,fichelocalM);
             }
@@ -146,16 +173,23 @@ tableaux_fiche parse(FILE * inputDB){
             fichelocalM = calloc(1,sizeof(fiche_minimal));
             exitIfNull(fichelocalM, "new calloc null")
             fichelocalM->nombre_auteur = 0;
-            fichelocalM->ADDR = indice_struct;
         }        
     }
     // printTabmeaux(tableaux_allfiche);
+
+    printf("PARSE OK\ndébut du trie:\n");
+    sortlist(&tableaux_allfiche);
+    printf("Trie OK\ndébut de genereation des id:\n");
+    gen_id_fiche(&tableaux_allfiche);
+    printf("Id générée!\n");
     return tableaux_allfiche;
 }
 
+
+
+
 //utiliser l'addresse pour pas copier ?
 void serialize(const tableaux_fiche mastertab, FILE * output){
-
     for (int i = 0; i < mastertab.taille; i++)
     {
         fprintf(output,"%s\n",mastertab.fiche[i]->titre);
@@ -268,6 +302,7 @@ tableaux_fiche * deserialisation(FILE * input){
 // }
 
 
+
 void parsing_free(tableaux_fiche * DEGAGE){
     for (int i = 0; i < DEGAGE->taille; i++)
     {
@@ -279,4 +314,25 @@ void parsing_free(tableaux_fiche * DEGAGE){
         free(DEGAGE->fiche[i]);
     }
     free(DEGAGE);
+
 }
+
+
+
+// int main(){
+
+
+// #define originedb           "DATA/dblp.xml"
+// #define smalloriginedb      "DATA/dblp1sur8.xml"
+// #define serializedb         "DATA/SerializedStruc.data"
+// #define smallserializedb    "DATA/Serialzed1000.data"
+// #define serializedbunwrap   "DATA/SerializedStrucInverse.data"
+
+//     FILE * in = fopen(originedb,"r");
+//     exitIfNull(in,"imposible d'ouvrire "originedb);
+//     tableaux_fiche coucou = parse(in); //utiliser des address pour eviter la copie ?? 
+//     FILE * out = fopen(serializedb,"w");
+//     exitIfNull(out,"imposible d'ouvrire "serializedb);
+//     serialize(coucou,out); //utiliser des address pour eviter la copie ?? 
+//     printTabmeaux(coucou);
+// }
