@@ -1,4 +1,4 @@
-CCA ?= cc 
+CCA ?= cc -O0
 CFLAGS ?= -Wall -Wextra -g
 LDLIBS ?= -lm -pthread -ftest-coverage -fprofile-arcs
 
@@ -68,7 +68,7 @@ DATA/SerializedStrucInverse.data: DATA/SerializedStruc.data
 
 gen_cache_data: DATA/dblp.xml DATA/dblp1sur8.xml DATA/SerializedStrucInverse.data DATA/Serialzed1000.data DATA/SerializedStruc.data
 
-refresh: clean abench.sh
+r: clean abench.sh
 
 clean:
 	rm -f  *.o *.so *.gcno *.gcda *.gcov coverage.info

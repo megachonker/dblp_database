@@ -12,7 +12,7 @@
 
 #include <assert.h>
 
-
+// https://en.wikipedia.org/wiki/Stdarg.h ...) multiple arg
 /**
  * @def macro tester si p est null et retourne un message
  * 
@@ -23,72 +23,108 @@ if (!p)\
     fprintf(stderr,msg);\
 }\
 
-#define MAXarraySIZE 21143793
-Paire_HauteurHeurvre HauteurHeuvre[MAXarraySIZE];
+// #define MAXarraySIZE 21143793
+// Paire_HauteurHeurvre HauteurHeuvre[MAXarraySIZE];
 
-void shift(int decalage){
-for(int p = 0; p < decalage ; p++)
-    printf("\t");
-}
+// void shift(int decalage){
+// for(int p = 0; p < decalage ; p++)
+//     printf("\t");
+// }
 
-int explore(List_Auteur Auteur_random,int profondeur){
-    if (profondeur > 3)
-    {
-        return 0;
-    }
+// int explore(List_Auteur Auteur_random,int profondeur){
+//     if (profondeur > 3)
+//     {
+//         return 0;
+//     }
     
-    shift(profondeur);
-    printf("%s:\n",Auteur_random.tableaux_Somet_hauteur->hauteur);
-    for (int u = 0; u < Auteur_random.taille; u++)
-    {
-        int nombre_auteur = Auteur_random.tableaux_Somet_hauteur->heuvre[u]->nombre_auteur;
-        shift(profondeur);
-        printf("\t__%d__:%s\n",nombre_auteur,Auteur_random.tableaux_Somet_hauteur->heuvre[u]->titre);
-        for (int j = 0; j < nombre_auteur; j++)
-        {
-            shift(profondeur);
-            printf("\t\t%s\n",Auteur_random.tableaux_Somet_hauteur->heuvre[u]->liste_auteur[j]);
-            // explore(Auteur_random.tableaux_Somet_hauteur->heuvre[u]->liste_auteur[j],profondeur++);
-        }
-    }
-}
+//     shift(profondeur);
+//     printf("%s:\n",Auteur_random.tableaux_Somet_hauteur->hauteur);
+//     for (int u = 0; u < Auteur_random.taille; u++)
+//     {
+//         int nombre_auteur = Auteur_random.tableaux_Somet_hauteur->heuvre[u]->nombre_auteur;
+//         shift(profondeur);
+//         printf("\t__%d__:%s\n",nombre_auteur,Auteur_random.tableaux_Somet_hauteur->heuvre[u]->titre);
+//         for (int j = 0; j < nombre_auteur; j++)
+//         {
+//             shift(profondeur);
+//             printf("\t\t%s\n",Auteur_random.tableaux_Somet_hauteur->heuvre[u]->liste_auteur[j]);
+//             // explore(Auteur_random.tableaux_Somet_hauteur->heuvre[u]->liste_auteur[j],profondeur++);
+//         }
+//     }
+// }
 
 int main()
 {
 
-    //tester les free dans parsing
-    //ajouter le nombre d'élément dans le serialiser pour les maloc ?
-    //dans unwrap sérialiser les titre des hauteur
-
-
 
     
+
+    //free de malloc marche pas ....
+
+    //crée une nouvel structure qui 
+
+
+    // Structure List_Auteur ou les heuvre sont des id des fiche_minimal contenue dans SerializedStrucInverse
+    // Structure List_Article ou les article sont des id de SerializedStruct est les heuvre sont 
+
+    //List_Article est générée a partire de List_Auteur on le déplie on trie par noms d'article
+    
+    //on sérialise les List_Article:
+    //  pour le noms d'auteur on stoque l'indexe du noms d'auteur de List_Auteur
+    //  pour les article on sotque l'index de la fiche minimal de List_Auteur
+
+
     FILE * DBxml = fopen("DATA/SerializedStruc.data","r");
     FILE * DBinverse = fopen("DATA/SerializedStrucInverse.data","r");
     exitIfNull(DBxml,"INPUT PAS CHEMAIN")
     exitIfNull(DBinverse,"INPUT PAS CHEMAIN")
 
-    tableaux_fiche * matablefiche = deserialisation(DBxml);
+    unwrap_Graph mongraphlul = gen_unwrap_Graph(DBxml,DBinverse);
 
-    // int sizeHauteurHeuvre = SwapStruct(matablefiche,HauteurHeuvre);
-    // sort_tableaux_fiche(HauteurHeuvre,sizeHauteurHeuvre);
-    // List_Auteur * malistedauteur = gen_List_Auteur(HauteurHeuvre,sizeHauteurHeuvre);
-    // unwrap_Serilise_Index(malistedauteur,DBinverse);
+    // printList_Article(mongraphlul.list_Article);
 
-    List_Auteur * malistesortie = unwrap_Deserilise_Index(matablefiche,DBinverse);
-    // printList_Auteur(malistesortie);
+
+
+
+
+    for (int i = 100; i < mongraphlul.list_Article->nombre_Article; i++)
+    {
+        Sommet_Article_TableauxD * premierarticle = &mongraphlul.list_Article->pointeur_Article_tableaux[i];
+        for (int u = 0; u < premierarticle->nombre_Auteur; u++)
+        {
+            Sommet_Auteur_TableauxD * premierauteur  =  premierarticle->pointeur_Auteur_tableaux[u];
+            // for (int j = 0; j <  premierauteur->nbelementmagi; j++)
+            // {
+            //     Sommet_Article_TableauxD * remonter = premierauteur->pointeur_Article[j];
+            //     printf("%s == %s\n",remonter->Article,premierarticle->Article);
+            // }
+                printf("%s == %s\n",premierauteur->pointeur_Article[0]->Article,premierarticle->Article);
+
+        }
+
+
+    }
+    
+
+    
+
+    // tableaux_fiche * matablefiche = deserialisation(DBxml);
+    // List_Auteur * malisteAuteur = unwrap_Deserilise_Index(matablefiche,DBinverse);
+    // printList_Auteur(malisteAuteur);    
+
 
 
     // Anna Flagg
 
     //fonction pour générée des fiche random
-    for (int i = 0; i < 10; i++)
-    {
-        printf("__%d__:",i);
-        Sommet_Auteur_TableauxD Auteur_random = malistesortie->tableaux_Somet_hauteur[rand()%malistesortie->taille];
-        // explore(Auteur_random,0);
-    }
+    // for (int i = 0; i < 10; i++)
+    // {
+    //     printf("__%d__:",i);
+    //     Sommet_Auteur_TableauxD Auteur_random = malistesortie->tableaux_Somet_hauteur[rand()%malistesortie->taille];
+    //     // explore(Auteur_random,0);
+    // }
     
+    //crée un nouvel index  SerializedStruc qui a des id de SerializedStrucInverse  
 
     // //lire tout le fichier pour le metrte en maloc est faire un vieux fseek
     // // FILE * inputDB = fopen("DATA/Serialzed1000.data","r");

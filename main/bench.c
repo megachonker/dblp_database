@@ -39,7 +39,8 @@ void serialized(){
     tableaux_fiche coucou = parse(in); //utiliser des address pour eviter la copie ?? 
     FILE * out = fopen(serializedb,"w");
     exitIfNull(out,"imposible d'ouvrire "serializedb);
-    serialize(coucou,out); //utiliser des address pour eviter la copie ?? 
+    serialize(coucou,out); //utiliser des address pour eviter la copie ??
+    // printTabmeaux(coucou);
 }
 
 //serialise small db manque 
