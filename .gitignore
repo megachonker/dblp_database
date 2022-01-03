@@ -207,3 +207,6 @@ main/latex/structtableaux__fiche__coll__graph.md5
 main/latex/structtableaux__fiche__coll__graph.pdf
 main/latex/structtableaux__fiche.tex
 main/latex/tabu_doxygen.sty
+main/callgrind_unwrab_deserialize
+main/callgrind_unwrwap_gen_cache
+main/parsing
