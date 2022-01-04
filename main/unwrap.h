@@ -6,62 +6,62 @@
 
 
 /**
- * @brief couple Hauteur <=> Heuvre
+ * @brief couple nom_auteur <=> Heuvre
  * utiliser pour qsort donc interne
  */
 typedef struct Paire_HauteurHeurvre
 {
-    char * hauteur;
+    char * nom_auteur;
     fiche_minimale * heuvre;
 }Paire_HauteurHeurvre;
 
 
-struct Sommet_Article_TableauxD;
+struct Article_struct;
 
 /**
- * @brief Un hauteur plusieur heuvre
+ * @brief Un nom_auteur plusieur heuvre
  * 
  * Générée a partire des cache
  */
-typedef struct Sommet_Auteur_TableauxD
+typedef struct auteur_struct
 {
-    struct Sommet_Article_TableauxD ** pointeur_Article; ///La magie qui pointe sur  Sommet_Article_TableauxD
-    int nbelementmagi;      ///<compteur d'élément Sommet_Article_TableauxD
-    char * hauteur;         ///<chaine de caractere maloc
+    struct Article_struct ** pointeur_Article; ///La magie qui pointe sur  Article_struct
+    int nbelementmagi;      ///<compteur d'élément Article_struct
+    char * nom_auteur;
     fiche_minimale ** heuvre;///<tableaux dynamique d'adresse pointant sur des structure contenant oeuvre
     int size;               ///<taille du tableaux dynamique
-}Sommet_Auteur_TableauxD;
+}auteur_struct;
 
 /**
- * @brief Un Article a plusieur Auteur
+ * @brief Un nom_Article a plusieur auteur_struct
  * 
- * Chaque Article pointe vers fiche_minimale de la on peut y retrouver le titre de l'article
- * Chaque article pointe ver plusieur Auteur qui provienne de Sommet_Auteur_TableauxD de la on peut y retrouver  l'auteur
+ * Chaque nom_Article pointe vers fiche_minimal de la on peut y retrouver le titre de l'article
+ * Chaque article pointe ver plusieur auteur_struct qui provienne de auteur_struct de la on peut y retrouver  l'auteur_struct
  * 
- * Sommet_Auteur_TableauxD on peut ce rediriger ver une autre fiche
+ * auteur_struct on peut ce rediriger ver une autre fiche
  * 
  */
-typedef struct Sommet_Article_TableauxD
+typedef struct Article_struct
 {
-    char * Article; ///< générée par deserialisation Contien toute les info d'un article\n qui provienne du parsing
-    Sommet_Auteur_TableauxD ** pointeur_Auteur_tableaux; ///< Liste de pointeur (meme indice que liste_auteur ) qui reboucle sur Sommet_Auteur_TableauxD avec sont auteur
+    char * nom_Article; ///< générée par deserialisation Contien toute les info d'un article\n qui provienne du parsing
+    auteur_struct ** pointeur_Auteur_tableaux; ///< Liste de pointeur (meme indice que liste_auteur ) qui reboucle sur auteur_struct avec sont auteur_struct
     int nombre_Auteur;
-}Sommet_Article_TableauxD;
+}Article_struct;
 
 /**
  * @brief liste déplier pour le trie
  * 
-tableaux_Somet_hauteur *tableaux_Somet_hauteur dans article on a la le nombre de d'euvre
+tab_auteur *tab_auteur dans article on a la le nombre de d'euvre
  * 
  */
 typedef struct Paire_ArticleHauteur
 {
     //si lordre de mes article est le meme que tableaux_fiche
-    //allor si j'accede au Xeme Article de tableaux_fiche
-    //allor je peut acceder au Xeme element de Sommet_Article_TableauxD
-    //Donc Sommet_Auteur_TableauxD ayant chaque hauteur pointant sur 
+    //allor si j'accede au Xeme nom_Article de tableaux_fiche
+    //allor je peut acceder au Xeme element de nom_Article
+    //Donc auteur_struct ayant chaque nom_auteur pointant sur 
     char * article; ///< dans la fiche minimal on va y retrouver le noms de l'article
-    Sommet_Auteur_TableauxD * pointeur_Auteur; ///< pointe ver un auteur Sommet_Auteur_TableauxD
+    auteur_struct * pointeur_Auteur; ///< pointe ver un auteur_struct auteur_struct
 }Paire_ArticleHauteur;
 
 
@@ -69,39 +69,39 @@ typedef struct Paire_ArticleHauteur
 
 
 /**
- * @brief Stoque tout les Sommet_Auteur_TableauxD
+ * @brief Stoque tout les auteur_struct
  * 
- * sous forme de tableaux DYNAMIQUE d'adresse pointant sur Sommet_Auteur_TableauxD
- * ainsie que le nombre d'élément (Sommet_Auteur_TableauxD) stoquer dans le tableaux 
+ * sous forme de tableaux DYNAMIQUE d'adresse pointant sur auteur_struct
+ * ainsie que le nombre d'élément (auteur_struct) stoquer dans le tableaux 
  */
-typedef struct List_Auteur
+typedef struct tab_auteur_struct
 {
-    Sommet_Auteur_TableauxD * tableaux_Somet_hauteur;///< tableaux de structure de taille
+    auteur_struct * tab_auteur;
     int taille;
-}List_Auteur;
+}tab_auteur_struct;
 
 /**
- * @brief Contien Sommet_Article_TableauxD est le nombre d'article 
+ * @brief Contien nom_Article est le nombre d'article 
  * 
  * 
  */
- typedef struct List_Article
+ typedef struct tab_Article_struct
 {
-    Sommet_Article_TableauxD * pointeur_Article_tableaux; ///< liste de pointeur qui pointe ver Sommet_Article_TableauxD
+    Article_struct * tab_Article;
     int nombre_Article;
-}List_Article;
+}tab_Article_struct;
 
 /**
  * @brief Structure contenant toute les structure importante
  * 
  * 
  */
-typedef struct unwrap_Graph
+typedef struct unwrap_Graph_t
 {
-    List_Auteur * list_Auteur;
-    List_Article * list_Article;
+    tab_auteur_struct * tab_auteur_struct;
+    tab_Article_struct * tab_Article_struct;
     tableaux_fiche * tableaux_de_fiche;
-}unwrap_Graph;
+}unwrap_Graph_t;
 
 
 
@@ -117,7 +117,7 @@ typedef struct unwrap_Graph
 int comphauteur(const void * a, const void * b);
 
 /**
- * @brief Affiche hauteur <=> Heuvre
+ * @brief Affiche nom_auteur <=> Heuvre
  * 
  * @param [in] OwI  Paire_HauteurHeurvre
  * @param [in] sizeHauteurHeuvre nombre d'élément 
@@ -130,81 +130,81 @@ void printPaire_HauteurHeurvre(Paire_HauteurHeurvre * OwI,int sizeHauteurHeuvre 
  * 
  * déplie tableaux_fiche pour généré unt tableaux
  * d'élément Paire_HauteurHeurvre
- * qui est une association auteur <=> heuvre unique
+ * qui est une association auteur_struct <=> heuvre unique
  * 
- * @param [in]  input toute les fiche des oeuvre qui comporte les liste auteur  
- * @param [out] arrayout liste qui associe un auteur a une oeuvre
+ * @param [in]  input toute les fiche des oeuvre qui comporte les liste auteur_struct  
+ * @param [out] arrayout liste qui associe un auteur_struct a une oeuvre
  * @return nombre d'élément du tableaux
  */
 int SwapStruct(tableaux_fiche input, Paire_HauteurHeurvre * arrayout );
 
 /**
- * @brief génère List_Auteur a partire de Paire_HauteurHeurvre
+ * @brief génère tab_auteur_struct a partire de Paire_HauteurHeurvre
  * 
  * fonction pricipal elle parcoure Paire_HauteurHeurvre est quand le meme
- * auteur ce suit ajoute tout les oeuvre dans un nouveaux tableaux
+ * auteur_struct ce suit ajoute tout les oeuvre dans un nouveaux tableaux
  * 
- * @param [in] liste                liste trier par auteur des paire auteur titre
+ * @param [in] liste                liste trier par auteur_struct des paire auteur_struct titre
  * @param [in] sizeHauteurHeuvre    taille de cette liste
- * @return List_Auteur* addressse de la liste final générée Auteur to Multiple titre  
+ * @return tab_auteur_struct* addressse de la liste final générée auteur_struct to Multiple titre  
  */
-List_Auteur* gen_List_Auteur(const Paire_HauteurHeurvre * liste,int sizeHauteurHeuvre);
+tab_auteur_struct* gen_List_Auteur(const Paire_HauteurHeurvre * liste,int sizeHauteurHeuvre);
 
 /**
- * @brief Affiche la liste final d'Auteur To multiple Titre
+ * @brief Affiche la liste final d'auteur_struct To multiple Titre
  * 
  * @param [in] OwO une addresse
  */
-void printList_Auteur(List_Auteur * OwO);
+void printList_Auteur(tab_auteur_struct * OwO);
 
 
 
 /**
- * @brief génère un index des auteur a partire d'un fichier
+ * @brief génère un index des auteur_struct a partire d'un fichier
  * 
  * il faudrait pouvoir détecter le type de fichier mais de base on assume que ces une liste a inverser
  * 
  * @param [in] inputFile fichier générer par serialize() 
- * @return List_Auteur* Structure  
+ * @return tab_auteur_struct* Structure  
  */
-List_Auteur * unwrap_from_file(FILE * inputFile);
+tab_auteur_struct * unwrap_from_file(FILE * inputFile);
 
 
 // /**
 //  * @brief DéPRéCIER! voir unwrap_Serilise_Index
 //  * 
-//  * Serialise la structeur List_Auteur
+//  * Serialise la structeur tab_auteur_struct
 //  * 
 //  * @param [in] List_des_Auteur 
 //  * @param [out] output
 //  */
-// void unwrap_Serilise(const List_Auteur * List_des_Auteur, FILE * output);
+// void unwrap_Serilise(const tab_auteur_struct * List_des_Auteur, FILE * output);
 
 // /**
 //  * @brief DéPRéCIER! voir unwrap_Deserilise_Index
 //  * 
-//  * désérialise l'index des Auteur depuis un fichier
+//  * désérialise l'index des auteur_struct depuis un fichier
 //  * 
 //  * 
 //  * @param [in] input => unwrap_serilise file 
-//  * @return List_Auteur*
+//  * @return tab_auteur_struct*
 //  */
-// List_Auteur * unwrap_Deserilise(FILE * input);
+// tab_auteur_struct * unwrap_Deserilise(FILE * input);
 
 
 /**
- * @brief sérialisation de List_Auteur
+ * @brief sérialisation de tab_auteur_struct
  * 
  * # Sera écrit:
- * - noms hauteur
+ * - noms nom_auteur
  * - nombre d'article
  * - indice article 
- * *on va écrire ADDR (l'indice) qui est l'indice pour acceder a fiche_minimale en fesant Sommet_Auteur_TableauxD[ADDR]*
+ * *on va écrire ADDR (l'indice) qui est l'indice pour acceder a fiche_minimal en fesant auteur_struct[ADDR]*
  * 
- * @param [in] List_des_Auteur le titre de l'heuvre accesible avec List_Auteur=>Sommet_Auteur_TableauxD=>fiche_minimale => ADDR
+ * @param [in] List_des_Auteur le titre de l'heuvre accesible avec tab_auteur_struct=>auteur_struct=>fiche_minimal => ADDR
  * @param [out] output fichier de sortie 
  */
-void unwrap_Serilise_Index(const List_Auteur * List_des_Auteur, FILE * output);
+void unwrap_Serilise_Index(const tab_auteur_struct * List_des_Auteur, FILE * output);
 
 /**
  * @brief désérialise une un cache produit par unwrap_Serilise_Index
@@ -213,18 +213,18 @@ void unwrap_Serilise_Index(const List_Auteur * List_des_Auteur, FILE * output);
  * 
  * tableaux_fiche
  * @param [in] List_des_Auteur deserialisation de la bonne fiche l'heuvre fiche[ADDR] 
- * @param [out] input on va pouvoir trouver ADDR et ne noms de l'auteur 
- * @return List_Auteur* 
+ * @param [out] input on va pouvoir trouver ADDR et ne noms de l'auteur_struct 
+ * @return tab_auteur_struct* 
  */
-List_Auteur * unwrap_Deserilise_Index(const tableaux_fiche * List_des_Auteur, FILE * input);
+tab_auteur_struct * unwrap_Deserilise_Index(const tableaux_fiche * List_des_Auteur, FILE * input);
 
 
-// void unwrap_sinc(List_Auteur * List_des_Auteur ,const tableaux_fiche input);
+// void unwrap_sinc(tab_auteur_struct * List_des_Auteur ,const tableaux_fiche input);
 // /**
 //  * @brief 
 //  * 
 //  * 
-//  * n'ayant pas les object Euvre/auteur
+//  * n'ayant pas les object Euvre/auteur_struct
 //  *  apres la décérialisation
 //  *  ajout fonction résolution qui va ajouterune entrée a chaque foit qu'on l'interroge
 //  *  de magnierre a ce qu'il soit possible d'executer l'algo sans avoir tout résolut
@@ -235,7 +235,7 @@ List_Auteur * unwrap_Deserilise_Index(const tableaux_fiche * List_des_Auteur, FI
 //  * @param resove 
 //  * @param input 
 //  */
-// void unwrap_resolve(List_Auteur * List_des_Auteur, Sommet_Auteur_TableauxD * resove, const tableaux_fiche * input);
+// void unwrap_resolve(tab_auteur_struct * List_des_Auteur, auteur_struct * resove, const tableaux_fiche * input);
 
 // /**
 //  * @brief D2PR3CIER génère une liste chainer a partire d'un tableaux
@@ -248,13 +248,13 @@ List_Auteur * unwrap_Deserilise_Index(const tableaux_fiche * List_des_Auteur, FI
 
 
 
-unwrap_Graph gen_unwrap_Graph(FILE * dblpxml, FILE * inverted);
+unwrap_Graph_t gen_unwrap_Graph(FILE * dblpxml, FILE * inverted);
 
 
-void printList_Article(List_Article * OwO);
+void printList_Article(tab_Article_struct * OwO);
 
-void unwrap_List_Auteur_free(List_Auteur * free);
+void unwrap_List_Auteur_free(tab_auteur_struct * free);
 
-List_Article * unwrap_ListArticle_from_xml(FILE * dbinput);
+tab_Article_struct * unwrap_ListArticle_from_xml(FILE * dbinput);
 
 #endif

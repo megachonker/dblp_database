@@ -167,7 +167,7 @@ tableaux_fiche parse(FILE * inputDB){
             && fichelocalM->nombre_auteur != 0 
             && strcmp(fichelocalM->titre,"")!=0)//ces con mais fichelocalM->titre ou fichelocalM->titre != '' devrais fonctioner..
             {
-                printM_titre(*fichelocalM);
+                // printM_titre(*fichelocalM);
                 appendTabmeaux(&tableaux_allfiche,fichelocalM);
             }
 

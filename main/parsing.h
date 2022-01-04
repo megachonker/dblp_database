@@ -20,7 +20,7 @@ typedef struct fiche_minimale
     char * titre;           ///< titre de l'heuvre / article
     int nombre_auteur;      ///< nombre d'auteur contenue dans liste_auteur
     char ** liste_auteur;   ///< liste de liste de caractere des noms d'auteur (Trier gain perf ?)
-    // Sommet_Auteur_TableauxD ** pointeur_Auteur_tableaux; ///< Liste de pointeur (meme indice que liste_auteur ) qui reboucle sur Sommet_Auteur_TableauxD avec sont auteur
+    // auteur_struct ** pointeur_Auteur_tableaux; ///< Liste de pointeur (meme indice que liste_auteur ) qui reboucle sur auteur_struct avec sont auteur
     //add une uid pour un auteur :3
     int ADDR;               ///< Indice permetant d'acceder a cette fiche_minimale depuis tableaux_fiche.fiche[ADDR] (initialiser a la création) 
 }fiche_minimale;

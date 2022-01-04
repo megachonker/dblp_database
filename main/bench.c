@@ -67,7 +67,7 @@ void deserialisesmalldb(){
     deserialisation(fichier);
 }
 
-List_Auteur * unwrap_from_filE(){ //E pas inspi
+tab_auteur_struct * unwrap_from_filE(){ //E pas inspi
     FILE * inputDB = fopen(serializedb,"r");
     exitIfNull(inputDB,"imposible d'ouvrire "serializedb)
     return unwrap_from_file(inputDB);
@@ -75,7 +75,7 @@ List_Auteur * unwrap_from_filE(){ //E pas inspi
 void unwrwap_gen_cache(){
     FILE * ouputDB = fopen(serializedbunwrap,"w");
     exitIfNull(ouputDB,"imposible d'ouvrire "serializedbunwrap)
-    List_Auteur * malistauteur = unwrap_from_filE();
+    tab_auteur_struct * malistauteur = unwrap_from_filE();
     unwrap_Serilise_Index(malistauteur,ouputDB);
     unwrap_List_Auteur_free(malistauteur);
 }
@@ -84,7 +84,7 @@ void unwrwap_gen_cache_small(){
     exitIfNull(ouputDB,"imposible d'ouvrire "smallserializedbunwrap)
     FILE * inputDB = fopen(smallserializedb,"r");
     exitIfNull(inputDB,"imposible d'ouvrire "smallserializedb)
-    List_Auteur * malistauteur = unwrap_from_file(inputDB);
+    tab_auteur_struct * malistauteur = unwrap_from_file(inputDB);
     unwrap_Serilise_Index(malistauteur,ouputDB);
     unwrap_List_Auteur_free(malistauteur);
 }
@@ -94,7 +94,7 @@ void unwrwap_deserialise(int print){
     FILE * fichier = fopen(serializedb,"r");
     exitIfNull(fichier,"imposible d'ouvrire "serializedb);
     tableaux_fiche * azer = deserialisation(fichier);
-    List_Auteur * malistauteur =  unwrap_Deserilise_Index(azer,input);
+    tab_auteur_struct * malistauteur =  unwrap_Deserilise_Index(azer,input);
     if(print == 1){
         printList_Auteur(malistauteur);
     }
@@ -115,7 +115,7 @@ void unwrwap_deserialise(int print){
 
 //     ll_list * Liste_chainer = ll_create();
 //     Sommet_Auteur_ListChainer new_sommet;
-//     new_sommet.auteur = mesfiches.fiche[0]->liste_auteur[0];
+//     new_sommet.auteur_struct = mesfiches.fiche[0]->liste_auteur[0];
 //     new_sommet.titre_article = ll_create();
 //     ll_append(new_sommet.titre_article,mesfiches.fiche[0]->titre);
 //     ll_append(Liste_chainer,&new_sommet);
@@ -128,7 +128,7 @@ void unwrwap_deserialise(int print){
 void swap(int print){
     FILE * inputDB = fopen("DATA/SerializedStruc.data","r");
     exitIfNull(inputDB,"INPUT PAS CHEMAIN")
-    List_Auteur * malistedauteur = unwrap_from_file(inputDB);
+    tab_auteur_struct * malistedauteur = unwrap_from_file(inputDB);
 
     if (print==1)
     {

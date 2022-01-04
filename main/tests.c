@@ -31,24 +31,24 @@ if (!p)\
 //     printf("\t");
 // }
 
-// int explore(List_Auteur Auteur_random,int profondeur){
+// int explore(tab_auteur_struct Auteur_random,int profondeur){
 //     if (profondeur > 3)
 //     {
 //         return 0;
 //     }
     
 //     shift(profondeur);
-//     printf("%s:\n",Auteur_random.tableaux_Somet_hauteur->hauteur);
+//     printf("%s:\n",Auteur_random.tab_auteur->nom_auteur);
 //     for (int u = 0; u < Auteur_random.taille; u++)
 //     {
-//         int nombre_auteur = Auteur_random.tableaux_Somet_hauteur->heuvre[u]->nombre_auteur;
+//         int nombre_auteur = Auteur_random.tab_auteur->heuvre[u]->nombre_auteur;
 //         shift(profondeur);
-//         printf("\t__%d__:%s\n",nombre_auteur,Auteur_random.tableaux_Somet_hauteur->heuvre[u]->titre);
+//         printf("\t__%d__:%s\n",nombre_auteur,Auteur_random.tab_auteur->heuvre[u]->titre);
 //         for (int j = 0; j < nombre_auteur; j++)
 //         {
 //             shift(profondeur);
-//             printf("\t\t%s\n",Auteur_random.tableaux_Somet_hauteur->heuvre[u]->liste_auteur[j]);
-//             // explore(Auteur_random.tableaux_Somet_hauteur->heuvre[u]->liste_auteur[j],profondeur++);
+//             printf("\t\t%s\n",Auteur_random.tab_auteur->heuvre[u]->liste_auteur[j]);
+//             // explore(Auteur_random.tab_auteur->heuvre[u]->liste_auteur[j],profondeur++);
 //         }
 //     }
 // }
@@ -64,14 +64,14 @@ int main()
     //crée une nouvel structure qui 
 
 
-    // Structure List_Auteur ou les heuvre sont des id des fiche_minimale contenue dans SerializedStrucInverse
-    // Structure List_Article ou les article sont des id de SerializedStruct est les heuvre sont 
+    // Structure tab_auteur_struct ou les heuvre sont des id des fiche_minimal contenue dans SerializedStrucInverse
+    // Structure tab_Article_struct ou les article sont des id de SerializedStruct est les heuvre sont 
 
-    //List_Article est générée a partire de List_Auteur on le déplie on trie par noms d'article
+    //tab_Article_struct est générée a partire de tab_auteur_struct on le déplie on trie par noms d'article
     
-    //on sérialise les List_Article:
-    //  pour le noms d'auteur on stoque l'indexe du noms d'auteur de List_Auteur
-    //  pour les article on sotque l'index de la fiche minimal de List_Auteur
+    //on sérialise les tab_Article_struct:
+    //  pour le noms d'auteur_struct on stoque l'indexe du noms d'auteur_struct de tab_auteur_struct
+    //  pour les article on sotque l'index de la fiche minimal de tab_auteur_struct
 
 
     // FILE * DBxml = fopen("DATA/Serialzed1000.data","r");
@@ -103,38 +103,38 @@ int main()
     // gen_List_Article()
 
     // unwrap_Graph mongraphlul = gen_unwrap_Graph(DBxml,DBinverse);
-    // printList_Article(mongraphlul.list_Article);
+    // printList_Article(mongraphlul.tab_Article_struct);
 
-    // for (int i = 0; i < mongraphlul.list_Article->nombre_Article ; i++)
+    // for (int i = 0; i < mongraphlul.tab_Article_struct->nombre_Article ; i++)
     // {
-    //     if (mongraphlul.list_Article->pointeur_Article_tableaux[i].nombre_Auteur != 0)
+    //     if (mongraphlul.tab_Article_struct->tab_Article[i].nombre_Auteur != 0)
     //     {
-    //         printf("OUI %s ==> %d\n",mongraphlul.list_Article->pointeur_Article_tableaux[i].Article, mongraphlul.list_Article->pointeur_Article_tableaux[i].nombre_Auteur);
-    //         // for (int u = 0; u < mongraphlul.list_Article->pointeur_Article_tableaux[i].nombre_Auteur; u++)
+    //         printf("OUI %s ==> %d\n",mongraphlul.tab_Article_struct->tab_Article[i].nom_Article, mongraphlul.tab_Article_struct->tab_Article[i].nombre_Auteur);
+    //         // for (int u = 0; u < mongraphlul.tab_Article_struct->tab_Article[i].nombre_Auteur; u++)
     //         // {
-    //         //     printf("\t%d\n",*mongraphlul.list_Article->pointeur_Article_tableaux[i].pointeur_Auteur_tableaux[u]->hauteur);
+    //         //     printf("\t%d\n",*mongraphlul.tab_Article_struct->tab_Article[i].pointeur_Auteur_tableaux[u]->heuvre);
     //         // }
             
     //     }else{
-    //         printf("NON %s\n",mongraphlul.list_Article->pointeur_Article_tableaux[i].Article);
+    //         printf("NON %s\n",mongraphlul.tab_Article_struct->tab_Article[i].nom_Article);
     //     }
         
     // }
     
 
 
-    // for (int i = 0; i < mongraphlul.list_Article->nombre_Article; i++)
+    // for (int i = 0; i < mongraphlul.tab_Article_struct->nombre_Article; i++)
     // {
-    //     Sommet_Article_TableauxD * monArticle = &mongraphlul.list_Article->pointeur_Article_tableaux[i];
-    //     printf("%s %d\n",monArticle->Article,monArticle->nombre_Auteur);
+    //     Article_struct * monArticle = &mongraphlul.tab_Article_struct->tab_Article[i];
+    //     printf("%s %d\n",monArticle->nom_Article,monArticle->nombre_Auteur);
     //     for (int u = 0; u < monArticle->nombre_Auteur; u++)
     //     {
-    //         Sommet_Auteur_TableauxD * auteurfromarticle  =  monArticle->pointeur_Auteur_tableaux[u];
-    //         printf("%s %d\n",auteurfromarticle->hauteur,auteurfromarticle->nbelementmagi);
+    //         auteur_struct * auteurfromarticle  =  monArticle->pointeur_Auteur_tableaux[u];
+    //         printf("%s %d\n",auteurfromarticle->heuvre,auteurfromarticle->nbelementmagi);
     //         for (int j = 0; j <  auteurfromarticle->nbelementmagi; j++)
     //         {
-    //             Sommet_Article_TableauxD * remonter = auteurfromarticle->pointeur_Article[j];
-    //             printf("%s == %s\n",remonter->Article,monArticle->Article);
+    //             Article_struct * remonter = auteurfromarticle->pointeur_Article[j];
+    //             printf("%s == %s\n",remonter->nom_Article,monArticle->nom_Article);
     //         }
     //     }
     // }
@@ -143,7 +143,7 @@ int main()
     
 
     // tableaux_fiche * matablefiche = deserialisation(DBxml);
-    // List_Auteur * malisteAuteur = unwrap_Deserilise_Index(matablefiche,DBinverse);
+    // tab_auteur_struct * malisteAuteur = unwrap_Deserilise_Index(matablefiche,DBinverse);
     // printList_Auteur(malisteAuteur);    
 
 
@@ -154,7 +154,7 @@ int main()
     // for (int i = 0; i < 10; i++)
     // {
     //     printf("__%d__:",i);
-    //     Sommet_Auteur_TableauxD Auteur_random = malistesortie->tableaux_Somet_hauteur[rand()%malistesortie->taille];
+    //     auteur_struct Auteur_random = malistesortie->tab_auteur[rand()%malistesortie->taille];
     //     // explore(Auteur_random,0);
     // }
     
@@ -173,9 +173,9 @@ int main()
     // {
     //     printf("pthread OK\n");
     // }
-    // List_Auteur * inverserStruct;
+    // tab_auteur_struct * inverserStruct;
 
-    // // List_Auteur * inverserStruct = unwrap_Deserilise(DBinverse);
+    // // tab_auteur_struct * inverserStruct = unwrap_Deserilise(DBinverse);
     // tableaux_fiche normalStruct = deserialisation(DBxml);
 
     
@@ -221,25 +221,25 @@ int main()
     //  * @brief Construct a new for object
     //  * 
     //  * on va demander de résoudre tout les object manuelment 
-    //  * on print tout les auteur contenu
+    //  * on print tout les auteur_struct contenu
     //  * 
-    //  * et pour montrer que le cache marche on print tout les auteur précédent de leur object
+    //  * et pour montrer que le cache marche on print tout les auteur_struct précédent de leur object
     //  * 
     //  * @param i 
     //  */
     // for (int i = 0; i < inverserStruct->taille; i++)
     // {
-    //     unwrap_resolve(inverserStruct,&inverserStruct->tableaux_Somet_hauteur[i],&normalStruct);
-    //     for (int u = 0; u < inverserStruct->tableaux_Somet_hauteur[i].size; u++)
+    //     unwrap_resolve(inverserStruct,&inverserStruct->tab_auteur[i],&normalStruct);
+    //     for (int u = 0; u < inverserStruct->tab_auteur[i].size; u++)
     //     {
-    //         printM(*inverserStruct->tableaux_Somet_hauteur[i].heuvre[u]);
+    //         printM(*inverserStruct->tab_auteur[i].heuvre[u]);
     //     }
     //     return 0;
     //     // for (int j = 0; j < i; j++)
     //     // {
-    //     //     for (int u = 0; u < masterpiece->tableaux_Somet_hauteur[j].size; u++)
+    //     //     for (int u = 0; u < masterpiece->tab_auteur[j].size; u++)
     //     //     {
-    //     //         printM(*masterpiece->tableaux_Somet_hauteur[j].heuvre[u]);
+    //     //         printM(*masterpiece->tab_auteur[j].heuvre[u]);
     //     //     }
     //     // }
     // }
@@ -249,12 +249,12 @@ int main()
     // printList_Auteur(masterpiece);
 
     // FILE * inputCACHE = fopen("DATA/SerializedStrucInverse.data","r");
-    // List_Auteur * masterpiece = unwrap_Deserilise(inputCACHE);
+    // tab_auteur_struct * masterpiece = unwrap_Deserilise(inputCACHE);
     // printList_Auteur(masterpiece);
 
 
-    // liste des hauteur trier
-    // dans la fonction de trie si 2 foit meme hauteur crée un structure SommetHauteur qui liste les hauteur
+    // liste des nom_auteur trier
+    // dans la fonction de trie si 2 foit meme nom_auteur crée un structure SommetHauteur qui liste les nom_auteur
     // a chaque comparaison qui match on suprime les occurance le mieux est de décaler 
     // on peut faire une pille de comparaison pour en faire en paralle
 
@@ -263,8 +263,8 @@ int main()
     // creation_de_la_liste_des_listes_de_sommet_des_sous_graphes_connexes(mesfiches);
 
 
-    // auteur ===> liste cooauteur 
-    //     list auteur liste article => liste cooteur
+    // auteur_struct ===> liste cooauteur 
+    //     list auteur_struct liste article => liste cooteur
 
     // les hash avec des chiffreeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeemlkjmlkjmlkjmlkjlmkjlmkjlmklmkjmlkjlkmjlmkjlmkjmlkmlkjmlkjmlkjmlkjmlkjmlkjlmkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkmdv
 

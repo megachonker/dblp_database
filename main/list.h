@@ -19,7 +19,7 @@ struct ll_list {
 
 typedef struct Sommet_Auteur_ListChainer
 {
-    char * auteur;
+    char * auteur_struct;
     ll_list * titre_article;
 }Sommet_Auteur_ListChainer;
 
@@ -95,7 +95,7 @@ size_t ll_size(ll_list*list);
  */
 void ll_free(ll_list *list);
 
-void add_entry(ll_list * list_chainer_auteur,char * auteur, char* titre);
+void add_entry(ll_list * list_chainer_auteur,char * auteur_struct, char* titre);
 
 /**
  * @brief Affiche la chaine de caractere pour chaque élément

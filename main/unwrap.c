@@ -17,11 +17,8 @@ if (!p)\
 }\
 
 
-
 /**
- * @brief fonction de comparaison des auteur pour qsort
- * 
- * elle pourait être mieux
+ * @brief Stoque tout les auteur_struct
  * 
  * @param [in] a object A
  * @param [in] b object B
@@ -49,7 +46,7 @@ comparticle(const void * a, const void * b){
     //moche
     Paire_HauteurHeurvre * aa = (Paire_HauteurHeurvre*)a;
     Paire_HauteurHeurvre * bb = (Paire_HauteurHeurvre*)b;
-    int result = strcmp(aa->hauteur,bb->hauteur);
+    int result = strcmp(aa->nom_auteur,bb->nom_auteur);
     return result;
 }
 
@@ -60,7 +57,7 @@ int SwapStruct(tableaux_fiche input, Paire_HauteurHeurvre * arrayout ){
         for (int u = 0; u < input.fiche[i]->nombre_auteur; u++)
         {   
             arrayout[indice].heuvre = input.fiche[i];
-            arrayout[indice].hauteur = input.fiche[i]->liste_auteur[u];
+            arrayout[indice].nom_auteur = input.fiche[i]->liste_auteur[u];
             indice++;
         }
     }
@@ -68,24 +65,24 @@ int SwapStruct(tableaux_fiche input, Paire_HauteurHeurvre * arrayout ){
 }
 
 
-int SwapPaire_HauteurHeurvreToPaire_HauteurHeurvre(const List_Auteur * input, Paire_ArticleHauteur * Article_auteur_Array ){
+int SwapPaire_HauteurHeurvreToPaire_HauteurHeurvre(const tab_auteur_struct * input, Paire_ArticleHauteur * Article_auteur_Array ){
     int indice = 0;
     for (int i = 0; i < input->taille; i++)
     {
-        for (int u = 0; u < input->tableaux_Somet_hauteur[i].size; u++)
+        for (int u = 0; u < input->tab_auteur[i].size; u++)
         {   
-            Article_auteur_Array[indice].article = input->tableaux_Somet_hauteur[i].heuvre[u]->titre;
-            Article_auteur_Array[indice].pointeur_Auteur =  &input->tableaux_Somet_hauteur[i];
+            Article_auteur_Array[indice].article = input->tab_auteur[i].heuvre[u]->titre;
+            Article_auteur_Array[indice].pointeur_Auteur =  &input->tab_auteur[i];
             indice++;
         }
     }
     return indice;
 }
 /**
- * @brief Trie Paire_HauteurHeurvre Par noms d'auteur
+ * @brief Trie Paire_HauteurHeurvre Par noms d'auteur_struct
  * 
- * trie le tableaux Paire_HauteurHeurvre par auteur
- * de facon a avoir toute les oeuvre du meme auteur facilement
+ * trie le tableaux Paire_HauteurHeurvre par auteur_struct
+ * de facon a avoir toute les oeuvre du meme auteur_struct facilement
  * 
  * auteurA => hoeuvreB\n
  * auteurA => hoeuvreA\n
@@ -130,7 +127,7 @@ void sort_tableaux_Article(Paire_ArticleHauteur * ArticleuHauteur,int sizeArticl
  * @param [in,out] list  
  * @param [in] HtH       
  */
-void add_titre_to_auteur(Sommet_Auteur_TableauxD * list,const Paire_HauteurHeurvre HtH){//ces plus logic comme ça mais pluslent ?
+void add_titre_to_auteur(auteur_struct * list,const Paire_HauteurHeurvre HtH){//ces plus logic comme ça mais pluslent ?
     fiche_minimale ** temparray = reallocarray(list->heuvre,list->size+1,8); //8 taille d'un pointeur 
     exitIfNull(temparray,"add_titre_to_auteur realockarrayfail\n");
     list->heuvre = temparray;
@@ -143,39 +140,39 @@ void add_titre_to_auteur(Sommet_Auteur_TableauxD * list,const Paire_HauteurHeurv
 void printPaire_HeurvreHauteur(Paire_ArticleHauteur * OwI,int sizeHauteurHeuvre ){
     for (int i = 0; i < sizeHauteurHeuvre ; i++)
     {
-        printf("%s => %s\n",OwI[i].article,OwI[i].pointeur_Auteur->hauteur);
+        printf("%s => %s\n",OwI[i].article,OwI[i].pointeur_Auteur->heuvre);
     }
 }
 
-List_Auteur* gen_List_Auteur(const Paire_HauteurHeurvre * liste,int sizeHauteurHeuvre){
-    List_Auteur * listes_Auteur_arrTitre = malloc(sizeof(List_Auteur));
-    exitIfNull(listes_Auteur_arrTitre,"Erreur création liste de List_Auteur\n")
+tab_auteur_struct* gen_List_Auteur(const Paire_HauteurHeurvre * liste,int sizeHauteurHeuvre){
+    tab_auteur_struct * listes_Auteur_arrTitre = malloc(sizeof(tab_auteur_struct));
+    exitIfNull(listes_Auteur_arrTitre,"Erreur création liste de tab_auteur_struct\n")
     listes_Auteur_arrTitre->taille=-1;//moche !
     int indiceSommet = 0;
-    listes_Auteur_arrTitre->tableaux_Somet_hauteur = NULL;
+    listes_Auteur_arrTitre->tab_auteur = NULL;
 
     //on parcoure liste
     for (int j = 0; j < sizeHauteurHeuvre; j=j)//on incrémenta pas la
     {
         listes_Auteur_arrTitre->taille++;
-        Sommet_Auteur_TableauxD * tb_Somet_h = reallocarray(listes_Auteur_arrTitre->tableaux_Somet_hauteur,listes_Auteur_arrTitre->taille+1,sizeof(Sommet_Auteur_TableauxD));
-        exitIfNull(tb_Somet_h,"Erreur création de Sommet_Auteur_TableauxD\n")
-        listes_Auteur_arrTitre->tableaux_Somet_hauteur = tb_Somet_h;
+        auteur_struct * tb_Somet_h = reallocarray(listes_Auteur_arrTitre->tab_auteur,listes_Auteur_arrTitre->taille+1,sizeof(auteur_struct));//fasink alocate error
+        exitIfNull(tb_Somet_h,"Erreur création de auteur_struct\n")
+        listes_Auteur_arrTitre->tab_auteur = tb_Somet_h;
 
         //on add le premier hauteure
-        listes_Auteur_arrTitre->tableaux_Somet_hauteur[listes_Auteur_arrTitre->taille].size=0;
-        listes_Auteur_arrTitre->tableaux_Somet_hauteur[listes_Auteur_arrTitre->taille].heuvre = NULL;
-        listes_Auteur_arrTitre->tableaux_Somet_hauteur[listes_Auteur_arrTitre->taille].hauteur=liste[j].hauteur;
+        listes_Auteur_arrTitre->tab_auteur[listes_Auteur_arrTitre->taille].size=0;
+        listes_Auteur_arrTitre->tab_auteur[listes_Auteur_arrTitre->taille].heuvre = NULL;
+        listes_Auteur_arrTitre->tab_auteur[listes_Auteur_arrTitre->taille].heuvre=liste[j].heuvre;
 
         //nombre délément
-        listes_Auteur_arrTitre->tableaux_Somet_hauteur[listes_Auteur_arrTitre->taille].nbelementmagi = 0;
-        listes_Auteur_arrTitre->tableaux_Somet_hauteur[listes_Auteur_arrTitre->taille].pointeur_Article = NULL;
+        listes_Auteur_arrTitre->tab_auteur[listes_Auteur_arrTitre->taille].nbelementmagi = 0;
+        listes_Auteur_arrTitre->tab_auteur[listes_Auteur_arrTitre->taille].pointeur_Article = NULL;
         // indiceSommet++;
         int i = 1;
-        //tant le prochain est le meme auteur et que on attein pas la fin de la liste
-        while (i+j < sizeHauteurHeuvre && strcmp(liste[j].hauteur,liste[j+i].hauteur) == 0)//ordre important
+        //tant le prochain est le meme auteur_struct et que on attein pas la fin de la liste
+        while (i+j < sizeHauteurHeuvre && strcmp(liste[j].nom_auteur,liste[j+i].nom_auteur) == 0)//ordre important
         {
-            add_titre_to_auteur(&listes_Auteur_arrTitre->tableaux_Somet_hauteur[listes_Auteur_arrTitre->taille],liste[i+j]);
+            add_titre_to_auteur(&listes_Auteur_arrTitre->tab_auteur[listes_Auteur_arrTitre->taille],liste[i+j]);
             i++;// truc de simon ?
         }
 
@@ -184,40 +181,40 @@ List_Auteur* gen_List_Auteur(const Paire_HauteurHeurvre * liste,int sizeHauteurH
     return listes_Auteur_arrTitre;
 }
 
-List_Article* gen_List_Article(Paire_ArticleHauteur * liste,int sizeArticleHauteur){
+tab_Article_struct* gen_List_Article(Paire_ArticleHauteur * liste,int sizeArticleHauteur){
 
 
-    List_Article * ListDesArticle = malloc(sizeof(List_Article));
-    exitIfNull(ListDesArticle,"Erreur création liste de List_Article\n")
+    tab_Article_struct * ListDesArticle = malloc(sizeof(tab_Article_struct));
+    exitIfNull(ListDesArticle,"Erreur création liste de tab_Article_struct\n")
     ListDesArticle->nombre_Article=-1;//moche !
-    ListDesArticle->pointeur_Article_tableaux = NULL;
+    ListDesArticle->tab_Article = NULL;
 
     //on parcoure liste
     for (int j = 0; j < sizeArticleHauteur; j=j)//on incrémenta pas la
     {
         ListDesArticle->nombre_Article++;
         
-        Sommet_Article_TableauxD * tb_Somet_h = reallocarray(ListDesArticle->pointeur_Article_tableaux,ListDesArticle->nombre_Article+1,sizeof(Sommet_Article_TableauxD));
-        exitIfNull(tb_Somet_h,"Erreur création de Sommet_Auteur_TableauxD\n")
-        ListDesArticle->pointeur_Article_tableaux = tb_Somet_h;
+        Article_struct * tb_Somet_h = reallocarray(ListDesArticle->tab_Article,ListDesArticle->nombre_Article+1,sizeof(Article_struct));
+        exitIfNull(tb_Somet_h,"Erreur création de auteur_struct\n")
+        ListDesArticle->tab_Article = tb_Somet_h;
 
-        //on add le premier Article
-        ListDesArticle->pointeur_Article_tableaux[ListDesArticle->nombre_Article].nombre_Auteur=0;
-        ListDesArticle->pointeur_Article_tableaux[ListDesArticle->nombre_Article].Article=liste[j].article;
-        ListDesArticle->pointeur_Article_tableaux[ListDesArticle->nombre_Article].pointeur_Auteur_tableaux = NULL;
+        //on add le premier nom_Article
+        ListDesArticle->tab_Article[ListDesArticle->nombre_Article].nombre_Auteur=0;
+        ListDesArticle->tab_Article[ListDesArticle->nombre_Article].nom_Article=liste[j].article;
+        ListDesArticle->tab_Article[ListDesArticle->nombre_Article].pointeur_Auteur_tableaux = NULL;
 
         int i = 1;
-        //tant le prochain est le meme auteur et que on attein pas la fin de la liste
+        //tant le prochain est le meme auteur_struct et que on attein pas la fin de la liste
         while (i+j < sizeArticleHauteur && strcmp(liste[j].article,liste[j+i].article) == 0)//ordre important
         {
-            Sommet_Article_TableauxD * dernierarticle = &ListDesArticle->pointeur_Article_tableaux[ListDesArticle->nombre_Article];
+            Article_struct * dernierarticle = &ListDesArticle->tab_Article[ListDesArticle->nombre_Article];
             int * last_auteur  = &dernierarticle->nombre_Auteur; /// < début du compteur 
             
-            Sommet_Auteur_TableauxD * temparray = reallocarray(dernierarticle->pointeur_Auteur_tableaux,*last_auteur+1,8); //8 taille d'un pointeur 
-            exitIfNull(temparray,"gen_List_Article Sommet_Auteur_TableauxD realockarrayfail\n");
+            auteur_struct * temparray = reallocarray(dernierarticle->pointeur_Auteur_tableaux,*last_auteur+1,8); //8 taille d'un pointeur 
+            exitIfNull(temparray,"gen_List_Article auteur_struct realockarrayfail\n");
             
             
-            dernierarticle->pointeur_Auteur_tableaux = (Sommet_Auteur_TableauxD**)temparray;
+            dernierarticle->pointeur_Auteur_tableaux = (auteur_struct**)temparray;
             dernierarticle->pointeur_Auteur_tableaux[*last_auteur] = liste[i+j].pointeur_Auteur;
             int found=0;
 
@@ -234,10 +231,10 @@ List_Article* gen_List_Article(Paire_ArticleHauteur * liste,int sizeArticleHaute
 
             if (found == 0)
             {
-                Sommet_Article_TableauxD ** tmptest  = reallocarray(
+                Article_struct ** tmptest  = reallocarray(
                     dernierarticle->pointeur_Auteur_tableaux[*last_auteur]->pointeur_Article,
                     (*localnbelementmaj)+1, ///< sur a 0 ?  
-                    sizeof(Sommet_Article_TableauxD**));
+                    sizeof(Article_struct**));
 
                 exitIfNull(tmptest,"imposible alouer dernierarticle->pointeur_Auteur_tableaux[*last_auteur]->pointeur_Article[i]\n");
                 dernierarticle->pointeur_Auteur_tableaux[*last_auteur]->pointeur_Article = tmptest;
@@ -249,42 +246,37 @@ List_Article* gen_List_Article(Paire_ArticleHauteur * liste,int sizeArticleHaute
             //fichierxml 2 article avec alice bob && alice bob && alice 
             (*last_auteur)++;
 
-            printf("---%d---%d-----\n",ListDesArticle->pointeur_Article_tableaux[ListDesArticle->nombre_Article].nombre_Auteur,*last_auteur); //< LA 
-            for (int  findiceauteur = 0; findiceauteur < ListDesArticle->pointeur_Article_tableaux[ListDesArticle->nombre_Article].nombre_Auteur; findiceauteur++)
+            printf("---%d---%d-----\n",ListDesArticle->tab_Article[ListDesArticle->nombre_Article].nombre_Auteur,*last_auteur); //< LA 
+            for (int  findiceauteur = 0; findiceauteur < ListDesArticle->tab_Article[ListDesArticle->nombre_Article].nombre_Auteur; findiceauteur++)
             {
-                int indicemagique = ListDesArticle->pointeur_Article_tableaux[ListDesArticle->nombre_Article].pointeur_Auteur_tableaux[findiceauteur]->nbelementmagi-1;
+                int indicemagique = ListDesArticle->tab_Article[ListDesArticle->nombre_Article].pointeur_Auteur_tableaux[findiceauteur]->nbelementmagi-1;
                 for (int OO = 0; OO <= indicemagique; OO++)
                 {
-                    // if (ListDesArticle->pointeur_Article_tableaux[ListDesArticle->nombre_Article].pointeur_Auteur_tableaux[i]->pointeur_Article[OO]->Article)
+                    // if (ListDesArticle->tab_Article[ListDesArticle->nombre_Article].pointeur_Auteur_tableaux[i]->pointeur_Article[OO]->nom_Article)
                     // {
-                        Sommet_Article_TableauxD * azer =  ListDesArticle->pointeur_Article_tableaux[ListDesArticle->nombre_Article].pointeur_Auteur_tableaux[findiceauteur]->pointeur_Article[OO];
-                        printf("%s\n",azer->Article); //< LA 
+                        Article_struct * azer =  ListDesArticle->tab_Article[ListDesArticle->nombre_Article].pointeur_Auteur_tableaux[findiceauteur]->pointeur_Article[OO];
+                        printf("%s\n",azer->nom_Article); //< LA 
                     // }
                     
                 }
                 
             }
-            
-            
-
-
-
 
             i++;// truc de simon ?
         }
 
         j+=i;//mais ici
 
-        // Sommet_Article_TableauxD Sometgenere = ListDesArticle->pointeur_Article_tableaux[ListDesArticle->nombre_Article];
-        // fprintf(stderr,"%s\n",Sometgenere.Article);
+        // Article_struct Sometgenere = ListDesArticle->tab_Article[ListDesArticle->nombre_Article];
+        // fprintf(stderr,"%s\n",Sometgenere.nom_Article);
         // fprintf(stderr,"\tnombre d'auteur %d\n",Sometgenere.nombre_Auteur); ///BIZARD BUG ?
         // for (int ii = 0; ii < Sometgenere.nombre_Auteur; ii++)
         // {
-        //     fprintf(stderr,"\t%s\n",Sometgenere.pointeur_Auteur_tableaux[ii]->hauteur);
-        //     fprintf(stderr,"\t\tnombre d'Article %d\n",Sometgenere.pointeur_Auteur_tableaux[ii]->nbelementmagi); ///BIZARD BUG ?
+        //     fprintf(stderr,"\t%s\n",Sometgenere.pointeur_Auteur_tableaux[ii]->heuvre);
+        //     fprintf(stderr,"\t\tnombre d'nom_Article %d\n",Sometgenere.pointeur_Auteur_tableaux[ii]->nbelementmagi); ///BIZARD BUG ?
         //     for (int Uu = 0; Uu < Sometgenere.pointeur_Auteur_tableaux[ii]->nbelementmagi; Uu++)
         //     {
-        //         fprintf(stderr,"\t\t%s\n",Sometgenere.pointeur_Auteur_tableaux[ii]->pointeur_Article[Uu]->Article);
+        //         fprintf(stderr,"\t\t%s\n",Sometgenere.pointeur_Auteur_tableaux[ii]->pointeur_Article[Uu]->nom_Article);
         //     }
          
         // }
@@ -292,7 +284,7 @@ List_Article* gen_List_Article(Paire_ArticleHauteur * liste,int sizeArticleHaute
     }
     // for (int i = 0; i < ListDesArticle->nombre_Article; i++)
     // {
-    //     fprintf(stderr,"%s\n",ListDesArticle->pointeur_Article_tableaux[i].pointeur_Auteur_tableaux[0]->pointeur_Article[0]->Article);
+    //     fprintf(stderr,"%s\n",ListDesArticle->tab_Article[i].pointeur_Auteur_tableaux[0]->pointeur_Article[0]->nom_Article);
     // }
     
 
@@ -302,13 +294,13 @@ List_Article* gen_List_Article(Paire_ArticleHauteur * liste,int sizeArticleHaute
 
 
 
-void printList_Auteur(List_Auteur * OwO){
+void printList_Auteur(tab_auteur_struct * OwO){
     for (int i = 0; i < OwO->taille; i++)
     {
-        printf("%s:\n",OwO->tableaux_Somet_hauteur[i].hauteur);    
-        for (int j = 0; j < OwO->tableaux_Somet_hauteur[i].size; j++)
+        printf("%s:\n",OwO->tab_auteur[i].nom_auteur);    
+        for (int j = 0; j < OwO->tab_auteur[i].size; j++)
         {
-            printf("    %s\n",OwO->tableaux_Somet_hauteur[i].heuvre[j]->titre);
+            printf("    %s\n",OwO->tab_auteur[i].heuvre[j]->titre);
         }
         printf("\n");
     }
@@ -316,13 +308,13 @@ void printList_Auteur(List_Auteur * OwO){
 }
 
 
-void printList_Article(List_Article * OwO){
+void printList_Article(tab_Article_struct * OwO){
     for (int i = 0; i < OwO->nombre_Article; i++)
     {
-        printf("%s:\n",OwO->pointeur_Article_tableaux[i].Article);    
-        for (int j = 0; j < OwO->pointeur_Article_tableaux[i].nombre_Auteur; j++)
+        printf("%s:\n",OwO->tab_Article[i].nom_Article);    
+        for (int j = 0; j < OwO->tab_Article[i].nombre_Auteur; j++)
         {
-            printf("\t%s\n",OwO->pointeur_Article_tableaux[i].pointeur_Auteur_tableaux[j]->hauteur);
+            printf("\t%s\n",OwO->tab_Article[i].pointeur_Auteur_tableaux[j]->heuvre);
         }
         printf("\n");
     }
@@ -332,53 +324,53 @@ void printList_Article(List_Article * OwO){
 void printPaire_HauteurHeurvre(Paire_HauteurHeurvre * OwI,int sizeHauteurHeuvre ){
     for (int i = 0; i < sizeHauteurHeuvre ; i++)
     {
-        printf("%s => %s\n",OwI[i].hauteur,OwI[i].heuvre->titre);
+        printf("%s => %s\n",OwI[i].nom_auteur,OwI[i].heuvre->titre);
     }
 }
 
 
-int count_isolate_autor(const List_Auteur * List_des_Auteur){
+int count_isolate_autor(const tab_auteur_struct * List_des_Auteur){
     int compteur = 0;
     for (int i = 0; i < List_des_Auteur->taille; i++)
     {
-        if(List_des_Auteur->tableaux_Somet_hauteur[i].size > 0){
+        if(List_des_Auteur->tab_auteur[i].size > 0){
             compteur++;
         }
     }
     return compteur;
 }
 
-// void unwrap_Serilise(const List_Auteur * List_des_Auteur, FILE * output){
-//     //fonction d'qui fait la moyenne des hauteur pour pouvoir fair un maloque que une foit en moyenne
+// void unwrap_Serilise(const tab_auteur_struct * List_des_Auteur, FILE * output){
+//     //fonction d'qui fait la moyenne des nom_auteur pour pouvoir fair un maloque que une foit en moyenne
 //     fprintf(output,"%d\n",count_isolate_autor(List_des_Auteur));
 //     for (int i = 0; i < List_des_Auteur->taille; i++)
 //     {
-//         if(List_des_Auteur->tableaux_Somet_hauteur[i].size > 0){
-//             fprintf(output,"%s\n",List_des_Auteur->tableaux_Somet_hauteur[i].hauteur);
-//             fprintf(output,"%d\n",List_des_Auteur->tableaux_Somet_hauteur[i].size);
-//             for (int j = 0; j < List_des_Auteur->tableaux_Somet_hauteur[i].size; j++)
+//         if(List_des_Auteur->tab_auteur[i].size > 0){
+//             fprintf(output,"%s\n",List_des_Auteur->tab_auteur[i].nom_auteur);
+//             fprintf(output,"%d\n",List_des_Auteur->tab_auteur[i].size);
+//             for (int j = 0; j < List_des_Auteur->tab_auteur[i].size; j++)
 //             {
-//                 fprintf(output,"%s\n",List_des_Auteur->tableaux_Somet_hauteur[i].heuvre[j]->titre);
+//                 fprintf(output,"%s\n",List_des_Auteur->tab_auteur[i].heuvre[j]->titre);
 //             }
 //         }
 
 //     }
 // }
 
-void unwrap_Serilise_Index(const List_Auteur * List_des_Auteur, FILE * output){
-    //fonction d'qui fait la moyenne des hauteur pour pouvoir fair un maloque que une foit en moyenne
+void unwrap_Serilise_Index(const tab_auteur_struct * List_des_Auteur, FILE * output){
+    //fonction d'qui fait la moyenne des nom_auteur pour pouvoir fair un maloque que une foit en moyenne
     fprintf(output,"%d\n",count_isolate_autor(List_des_Auteur));
     for (int i = 0; i < List_des_Auteur->taille; i++)
     {
-        if(List_des_Auteur->tableaux_Somet_hauteur[i].size > 0){
-            // List_des_Auteur->tableaux_Somet_hauteur[i].
-            // fprintf(output,"%d\n",List_des_Auteur->tableaux_Somet_hauteur[i].DECALAGE);
-            fprintf(output,"%s\n",List_des_Auteur->tableaux_Somet_hauteur[i].hauteur);//char 1o addresse 8o
-            fprintf(output,"%d\n",List_des_Auteur->tableaux_Somet_hauteur[i].size);
-            for (int j = 0; j < List_des_Auteur->tableaux_Somet_hauteur[i].size; j++)
+        if(List_des_Auteur->tab_auteur[i].size > 0){
+            // List_des_Auteur->tab_auteur[i].
+            // fprintf(output,"%d\n",List_des_Auteur->tab_auteur[i].DECALAGE);
+            fprintf(output,"%s\n",List_des_Auteur->tab_auteur[i].nom_auteur);//char 1o addresse 8o
+            fprintf(output,"%d\n",List_des_Auteur->tab_auteur[i].size);
+            for (int j = 0; j < List_des_Auteur->tab_auteur[i].size; j++)
             {
-                //ma fiche minimal est contenue dans Sommet_Auteur_TableauxD et dans tableaux fiche 
-                fprintf(output,"%d\n",List_des_Auteur->tableaux_Somet_hauteur[i].heuvre[j]->ADDR);
+                //ma fiche minimal est contenue dans auteur_struct et dans tableaux fiche 
+                fprintf(output,"%d\n",List_des_Auteur->tab_auteur[i].heuvre[j]->ADDR);
             }
         }
 
@@ -389,17 +381,17 @@ void unwrap_Serilise_Index(const List_Auteur * List_des_Auteur, FILE * output){
 //DOUBLON DE PARSING FAIR UN FICHIER UTILS OU ON LE MET
 void enlever_retour_a_la_ligne(char * ligne);
 
-// List_Auteur * unwrap_Deserilise(FILE * input){
+// tab_auteur_struct * unwrap_Deserilise(FILE * input){
 //     char ligne[BALISESIZE];
-//     List_Auteur * master_List_Auteur = malloc(sizeof(List_Auteur));
+//     tab_auteur_struct * master_List_Auteur = malloc(sizeof(tab_auteur_struct));
 //     master_List_Auteur->taille=0;
 //     fgets(ligne,BALISESIZE,input);
 //         exitIfNull(sscanf(ligne,"%i\n",&master_List_Auteur->taille),"nombre de structure manquand ...")
 
 //     //optimiser car on alloue tout en un malloc ! par contre ça peut echouer a voir
-//     Sommet_Auteur_TableauxD * Sommet_Auteur_Tableaux =  malloc(sizeof(Sommet_Auteur_TableauxD)*master_List_Auteur->taille);  //<= je fait une liste de quoi ?
-//     exitIfNull(Sommet_Auteur_Tableaux, "creation des sommet auteur tableaxD malloc null")
-//     master_List_Auteur->tableaux_Somet_hauteur = Sommet_Auteur_Tableaux; //<=associasioin bonne ?
+//     auteur_struct * Sommet_Auteur_Tableaux =  malloc(sizeof(auteur_struct)*master_List_Auteur->taille);  //<= je fait une liste de quoi ?
+//     exitIfNull(Sommet_Auteur_Tableaux, "creation des sommet auteur_struct tableaxD malloc null")
+//     master_List_Auteur->tab_auteur = Sommet_Auteur_Tableaux; //<=associasioin bonne ?
 
 //     int i = 0;
 //     while (fgets(ligne,BALISESIZE,input))
@@ -410,45 +402,45 @@ void enlever_retour_a_la_ligne(char * ligne);
 //             exit(3);
 //         }
 //         enlever_retour_a_la_ligne(ligne);
-//         master_List_Auteur->tableaux_Somet_hauteur[i].hauteur = strdup(ligne);
+//         master_List_Auteur->tab_auteur[i].nom_auteur = strdup(ligne);
 //         fgets(ligne,BALISESIZE,input);
-//         exitIfNull(sscanf(ligne,"%i\n", &master_List_Auteur->tableaux_Somet_hauteur[i].size),"auteur qui n'om pas d'article\n");
+//         exitIfNull(sscanf(ligne,"%i\n", &master_List_Auteur->tab_auteur[i].size),"auteur_struct qui n'om pas d'article\n");
         
-//         master_List_Auteur->tableaux_Somet_hauteur[i].heuvre = malloc(master_List_Auteur->tableaux_Somet_hauteur[i].size*sizeof(Sommet_Auteur_TableauxD)); //<= bon type ?
-//         exitIfNull(master_List_Auteur->tableaux_Somet_hauteur[i].heuvre,"allocation master_List_Auteur->tableaux_Somet_hauteur[i].heuvre echouser...");
+//         master_List_Auteur->tab_auteur[i].heuvre = malloc(master_List_Auteur->tab_auteur[i].size*sizeof(auteur_struct)); //<= bon type ?
+//         exitIfNull(master_List_Auteur->tab_auteur[i].heuvre,"allocation master_List_Auteur->tab_auteur[i].heuvre echouser...");
 
-//         for (int u = 0; u < master_List_Auteur->tableaux_Somet_hauteur[i].size; u++)
+//         for (int u = 0; u < master_List_Auteur->tab_auteur[i].size; u++)
 //         {
 //             fgets(ligne,BALISESIZE,input);
 //             enlever_retour_a_la_ligne(ligne);
             
 //             //on va crée un pointeur dynamique qui pointe sur une fiche Je sais pas si ces bon choix ...
-//             master_List_Auteur->tableaux_Somet_hauteur[i].heuvre[u] = malloc(sizeof(8));
-//             exitIfNull(master_List_Auteur->tableaux_Somet_hauteur[i].heuvre[u],"allocation nouvel fiche_minimale echouer")
+//             master_List_Auteur->tab_auteur[i].heuvre[u] = malloc(sizeof(8));
+//             exitIfNull(master_List_Auteur->tab_auteur[i].heuvre[u],"allocation nouvel fiche_minimale echouer")
 //             /* //! \\ On va fair stoquer le noms de l'oteur dans une addresse structure pas encore lier  //!\\ */
-//             master_List_Auteur->tableaux_Somet_hauteur[i].heuvre[u]->titre = strdup(ligne);//<= générée un tableaux?
+//             master_List_Auteur->tab_auteur[i].heuvre[u]->titre = strdup(ligne);//<= générée un tableaux?
 //         }
 //         i++;
 //     }
 
 //     //Fonction pour associer ces valeur au structure ?
-//     //master_List_Auteur[i].tableaux_Somet_hauteur[u]
+//     //master_List_Auteur[i].tab_auteur[u]
 
 //     return master_List_Auteur;
 // }
 
 
-List_Auteur * unwrap_Deserilise_Index(const tableaux_fiche * tableaux_fiche,FILE * input){
+tab_auteur_struct * unwrap_Deserilise_Index(const tableaux_fiche * tableaux_fiche,FILE * input){
     char ligne[BALISESIZE];
-    List_Auteur * master_List_Auteur = malloc(sizeof(List_Auteur));
+    tab_auteur_struct * master_List_Auteur = malloc(sizeof(tab_auteur_struct));
     master_List_Auteur->taille=0;
     fgets(ligne,BALISESIZE,input);
         exitIfNull(sscanf(ligne,"%i\n",&master_List_Auteur->taille),"nombre de structure manquand ...")
 
     //optimiser car on alloue tout en un malloc ! par contre ça peut echouer a voir
-    Sommet_Auteur_TableauxD * Sommet_Auteur_Tableaux =  malloc(sizeof(Sommet_Auteur_TableauxD)*master_List_Auteur->taille);  //<= je fait une liste de quoi ?
-    exitIfNull(Sommet_Auteur_Tableaux, "creation des sommet auteur tableaxD malloc null")
-    master_List_Auteur->tableaux_Somet_hauteur = Sommet_Auteur_Tableaux; //<=associasioin bonne ?
+    auteur_struct * Sommet_Auteur_Tableaux =  malloc(sizeof(auteur_struct)*master_List_Auteur->taille);  //<= je fait une liste de quoi ?
+    exitIfNull(Sommet_Auteur_Tableaux, "creation des sommet auteur_struct tableaxD malloc null")
+    master_List_Auteur->tab_auteur = Sommet_Auteur_Tableaux; //<=associasioin bonne ?
 
     int i = 0;
     while (fgets(ligne,BALISESIZE,input))
@@ -460,22 +452,22 @@ List_Auteur * unwrap_Deserilise_Index(const tableaux_fiche * tableaux_fiche,FILE
         }
         enlever_retour_a_la_ligne(ligne);
                                                                 /// STR JE VEUx iNDICE
-        master_List_Auteur->tableaux_Somet_hauteur[i].hauteur = strdup(ligne);
+        master_List_Auteur->tab_auteur[i].nom_auteur = strdup(ligne);
         // //on catch l'id du char
-        // exitIfNull(sscanf(ligne,"%i\n", &master_List_Auteur->tableaux_Somet_hauteur[i].DECALAGE),"auteur qui n'om pas d'article\n");
-        // //rename par le bon noms d'auteur la fiche crée 
-        // master_List_Auteur->tableaux_Somet_hauteur[i].hauteur = tableaux_fiche->fiche[master_List_Auteur->tableaux_Somet_hauteur[i].DECALAGE];
+        // exitIfNull(sscanf(ligne,"%i\n", &master_List_Auteur->tab_auteur[i].DECALAGE),"auteur_struct qui n'om pas d'article\n");
+        // //rename par le bon noms d'auteur_struct la fiche crée 
+        // master_List_Auteur->tab_auteur[i].nom_auteur = tableaux_fiche->fiche[master_List_Auteur->tab_auteur[i].DECALAGE];
         // on initialise le compteur d'élément 
-        master_List_Auteur->tableaux_Somet_hauteur[i].nbelementmagi = 0;
-        master_List_Auteur->tableaux_Somet_hauteur[i].pointeur_Article = NULL;
+        master_List_Auteur->tab_auteur[i].nbelementmagi = 0;
+        master_List_Auteur->tab_auteur[i].pointeur_Article = NULL;
 
         fgets(ligne,BALISESIZE,input);
-        exitIfNull(sscanf(ligne,"%i\n", &master_List_Auteur->tableaux_Somet_hauteur[i].size),"auteur qui n'om pas d'article\n");
+        exitIfNull(sscanf(ligne,"%i\n", &master_List_Auteur->tab_auteur[i].size),"auteur_struct qui n'om pas d'article\n");
         
-        master_List_Auteur->tableaux_Somet_hauteur[i].heuvre = malloc(master_List_Auteur->tableaux_Somet_hauteur[i].size*sizeof(Sommet_Auteur_TableauxD)); //<= bon type ?
-        exitIfNull(master_List_Auteur->tableaux_Somet_hauteur[i].heuvre,"allocation master_List_Auteur->tableaux_Somet_hauteur[i].heuvre echouser...");
+        master_List_Auteur->tab_auteur[i].heuvre = malloc(master_List_Auteur->tab_auteur[i].size*sizeof(auteur_struct)); //<= bon type ?
+        exitIfNull(master_List_Auteur->tab_auteur[i].heuvre,"allocation master_List_Auteur->tab_auteur[i].heuvre echouser...");
 
-        for (int u = 0; u < master_List_Auteur->tableaux_Somet_hauteur[i].size; u++)
+        for (int u = 0; u < master_List_Auteur->tab_auteur[i].size; u++)
         {
             fgets(ligne,BALISESIZE,input);
             enlever_retour_a_la_ligne(ligne);
@@ -484,7 +476,7 @@ List_Auteur * unwrap_Deserilise_Index(const tableaux_fiche * tableaux_fiche,FILE
             //on fait des sscanf de fgets ... on peut le faire directement 37% de perte perf a cause du sscanf !
             sscanf(ligne,"%d",&a);
             exitIfNull(tableaux_fiche->fiche[a],"serialise index pointeur sur heuvre introuvable\n")
-            master_List_Auteur->tableaux_Somet_hauteur[i].heuvre[u] = tableaux_fiche->fiche[a];
+            master_List_Auteur->tab_auteur[i].heuvre[u] = tableaux_fiche->fiche[a];
         }
         i++;
     }
@@ -494,20 +486,20 @@ List_Auteur * unwrap_Deserilise_Index(const tableaux_fiche * tableaux_fiche,FILE
 
 
 
-// void unwrap_sinc(List_Auteur * List_des_Auteur ,const tableaux_fiche input){
+// void unwrap_sinc(tab_auteur_struct * List_des_Auteur ,const tableaux_fiche input){
 //     for (int i = 0; i < List_des_Auteur->taille; i++)
 //     {
-//         for (int u = 0; u < List_des_Auteur->tableaux_Somet_hauteur[i].size; u++)
+//         for (int u = 0; u < List_des_Auteur->tab_auteur[i].size; u++)
 //         {
 //             for (int j = 0; j < input.taille; j++)
 //             {
-//                 if (strcmp(List_des_Auteur->tableaux_Somet_hauteur[i].heuvre[u]->titre,input.fiche[j]->titre)==0)
+//                 if (strcmp(List_des_Auteur->tab_auteur[i].heuvre[u]->titre,input.fiche[j]->titre)==0)
 //                 {
-//                     List_des_Auteur->tableaux_Somet_hauteur[i].heuvre[u] = input.fiche[j];
+//                     List_des_Auteur->tab_auteur[i].heuvre[u] = input.fiche[j];
 //                     break;
 //                 } 
 //             }
-//             // printf("%d/%d et %d/%d\n",i,List_des_Auteur->taille,u,List_des_Auteur->tableaux_Somet_hauteur[i].size);
+//             // printf("%d/%d et %d/%d\n",i,List_des_Auteur->taille,u,List_des_Auteur->tab_auteur[i].size);
 //         }
 //     }
     
@@ -517,7 +509,7 @@ List_Auteur * unwrap_Deserilise_Index(const tableaux_fiche * tableaux_fiche,FILE
 //  * @brief 
 //  * 
 //  * 
-//  * n'ayant pas les object Euvre/auteur
+//  * n'ayant pas les object Euvre/auteur_struct
 //  *  apres la décérialisation
 //  *  ajout fonction résolution qui va ajouterune entrée a chaque foit qu'on l'interroge
 //  *  de magnierre a ce qu'il soit possible d'executer l'algo sans avoir tout résolut
@@ -528,12 +520,12 @@ List_Auteur * unwrap_Deserilise_Index(const tableaux_fiche * tableaux_fiche,FILE
 //  * @param resove 
 //  * @param input 
 //  */
-// void unwrap_resolve(List_Auteur * List_des_Auteur, Sommet_Auteur_TableauxD * resove, const tableaux_fiche * input){
+// void unwrap_resolve(tab_auteur_struct * List_des_Auteur, auteur_struct * resove, const tableaux_fiche * input){
 //     int i = 0;
 //     int b = 0;
 //     while (i < List_des_Auteur->taille)
 //     {
-//         if(strcmp(List_des_Auteur->tableaux_Somet_hauteur[i].hauteur,resove->hauteur)==0){
+//         if(strcmp(List_des_Auteur->tab_auteur[i].nom_auteur,resove->nom_auteur)==0){
 //             b = 1;
 //             break;
 //         }
@@ -541,21 +533,21 @@ List_Auteur * unwrap_Deserilise_Index(const tableaux_fiche * tableaux_fiche,FILE
 //     }
 //     if (b == 0)
 //     {
-//         fprintf(stderr,"L'ors de la résolution je n'ais pas trouver l'autaure qui corespond a %s",List_des_Auteur->tableaux_Somet_hauteur[i].hauteur);
+//         fprintf(stderr,"L'ors de la résolution je n'ais pas trouver l'autaure qui corespond a %s",List_des_Auteur->tab_auteur[i].nom_auteur);
 //         exit(3);
 //     }
     
-//     for (int u = 0; u < List_des_Auteur->tableaux_Somet_hauteur[i].size; u++)
+//     for (int u = 0; u < List_des_Auteur->tab_auteur[i].size; u++)
 //     {
 //         for (int j = 0; j < input->taille; j++)
 //         {
-//             if (strcmp(List_des_Auteur->tableaux_Somet_hauteur[i].heuvre[u]->titre,input->fiche[j]->titre)==0)
+//             if (strcmp(List_des_Auteur->tab_auteur[i].heuvre[u]->titre,input->fiche[j]->titre)==0)
 //             {
-//                 List_des_Auteur->tableaux_Somet_hauteur[i].heuvre[u] = input->fiche[j];
+//                 List_des_Auteur->tab_auteur[i].heuvre[u] = input->fiche[j];
 //                 break;
 //             } 
 //         }
-//         // printf("%d/%d\n",u,List_des_Auteur->tableaux_Somet_hauteur[i].size);
+//         // printf("%d/%d\n",u,List_des_Auteur->tab_auteur[i].size);
 //     }
 // }
 
@@ -563,68 +555,68 @@ List_Auteur * unwrap_Deserilise_Index(const tableaux_fiche * tableaux_fiche,FILE
 #define MAXarraySIZE 21143793
 Paire_HauteurHeurvre HauteurHeuvre[MAXarraySIZE];
 
-List_Auteur * unwrap_ListAuteur_from_xml(FILE * dbinput){
+tab_auteur_struct * unwrap_ListAuteur_from_xml(FILE * dbinput){
     tableaux_fiche mesfiche =  parse(dbinput);
     int sizeHauteurHeuvre = SwapStruct(mesfiche,HauteurHeuvre);
     sort_tableaux_fiche(HauteurHeuvre,sizeHauteurHeuvre);
-    List_Auteur * malistedauteur = gen_List_Auteur(HauteurHeuvre,sizeHauteurHeuvre);
+    tab_auteur_struct * malistedauteur = gen_List_Auteur(HauteurHeuvre,sizeHauteurHeuvre);
     return malistedauteur;
 }
 
 
-List_Auteur * unwrap_from_tabfich(tableaux_fiche * mesfiches){
+tab_auteur_struct * unwrap_from_tabfich(tableaux_fiche * mesfiches){
     int sizeHauteurHeuvre = SwapStruct(*mesfiches,HauteurHeuvre);
     sort_tableaux_fiche(HauteurHeuvre,sizeHauteurHeuvre);
-    List_Auteur * malistedauteur = gen_List_Auteur(HauteurHeuvre,sizeHauteurHeuvre);
+    tab_auteur_struct * malistedauteur = gen_List_Auteur(HauteurHeuvre,sizeHauteurHeuvre);
     return malistedauteur;
 }
 
-List_Auteur * unwrap_from_file(FILE * inputFile){
+tab_auteur_struct * unwrap_from_file(FILE * inputFile){
 
     tableaux_fiche * mesfiches = deserialisation(inputFile);
     int sizeHauteurHeuvre = SwapStruct(*mesfiches,HauteurHeuvre);
     sort_tableaux_fiche(HauteurHeuvre,sizeHauteurHeuvre);
-    List_Auteur * malistedauteur = gen_List_Auteur(HauteurHeuvre,sizeHauteurHeuvre);
+    tab_auteur_struct * malistedauteur = gen_List_Auteur(HauteurHeuvre,sizeHauteurHeuvre);
     return malistedauteur;
 }
 
-List_Article * gen_ListaArticle(const List_Auteur * Malistauteur){
+tab_Article_struct * gen_ListaArticle(const tab_auteur_struct * Malistauteur){
     //compte le nombre de structure pour le maloc
     int nbstructure = 0;
     for (int i = 0; i < Malistauteur->taille; i++)
     {
-        nbstructure+=Malistauteur->tableaux_Somet_hauteur[i].size;/// lerreur etait la
+        nbstructure+=Malistauteur->tab_auteur[i].size;/// lerreur etait la
     }
-    Paire_ArticleHauteur * Paire_HauteurHeurvre = calloc(nbstructure,sizeof(Sommet_Article_TableauxD));
+    Paire_ArticleHauteur * Paire_HauteurHeurvre = calloc(nbstructure,sizeof(Article_struct));
     exitIfNull(Paire_HauteurHeurvre,"imposible de crée Paire_HauteurHeurvre");
     int sizeHauteurHeuvre = SwapPaire_HauteurHeurvreToPaire_HauteurHeurvre(Malistauteur,Paire_HauteurHeurvre);
     sort_tableaux_Article(Paire_HauteurHeurvre,sizeHauteurHeuvre);
-    List_Article * malistedauteur = gen_List_Article(Paire_HauteurHeurvre,sizeHauteurHeuvre);
+    tab_Article_struct * malistedauteur = gen_List_Article(Paire_HauteurHeurvre,sizeHauteurHeuvre);
     return malistedauteur;
 }
 
-List_Article * unwrap_ListArticle_from_xml(FILE * dbinput){
-    List_Auteur * malistarticle = unwrap_ListAuteur_from_xml(dbinput);
-    printList_Auteur(malistarticle);
+tab_Article_struct * unwrap_ListArticle_from_xml(FILE * dbinput){
+    tab_auteur_struct * malistarticle = unwrap_ListAuteur_from_xml(dbinput);
+    // printList_Auteur(malistarticle);
     return  gen_ListaArticle(malistarticle);
 }
 
-unwrap_Graph gen_unwrap_Graph(FILE * dblpxml, FILE * inverted){
+unwrap_Graph_t gen_unwrap_Graph(FILE * dblpxml, FILE * inverted){
     tableaux_fiche * matablefiche = deserialisation(dblpxml);
-    List_Auteur * malistaauteur =   unwrap_Deserilise_Index(matablefiche,inverted);
-    List_Article * malistearticle = gen_ListaArticle(malistaauteur);
-    unwrap_Graph graph  = {malistaauteur, malistearticle,matablefiche};
+    tab_auteur_struct * malistaauteur =   unwrap_Deserilise_Index(matablefiche,inverted);
+    tab_Article_struct * malistearticle = gen_ListaArticle(malistaauteur);
+    unwrap_Graph_t graph  = {malistaauteur, malistearticle,matablefiche};
     return graph;
 }
 
 
 
-void unwrap_List_Auteur_free(List_Auteur * afree){
+void unwrap_List_Auteur_free(tab_auteur_struct * afree){
     for (int i = 0; i < afree->taille; i++)
     {
-        free(afree->tableaux_Somet_hauteur[i].hauteur);   
+        free(afree->tab_auteur[i].nom_auteur);   
     }
-    free(afree->tableaux_Somet_hauteur);
+    free(afree->tab_auteur);
 }
 
 // void convertStruct(tableaux_fiche input, ll_list * list_chainer_auteur ){
@@ -643,9 +635,9 @@ void unwrap_List_Auteur_free(List_Auteur * afree){
 
 
     // listes_Auteur_arrTitre->taille++;
-    // Sommet_Auteur_TableauxD * new_array = calloc((listes_Auteur_arrTitre->taille+1),sizeof(Sommet_Auteur_TableauxD));
+    // auteur_struct * new_array = calloc((listes_Auteur_arrTitre->taille+1),sizeof(auteur_struct));
     // exitIfNull(new_array,"Newarray fail alloc !\n");
-    // memcpy(new_array,listes_Auteur_arrTitre->tableaux_Somet_hauteur,(listes_Auteur_arrTitre->taille)*sizeof(Sommet_Auteur_TableauxD)); // < ne déplace pas ...
-    // free(listes_Auteur_arrTitre->tableaux_Somet_hauteur); // < double free or corruption (out)
-    // listes_Auteur_arrTitre->tableaux_Somet_hauteur = new_array;
+    // memcpy(new_array,listes_Auteur_arrTitre->tab_auteur,(listes_Auteur_arrTitre->taille)*sizeof(auteur_struct)); // < ne déplace pas ...
+    // free(listes_Auteur_arrTitre->tab_auteur); // < double free or corruption (out)
+    // listes_Auteur_arrTitre->tab_auteur = new_array;
     // free(new_array);
