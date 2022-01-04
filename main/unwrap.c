@@ -152,8 +152,7 @@ List_Auteur* gen_List_Auteur(const Paire_HauteurHeurvre * liste,int sizeHauteurH
     exitIfNull(listes_Auteur_arrTitre,"Erreur création liste de List_Auteur\n")
     listes_Auteur_arrTitre->taille=-1;//moche !
     int indiceSommet = 0;
-    listes_Auteur_arrTitre->tableaux_Somet_hauteur = malloc(sizeof(Sommet_Auteur_TableauxD)); //comment ça pouvais marcher au paravent ???
-    exitIfNull(listes_Auteur_arrTitre->tableaux_Somet_hauteur,"Erreur création de 1 Sommet_Auteur_TableauxD\n")
+    listes_Auteur_arrTitre->tableaux_Somet_hauteur = NULL;
 
     //on parcoure liste
     for (int j = 0; j < sizeHauteurHeuvre; j=j)//on incrémenta pas la
@@ -164,9 +163,10 @@ List_Auteur* gen_List_Auteur(const Paire_HauteurHeurvre * liste,int sizeHauteurH
         listes_Auteur_arrTitre->tableaux_Somet_hauteur = tb_Somet_h;
 
         //on add le premier hauteure
-        listes_Auteur_arrTitre->tableaux_Somet_hauteur[listes_Auteur_arrTitre->taille].hauteur=liste[j].hauteur;
         listes_Auteur_arrTitre->tableaux_Somet_hauteur[listes_Auteur_arrTitre->taille].size=0;
         listes_Auteur_arrTitre->tableaux_Somet_hauteur[listes_Auteur_arrTitre->taille].heuvre = NULL;
+        listes_Auteur_arrTitre->tableaux_Somet_hauteur[listes_Auteur_arrTitre->taille].hauteur=liste[j].hauteur;
+
         //nombre délément
         listes_Auteur_arrTitre->tableaux_Somet_hauteur[listes_Auteur_arrTitre->taille].nbelementmagi = 0;
         listes_Auteur_arrTitre->tableaux_Somet_hauteur[listes_Auteur_arrTitre->taille].pointeur_Article = NULL;
@@ -185,24 +185,26 @@ List_Auteur* gen_List_Auteur(const Paire_HauteurHeurvre * liste,int sizeHauteurH
 }
 
 List_Article* gen_List_Article(Paire_ArticleHauteur * liste,int sizeArticleHauteur){
+
+
     List_Article * ListDesArticle = malloc(sizeof(List_Article));
     exitIfNull(ListDesArticle,"Erreur création liste de List_Article\n")
     ListDesArticle->nombre_Article=-1;//moche !
+    ListDesArticle->pointeur_Article_tableaux = NULL;
 
     //on parcoure liste
     for (int j = 0; j < sizeArticleHauteur; j=j)//on incrémenta pas la
     {
         ListDesArticle->nombre_Article++;
+        
         Sommet_Article_TableauxD * tb_Somet_h = reallocarray(ListDesArticle->pointeur_Article_tableaux,ListDesArticle->nombre_Article+1,sizeof(Sommet_Article_TableauxD));
         exitIfNull(tb_Somet_h,"Erreur création de Sommet_Auteur_TableauxD\n")
         ListDesArticle->pointeur_Article_tableaux = tb_Somet_h;
 
         //on add le premier Article
-        ListDesArticle->pointeur_Article_tableaux[ListDesArticle->nombre_Article].Article=liste[j].article;
         ListDesArticle->pointeur_Article_tableaux[ListDesArticle->nombre_Article].nombre_Auteur=0;
-        
-        ListDesArticle->pointeur_Article_tableaux[ListDesArticle->nombre_Article].pointeur_Auteur_tableaux = malloc(sizeof(Sommet_Auteur_TableauxD)); //maloc pour ladresse qui contiendra le tableaux ?
-        exitIfNull(ListDesArticle->pointeur_Article_tableaux[ListDesArticle->nombre_Article].pointeur_Auteur_tableaux,"pointeur_Auteur_tableaux imposible");
+        ListDesArticle->pointeur_Article_tableaux[ListDesArticle->nombre_Article].Article=liste[j].article;
+        ListDesArticle->pointeur_Article_tableaux[ListDesArticle->nombre_Article].pointeur_Auteur_tableaux = NULL;
 
         int i = 1;
         //tant le prochain est le meme auteur et que on attein pas la fin de la liste
@@ -236,8 +238,27 @@ List_Article* gen_List_Article(Paire_ArticleHauteur * liste,int sizeArticleHaute
                 dernierarticle->pointeur_Auteur_tableaux[*last_auteur]->pointeur_Article = tmptest;
                 //on boucle 
                 dernierarticle->pointeur_Auteur_tableaux[*last_auteur]->pointeur_Article[dernierarticle->pointeur_Auteur_tableaux[*last_auteur]->nbelementmagi] = dernierarticle;
+
                 dernierarticle->pointeur_Auteur_tableaux[*last_auteur]->nbelementmagi++;
             }
+
+            for (int  i = 0; i < ListDesArticle->pointeur_Article_tableaux[ListDesArticle->nombre_Article].nombre_Auteur; i++)
+            {
+                int indicemagique = ListDesArticle->pointeur_Article_tableaux[ListDesArticle->nombre_Article].pointeur_Auteur_tableaux[i]->nbelementmagi-1;
+                for (int OO = 0; OO < indicemagique; OO++)
+                {
+                    if (*(ListDesArticle->pointeur_Article_tableaux[ListDesArticle->nombre_Article].pointeur_Auteur_tableaux[i]->pointeur_Article[OO])->Article)
+                    {
+                        Sommet_Article_TableauxD * azer =  ListDesArticle->pointeur_Article_tableaux[ListDesArticle->nombre_Article].pointeur_Auteur_tableaux[i]->pointeur_Article[OO];
+                        printf("%s\n",azer->Article); //< LA 
+                    }
+                    
+                }
+                
+            }
+            
+            
+
 
 
             (*last_auteur)++;

@@ -101,28 +101,39 @@ int main()
     unwrap_Graph mongraphlul = gen_unwrap_Graph(DBxml,DBinverse);
     // printList_Article(mongraphlul.list_Article);
 
+    // for (int i = 0; i < mongraphlul.list_Article->nombre_Article ; i++)
+    // {
+    //     if (mongraphlul.list_Article->pointeur_Article_tableaux[i].nombre_Auteur != 0)
+    //     {
+    //         printf("OUI %s ==> %d\n",mongraphlul.list_Article->pointeur_Article_tableaux[i].Article, mongraphlul.list_Article->pointeur_Article_tableaux[i].nombre_Auteur);
+    //         // for (int u = 0; u < mongraphlul.list_Article->pointeur_Article_tableaux[i].nombre_Auteur; u++)
+    //         // {
+    //         //     printf("\t%d\n",*mongraphlul.list_Article->pointeur_Article_tableaux[i].pointeur_Auteur_tableaux[u]->hauteur);
+    //         // }
+            
+    //     }else{
+    //         printf("NON %s\n",mongraphlul.list_Article->pointeur_Article_tableaux[i].Article);
+    //     }
+        
+    // }
+    
 
 
-
-    for (int i = 0; i < mongraphlul.list_Article->nombre_Article; i++)
-    {
-        Sommet_Article_TableauxD * monArticle = &mongraphlul.list_Article->pointeur_Article_tableaux[i];
-        printf("%s %s\n",monArticle->Article,monArticle->nombre_Auteur);
-        for (int u = 0; u < monArticle->nombre_Auteur; u++)
-        {
-            Sommet_Auteur_TableauxD * auteurfromarticle  =  monArticle->pointeur_Auteur_tableaux[u];
-            // printf(auteurfromarticle)
-            // for (int j = 0; j <  auteurfromarticle->nbelementmagi; j++)
-            // {
-            //     Sommet_Article_TableauxD * remonter = auteurfromarticle->pointeur_Article[j];
-            //     printf("%s == %s\n",remonter->Article,monArticle->Article);
-            // }
-                printf("%s == %s\n",auteurfromarticle->pointeur_Article[0]->Article,monArticle->Article);
-
-        }
-
-
-    }
+    // for (int i = 0; i < mongraphlul.list_Article->nombre_Article; i++)
+    // {
+    //     Sommet_Article_TableauxD * monArticle = &mongraphlul.list_Article->pointeur_Article_tableaux[i];
+    //     printf("%s %d\n",monArticle->Article,monArticle->nombre_Auteur);
+    //     for (int u = 0; u < monArticle->nombre_Auteur; u++)
+    //     {
+    //         Sommet_Auteur_TableauxD * auteurfromarticle  =  monArticle->pointeur_Auteur_tableaux[u];
+    //         printf("%s %d\n",auteurfromarticle->hauteur,auteurfromarticle->nbelementmagi);
+    //         for (int j = 0; j <  auteurfromarticle->nbelementmagi; j++)
+    //         {
+    //             Sommet_Article_TableauxD * remonter = auteurfromarticle->pointeur_Article[j];
+    //             printf("%s == %s\n",remonter->Article,monArticle->Article);
+    //         }
+    //     }
+    // }
     
 
     
