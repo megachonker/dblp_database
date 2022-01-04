@@ -41,14 +41,14 @@ if (!p)\
 //     printf("%s:\n",Auteur_random.tab_auteur->nom_auteur);
 //     for (int u = 0; u < Auteur_random.taille; u++)
 //     {
-//         int nombre_auteur = Auteur_random.tab_auteur->heuvre[u]->nombre_auteur;
+//         int nombre_auteur = Auteur_random.tab_auteur->tab_ptr_fiche_min[u]->nombre_auteur;
 //         shift(profondeur);
-//         printf("\t__%d__:%s\n",nombre_auteur,Auteur_random.tab_auteur->heuvre[u]->titre);
+//         printf("\t__%d__:%s\n",nombre_auteur,Auteur_random.tab_auteur->tab_ptr_fiche_min[u]->titre);
 //         for (int j = 0; j < nombre_auteur; j++)
 //         {
 //             shift(profondeur);
-//             printf("\t\t%s\n",Auteur_random.tab_auteur->heuvre[u]->liste_auteur[j]);
-//             // explore(Auteur_random.tab_auteur->heuvre[u]->liste_auteur[j],profondeur++);
+//             printf("\t\t%s\n",Auteur_random.tab_auteur->tab_ptr_fiche_min[u]->liste_auteur[j]);
+//             // explore(Auteur_random.tab_auteur->tab_ptr_fiche_min[u]->liste_auteur[j],profondeur++);
 //         }
 //     }
 // }
@@ -64,13 +64,13 @@ int main()
     //crée une nouvel structure qui 
 
 
-    // Structure tab_auteur_struct ou les heuvre sont des id des fiche_minimal contenue dans SerializedStrucInverse
-    // Structure tab_Article_struct ou les article sont des id de SerializedStruct est les heuvre sont 
+    // Structure tab_auteur_struct ou les oeuvre sont des id des fiche_minimal contenue dans SerializedStrucInverse
+    // Structure tab_Article_struct ou les article sont des id de SerializedStruct est les oeuvre sont 
 
     //tab_Article_struct est générée a partire de tab_auteur_struct on le déplie on trie par noms d'article
     
     //on sérialise les tab_Article_struct:
-    //  pour le noms d'auteur_struct on stoque l'indexe du noms d'auteur_struct de tab_auteur_struct
+    //  pour le noms d'auteur on stoque l'indexe du noms d'auteur de tab_auteur_struct
     //  pour les article on sotque l'index de la fiche minimal de tab_auteur_struct
 
 
@@ -112,7 +112,7 @@ int main()
     //         printf("OUI %s ==> %d\n",mongraphlul.tab_Article_struct->tab_Article[i].nom_Article, mongraphlul.tab_Article_struct->tab_Article[i].nombre_Auteur);
     //         // for (int u = 0; u < mongraphlul.tab_Article_struct->tab_Article[i].nombre_Auteur; u++)
     //         // {
-    //         //     printf("\t%d\n",*mongraphlul.tab_Article_struct->tab_Article[i].pointeur_Auteur_tableaux[u]->heuvre);
+    //         //     printf("\t%d\n",*mongraphlul.tab_Article_struct->tab_Article[i].tab_ptr_auteur[u]->nom_auteur);
     //         // }
             
     //     }else{
@@ -129,8 +129,8 @@ int main()
     //     printf("%s %d\n",monArticle->nom_Article,monArticle->nombre_Auteur);
     //     for (int u = 0; u < monArticle->nombre_Auteur; u++)
     //     {
-    //         auteur_struct * auteurfromarticle  =  monArticle->pointeur_Auteur_tableaux[u];
-    //         printf("%s %d\n",auteurfromarticle->heuvre,auteurfromarticle->nbelementmagi);
+    //         auteur_struct * auteurfromarticle  =  monArticle->tab_ptr_auteur[u];
+    //         printf("%s %d\n",auteurfromarticle->nom_auteur,auteurfromarticle->nbelementmagi);
     //         for (int j = 0; j <  auteurfromarticle->nbelementmagi; j++)
     //         {
     //             Article_struct * remonter = auteurfromarticle->pointeur_Article[j];
@@ -221,9 +221,9 @@ int main()
     //  * @brief Construct a new for object
     //  * 
     //  * on va demander de résoudre tout les object manuelment 
-    //  * on print tout les auteur_struct contenu
+    //  * on print tout les auteur contenu
     //  * 
-    //  * et pour montrer que le cache marche on print tout les auteur_struct précédent de leur object
+    //  * et pour montrer que le cache marche on print tout les auteur précédent de leur object
     //  * 
     //  * @param i 
     //  */
@@ -232,14 +232,14 @@ int main()
     //     unwrap_resolve(inverserStruct,&inverserStruct->tab_auteur[i],&normalStruct);
     //     for (int u = 0; u < inverserStruct->tab_auteur[i].size; u++)
     //     {
-    //         printM(*inverserStruct->tab_auteur[i].heuvre[u]);
+    //         printM(*inverserStruct->tab_auteur[i].tab_ptr_fiche_min[u]);
     //     }
     //     return 0;
     //     // for (int j = 0; j < i; j++)
     //     // {
     //     //     for (int u = 0; u < masterpiece->tab_auteur[j].size; u++)
     //     //     {
-    //     //         printM(*masterpiece->tab_auteur[j].heuvre[u]);
+    //     //         printM(*masterpiece->tab_auteur[j].tab_ptr_fiche_min[u]);
     //     //     }
     //     // }
     // }
@@ -263,8 +263,8 @@ int main()
     // creation_de_la_liste_des_listes_de_sommet_des_sous_graphes_connexes(mesfiches);
 
 
-    // auteur_struct ===> liste cooauteur 
-    //     list auteur_struct liste article => liste cooteur
+    // auteur ===> liste cooauteur 
+    //     list auteur liste article => liste cooteur
 
     // les hash avec des chiffreeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeemlkjmlkjmlkjmlkjlmkjlmkjlmklmkjmlkjlkmjlmkjlmkjmlkmlkjmlkjmlkjmlkjmlkjmlkjlmkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkmdv
 

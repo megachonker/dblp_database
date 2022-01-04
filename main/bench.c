@@ -115,7 +115,7 @@ void unwrwap_deserialise(int print){
 
 //     ll_list * Liste_chainer = ll_create();
 //     Sommet_Auteur_ListChainer new_sommet;
-//     new_sommet.auteur_struct = mesfiches.fiche[0]->liste_auteur[0];
+//     new_sommet.auteur = mesfiches.fiche[0]->liste_auteur[0];
 //     new_sommet.titre_article = ll_create();
 //     ll_append(new_sommet.titre_article,mesfiches.fiche[0]->titre);
 //     ll_append(Liste_chainer,&new_sommet);

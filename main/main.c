@@ -6,8 +6,8 @@
 • l'option -c pourra correspondre au calcul du nombre de composantes connexes avec leur diamètre.
 • l'option -p AUTEUR1 -p AUTEUR2 permettra de calculer un plus court chemin entre les deux auteurs indiqués.
 • l'option -l MOT permettra de lister les auteurs qui contiennent le mot donné.
-• l-option -a AUTEUR permet d'obtenir les informations d'un auteur (liste des articles).
-• l-option -a AUTEUR -n N permet d'obtenir les co-auteurs à distance N (ou moins) d'un auteur.
+• l-option -a auteur permet d'obtenir les informations d'un auteur (liste des articles).
+• l-option -a auteur -n N permet d'obtenir les co-auteurs à distance N (ou moins) d'un auteur.
 • l-option -o sauvegarder la structure dans un fichier binaire (indiqué avec une option -o OUTPUT_FILE)
 */
 
@@ -16,14 +16,14 @@ void dfault(){
 • -c                calculer les composantes connexes & diamètre.\n\
 • -p AUT1 AUT2      plus court chemin auteurs indiqués.\n\
 • -l MOT            Lister les auteurs qui contiennent le mot donné.\n\
-• -a AUTEUR         Fnformations d'un auteur (liste des articles).\n\
-• -a AUTEUR -n N    Liste les co-auteurs à distance N (ou moins) d'un auteur.\n\
+• -a auteur         Fnformations d'un auteur (liste des articles).\n\
+• -a auteur -n N    Liste les co-auteurs à distance N (ou moins) d'un auteur.\n\
 • -f INPUT          cache d\'entrée.\n\
 • -o OUTPUT         Sauvegarder la structure dans un fichier binaire (indiqué avec une option -o OUTPUT_FILE)\n");
 }
 
 void sdfault(){
-    printf("\n -c -p AUT1 AUT2 -l MOT -a AUTEUR -a AUTEUR -n N -f INPUT -o OUTPUT");
+    printf("\n -c -p AUT1 AUT2 -l MOT -a auteur -a auteur -n N -f INPUT -o OUTPUT");
 }
 
 typedef struct all_options
@@ -80,7 +80,7 @@ all_options gen_Struct_option(int argc, char *argv[]){
                     printf("-l MOT permet de lister les auteurs qui contiennent le mot donné.");
                     break;
                 case 'a':
-                    printf("-a AUTEUR permet d'obtenir les informations d'un auteur (liste des articles).");
+                    printf("-a auteur permet d'obtenir les informations d'un auteur (liste des articles).");
                     break;
                 case 'o':
                     printf("-o sauvegarder la structure dans un fichier binaire (indiqué avec une option -o OUTPUT_FILE).");

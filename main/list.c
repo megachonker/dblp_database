@@ -263,7 +263,7 @@ void ll_print_list_as_char(ll_list *list){
 ll_node * ll_search_auteur(ll_list* list,char * address){
     ll_node *it = list->first;
     while(it->next != NULL && it->value != address) {
-        char *  lfranbnnnce_wuuuuie = ((Sommet_Auteur_ListChainer*)it->value)->auteur_struct;
+        char *  lfranbnnnce_wuuuuie = ((Sommet_Auteur_ListChainer*)it->value)->auteur;
         if(strcmp(lfranbnnnce_wuuuuie,address)==0){
             lfranbnnnce_wuuuuie = address;
             printf("b: %s;%s\n",lfranbnnnce_wuuuuie,address);
@@ -275,12 +275,12 @@ ll_node * ll_search_auteur(ll_list* list,char * address){
 }
 
 
-void add_entry(ll_list * list_chainer_auteur,char * auteur_struct, char* titre){
-    ll_node *list_chainer_article = ll_search_auteur(list_chainer_auteur,auteur_struct);
+void add_entry(ll_list * list_chainer_auteur,char * auteur, char* titre){
+    ll_node *list_chainer_article = ll_search_auteur(list_chainer_auteur,auteur);
     if (list_chainer_article)
     {
         Sommet_Auteur_ListChainer * list_chainer_Somet_hauteur = list_chainer_article->value;
-        // printf("append: %s to %s\n",titre,auteur_struct);
+        // printf("append: %s to %s\n",titre,auteur);
         ll_append(list_chainer_Somet_hauteur->titre_article,strdup(titre));
     }else{
         Sommet_Auteur_ListChainer * new_sommet = malloc(sizeof(Sommet_Auteur_ListChainer));
@@ -289,8 +289,8 @@ void add_entry(ll_list * list_chainer_auteur,char * auteur_struct, char* titre){
             exit(1);
         }
 
-        new_sommet->auteur_struct =  strdup(auteur_struct);
-        auteur_struct[0] = '\0';
+        new_sommet->auteur =  strdup(auteur);
+        auteur[0] = '\0';
         
         new_sommet->titre_article = ll_create();
         ll_append(new_sommet->titre_article,titre);
@@ -345,7 +345,7 @@ void print_liste_chainer_Auteur_titre(ll_list * list_chainer_auteur)
     for (int i = 0; i < siz; i++)
     {
         Sommet_Auteur_ListChainer * monauteur = ll_get(list_chainer_auteur,i);
-        printf("\nAuteur: %s\n",monauteur->auteur_struct);
+        printf("\nAuteur: %s\n",monauteur->auteur);
         ll_list * listart = monauteur->titre_article;
         int sizze = ll_size(listart); 
         for (int j = 1; j < sizze; j++)

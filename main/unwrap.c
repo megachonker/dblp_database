@@ -18,7 +18,7 @@ if (!p)\
 
 
 /**
- * @brief Stoque tout les auteur_struct
+ * @brief Stoque tout les auteur
  * 
  * @param [in] a object A
  * @param [in] b object B
@@ -56,7 +56,7 @@ int SwapStruct(tableaux_fiche input, Paire_HauteurHeurvre * arrayout ){
     {
         for (int u = 0; u < input.fiche[i]->nombre_auteur; u++)
         {   
-            arrayout[indice].heuvre = input.fiche[i];
+            arrayout[indice].oeuvre = input.fiche[i];
             arrayout[indice].nom_auteur = input.fiche[i]->liste_auteur[u];
             indice++;
         }
@@ -71,18 +71,20 @@ int SwapPaire_HauteurHeurvreToPaire_HauteurHeurvre(const tab_auteur_struct * inp
     {
         for (int u = 0; u < input->tab_auteur[i].size; u++)
         {   
-            Article_auteur_Array[indice].article = input->tab_auteur[i].heuvre[u]->titre;
-            Article_auteur_Array[indice].pointeur_Auteur =  &input->tab_auteur[i];
+            Article_auteur_Array[indice].article = input->tab_auteur[i].tab_ptr_fiche_min[u]->titre;
+            Article_auteur_Array[indice].pointeur_Auteur = &input->tab_auteur[i];
+            // Article_auteur_Array[indice].article = *input.tab_auteur[input.tab_auteur[i].DECALAGE].oeuvre;
+            // Article_auteur_Array[indice].pointeur_Auteur = &input.tab_auteur[i].tab_ptr_fiche_min[u];
             indice++;
         }
     }
     return indice;
 }
 /**
- * @brief Trie Paire_HauteurHeurvre Par noms d'auteur_struct
+ * @brief Trie Paire_HauteurHeurvre Par noms d'auteur
  * 
- * trie le tableaux Paire_HauteurHeurvre par auteur_struct
- * de facon a avoir toute les oeuvre du meme auteur_struct facilement
+ * trie le tableaux Paire_HauteurHeurvre par auteur
+ * de facon a avoir toute les oeuvre du meme auteur facilement
  * 
  * auteurA => hoeuvreB\n
  * auteurA => hoeuvreA\n
@@ -128,10 +130,10 @@ void sort_tableaux_Article(Paire_ArticleHauteur * ArticleuHauteur,int sizeArticl
  * @param [in] HtH       
  */
 void add_titre_to_auteur(auteur_struct * list,const Paire_HauteurHeurvre HtH){//ces plus logic comme ça mais pluslent ?
-    fiche_minimale ** temparray = reallocarray(list->heuvre,list->size+1,8); //8 taille d'un pointeur 
+    fiche_minimale ** temparray = reallocarray(list->tab_ptr_fiche_min,list->size+1,8); //8 taille d'un pointeur 
     exitIfNull(temparray,"add_titre_to_auteur realockarrayfail\n");
-    list->heuvre = temparray;
-    list->heuvre[list->size] = HtH.heuvre;
+    list->tab_ptr_fiche_min = temparray;
+    list->tab_ptr_fiche_min[list->size] = HtH.oeuvre;
     list->size++;
 }
 
@@ -140,7 +142,7 @@ void add_titre_to_auteur(auteur_struct * list,const Paire_HauteurHeurvre HtH){//
 void printPaire_HeurvreHauteur(Paire_ArticleHauteur * OwI,int sizeHauteurHeuvre ){
     for (int i = 0; i < sizeHauteurHeuvre ; i++)
     {
-        printf("%s => %s\n",OwI[i].article,OwI[i].pointeur_Auteur->heuvre);
+        printf("%s => %s\n",OwI[i].article,OwI[i].pointeur_Auteur->nom_auteur);
     }
 }
 
@@ -161,15 +163,15 @@ tab_auteur_struct* gen_List_Auteur(const Paire_HauteurHeurvre * liste,int sizeHa
 
         //on add le premier hauteure
         listes_Auteur_arrTitre->tab_auteur[listes_Auteur_arrTitre->taille].size=0;
-        listes_Auteur_arrTitre->tab_auteur[listes_Auteur_arrTitre->taille].heuvre = NULL;
-        listes_Auteur_arrTitre->tab_auteur[listes_Auteur_arrTitre->taille].heuvre=liste[j].heuvre;
+        listes_Auteur_arrTitre->tab_auteur[listes_Auteur_arrTitre->taille].nom_auteur = NULL;
+        listes_Auteur_arrTitre->tab_auteur[listes_Auteur_arrTitre->taille].nom_auteur=liste[j].nom_auteur;
 
         //nombre délément
         listes_Auteur_arrTitre->tab_auteur[listes_Auteur_arrTitre->taille].nbelementmagi = 0;
         listes_Auteur_arrTitre->tab_auteur[listes_Auteur_arrTitre->taille].pointeur_Article = NULL;
         // indiceSommet++;
         int i = 1;
-        //tant le prochain est le meme auteur_struct et que on attein pas la fin de la liste
+        //tant le prochain est le meme auteur et que on attein pas la fin de la liste
         while (i+j < sizeHauteurHeuvre && strcmp(liste[j].nom_auteur,liste[j+i].nom_auteur) == 0)//ordre important
         {
             add_titre_to_auteur(&listes_Auteur_arrTitre->tab_auteur[listes_Auteur_arrTitre->taille],liste[i+j]);
@@ -201,29 +203,30 @@ tab_Article_struct* gen_List_Article(Paire_ArticleHauteur * liste,int sizeArticl
         //on add le premier nom_Article
         ListDesArticle->tab_Article[ListDesArticle->nombre_Article].nombre_Auteur=0;
         ListDesArticle->tab_Article[ListDesArticle->nombre_Article].nom_Article=liste[j].article;
-        ListDesArticle->tab_Article[ListDesArticle->nombre_Article].pointeur_Auteur_tableaux = NULL;
+        ListDesArticle->tab_Article[ListDesArticle->nombre_Article].tab_ptr_auteur = NULL;
 
         int i = 1;
-        //tant le prochain est le meme auteur_struct et que on attein pas la fin de la liste
+        //tant le prochain est le meme auteur et que on attein pas la fin de la liste
         while (i+j < sizeArticleHauteur && strcmp(liste[j].article,liste[j+i].article) == 0)//ordre important
         {
             Article_struct * dernierarticle = &ListDesArticle->tab_Article[ListDesArticle->nombre_Article];
-            int * last_auteur  = &dernierarticle->nombre_Auteur; /// < début du compteur 
-            
-            auteur_struct * temparray = reallocarray(dernierarticle->pointeur_Auteur_tableaux,*last_auteur+1,8); //8 taille d'un pointeur 
+            int * last_auteur  = &dernierarticle->nombre_Auteur;
+            // auteur_struct ** temparray = reallocarray(listcorrespondancelocal->tab_ptr_auteur,*nombre_auteur+1,8); //8 taille d'un pointeur 
+
+            auteur_struct * temparray = reallocarray(dernierarticle->tab_ptr_auteur,*last_auteur+1,8); //8 taille d'un pointeur 
             exitIfNull(temparray,"gen_List_Article auteur_struct realockarrayfail\n");
             
             
-            dernierarticle->pointeur_Auteur_tableaux = (auteur_struct**)temparray;
-            dernierarticle->pointeur_Auteur_tableaux[*last_auteur] = liste[i+j].pointeur_Auteur;
+            dernierarticle->tab_ptr_auteur = (auteur_struct**)temparray;
+            dernierarticle->tab_ptr_auteur[*last_auteur] = liste[i+j].pointeur_Auteur;
             int found=0;
 
-            int *localnbelementmaj = &dernierarticle->pointeur_Auteur_tableaux[*last_auteur]->nbelementmagi ;
+            int *localnbelementmaj = &dernierarticle->tab_ptr_auteur[*last_auteur]->nbelementmagi ;
 
             //on vérifie pas de douvbon avand d'ajouter
             for (int o = 0; o < *localnbelementmaj; o++)
             {
-                if (dernierarticle->pointeur_Auteur_tableaux[*last_auteur]->pointeur_Article[o] == dernierarticle){
+                if (dernierarticle->tab_ptr_auteur[*last_auteur]->pointeur_Article[o] == dernierarticle){
                     found = 1;
                     break;
                 }
@@ -232,14 +235,14 @@ tab_Article_struct* gen_List_Article(Paire_ArticleHauteur * liste,int sizeArticl
             if (found == 0)
             {
                 Article_struct ** tmptest  = reallocarray(
-                    dernierarticle->pointeur_Auteur_tableaux[*last_auteur]->pointeur_Article,
+                    dernierarticle->tab_ptr_auteur[*last_auteur]->pointeur_Article,
                     (*localnbelementmaj)+1, ///< sur a 0 ?  
                     sizeof(Article_struct**));
 
-                exitIfNull(tmptest,"imposible alouer dernierarticle->pointeur_Auteur_tableaux[*last_auteur]->pointeur_Article[i]\n");
-                dernierarticle->pointeur_Auteur_tableaux[*last_auteur]->pointeur_Article = tmptest;
+                exitIfNull(tmptest,"imposible alouer dernierarticle->tab_ptr_auteur[*last_auteur]->pointeur_Article[i]\n");
+                dernierarticle->tab_ptr_auteur[*last_auteur]->pointeur_Article = tmptest;
                 //on boucle indicemagiqueindicemagiqueindicemagiqueindiceindicemagiquemagique
-                dernierarticle->pointeur_Auteur_tableaux[*last_auteur]->pointeur_Article[*localnbelementmaj] = dernierarticle; /// 
+                dernierarticle->tab_ptr_auteur[*last_auteur]->pointeur_Article[*localnbelementmaj] = dernierarticle; /// 
 
                 (*localnbelementmaj)++;
             }
@@ -249,12 +252,12 @@ tab_Article_struct* gen_List_Article(Paire_ArticleHauteur * liste,int sizeArticl
             printf("---%d---%d-----\n",ListDesArticle->tab_Article[ListDesArticle->nombre_Article].nombre_Auteur,*last_auteur); //< LA 
             for (int  findiceauteur = 0; findiceauteur < ListDesArticle->tab_Article[ListDesArticle->nombre_Article].nombre_Auteur; findiceauteur++)
             {
-                int indicemagique = ListDesArticle->tab_Article[ListDesArticle->nombre_Article].pointeur_Auteur_tableaux[findiceauteur]->nbelementmagi-1;
+                int indicemagique = ListDesArticle->tab_Article[ListDesArticle->nombre_Article].tab_ptr_auteur[findiceauteur]->nbelementmagi-1;
                 for (int OO = 0; OO <= indicemagique; OO++)
                 {
-                    // if (ListDesArticle->tab_Article[ListDesArticle->nombre_Article].pointeur_Auteur_tableaux[i]->pointeur_Article[OO]->nom_Article)
+                    // if (ListDesArticle->tab_Article[ListDesArticle->nombre_Article].tab_ptr_auteur[i]->pointeur_Article[OO]->nom_Article)
                     // {
-                        Article_struct * azer =  ListDesArticle->tab_Article[ListDesArticle->nombre_Article].pointeur_Auteur_tableaux[findiceauteur]->pointeur_Article[OO];
+                        Article_struct * azer =  ListDesArticle->tab_Article[ListDesArticle->nombre_Article].tab_ptr_auteur[findiceauteur]->pointeur_Article[OO];
                         printf("%s\n",azer->nom_Article); //< LA 
                     // }
                     
@@ -272,11 +275,11 @@ tab_Article_struct* gen_List_Article(Paire_ArticleHauteur * liste,int sizeArticl
         // fprintf(stderr,"\tnombre d'auteur %d\n",Sometgenere.nombre_Auteur); ///BIZARD BUG ?
         // for (int ii = 0; ii < Sometgenere.nombre_Auteur; ii++)
         // {
-        //     fprintf(stderr,"\t%s\n",Sometgenere.pointeur_Auteur_tableaux[ii]->heuvre);
-        //     fprintf(stderr,"\t\tnombre d'nom_Article %d\n",Sometgenere.pointeur_Auteur_tableaux[ii]->nbelementmagi); ///BIZARD BUG ?
-        //     for (int Uu = 0; Uu < Sometgenere.pointeur_Auteur_tableaux[ii]->nbelementmagi; Uu++)
+        //     fprintf(stderr,"\t%s\n",Sometgenere.tab_ptr_auteur[ii]->nom_auteur);
+        //     fprintf(stderr,"\t\tnombre d'nom_Article %d\n",Sometgenere.tab_ptr_auteur[ii]->nbelementmagi); ///BIZARD BUG ?
+        //     for (int Uu = 0; Uu < Sometgenere.tab_ptr_auteur[ii]->nbelementmagi; Uu++)
         //     {
-        //         fprintf(stderr,"\t\t%s\n",Sometgenere.pointeur_Auteur_tableaux[ii]->pointeur_Article[Uu]->nom_Article);
+        //         fprintf(stderr,"\t\t%s\n",Sometgenere.tab_ptr_auteur[ii]->pointeur_Article[Uu]->nom_Article);
         //     }
          
         // }
@@ -284,7 +287,7 @@ tab_Article_struct* gen_List_Article(Paire_ArticleHauteur * liste,int sizeArticl
     }
     // for (int i = 0; i < ListDesArticle->nombre_Article; i++)
     // {
-    //     fprintf(stderr,"%s\n",ListDesArticle->tab_Article[i].pointeur_Auteur_tableaux[0]->pointeur_Article[0]->nom_Article);
+    //     fprintf(stderr,"%s\n",ListDesArticle->tab_Article[i].tab_ptr_auteur[0]->pointeur_Article[0]->nom_Article);
     // }
     
 
@@ -300,7 +303,7 @@ void printList_Auteur(tab_auteur_struct * OwO){
         printf("%s:\n",OwO->tab_auteur[i].nom_auteur);    
         for (int j = 0; j < OwO->tab_auteur[i].size; j++)
         {
-            printf("    %s\n",OwO->tab_auteur[i].heuvre[j]->titre);
+            printf("    %s\n",OwO->tab_auteur[i].tab_ptr_fiche_min[j]->titre);
         }
         printf("\n");
     }
@@ -314,7 +317,7 @@ void printList_Article(tab_Article_struct * OwO){
         printf("%s:\n",OwO->tab_Article[i].nom_Article);    
         for (int j = 0; j < OwO->tab_Article[i].nombre_Auteur; j++)
         {
-            printf("\t%s\n",OwO->tab_Article[i].pointeur_Auteur_tableaux[j]->heuvre);
+            printf("\t%s\n",OwO->tab_Article[i].tab_ptr_auteur[j]->nom_auteur);
         }
         printf("\n");
     }
@@ -324,7 +327,7 @@ void printList_Article(tab_Article_struct * OwO){
 void printPaire_HauteurHeurvre(Paire_HauteurHeurvre * OwI,int sizeHauteurHeuvre ){
     for (int i = 0; i < sizeHauteurHeuvre ; i++)
     {
-        printf("%s => %s\n",OwI[i].nom_auteur,OwI[i].heuvre->titre);
+        printf("%s => %s\n",OwI[i].nom_auteur,OwI[i].oeuvre->titre);
     }
 }
 
@@ -350,7 +353,7 @@ int count_isolate_autor(const tab_auteur_struct * List_des_Auteur){
 //             fprintf(output,"%d\n",List_des_Auteur->tab_auteur[i].size);
 //             for (int j = 0; j < List_des_Auteur->tab_auteur[i].size; j++)
 //             {
-//                 fprintf(output,"%s\n",List_des_Auteur->tab_auteur[i].heuvre[j]->titre);
+//                 fprintf(output,"%s\n",List_des_Auteur->tab_auteur[i].tab_ptr_fiche_min[j]->titre);
 //             }
 //         }
 
@@ -369,8 +372,8 @@ void unwrap_Serilise_Index(const tab_auteur_struct * List_des_Auteur, FILE * out
             fprintf(output,"%d\n",List_des_Auteur->tab_auteur[i].size);
             for (int j = 0; j < List_des_Auteur->tab_auteur[i].size; j++)
             {
-                //ma fiche minimal est contenue dans auteur_struct et dans tableaux fiche 
-                fprintf(output,"%d\n",List_des_Auteur->tab_auteur[i].heuvre[j]->ADDR);
+                //ma fiche minimal est contenue dans auteur et dans tableaux fiche 
+                fprintf(output,"%d\n",List_des_Auteur->tab_auteur[i].tab_ptr_fiche_min[j]->ADDR);
             }
         }
 
@@ -390,7 +393,7 @@ void enlever_retour_a_la_ligne(char * ligne);
 
 //     //optimiser car on alloue tout en un malloc ! par contre ça peut echouer a voir
 //     auteur_struct * Sommet_Auteur_Tableaux =  malloc(sizeof(auteur_struct)*master_List_Auteur->taille);  //<= je fait une liste de quoi ?
-//     exitIfNull(Sommet_Auteur_Tableaux, "creation des sommet auteur_struct tableaxD malloc null")
+//     exitIfNull(Sommet_Auteur_Tableaux, "creation des sommet auteur tableaxD malloc null")
 //     master_List_Auteur->tab_auteur = Sommet_Auteur_Tableaux; //<=associasioin bonne ?
 
 //     int i = 0;
@@ -404,10 +407,10 @@ void enlever_retour_a_la_ligne(char * ligne);
 //         enlever_retour_a_la_ligne(ligne);
 //         master_List_Auteur->tab_auteur[i].nom_auteur = strdup(ligne);
 //         fgets(ligne,BALISESIZE,input);
-//         exitIfNull(sscanf(ligne,"%i\n", &master_List_Auteur->tab_auteur[i].size),"auteur_struct qui n'om pas d'article\n");
+//         exitIfNull(sscanf(ligne,"%i\n", &master_List_Auteur->tab_auteur[i].size),"auteur qui n'om pas d'article\n");
         
-//         master_List_Auteur->tab_auteur[i].heuvre = malloc(master_List_Auteur->tab_auteur[i].size*sizeof(auteur_struct)); //<= bon type ?
-//         exitIfNull(master_List_Auteur->tab_auteur[i].heuvre,"allocation master_List_Auteur->tab_auteur[i].heuvre echouser...");
+//         master_List_Auteur->tab_auteur[i].tab_ptr_fiche_min = malloc(master_List_Auteur->tab_auteur[i].size*sizeof(auteur_struct)); //<= bon type ?
+//         exitIfNull(master_List_Auteur->tab_auteur[i].tab_ptr_fiche_min,"allocation master_List_Auteur->tab_auteur[i].tab_ptr_fiche_min echouser...");
 
 //         for (int u = 0; u < master_List_Auteur->tab_auteur[i].size; u++)
 //         {
@@ -415,10 +418,10 @@ void enlever_retour_a_la_ligne(char * ligne);
 //             enlever_retour_a_la_ligne(ligne);
             
 //             //on va crée un pointeur dynamique qui pointe sur une fiche Je sais pas si ces bon choix ...
-//             master_List_Auteur->tab_auteur[i].heuvre[u] = malloc(sizeof(8));
-//             exitIfNull(master_List_Auteur->tab_auteur[i].heuvre[u],"allocation nouvel fiche_minimale echouer")
+//             master_List_Auteur->tab_auteur[i].tab_ptr_fiche_min[u] = malloc(sizeof(8));
+//             exitIfNull(master_List_Auteur->tab_auteur[i].tab_ptr_fiche_min[u],"allocation nouvel fiche_minimal echouer")
 //             /* //! \\ On va fair stoquer le noms de l'oteur dans une addresse structure pas encore lier  //!\\ */
-//             master_List_Auteur->tab_auteur[i].heuvre[u]->titre = strdup(ligne);//<= générée un tableaux?
+//             master_List_Auteur->tab_auteur[i].tab_ptr_fiche_min[u]->titre = strdup(ligne);//<= générée un tableaux?
 //         }
 //         i++;
 //     }
@@ -439,7 +442,7 @@ tab_auteur_struct * unwrap_Deserilise_Index(const tableaux_fiche * tableaux_fich
 
     //optimiser car on alloue tout en un malloc ! par contre ça peut echouer a voir
     auteur_struct * Sommet_Auteur_Tableaux =  malloc(sizeof(auteur_struct)*master_List_Auteur->taille);  //<= je fait une liste de quoi ?
-    exitIfNull(Sommet_Auteur_Tableaux, "creation des sommet auteur_struct tableaxD malloc null")
+    exitIfNull(Sommet_Auteur_Tableaux, "creation des sommet auteur tableaxD malloc null")
     master_List_Auteur->tab_auteur = Sommet_Auteur_Tableaux; //<=associasioin bonne ?
 
     int i = 0;
@@ -454,18 +457,18 @@ tab_auteur_struct * unwrap_Deserilise_Index(const tableaux_fiche * tableaux_fich
                                                                 /// STR JE VEUx iNDICE
         master_List_Auteur->tab_auteur[i].nom_auteur = strdup(ligne);
         // //on catch l'id du char
-        // exitIfNull(sscanf(ligne,"%i\n", &master_List_Auteur->tab_auteur[i].DECALAGE),"auteur_struct qui n'om pas d'article\n");
-        // //rename par le bon noms d'auteur_struct la fiche crée 
+        // exitIfNull(sscanf(ligne,"%i\n", &master_List_Auteur->tab_auteur[i].DECALAGE),"auteur qui n'om pas d'article\n");
+        // //rename par le bon noms d'auteur la fiche crée 
         // master_List_Auteur->tab_auteur[i].nom_auteur = tableaux_fiche->fiche[master_List_Auteur->tab_auteur[i].DECALAGE];
         // on initialise le compteur d'élément 
         master_List_Auteur->tab_auteur[i].nbelementmagi = 0;
         master_List_Auteur->tab_auteur[i].pointeur_Article = NULL;
 
         fgets(ligne,BALISESIZE,input);
-        exitIfNull(sscanf(ligne,"%i\n", &master_List_Auteur->tab_auteur[i].size),"auteur_struct qui n'om pas d'article\n");
+        exitIfNull(sscanf(ligne,"%i\n", &master_List_Auteur->tab_auteur[i].size),"auteur qui n'om pas d'article\n");
         
-        master_List_Auteur->tab_auteur[i].heuvre = malloc(master_List_Auteur->tab_auteur[i].size*sizeof(auteur_struct)); //<= bon type ?
-        exitIfNull(master_List_Auteur->tab_auteur[i].heuvre,"allocation master_List_Auteur->tab_auteur[i].heuvre echouser...");
+        master_List_Auteur->tab_auteur[i].tab_ptr_fiche_min = malloc(master_List_Auteur->tab_auteur[i].size*sizeof(auteur_struct)); //<= bon type ?
+        exitIfNull(master_List_Auteur->tab_auteur[i].tab_ptr_fiche_min,"allocation master_List_Auteur->tab_auteur[i].tab_ptr_fiche_min echouser...");
 
         for (int u = 0; u < master_List_Auteur->tab_auteur[i].size; u++)
         {
@@ -475,8 +478,8 @@ tab_auteur_struct * unwrap_Deserilise_Index(const tableaux_fiche * tableaux_fich
             int a = 0;
             //on fait des sscanf de fgets ... on peut le faire directement 37% de perte perf a cause du sscanf !
             sscanf(ligne,"%d",&a);
-            exitIfNull(tableaux_fiche->fiche[a],"serialise index pointeur sur heuvre introuvable\n")
-            master_List_Auteur->tab_auteur[i].heuvre[u] = tableaux_fiche->fiche[a];
+            exitIfNull(tableaux_fiche->fiche[a],"serialise index pointeur sur nom_auteur introuvable\n")
+            master_List_Auteur->tab_auteur[i].tab_ptr_fiche_min[u] = tableaux_fiche->fiche[a];
         }
         i++;
     }
@@ -493,9 +496,9 @@ tab_auteur_struct * unwrap_Deserilise_Index(const tableaux_fiche * tableaux_fich
 //         {
 //             for (int j = 0; j < input.taille; j++)
 //             {
-//                 if (strcmp(List_des_Auteur->tab_auteur[i].heuvre[u]->titre,input.fiche[j]->titre)==0)
+//                 if (strcmp(List_des_Auteur->tab_auteur[i].tab_ptr_fiche_min[u]->titre,input.fiche[j]->titre)==0)
 //                 {
-//                     List_des_Auteur->tab_auteur[i].heuvre[u] = input.fiche[j];
+//                     List_des_Auteur->tab_auteur[i].tab_ptr_fiche_min[u] = input.fiche[j];
 //                     break;
 //                 } 
 //             }
@@ -509,7 +512,7 @@ tab_auteur_struct * unwrap_Deserilise_Index(const tableaux_fiche * tableaux_fich
 //  * @brief 
 //  * 
 //  * 
-//  * n'ayant pas les object Euvre/auteur_struct
+//  * n'ayant pas les object Euvre/auteur
 //  *  apres la décérialisation
 //  *  ajout fonction résolution qui va ajouterune entrée a chaque foit qu'on l'interroge
 //  *  de magnierre a ce qu'il soit possible d'executer l'algo sans avoir tout résolut
@@ -541,9 +544,9 @@ tab_auteur_struct * unwrap_Deserilise_Index(const tableaux_fiche * tableaux_fich
 //     {
 //         for (int j = 0; j < input->taille; j++)
 //         {
-//             if (strcmp(List_des_Auteur->tab_auteur[i].heuvre[u]->titre,input->fiche[j]->titre)==0)
+//             if (strcmp(List_des_Auteur->tab_auteur[i].tab_ptr_fiche_min[u]->titre,input->fiche[j]->titre)==0)
 //             {
-//                 List_des_Auteur->tab_auteur[i].heuvre[u] = input->fiche[j];
+//                 List_des_Auteur->tab_auteur[i].tab_ptr_fiche_min[u] = input->fiche[j];
 //                 break;
 //             } 
 //         }
