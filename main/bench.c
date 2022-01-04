@@ -10,6 +10,8 @@
 #define serializedb         "DATA/SerializedStruc.data"
 #define smallserializedb    "DATA/Serialzed1000.data"
 #define serializedbunwrap   "DATA/SerializedStrucInverse.data"
+#define smallserializedbunwrap    "DATA/SerializedStrucInverse1000.data"
+
 
 
 
@@ -42,7 +44,15 @@ void serialized(){
     serialize(coucou,out); //utiliser des address pour eviter la copie ??
     // printTabmeaux(coucou);
 }
-
+void serializedsmall(){
+    FILE * in = fopen(smalloriginedb,"r");
+    exitIfNull(in,"imposible d'ouvrire "smalloriginedb);
+    tableaux_fiche coucou = parse(in); //utiliser des address pour eviter la copie ?? 
+    FILE * out = fopen(smallserializedb,"w");
+    exitIfNull(out,"imposible d'ouvrire "smallserializedb);
+    serialize(coucou,out); //utiliser des address pour eviter la copie ??
+    // printTabmeaux(coucou);
+}
 //serialise small db manque 
 
 tableaux_fiche * deserialisedb(){
@@ -59,13 +69,22 @@ void deserialisesmalldb(){
 
 List_Auteur * unwrap_from_filE(){ //E pas inspi
     FILE * inputDB = fopen(serializedb,"r");
-    exitIfNull(inputDB,"imposible d'ouvrire "smallserializedb)
+    exitIfNull(inputDB,"imposible d'ouvrire "serializedb)
     return unwrap_from_file(inputDB);
 }
 void unwrwap_gen_cache(){
     FILE * ouputDB = fopen(serializedbunwrap,"w");
     exitIfNull(ouputDB,"imposible d'ouvrire "serializedbunwrap)
     List_Auteur * malistauteur = unwrap_from_filE();
+    unwrap_Serilise_Index(malistauteur,ouputDB);
+    unwrap_List_Auteur_free(malistauteur);
+}
+void unwrwap_gen_cache_small(){
+    FILE * ouputDB = fopen(smallserializedbunwrap,"w");
+    exitIfNull(ouputDB,"imposible d'ouvrire "smallserializedbunwrap)
+    FILE * inputDB = fopen(smallserializedb,"r");
+    exitIfNull(inputDB,"imposible d'ouvrire "smallserializedb)
+    List_Auteur * malistauteur = unwrap_from_file(inputDB);
     unwrap_Serilise_Index(malistauteur,ouputDB);
     unwrap_List_Auteur_free(malistauteur);
 }
@@ -142,6 +161,10 @@ int main(int argc, char const *argv[])
         // printf("serialized\n");
         serialized();    
     }
+    else if(strcmp("serializedsmall",compstr)==0){
+        // printf("serialized\n");
+        serializedsmall();    
+    }
     else if(strcmp("deserialisedb",compstr)==0){// N
         // printf("deserialisedb\n");
         deserialisedb();    
@@ -169,7 +192,12 @@ int main(int argc, char const *argv[])
     }else if (strcmp("unwrwap_gen_cache",compstr)==0)
     {
         unwrwap_gen_cache();
-    }else if (strcmp("unwrap_from_file",compstr)==0)
+    }
+    else if (strcmp("unwrwap_gen_cache_small",compstr)==0)
+    {
+        unwrwap_gen_cache_small();
+    }
+    else if (strcmp("unwrap_from_file",compstr)==0)
     {
         unwrap_from_filE();
     }
