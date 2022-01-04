@@ -76,7 +76,7 @@ typedef struct Paire_ArticleHauteur
  */
 typedef struct List_Auteur
 {
-    Sommet_Auteur_TableauxD * tableaux_Somet_hauteur;// LISTE DADRESE DONC ** ??????????????????????
+    Sommet_Auteur_TableauxD * tableaux_Somet_hauteur;///< tableaux de structure de taille
     int taille;
 }List_Auteur;
 
