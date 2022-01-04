@@ -211,6 +211,7 @@ main/callgrind_unwrab_deserialize
 main/callgrind_unwrwap_gen_cache
 main/parsing
 .vscode/c_cpp_properties.json
+<<<<<<< HEAD
 .vscode/launch.json
 .vscode/targets.log
 .vscode/tasks.json
@@ -1385,3 +1386,15 @@ main/latex/unwrap_8h_af750e72ee98a8aa0ce01eb536382d71b_icgraph.pdf
 main/latex/unwrap_8h.tex
 main/DATA/SerializedStrucInverse1000.data
 main/notes_Katie
+=======
+main/bench
+main/bench.o
+main/creation_Gt.o
+main/list.o
+main/parsing.o
+main/test_creation_Gt.o
+main/unwrap.o
+main/unwrap.o
+main/bench
+main/bench.o
+>>>>>>> a613237 (gitignore)
