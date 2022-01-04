@@ -210,3 +210,8 @@ main/latex/tabu_doxygen.sty
 main/callgrind_unwrab_deserialize
 main/callgrind_unwrwap_gen_cache
 main/parsing
+.vscode/c_cpp_properties.json
+.vscode/launch.json
+.vscode/targets.log
+.vscode/tasks.json
+main/callgrind_trace

@@ -81,3 +81,6 @@ cleanall: clean Update
 		DATA/Serialzed1000.data\
 
 
+
+
+# instaler doxygene est lcov
