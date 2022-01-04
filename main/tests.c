@@ -74,36 +74,66 @@ int main()
     //  pour les article on sotque l'index de la fiche minimal de List_Auteur
 
 
-    FILE * DBxml = fopen("DATA/SerializedStruc.data","r");
-    FILE * DBinverse = fopen("DATA/SerializedStrucInverse.data","r");
+    // FILE * DBxml = fopen("DATA/Serialzed1000.data","r");
+    // FILE * DBinverse = fopen("DATA/SerializedStrucInverse1000.data","r");
+
+#define originedb           "DATA/dblp.xml"
+#define smalloriginedb      "DATA/dblp1sur8.xml"
+#define serializedb         "DATA/SerializedStruc.data"
+#define smallserializedb    "DATA/Serialzed1000.data"
+#define serializedbunwrap   "DATA/SerializedStrucInverse.data"
+#define smallserializedbunwrap    "DATA/SerializedStrucInverse1000.data"
+
+
+    // FILE * DBxml = fopen(serializedb,"r");
+    // FILE * DBinverse = fopen(serializedbunwrap,"r");
+
+
+    FILE * DBxml = fopen(smallserializedb,"r");
+    FILE * DBinverse = fopen(smallserializedbunwrap,"r");
+
+    // FILE * DBxml = fopen(serializedb,"r");
+    // FILE * DBinverse = fopen(serializedbunwrap,"r");
+
     exitIfNull(DBxml,"INPUT PAS CHEMAIN")
     exitIfNull(DBinverse,"INPUT PAS CHEMAIN")
 
     unwrap_Graph mongraphlul = gen_unwrap_Graph(DBxml,DBinverse);
-
     // printList_Article(mongraphlul.list_Article);
 
+    // for (int i = 0; i < mongraphlul.list_Article->nombre_Article ; i++)
+    // {
+    //     if (mongraphlul.list_Article->pointeur_Article_tableaux[i].nombre_Auteur != 0)
+    //     {
+    //         printf("OUI %s ==> %d\n",mongraphlul.list_Article->pointeur_Article_tableaux[i].Article, mongraphlul.list_Article->pointeur_Article_tableaux[i].nombre_Auteur);
+    //         // for (int u = 0; u < mongraphlul.list_Article->pointeur_Article_tableaux[i].nombre_Auteur; u++)
+    //         // {
+    //         //     printf("\t%d\n",*mongraphlul.list_Article->pointeur_Article_tableaux[i].pointeur_Auteur_tableaux[u]->hauteur);
+    //         // }
+            
+    //     }else{
+    //         printf("NON %s\n",mongraphlul.list_Article->pointeur_Article_tableaux[i].Article);
+    //     }
+        
+    // }
+    
 
 
-
-
-    for (int i = 100; i < mongraphlul.list_Article->nombre_Article; i++)
-    {
-        Sommet_Article_TableauxD * premierarticle = &mongraphlul.list_Article->pointeur_Article_tableaux[i];
-        for (int u = 0; u < premierarticle->nombre_Auteur; u++)
-        {
-            Sommet_Auteur_TableauxD * premierauteur  =  premierarticle->pointeur_Auteur_tableaux[u];
-            // for (int j = 0; j <  premierauteur->nbelementmagi; j++)
-            // {
-            //     Sommet_Article_TableauxD * remonter = premierauteur->pointeur_Article[j];
-            //     printf("%s == %s\n",remonter->Article,premierarticle->Article);
-            // }
-                printf("%s == %s\n",premierauteur->pointeur_Article[0]->Article,premierarticle->Article);
-
-        }
-
-
-    }
+    // for (int i = 0; i < mongraphlul.list_Article->nombre_Article; i++)
+    // {
+    //     Sommet_Article_TableauxD * monArticle = &mongraphlul.list_Article->pointeur_Article_tableaux[i];
+    //     printf("%s %d\n",monArticle->Article,monArticle->nombre_Auteur);
+    //     for (int u = 0; u < monArticle->nombre_Auteur; u++)
+    //     {
+    //         Sommet_Auteur_TableauxD * auteurfromarticle  =  monArticle->pointeur_Auteur_tableaux[u];
+    //         printf("%s %d\n",auteurfromarticle->hauteur,auteurfromarticle->nbelementmagi);
+    //         for (int j = 0; j <  auteurfromarticle->nbelementmagi; j++)
+    //         {
+    //             Sommet_Article_TableauxD * remonter = auteurfromarticle->pointeur_Article[j];
+    //             printf("%s == %s\n",remonter->Article,monArticle->Article);
+    //         }
+    //     }
+    // }
     
 
     

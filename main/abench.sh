@@ -9,6 +9,7 @@ help(){
     - readb
     - readsmaldb
     - serialized
+    - serializedsmall
     - deserialisedb
     - deserialisesmalldb
     - swap
@@ -16,6 +17,7 @@ help(){
     - unwrwap_gen_cache
     - unwrap_from_file
     - unwrwap_deserialise
+    - unwrwap_gen_cache_small
     - ALL'
 }
 

@@ -59,26 +59,30 @@ DATA/dblp1sur8.xml: DATA/dblp.xml
 DATA/SerializedStruc.data:	DATA/dblp.xml parsing.o
 	./bench serialized
 
-DATA/Serialzed1000.data: 	DATA/SerializedStruc.data
-	head DATA/SerializedStruc.data -n 1002 > DATA/Serialzed1000.data
+DATA/Serialzed1000.data: 	DATA/dblp1sur8.xml
+	./bench serializedsmall
+
+DATA/SerializedStrucInverse1000.data:	DATA/Serialzed1000.data
+	./bench unwrwap_gen_cache_small
 
 #LA
 DATA/SerializedStrucInverse.data: DATA/SerializedStruc.data
 	./bench unwrwap_gen_cache
 
-gen_cache_data: DATA/dblp.xml DATA/dblp1sur8.xml DATA/SerializedStrucInverse.data DATA/Serialzed1000.data DATA/SerializedStruc.data
+gen_cache_data: DATA/dblp.xml DATA/dblp1sur8.xml DATA/SerializedStrucInverse.data DATA/Serialzed1000.data DATA/SerializedStruc.data DATA/SerializedStrucInverse1000.data
 
 r: clean abench.sh
 
 clean:
 	rm -f  *.o *.so *.gcno *.gcda *.gcov coverage.info
 	rm -fr tests bench main GCOVtests LcovRapport html latex
-
-cleanall: clean Update
+# Update
+cleanall: clean 
 	rm -f DATA/SerializedStrucInverse.data\
 		DATA/dblp1sur8.xml\
 		DATA/SerializedStruc.data\
 		DATA/Serialzed1000.data\
+		DATA/SerializedStrucInverse1000.data\
 
 
 
