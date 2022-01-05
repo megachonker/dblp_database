@@ -29,7 +29,13 @@ typedef struct auteur_struct
     int nbelementmagi;      ///<compteur d'élément Article_struct
     char * nom_auteur;
     fiche_minimale ** tab_ptr_fiche_min;///<tableaux dynamique d'adresse pointant sur des structure contenant oeuvre
-    int size;               ///<taille du tableaux dynamique
+    int size;                           ///<taille du tableaux dynamique
+    
+    //ajoue d'Katie
+    auteur_struct **tab_voisins;        //tableau de pointeur vers les voisins de l'auteur
+    int nb_voisins;
+    int etiquette;
+    
 }auteur_struct;
 
 /**
@@ -96,12 +102,12 @@ typedef struct tab_auteur_struct
  * 
  * 
  */
-typedef struct unwrap_Graph_t
+typedef struct unwrap_Graph_struct
 {
     tab_auteur_struct * tab_auteur_struct;
     tab_Article_struct * tab_Article_struct;
     tableaux_fiche * tableaux_de_fiche;
-}unwrap_Graph_t;
+}unwrap_Graph_struct;
 
 
 
@@ -248,7 +254,7 @@ tab_auteur_struct * unwrap_Deserilise_Index(const tableaux_fiche * List_des_Aute
 
 
 
-unwrap_Graph_t gen_unwrap_Graph(FILE * dblpxml, FILE * inverted);
+unwrap_Graph_struct gen_unwrap_Graph(FILE * dblpxml, FILE * inverted);
 
 
 void printList_Article(tab_Article_struct * OwO);

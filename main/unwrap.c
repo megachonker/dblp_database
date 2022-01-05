@@ -604,11 +604,11 @@ tab_Article_struct * unwrap_ListArticle_from_xml(FILE * dbinput){
     return  gen_ListaArticle(malistarticle);
 }
 
-unwrap_Graph_t gen_unwrap_Graph(FILE * dblpxml, FILE * inverted){
+unwrap_Graph_struct gen_unwrap_Graph(FILE * dblpxml, FILE * inverted){
     tableaux_fiche * matablefiche = deserialisation(dblpxml);
     tab_auteur_struct * malistaauteur =   unwrap_Deserilise_Index(matablefiche,inverted);
     tab_Article_struct * malistearticle = gen_ListaArticle(malistaauteur);
-    unwrap_Graph_t graph  = {malistaauteur, malistearticle,matablefiche};
+    unwrap_Graph_struct graph  = {malistaauteur, malistearticle,matablefiche};
     return graph;
 }
 
