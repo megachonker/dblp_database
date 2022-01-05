@@ -85,3 +85,6 @@ cleanall: clean
 		DATA/SerializedStrucInverse1000.data\
 
 
+
+
+# instaler doxygene est lcov
