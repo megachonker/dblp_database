@@ -219,39 +219,47 @@ List_Article* gen_List_Article(Paire_ArticleHauteur * liste,int sizeArticleHaute
             
             dernierarticle->pointeur_Auteur_tableaux = (Sommet_Auteur_TableauxD**)temparray;
             dernierarticle->pointeur_Auteur_tableaux[*last_auteur] = liste[i+j].pointeur_Auteur;
-            int f=0;
+            int found=0;
+
+            int *localnbelementmaj = &dernierarticle->pointeur_Auteur_tableaux[*last_auteur]->nbelementmagi ;
 
             //on vérifie pas de douvbon avand d'ajouter
-            for (int o = 0; o < dernierarticle->pointeur_Auteur_tableaux[*last_auteur]->nbelementmagi; o++)
+            for (int o = 0; o < *localnbelementmaj; o++)
             {
                 if (dernierarticle->pointeur_Auteur_tableaux[*last_auteur]->pointeur_Article[o] == dernierarticle){
-                    f = 1;
+                    found = 1;
                     break;
                 }
             }
 
-            if (f == 0)
+            if (found == 0)
             {
-                Sommet_Article_TableauxD ** tmptest  = reallocarray(dernierarticle->pointeur_Auteur_tableaux[*last_auteur]->pointeur_Article,
-                dernierarticle->pointeur_Auteur_tableaux[*last_auteur]->nbelementmagi+1,sizeof(Sommet_Article_TableauxD**));
+                Sommet_Article_TableauxD ** tmptest  = reallocarray(
+                    dernierarticle->pointeur_Auteur_tableaux[*last_auteur]->pointeur_Article,
+                    (*localnbelementmaj)+1, ///< sur a 0 ?  
+                    sizeof(Sommet_Article_TableauxD**));
+
                 exitIfNull(tmptest,"imposible alouer dernierarticle->pointeur_Auteur_tableaux[*last_auteur]->pointeur_Article[i]\n");
                 dernierarticle->pointeur_Auteur_tableaux[*last_auteur]->pointeur_Article = tmptest;
-                //on boucle 
-                dernierarticle->pointeur_Auteur_tableaux[*last_auteur]->pointeur_Article[dernierarticle->pointeur_Auteur_tableaux[*last_auteur]->nbelementmagi] = dernierarticle;
+                //on boucle indicemagiqueindicemagiqueindicemagiqueindiceindicemagiquemagique
+                dernierarticle->pointeur_Auteur_tableaux[*last_auteur]->pointeur_Article[*localnbelementmaj] = dernierarticle; /// 
 
-                dernierarticle->pointeur_Auteur_tableaux[*last_auteur]->nbelementmagi++;
+                (*localnbelementmaj)++;
             }
+            //fichierxml 2 article avec alice bob && alice bob && alice 
+            (*last_auteur)++;
 
-            for (int  i = 0; i < ListDesArticle->pointeur_Article_tableaux[ListDesArticle->nombre_Article].nombre_Auteur; i++)
+            printf("---%d---%d-----\n",ListDesArticle->pointeur_Article_tableaux[ListDesArticle->nombre_Article].nombre_Auteur,*last_auteur); //< LA 
+            for (int  findiceauteur = 0; findiceauteur < ListDesArticle->pointeur_Article_tableaux[ListDesArticle->nombre_Article].nombre_Auteur; findiceauteur++)
             {
-                int indicemagique = ListDesArticle->pointeur_Article_tableaux[ListDesArticle->nombre_Article].pointeur_Auteur_tableaux[i]->nbelementmagi-1;
-                for (int OO = 0; OO < indicemagique; OO++)
+                int indicemagique = ListDesArticle->pointeur_Article_tableaux[ListDesArticle->nombre_Article].pointeur_Auteur_tableaux[findiceauteur]->nbelementmagi-1;
+                for (int OO = 0; OO <= indicemagique; OO++)
                 {
-                    if (*(ListDesArticle->pointeur_Article_tableaux[ListDesArticle->nombre_Article].pointeur_Auteur_tableaux[i]->pointeur_Article[OO])->Article)
-                    {
-                        Sommet_Article_TableauxD * azer =  ListDesArticle->pointeur_Article_tableaux[ListDesArticle->nombre_Article].pointeur_Auteur_tableaux[i]->pointeur_Article[OO];
+                    // if (ListDesArticle->pointeur_Article_tableaux[ListDesArticle->nombre_Article].pointeur_Auteur_tableaux[i]->pointeur_Article[OO]->Article)
+                    // {
+                        Sommet_Article_TableauxD * azer =  ListDesArticle->pointeur_Article_tableaux[ListDesArticle->nombre_Article].pointeur_Auteur_tableaux[findiceauteur]->pointeur_Article[OO];
                         printf("%s\n",azer->Article); //< LA 
-                    }
+                    // }
                     
                 }
                 
@@ -261,7 +269,7 @@ List_Article* gen_List_Article(Paire_ArticleHauteur * liste,int sizeArticleHaute
 
 
 
-            (*last_auteur)++;
+
             i++;// truc de simon ?
         }
 
@@ -555,6 +563,15 @@ List_Auteur * unwrap_Deserilise_Index(const tableaux_fiche * tableaux_fiche,FILE
 #define MAXarraySIZE 21143793
 Paire_HauteurHeurvre HauteurHeuvre[MAXarraySIZE];
 
+List_Auteur * unwrap_ListAuteur_from_xml(FILE * dbinput){
+    tableaux_fiche mesfiche =  parse(dbinput);
+    int sizeHauteurHeuvre = SwapStruct(mesfiche,HauteurHeuvre);
+    sort_tableaux_fiche(HauteurHeuvre,sizeHauteurHeuvre);
+    List_Auteur * malistedauteur = gen_List_Auteur(HauteurHeuvre,sizeHauteurHeuvre);
+    return malistedauteur;
+}
+
+
 List_Auteur * unwrap_from_tabfich(tableaux_fiche * mesfiches){
     int sizeHauteurHeuvre = SwapStruct(*mesfiches,HauteurHeuvre);
     sort_tableaux_fiche(HauteurHeuvre,sizeHauteurHeuvre);
@@ -586,6 +603,11 @@ List_Article * gen_ListaArticle(const List_Auteur * Malistauteur){
     return malistedauteur;
 }
 
+List_Article * unwrap_ListArticle_from_xml(FILE * dbinput){
+    List_Auteur * malistarticle = unwrap_ListAuteur_from_xml(dbinput);
+    printList_Auteur(malistarticle);
+    return  gen_ListaArticle(malistarticle);
+}
 
 unwrap_Graph gen_unwrap_Graph(FILE * dblpxml, FILE * inverted){
     tableaux_fiche * matablefiche = deserialisation(dblpxml);

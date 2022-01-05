@@ -255,4 +255,6 @@ void printList_Article(List_Article * OwO);
 
 void unwrap_List_Auteur_free(List_Auteur * free);
 
+List_Article * unwrap_ListArticle_from_xml(FILE * dbinput);
+
 #endif
