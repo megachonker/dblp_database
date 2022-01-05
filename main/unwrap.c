@@ -211,7 +211,7 @@ List_Article* gen_List_Article(Paire_ArticleHauteur * liste,int sizeArticleHaute
         while (i+j < sizeArticleHauteur && strcmp(liste[j].article,liste[j+i].article) == 0)//ordre important
         {
             Sommet_Article_TableauxD * dernierarticle = &ListDesArticle->pointeur_Article_tableaux[ListDesArticle->nombre_Article];
-            int * last_auteur  = &dernierarticle->nombre_Auteur;
+            int * last_auteur  = &dernierarticle->nombre_Auteur; /// < début du compteur 
             
             Sommet_Auteur_TableauxD * temparray = reallocarray(dernierarticle->pointeur_Auteur_tableaux,*last_auteur+1,8); //8 taille d'un pointeur 
             exitIfNull(temparray,"gen_List_Article Sommet_Auteur_TableauxD realockarrayfail\n");
@@ -240,22 +240,25 @@ List_Article* gen_List_Article(Paire_ArticleHauteur * liste,int sizeArticleHaute
                 dernierarticle->pointeur_Auteur_tableaux[*last_auteur]->pointeur_Article[dernierarticle->pointeur_Auteur_tableaux[*last_auteur]->nbelementmagi] = dernierarticle;
 
                 dernierarticle->pointeur_Auteur_tableaux[*last_auteur]->nbelementmagi++;
+
+
+                // printf("%d\n",dernierarticle->nombre_Auteur);
+                
+
             }
 
-            for (int  i = 0; i < ListDesArticle->pointeur_Article_tableaux[ListDesArticle->nombre_Article].nombre_Auteur; i++)
-            {
-                int indicemagique = ListDesArticle->pointeur_Article_tableaux[ListDesArticle->nombre_Article].pointeur_Auteur_tableaux[i]->nbelementmagi-1;
-                for (int OO = 0; OO < indicemagique; OO++)
-                {
-                    if (*(ListDesArticle->pointeur_Article_tableaux[ListDesArticle->nombre_Article].pointeur_Auteur_tableaux[i]->pointeur_Article[OO])->Article)
-                    {
-                        Sommet_Article_TableauxD * azer =  ListDesArticle->pointeur_Article_tableaux[ListDesArticle->nombre_Article].pointeur_Auteur_tableaux[i]->pointeur_Article[OO];
-                        printf("%s\n",azer->Article); //< LA 
-                    }
-                    
-                }
-                
-            }
+            // for (int  i = 0; i < ListDesArticle->pointeur_Article_tableaux[ListDesArticle->nombre_Article].nombre_Auteur; i++)
+            // {
+            //     int indicemagique = ListDesArticle->pointeur_Article_tableaux[ListDesArticle->nombre_Article].pointeur_Auteur_tableaux[i]->nbelementmagi-1;
+            //     for (int OO = 0; OO < indicemagique; OO++)
+            //     {
+            //         if (*(ListDesArticle->pointeur_Article_tableaux[ListDesArticle->nombre_Article].pointeur_Auteur_tableaux[i]->pointeur_Article[OO])->Article)
+            //         {
+            //             Sommet_Article_TableauxD * azer =  ListDesArticle->pointeur_Article_tableaux[ListDesArticle->nombre_Article].pointeur_Auteur_tableaux[i]->pointeur_Article[OO];
+            //             printf("%s\n",azer->Article); //< LA 
+            //         }   
+            //     } 
+            // }
             
             
 
@@ -314,7 +317,7 @@ void printList_Article(List_Article * OwO){
         printf("%s:\n",OwO->pointeur_Article_tableaux[i].Article);    
         for (int j = 0; j < OwO->pointeur_Article_tableaux[i].nombre_Auteur; j++)
         {
-            printf("    %s\n",OwO->pointeur_Article_tableaux[i].pointeur_Auteur_tableaux[j]->hauteur);
+            printf("\t%s\n",OwO->pointeur_Article_tableaux[i].pointeur_Auteur_tableaux[j]->hauteur);
         }
         printf("\n");
     }

@@ -99,6 +99,10 @@ int main()
     exitIfNull(DBinverse,"INPUT PAS CHEMAIN")
 
     unwrap_Graph mongraphlul = gen_unwrap_Graph(DBxml,DBinverse);
+    
+    for (size_t i = 0; i < mongraphlul.list_Auteur->taille; i++)
+        printf("%d\n",mongraphlul.list_Auteur->tableaux_Somet_hauteur[i].size);
+    
     // printList_Article(mongraphlul.list_Article);
 
     // for (int i = 0; i < mongraphlul.list_Article->nombre_Article ; i++)
