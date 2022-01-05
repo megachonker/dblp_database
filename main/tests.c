@@ -83,26 +83,26 @@ int main()
 #define smallserializedb    "DATA/Serialzed1000.data"
 #define serializedbunwrap   "DATA/SerializedStrucInverse.data"
 #define smallserializedbunwrap    "DATA/SerializedStrucInverse1000.data"
+#define customxml    "DATA/custom.xml"
 
 
     // FILE * DBxml = fopen(serializedb,"r");
     // FILE * DBinverse = fopen(serializedbunwrap,"r");
 
 
-    FILE * DBxml = fopen(smallserializedb,"r");
-    FILE * DBinverse = fopen(smallserializedbunwrap,"r");
+    FILE * DBxml = fopen(customxml,"r");
+    // FILE * DBinverse = fopen(smallserializedbunwrap,"r");
 
     // FILE * DBxml = fopen(serializedb,"r");
     // FILE * DBinverse = fopen(serializedbunwrap,"r");
 
     exitIfNull(DBxml,"INPUT PAS CHEMAIN")
-    exitIfNull(DBinverse,"INPUT PAS CHEMAIN")
+    // exitIfNull(DBinverse,"INPUT PAS CHEMAIN")
 
-    unwrap_Graph mongraphlul = gen_unwrap_Graph(DBxml,DBinverse);
-    
-    for (size_t i = 0; i < mongraphlul.list_Auteur->taille; i++)
-        printf("%d\n",mongraphlul.list_Auteur->tableaux_Somet_hauteur[i].size);
-    
+    unwrap_ListArticle_from_xml(DBxml);
+    // gen_List_Article()
+
+    // unwrap_Graph mongraphlul = gen_unwrap_Graph(DBxml,DBinverse);
     // printList_Article(mongraphlul.list_Article);
 
     // for (int i = 0; i < mongraphlul.list_Article->nombre_Article ; i++)
