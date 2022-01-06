@@ -99,12 +99,8 @@ int main()
     exitIfNull(DBxml,"INPUT PAS CHEMAIN")
     // exitIfNull(DBinverse,"INPUT PAS CHEMAIN")
 
-<<<<<<< HEAD
     unwrap_ListArticle_from_xml(DBxml);
     // gen_List_Article()
-=======
-    unwrap_Graph_struct mongraphlul = gen_unwrap_Graph(DBxml,DBinverse);
->>>>>>> 7c442a9 (renommage unwrap_Graphe_t, ajoue dans auteur_struct, creation_graphe_voisin et debut dijkstra)
 
     // unwrap_Graph mongraphlul = gen_unwrap_Graph(DBxml,DBinverse);
     // printList_Article(mongraphlul.tab_Article_struct);
