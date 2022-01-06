@@ -16,7 +16,7 @@ struct auteur_graphe_struct;
 
 
 //graphe= tableau des ptr vers les auteur_struct avec pour chacun, leur tableau de ptr vers leurs voisins
-auteur_struct** creation_graphe(int* size_graphe)
+auteur_struct** creation_graphe(void)
 {
 
     FILE * DBxml = fopen("DATA/SerializedStruc.data","r");
@@ -28,18 +28,19 @@ auteur_struct** creation_graphe(int* size_graphe)
     fclose(DBinverse);
 
     
-    size_graphe= unwrap_Graph.tab_auteur_struct->taille;
+    int *size_graphe_ptr= malloc(sizeof(int));
+    *size_graphe_ptr= unwrap_Graph.tab_auteur_struct->taille;
 
 
     //creation du graphe sans les voisins (inutile si il existe deja)
-    auteur_struct** graphe=malloc(sizeof(auteur_struct*)**size_graphe);
+    auteur_struct** graphe=malloc(sizeof(auteur_struct*)**size_graphe_ptr);
     if(graphe== NULL)
     {
         printf("%s\n", "erreur de malloc du graphe");
         return NULL;
     }
     
-    for(int i=0; i<size_graphe; i++)
+    for(int i=0; i<*size_graphe_ptr; i++)
     {
         auteur_struct ai= unwrap_Graph.tab_auteur_struct->tab_auteur[i];
         graphe[i]= &ai;
@@ -50,7 +51,7 @@ auteur_struct** creation_graphe(int* size_graphe)
     //ajout du tableau des voisins pour chaque auteur
 
     //pour tous les auteurs ak du graphe
-    for(int k=0; k<size_graphe-1; k++)
+    for(int k=0; k<*size_graphe_ptr-1; k++)
     {
         auteur_struct *ptr_ak= graphe[k];
         
@@ -123,9 +124,9 @@ auteur_struct** creation_graphe(int* size_graphe)
 }
 
 
-void free_graphe(auteur_struct** graphe, int* size_graphe)
+void free_graphe(auteur_struct** graphe, int* size_graphe_ptr)
 {
-    for(int k=0; k<size_graphe; k++)
+    for(int k=0; k<*size_graphe_ptr; k++)
     {
         auteur_struct *ptr_ak= graphe[k];
         
