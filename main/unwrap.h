@@ -21,7 +21,7 @@ struct Article_struct;
 /**
  * @brief Un nom_auteur plusieur oeuvre
  * 
- * Générée a partire des cache
+ * Générée a partire des caches
  */
 typedef struct auteur_struct
 {
@@ -34,12 +34,12 @@ typedef struct auteur_struct
     //ajoue d'Katie
     struct auteur_struct **tab_voisins;        //tableau de pointeur vers les voisins de l'auteur
     int nb_voisins;
-    int etiquette;
+    int etiquette;    //distance a la source dans dijkstra
     
 }auteur_struct;
 
 /**
- * @brief Un Article a plusieur auteur
+ * @brief Un Article a plusieurs auteur
  * 
  * Chaque Article pointe vers fiche_minimal de la on peut y retrouver le titre de l'article
  * Chaque article pointe ver plusieur auteur qui provienne de auteur de la on peut y retrouver  l'auteur
@@ -60,7 +60,7 @@ typedef struct Article_struct
 tab_auteur *tab_auteur dans article on a la le nombre de d'euvre
  * 
  */
-typedef struct Paire_ArticleHauteur
+typedef struct Paire_Article_auteur
 {
     //si lordre de mes article est le meme que tableaux_fiche
     //allor si j'accede au Xeme Article de tableaux_fiche
@@ -68,7 +68,7 @@ typedef struct Paire_ArticleHauteur
     //Donc auteur ayant chaque nom_auteur pointant sur 
     char * article; ///< dans la fiche minimal on va y retrouver le noms de l'article
     auteur_struct * pointeur_Auteur; ///< pointe ver un auteur auteur
-}Paire_ArticleHauteur;
+}Paire_Article_auteur;
 
 
 
