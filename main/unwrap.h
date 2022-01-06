@@ -32,7 +32,7 @@ typedef struct auteur_struct
     int size;                           ///<taille du tableaux dynamique
     
     //ajoue d'Katie
-    auteur_struct **tab_voisins;        //tableau de pointeur vers les voisins de l'auteur
+    struct auteur_struct **tab_voisins;        //tableau de pointeur vers les voisins de l'auteur
     int nb_voisins;
     int etiquette;
     
