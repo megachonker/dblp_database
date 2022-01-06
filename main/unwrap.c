@@ -201,7 +201,7 @@ tab_Article_struct* gen_List_Article(Paire_Article_auteur * liste,int sizeArticl
         ListDesArticle->tab_Article = tb_Somet_h;
 
         //on add le premier nom_Article
-        ListDesArticle->tab_Article[ListDesArticle->nombre_Article].nombre_Auteur=0;
+        ListDesArticle->tab_Article[ListDesArticle->nombre_Article].nombre_auteur=0;
         ListDesArticle->tab_Article[ListDesArticle->nombre_Article].nom_Article=liste[j].article;
         ListDesArticle->tab_Article[ListDesArticle->nombre_Article].tab_ptr_auteur = NULL;
 
@@ -210,7 +210,7 @@ tab_Article_struct* gen_List_Article(Paire_Article_auteur * liste,int sizeArticl
         while (i+j < sizeArticleHauteur && strcmp(liste[j].article,liste[j+i].article) == 0)//ordre important
         {
             Article_struct * dernierarticle = &ListDesArticle->tab_Article[ListDesArticle->nombre_Article];
-            int * last_auteur  = &dernierarticle->nombre_Auteur;
+            int * last_auteur  = &dernierarticle->nombre_auteur;
             // auteur_struct ** temparray = reallocarray(listcorrespondancelocal->tab_ptr_auteur,*nombre_auteur+1,8); //8 taille d'un pointeur 
 
             auteur_struct * temparray = reallocarray(dernierarticle->tab_ptr_auteur,*last_auteur+1,8); //8 taille d'un pointeur 
@@ -249,8 +249,8 @@ tab_Article_struct* gen_List_Article(Paire_Article_auteur * liste,int sizeArticl
             //fichierxml 2 article avec alice bob && alice bob && alice 
             (*last_auteur)++;
 
-            printf("---%d---%d-----\n",ListDesArticle->tab_Article[ListDesArticle->nombre_Article].nombre_Auteur,*last_auteur); //< LA 
-            for (int  findiceauteur = 0; findiceauteur < ListDesArticle->tab_Article[ListDesArticle->nombre_Article].nombre_Auteur; findiceauteur++)
+            printf("---%d---%d-----\n",ListDesArticle->tab_Article[ListDesArticle->nombre_Article].nombre_auteur,*last_auteur); //< LA 
+            for (int  findiceauteur = 0; findiceauteur < ListDesArticle->tab_Article[ListDesArticle->nombre_Article].nombre_auteur; findiceauteur++)
             {
                 int indicemagique = ListDesArticle->tab_Article[ListDesArticle->nombre_Article].tab_ptr_auteur[findiceauteur]->nbelementmagi-1;
                 for (int OO = 0; OO <= indicemagique; OO++)
@@ -272,8 +272,8 @@ tab_Article_struct* gen_List_Article(Paire_Article_auteur * liste,int sizeArticl
 
         // Article_struct Sometgenere = ListDesArticle->tab_Article[ListDesArticle->nombre_Article];
         // fprintf(stderr,"%s\n",Sometgenere.nom_Article);
-        // fprintf(stderr,"\tnombre d'auteur %d\n",Sometgenere.nombre_Auteur); ///BIZARD BUG ?
-        // for (int ii = 0; ii < Sometgenere.nombre_Auteur; ii++)
+        // fprintf(stderr,"\tnombre d'auteur %d\n",Sometgenere.nombre_auteur); ///BIZARD BUG ?
+        // for (int ii = 0; ii < Sometgenere.nombre_auteur; ii++)
         // {
         //     fprintf(stderr,"\t%s\n",Sometgenere.tab_ptr_auteur[ii]->nom_auteur);
         //     fprintf(stderr,"\t\tnombre d'nom_Article %d\n",Sometgenere.tab_ptr_auteur[ii]->nbelementmagi); ///BIZARD BUG ?
@@ -315,7 +315,7 @@ void printList_Article(tab_Article_struct * OwO){
     for (int i = 0; i < OwO->nombre_Article; i++)
     {
         printf("%s:\n",OwO->tab_Article[i].nom_Article);    
-        for (int j = 0; j < OwO->tab_Article[i].nombre_Auteur; j++)
+        for (int j = 0; j < OwO->tab_Article[i].nombre_auteur; j++)
         {
             printf("\t%s\n",OwO->tab_Article[i].tab_ptr_auteur[j]->nom_auteur);
         }

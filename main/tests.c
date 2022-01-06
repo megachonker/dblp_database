@@ -107,10 +107,10 @@ int main()
 
     // for (int i = 0; i < mongraphlul.tab_Article_struct->nombre_Article ; i++)
     // {
-    //     if (mongraphlul.tab_Article_struct->tab_Article[i].nombre_Auteur != 0)
+    //     if (mongraphlul.tab_Article_struct->tab_Article[i].nombre_auteur != 0)
     //     {
-    //         printf("OUI %s ==> %d\n",mongraphlul.tab_Article_struct->tab_Article[i].nom_Article, mongraphlul.tab_Article_struct->tab_Article[i].nombre_Auteur);
-    //         // for (int u = 0; u < mongraphlul.tab_Article_struct->tab_Article[i].nombre_Auteur; u++)
+    //         printf("OUI %s ==> %d\n",mongraphlul.tab_Article_struct->tab_Article[i].nom_Article, mongraphlul.tab_Article_struct->tab_Article[i].nombre_auteur);
+    //         // for (int u = 0; u < mongraphlul.tab_Article_struct->tab_Article[i].nombre_auteur; u++)
     //         // {
     //         //     printf("\t%d\n",*mongraphlul.tab_Article_struct->tab_Article[i].tab_ptr_auteur[u]->nom_auteur);
     //         // }
@@ -126,8 +126,8 @@ int main()
     // for (int i = 0; i < mongraphlul.tab_Article_struct->nombre_Article; i++)
     // {
     //     Article_struct * monArticle = &mongraphlul.tab_Article_struct->tab_Article[i];
-    //     printf("%s %d\n",monArticle->nom_Article,monArticle->nombre_Auteur);
-    //     for (int u = 0; u < monArticle->nombre_Auteur; u++)
+    //     printf("%s %d\n",monArticle->nom_Article,monArticle->nombre_auteur);
+    //     for (int u = 0; u < monArticle->nombre_auteur; u++)
     //     {
     //         auteur_struct * auteurfromarticle  =  monArticle->tab_ptr_auteur[u];
     //         printf("%s %d\n",auteurfromarticle->nom_auteur,auteurfromarticle->nbelementmagi);

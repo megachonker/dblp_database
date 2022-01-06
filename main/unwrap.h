@@ -51,7 +51,7 @@ typedef struct Article_struct
 {
     char * nom_Article; ///< générée par deserialisation Contien toute les info d'un article\n qui provienne du parsing
     auteur_struct ** tab_ptr_auteur; ///< Liste de pointeur (meme indice que liste_auteur ) qui reboucle sur auteur avec sont auteur
-    int nombre_Auteur;
+    int nombre_auteur;
 }Article_struct;
 
 /**
