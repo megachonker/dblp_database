@@ -2,10 +2,10 @@
 #define _graphe_test_
 
 #include <stdio.h>
-#include <unwrap.h>
-#include <list.h>
+#include "unwrap.h"
+#include "list.h"
 #include <stdlib.h>
-#include <creation_graphe_voisins.h>
+#include "creation_graphe_voisins.h"
 
 
 //Je crée des 10 auteurs ayant écrit des Articles
