@@ -1395,3 +1395,9 @@ main/unwrap.o
 main/unwrap.o
 main/bench
 main/bench.o
+main/creation_graphe_voisins.gcno
+main/creation_graphe_voisins.h.gch
+main/creation_Gt.h.gch
+main/list.h.gch
+main/parsing.h.gch
+main/unwrap.h.gch
