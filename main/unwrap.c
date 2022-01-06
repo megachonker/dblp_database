@@ -168,7 +168,7 @@ tab_auteur_struct* gen_List_Auteur(const Paire_HauteurHeurvre * liste,int sizeHa
 
         //nombre délément
         listes_Auteur_arrTitre->tab_auteur[listes_Auteur_arrTitre->taille].nbelementmagi = 0;
-        listes_Auteur_arrTitre->tab_auteur[listes_Auteur_arrTitre->taille].pointeur_Article = NULL;
+        listes_Auteur_arrTitre->tab_auteur[listes_Auteur_arrTitre->taille].tab_ptr_Article = NULL;
         // indiceSommet++;
         int i = 1;
         //tant le prochain est le meme auteur et que on attein pas la fin de la liste
@@ -226,7 +226,7 @@ tab_Article_struct* gen_List_Article(Paire_ArticleHauteur * liste,int sizeArticl
             //on vérifie pas de douvbon avand d'ajouter
             for (int o = 0; o < *localnbelementmaj; o++)
             {
-                if (dernierarticle->tab_ptr_auteur[*last_auteur]->pointeur_Article[o] == dernierarticle){
+                if (dernierarticle->tab_ptr_auteur[*last_auteur]->tab_ptr_Article[o] == dernierarticle){
                     found = 1;
                     break;
                 }
@@ -235,14 +235,14 @@ tab_Article_struct* gen_List_Article(Paire_ArticleHauteur * liste,int sizeArticl
             if (found == 0)
             {
                 Article_struct ** tmptest  = reallocarray(
-                    dernierarticle->tab_ptr_auteur[*last_auteur]->pointeur_Article,
+                    dernierarticle->tab_ptr_auteur[*last_auteur]->tab_ptr_Article,
                     (*localnbelementmaj)+1, ///< sur a 0 ?  
                     sizeof(Article_struct**));
 
-                exitIfNull(tmptest,"imposible alouer dernierarticle->tab_ptr_auteur[*last_auteur]->pointeur_Article[i]\n");
-                dernierarticle->tab_ptr_auteur[*last_auteur]->pointeur_Article = tmptest;
+                exitIfNull(tmptest,"imposible alouer dernierarticle->tab_ptr_auteur[*last_auteur]->tab_ptr_Article[i]\n");
+                dernierarticle->tab_ptr_auteur[*last_auteur]->tab_ptr_Article = tmptest;
                 //on boucle indicemagiqueindicemagiqueindicemagiqueindiceindicemagiquemagique
-                dernierarticle->tab_ptr_auteur[*last_auteur]->pointeur_Article[*localnbelementmaj] = dernierarticle; /// 
+                dernierarticle->tab_ptr_auteur[*last_auteur]->tab_ptr_Article[*localnbelementmaj] = dernierarticle; /// 
 
                 (*localnbelementmaj)++;
             }
@@ -255,9 +255,9 @@ tab_Article_struct* gen_List_Article(Paire_ArticleHauteur * liste,int sizeArticl
                 int indicemagique = ListDesArticle->tab_Article[ListDesArticle->nombre_Article].tab_ptr_auteur[findiceauteur]->nbelementmagi-1;
                 for (int OO = 0; OO <= indicemagique; OO++)
                 {
-                    // if (ListDesArticle->tab_Article[ListDesArticle->nombre_Article].tab_ptr_auteur[i]->pointeur_Article[OO]->nom_Article)
+                    // if (ListDesArticle->tab_Article[ListDesArticle->nombre_Article].tab_ptr_auteur[i]->tab_ptr_Article[OO]->nom_Article)
                     // {
-                        Article_struct * azer =  ListDesArticle->tab_Article[ListDesArticle->nombre_Article].tab_ptr_auteur[findiceauteur]->pointeur_Article[OO];
+                        Article_struct * azer =  ListDesArticle->tab_Article[ListDesArticle->nombre_Article].tab_ptr_auteur[findiceauteur]->tab_ptr_Article[OO];
                         printf("%s\n",azer->nom_Article); //< LA 
                     // }
                     
@@ -279,7 +279,7 @@ tab_Article_struct* gen_List_Article(Paire_ArticleHauteur * liste,int sizeArticl
         //     fprintf(stderr,"\t\tnombre d'nom_Article %d\n",Sometgenere.tab_ptr_auteur[ii]->nbelementmagi); ///BIZARD BUG ?
         //     for (int Uu = 0; Uu < Sometgenere.tab_ptr_auteur[ii]->nbelementmagi; Uu++)
         //     {
-        //         fprintf(stderr,"\t\t%s\n",Sometgenere.tab_ptr_auteur[ii]->pointeur_Article[Uu]->nom_Article);
+        //         fprintf(stderr,"\t\t%s\n",Sometgenere.tab_ptr_auteur[ii]->tab_ptr_Article[Uu]->nom_Article);
         //     }
          
         // }
@@ -287,7 +287,7 @@ tab_Article_struct* gen_List_Article(Paire_ArticleHauteur * liste,int sizeArticl
     }
     // for (int i = 0; i < ListDesArticle->nombre_Article; i++)
     // {
-    //     fprintf(stderr,"%s\n",ListDesArticle->tab_Article[i].tab_ptr_auteur[0]->pointeur_Article[0]->nom_Article);
+    //     fprintf(stderr,"%s\n",ListDesArticle->tab_Article[i].tab_ptr_auteur[0]->tab_ptr_Article[0]->nom_Article);
     // }
     
 
@@ -462,7 +462,7 @@ tab_auteur_struct * unwrap_Deserilise_Index(const tableaux_fiche * tableaux_fich
         // master_List_Auteur->tab_auteur[i].nom_auteur = tableaux_fiche->fiche[master_List_Auteur->tab_auteur[i].DECALAGE];
         // on initialise le compteur d'élément 
         master_List_Auteur->tab_auteur[i].nbelementmagi = 0;
-        master_List_Auteur->tab_auteur[i].pointeur_Article = NULL;
+        master_List_Auteur->tab_auteur[i].tab_ptr_Article = NULL;
 
         fgets(ligne,BALISESIZE,input);
         exitIfNull(sscanf(ligne,"%i\n", &master_List_Auteur->tab_auteur[i].size),"auteur qui n'om pas d'article\n");

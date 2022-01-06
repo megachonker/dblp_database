@@ -133,7 +133,7 @@ int main()
     //         printf("%s %d\n",auteurfromarticle->nom_auteur,auteurfromarticle->nbelementmagi);
     //         for (int j = 0; j <  auteurfromarticle->nbelementmagi; j++)
     //         {
-    //             Article_struct * remonter = auteurfromarticle->pointeur_Article[j];
+    //             Article_struct * remonter = auteurfromarticle->tab_ptr_Article[j];
     //             printf("%s == %s\n",remonter->nom_Article,monArticle->nom_Article);
     //         }
     //     }
