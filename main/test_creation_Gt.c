@@ -1,8 +1,9 @@
 #include<stdio.h>
 #include "parsing.h"
-#include "list-makefile-2/linked-list.h"
+#include "list.h"
 #include "creation_Gt.h"
 
+#include "creation_graphe_voisins.h"
 
 
 

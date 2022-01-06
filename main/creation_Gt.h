@@ -1,13 +1,9 @@
 #ifndef CREATION_GT_H
 #define CREATION_GT_H
 
-
-#include <stdio.h>
 #include "parsing.h"
-#include "list-makefile-2/linked-list.h"
-#include <stdlib.h>
+#include "list.h"
 
-#include <string.h>
 
 typedef enum comparaison_auteur
 {
@@ -23,7 +19,14 @@ typedef enum stade_de_traitement_de_Gt_pour_l_article_Ai
 
 
 
-
+/**
+ * @brief nouvile pas la doc 
+ * 
+ * @param A 
+ * @param sGc 
+ * @param indice_de_l_auteur_trouver_dans_sGc 
+ * @return comparaison_auteur 
+ */
 comparaison_auteur voir_si_il_y_a_un_auteur_de_la_fiche_A_dans_la_liste_sGc(fiche_minimale *A, ll_list *sGc, int *indice_de_l_auteur_trouver_dans_sGc);
 
 void mettre_tous_les_ai_de_sGcn_dans_sGcj_sauf_ceux_qui_y_sont_deja(ll_list *sGcn, ll_list *sGcj, ll_list *Gt, int idx_sGcn_in_Gt);

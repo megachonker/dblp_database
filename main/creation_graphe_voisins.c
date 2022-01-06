@@ -1,8 +1,8 @@
 #include <stdio.h>
-#include <unwrap.h>
-#include <list.h>
+#include "unwrap.h"
+#include "list.h"
 #include <stdlib.h>
-#include <creation_graphe_voisins.h>
+#include "creation_graphe_voisins.h"
 
 typedef enum a_mettre_dans_voisins_ou_pas
 {
@@ -11,18 +11,18 @@ typedef enum a_mettre_dans_voisins_ou_pas
 
 }a_mettre_dans_voisins_ou_pas;
 
-struct auteur_graphe_struct;
+// struct auteur_graphe_struct;
 
 
 
 //graphe= tableau des ptr vers les auteur_struct avec pour chacun, leur tableau de ptr vers leurs voisins
-auteur_struct** creation_graphe(void)
+auteur_struct** creati5on_graphe(void)
 {
 
     FILE * DBxml = fopen("DATA/SerializedStruc.data","r");
     FILE * DBinverse = fopen("DATA/SerializedStrucInverse.data","r");
 
-    unwrap_Graph_struct unwrap_Graph=gen_unwrap_Graph(DBxml, DBinverse);
+    unwrap_Graph_struct unwrap_Graph  =    gen_unwrap_Graph(DBxml, DBinverse); //< erreur peut etre la ?
     
     fclose(DBxml);
     fclose(DBinverse);
@@ -101,7 +101,7 @@ auteur_struct** creation_graphe(void)
                 if(flag== a_mettre)
                 {
                     nb_actuel_voisins++;
-                    ptr_ak->tab_voisins=realleoc(ptr_ak->tab_voisins, sizeof(auteur_struct*)*nb_actuel_voisins);
+                    ptr_ak->tab_voisins=realloc(ptr_ak->tab_voisins, sizeof(auteur_struct*)*nb_actuel_voisins);
                     ptr_ak->tab_voisins[nb_actuel_voisins-1]= ptr_am;
                    
                 }

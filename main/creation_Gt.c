@@ -1,9 +1,8 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "parsing.h"
 #include "list.h"
-#include <stdlib.h>
-
-#include <string.h>
 #include "creation_Gt.h"
 
 comparaison_auteur voir_si_il_y_a_auteur_dans_sGc(char *auteur, ll_list *sGc)
@@ -25,9 +24,6 @@ comparaison_auteur voir_si_il_y_a_auteur_dans_sGc(char *auteur, ll_list *sGc)
     }
     return trouver_ou_pas;
 }
-
-
-
 
 comparaison_auteur voir_si_il_y_a_un_auteur_de_L_dans_sGc(ll_list *L, ll_list *sGc)
 {
