@@ -24,7 +24,7 @@ if (!p)\
 }\
 
 // #define MAXarraySIZE 21143793
-// Paire_HauteurHeurvre HauteurHeuvre[MAXarraySIZE];
+// Paire_auteur_oeuvre HauteurHeuvre[MAXarraySIZE];
 
 // void shift(int decalage){
 // for(int p = 0; p < decalage ; p++)

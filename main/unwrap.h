@@ -9,11 +9,11 @@
  * @brief couple nom_auteur <=> Heuvre
  * utiliser pour qsort donc interne
  */
-typedef struct Paire_HauteurHeurvre
+typedef struct Paire_auteur_oeuvre
 {
     char * nom_auteur;
     fiche_minimale * oeuvre;
-}Paire_HauteurHeurvre;
+}Paire_auteur_oeuvre;
 
 
 struct Article_struct;
@@ -125,36 +125,36 @@ int comphauteur(const void * a, const void * b);
 /**
  * @brief Affiche nom_auteur <=> Heuvre
  * 
- * @param [in] OwI  Paire_HauteurHeurvre
+ * @param [in] OwI  Paire_auteur_oeuvre
  * @param [in] sizeHauteurHeuvre nombre d'élément 
  */
-void printPaire_HauteurHeurvre(Paire_HauteurHeurvre * OwI,int sizeHauteurHeuvre );
+void printPaire_HauteurHeurvre(Paire_auteur_oeuvre * OwI,int sizeHauteurHeuvre );
 
 
 /**
  * @brief génère un tableaux d' HauteurToHeurvre 
  * 
  * déplie tableaux_fiche pour généré unt tableaux
- * d'élément Paire_HauteurHeurvre
+ * d'élément Paire_auteur_oeuvre
  * qui est une association auteur <=> oeuvre unique
  * 
  * @param [in]  input toute les fiche des oeuvre qui comporte les liste auteur  
  * @param [out] arrayout liste qui associe un auteur a une oeuvre
  * @return nombre d'élément du tableaux
  */
-int SwapStruct(tableaux_fiche input, Paire_HauteurHeurvre * arrayout );
+int SwapStruct(tableaux_fiche input, Paire_auteur_oeuvre * arrayout );
 
 /**
- * @brief génère tab_auteur_struct a partire de Paire_HauteurHeurvre
+ * @brief génère tab_auteur_struct a partire de Paire_auteur_oeuvre
  * 
- * fonction pricipal elle parcoure Paire_HauteurHeurvre est quand le meme
+ * fonction pricipal elle parcoure Paire_auteur_oeuvre est quand le meme
  * auteur ce suit ajoute tout les oeuvre dans un nouveaux tableaux
  * 
  * @param [in] liste                liste trier par auteur des paire auteur titre
  * @param [in] sizeHauteurHeuvre    taille de cette liste
  * @return tab_auteur_struct* addressse de la liste final générée auteur to Multiple titre  
  */
-tab_auteur_struct* gen_List_Auteur(const Paire_HauteurHeurvre * liste,int sizeHauteurHeuvre);
+tab_auteur_struct* gen_List_Auteur(const Paire_auteur_oeuvre * liste,int sizeHauteurHeuvre);
 
 /**
  * @brief Affiche la liste final d'auteur To multiple Titre

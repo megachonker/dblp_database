@@ -44,13 +44,13 @@ int comphauteur(const void * a, const void * b){
 int 
 comparticle(const void * a, const void * b){
     //moche
-    Paire_HauteurHeurvre * aa = (Paire_HauteurHeurvre*)a;
-    Paire_HauteurHeurvre * bb = (Paire_HauteurHeurvre*)b;
+    Paire_auteur_oeuvre * aa = (Paire_auteur_oeuvre*)a;
+    Paire_auteur_oeuvre * bb = (Paire_auteur_oeuvre*)b;
     int result = strcmp(aa->nom_auteur,bb->nom_auteur);
     return result;
 }
 
-int SwapStruct(tableaux_fiche input, Paire_HauteurHeurvre * arrayout ){
+int SwapStruct(tableaux_fiche input, Paire_auteur_oeuvre * arrayout ){
     int indice = 0;
     for (int i = 0; i < input.taille; i++)
     {
@@ -81,9 +81,9 @@ int SwapPaire_HauteurHeurvreToPaire_HauteurHeurvre(const tab_auteur_struct * inp
     return indice;
 }
 /**
- * @brief Trie Paire_HauteurHeurvre Par noms d'auteur
+ * @brief Trie Paire_auteur_oeuvre Par noms d'auteur
  * 
- * trie le tableaux Paire_HauteurHeurvre par auteur
+ * trie le tableaux Paire_auteur_oeuvre par auteur
  * de facon a avoir toute les oeuvre du meme auteur facilement
  * 
  * auteurA => hoeuvreB\n
@@ -98,8 +98,8 @@ int SwapPaire_HauteurHeurvreToPaire_HauteurHeurvre(const tab_auteur_struct * inp
  * @param [in,out]  HauteurHeuvre     Structure a trier
  * @param [in]      sizeHauteurHeuvre taille de la tructure
  */
-void sort_tableaux_fiche(Paire_HauteurHeurvre * HauteurHeuvre,int sizeHauteurHeuvre ){
-    qsort(HauteurHeuvre,sizeHauteurHeuvre ,sizeof(Paire_HauteurHeurvre),comphauteur);
+void sort_tableaux_fiche(Paire_auteur_oeuvre * HauteurHeuvre,int sizeHauteurHeuvre ){
+    qsort(HauteurHeuvre,sizeHauteurHeuvre ,sizeof(Paire_auteur_oeuvre),comphauteur);
 }
 /**
  * @brief 
@@ -129,7 +129,7 @@ void sort_tableaux_Article(Paire_ArticleHauteur * ArticleuHauteur,int sizeArticl
  * @param [in,out] list  
  * @param [in] HtH       
  */
-void add_titre_to_auteur(auteur_struct * list,const Paire_HauteurHeurvre HtH){//ces plus logic comme ça mais pluslent ?
+void add_titre_to_auteur(auteur_struct * list,const Paire_auteur_oeuvre HtH){//ces plus logic comme ça mais pluslent ?
     fiche_minimale ** temparray = reallocarray(list->tab_ptr_fiche_min,list->size+1,8); //8 taille d'un pointeur 
     exitIfNull(temparray,"add_titre_to_auteur realockarrayfail\n");
     list->tab_ptr_fiche_min = temparray;
@@ -146,7 +146,7 @@ void printPaire_HeurvreHauteur(Paire_ArticleHauteur * OwI,int sizeHauteurHeuvre 
     }
 }
 
-tab_auteur_struct* gen_List_Auteur(const Paire_HauteurHeurvre * liste,int sizeHauteurHeuvre){
+tab_auteur_struct* gen_List_Auteur(const Paire_auteur_oeuvre * liste,int sizeHauteurHeuvre){
     tab_auteur_struct * listes_Auteur_arrTitre = malloc(sizeof(tab_auteur_struct));
     exitIfNull(listes_Auteur_arrTitre,"Erreur création liste de tab_auteur_struct\n")
     listes_Auteur_arrTitre->taille=-1;//moche !
@@ -324,7 +324,7 @@ void printList_Article(tab_Article_struct * OwO){
     
 }
 
-void printPaire_HauteurHeurvre(Paire_HauteurHeurvre * OwI,int sizeHauteurHeuvre ){
+void printPaire_HauteurHeurvre(Paire_auteur_oeuvre * OwI,int sizeHauteurHeuvre ){
     for (int i = 0; i < sizeHauteurHeuvre ; i++)
     {
         printf("%s => %s\n",OwI[i].nom_auteur,OwI[i].oeuvre->titre);
@@ -556,7 +556,7 @@ tab_auteur_struct * unwrap_Deserilise_Index(const tableaux_fiche * tableaux_fich
 
 //PABIEN
 #define MAXarraySIZE 21143793
-Paire_HauteurHeurvre HauteurHeuvre[MAXarraySIZE];
+Paire_auteur_oeuvre HauteurHeuvre[MAXarraySIZE];
 
 tab_auteur_struct * unwrap_ListAuteur_from_xml(FILE * dbinput){
     tableaux_fiche mesfiche =  parse(dbinput);
@@ -590,11 +590,11 @@ tab_Article_struct * gen_ListaArticle(const tab_auteur_struct * Malistauteur){
     {
         nbstructure+=Malistauteur->tab_auteur[i].size;/// lerreur etait la
     }
-    Paire_ArticleHauteur * Paire_HauteurHeurvre = calloc(nbstructure,sizeof(Article_struct));
-    exitIfNull(Paire_HauteurHeurvre,"imposible de crée Paire_HauteurHeurvre");
-    int sizeHauteurHeuvre = SwapPaire_HauteurHeurvreToPaire_HauteurHeurvre(Malistauteur,Paire_HauteurHeurvre);
-    sort_tableaux_Article(Paire_HauteurHeurvre,sizeHauteurHeuvre);
-    tab_Article_struct * malistedauteur = gen_List_Article(Paire_HauteurHeurvre,sizeHauteurHeuvre);
+    Paire_ArticleHauteur * Paire_auteur_oeuvre = calloc(nbstructure,sizeof(Article_struct));
+    exitIfNull(Paire_auteur_oeuvre,"imposible de crée Paire_auteur_oeuvre");
+    int sizeHauteurHeuvre = SwapPaire_HauteurHeurvreToPaire_HauteurHeurvre(Malistauteur,Paire_auteur_oeuvre);
+    sort_tableaux_Article(Paire_auteur_oeuvre,sizeHauteurHeuvre);
+    tab_Article_struct * malistedauteur = gen_List_Article(Paire_auteur_oeuvre,sizeHauteurHeuvre);
     return malistedauteur;
 }
 
