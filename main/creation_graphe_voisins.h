@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <creation_graphe_voisins.h>
 
-auteur_struct** creation_graphe(int* size_graphe);
+auteur_struct** creation_graphe(void);
 
 void free_graphe(auteur_struct** graphe, int* size_graphe);
 
