@@ -3,7 +3,7 @@ CFLAGS ?= -Wall -Wextra -g
 LDLIBS ?= -lm -pthread -ftest-coverage -fprofile-arcs
 
 
-
+//OK
 go:	tests abench.sh
 	./tests
 
