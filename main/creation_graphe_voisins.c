@@ -32,7 +32,7 @@ auteur_struct** creati5on_graphe(void)
     *size_graphe_ptr= unwrap_Graph.tab_auteur_struct->taille;
 
 
-    //creation du graphe sans les voisins (inutile si il existe deja)
+    //creation du graphe sans les voisins
     auteur_struct** graphe=malloc(sizeof(auteur_struct*)**size_graphe_ptr);
     if(graphe== NULL)
     {
@@ -51,7 +51,7 @@ auteur_struct** creati5on_graphe(void)
     //ajout du tableau des voisins pour chaque auteur
 
     //pour tous les auteurs ak du graphe
-    for(int k=0; k<*size_graphe_ptr-1; k++)
+    for(int k=0; k<*size_graphe_ptr; k++)
     {
         auteur_struct *ptr_ak= graphe[k];
         
@@ -68,7 +68,7 @@ auteur_struct** creati5on_graphe(void)
         for(int l=0; l< ptr_ak->size; l++)
         {
             
-            int nbr_a_dans_Al= ptr_ak->tab_ptr_Article[l]->nombre_auteur; //cette ligne sera bonne quand on aura fait le bon merge
+            int nbr_a_dans_Al= ptr_ak->tab_ptr_Article[l]->nombre_auteur; 
 
             //pour tous les auteurs am, de l'article courant écrit par l'auteur courant ak
             for(int m=0; m<nbr_a_dans_Al; m++)
@@ -79,7 +79,7 @@ auteur_struct** creati5on_graphe(void)
                 //initialisation du flag pour savoir si il faut mettre l'auteur am dans la liste des voisins de agk
                 a_mettre_dans_voisins_ou_pas flag= a_mettre;
                 
-                auteur_struct *ptr_am= ptr_ak->tab_ptr_Article[l]->tab_ptr_auteur[m]; //cette ligne sera bonne quand on aura fait le bon merge
+                auteur_struct *ptr_am= ptr_ak->tab_ptr_Article[l]->tab_ptr_auteur[m]; 
 
                 if(ptr_am== ptr_ak) //on pourra remplacer les comparaisons de pointeur par des comparaison d'id pour opti
                     flag= a_ne_pas_mettre;
@@ -114,7 +114,7 @@ auteur_struct** creati5on_graphe(void)
         }
         
         ptr_ak->nb_voisins= nb_actuel_voisins;
-        ptr_ak->etiquette=-1;
+        ptr_ak->etiquette=-1; //on set up toutes les etiquettes a -1 en prevision pour Dijkstra
 
 
 
