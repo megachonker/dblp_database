@@ -149,32 +149,33 @@ void printPaire_HeurvreHauteur(Paire_Article_auteur * OwI,int sizeHauteurHeuvre 
 tab_auteur_struct* gen_List_Auteur(const Paire_auteur_oeuvre * liste,int sizeHauteurHeuvre){
     tab_auteur_struct * listes_Auteur_arrTitre = malloc(sizeof(tab_auteur_struct));
     exitIfNull(listes_Auteur_arrTitre,"Erreur création liste de tab_auteur_struct\n")
-    listes_Auteur_arrTitre->taille=-1;//moche !
+    int * nb_auteur = &listes_Auteur_arrTitre->taille; 
+
+    (*nb_auteur)=-1;
+
     int indiceSommet = 0;
     listes_Auteur_arrTitre->tab_auteur = NULL;
 
     //on parcoure liste
     for (int j = 0; j < sizeHauteurHeuvre; j=j)//on incrémenta pas la
     {
-        listes_Auteur_arrTitre->taille++;
-        auteur_struct * tb_Somet_h = reallocarray(listes_Auteur_arrTitre->tab_auteur,listes_Auteur_arrTitre->taille+1,sizeof(auteur_struct));//fasink alocate error
+        (*nb_auteur)++;
+        auteur_struct * tb_Somet_h = reallocarray(listes_Auteur_arrTitre->tab_auteur,(*nb_auteur)+1,sizeof(auteur_struct));//fasink alocate error
         exitIfNull(tb_Somet_h,"Erreur création de auteur_struct\n")
         listes_Auteur_arrTitre->tab_auteur = tb_Somet_h;
 
-        //on add le premier hauteure
-        listes_Auteur_arrTitre->tab_auteur[listes_Auteur_arrTitre->taille].size=0;
-        listes_Auteur_arrTitre->tab_auteur[listes_Auteur_arrTitre->taille].nom_auteur = NULL;
-        listes_Auteur_arrTitre->tab_auteur[listes_Auteur_arrTitre->taille].nom_auteur=liste[j].nom_auteur;
+        //initialisation de l'auteur crée
+        listes_Auteur_arrTitre->tab_auteur[(*nb_auteur)].size=0;
+        listes_Auteur_arrTitre->tab_auteur[(*nb_auteur)].nbelementmagi = 0;
+        listes_Auteur_arrTitre->tab_auteur[(*nb_auteur)].nom_auteur = NULL;
+        listes_Auteur_arrTitre->tab_auteur[(*nb_auteur)].tab_ptr_Article = NULL;
+        listes_Auteur_arrTitre->tab_auteur[(*nb_auteur)].nom_auteur=liste[j].nom_auteur;
 
-        //nombre délément
-        listes_Auteur_arrTitre->tab_auteur[listes_Auteur_arrTitre->taille].nbelementmagi = 0;
-        listes_Auteur_arrTitre->tab_auteur[listes_Auteur_arrTitre->taille].tab_ptr_Article = NULL;
-        // indiceSommet++;
-        int i = 1;
+        int i = 0;
         //tant le prochain est le meme auteur et que on attein pas la fin de la liste
         while (i+j < sizeHauteurHeuvre && strcmp(liste[j].nom_auteur,liste[j+i].nom_auteur) == 0)//ordre important
         {
-            add_titre_to_auteur(&listes_Auteur_arrTitre->tab_auteur[listes_Auteur_arrTitre->taille],liste[i+j]);
+            add_titre_to_auteur(&listes_Auteur_arrTitre->tab_auteur[(*nb_auteur)],liste[i+j]);
             i++;// truc de simon ?
         }
 
@@ -600,7 +601,7 @@ tab_Article_struct * gen_ListaArticle(const tab_auteur_struct * Malistauteur){
 
 tab_Article_struct * unwrap_ListArticle_from_xml(FILE * dbinput){
     tab_auteur_struct * malistarticle = unwrap_ListAuteur_from_xml(dbinput);
-    // printList_Auteur(malistarticle);
+    printList_Auteur(malistarticle);
     return  gen_ListaArticle(malistarticle);
 }
 
