@@ -3,6 +3,7 @@
 #include <list.h>
 #include <stdlib.h>
 #include <creation_graphe_voisins.h>
+#include <graphe_test_Katie.h>
 
 typedef enum a_mettre_dans_voisins_ou_pas
 {
@@ -18,7 +19,7 @@ struct auteur_graphe_struct;
 //graphe= tableau des ptr vers les auteur_struct avec pour chacun, leur tableau de ptr vers leurs voisins
 auteur_struct** creation_graphe(void)
 {
-
+/*
     FILE * DBxml = fopen("DATA/SerializedStruc.data","r");
     FILE * DBinverse = fopen("DATA/SerializedStrucInverse.data","r");
 
@@ -30,7 +31,12 @@ auteur_struct** creation_graphe(void)
     
     int *size_graphe_ptr= malloc(sizeof(int));
     *size_graphe_ptr= unwrap_Graph.tab_auteur_struct->taille;
+*/
 
+
+    int *size_graphe_ptr=NULL;
+    *size_graphe_ptr=10;
+    
 
     //creation du graphe sans les voisins
     auteur_struct** graphe=malloc(sizeof(auteur_struct*)**size_graphe_ptr);
@@ -42,10 +48,9 @@ auteur_struct** creation_graphe(void)
     
     for(int i=0; i<*size_graphe_ptr; i++)
     {
-        auteur_struct ai= unwrap_Graph.tab_auteur_struct->tab_auteur[i];
+        auteur_struct ai= graphe_de_test_Katie[i]; /*unwrap_Graph.tab_auteur_struct->tab_auteur[i];*/
         graphe[i]= &ai;
     }
-
 
 
     //ajout du tableau des voisins pour chaque auteur
