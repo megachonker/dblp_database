@@ -2,8 +2,9 @@ CCA ?= cc -O0
 CFLAGS ?= -Wall -Wextra -g
 LDLIBS ?= -lm -pthread -ftest-coverage -fprofile-arcs
 
+graph:	creation_graphe_voisins creation_Gt test_creation_Gt
+	./test_creation_Gt
 
-//OK
 go:	tests abench.sh
 	./tests
 
@@ -76,7 +77,7 @@ gen_cache_data: DATA/dblp.xml DATA/dblp1sur8.xml DATA/SerializedStrucInverse.dat
 r: clean abench.sh
 
 clean:
-	rm -f  *.o *.so *.gcno *.gcda *.gcov coverage.info
+	rm -f  *.o *.so *.gcno *.gcda *.gch *.gcov coverage.info
 	rm -fr tests bench main GCOVtests LcovRapport html latex
 # Update
 cleanall: clean 

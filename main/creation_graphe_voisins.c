@@ -1,9 +1,9 @@
 #include <stdio.h>
-#include <unwrap.h>
-#include <list.h>
+#include "unwrap.h"
+#include "list.h"
 #include <stdlib.h>
-#include <creation_graphe_voisins.h>
-#include <graphe_test_Katie.h>
+#include "creation_graphe_voisins.h"
+#include "graphe_test_Katie.h"
 
 typedef enum a_mettre_dans_voisins_ou_pas
 {
@@ -12,7 +12,7 @@ typedef enum a_mettre_dans_voisins_ou_pas
 
 }a_mettre_dans_voisins_ou_pas;
 
-struct auteur_graphe_struct;
+// struct auteur_graphe_struct;
 
 
 
@@ -23,7 +23,7 @@ auteur_struct** creation_graphe(void)
     FILE * DBxml = fopen("DATA/SerializedStruc.data","r");
     FILE * DBinverse = fopen("DATA/SerializedStrucInverse.data","r");
 
-    unwrap_Graph_struct unwrap_Graph=gen_unwrap_Graph(DBxml, DBinverse);
+    unwrap_Graph_struct unwrap_Graph  =    gen_unwrap_Graph(DBxml, DBinverse); //< erreur peut etre la ?
     
     fclose(DBxml);
     fclose(DBinverse);
@@ -33,7 +33,7 @@ auteur_struct** creation_graphe(void)
     *size_graphe_ptr= unwrap_Graph.tab_auteur_struct->taille;
 */
 
-
+    auteur_struct* graphe_test= creation_graphe_test();
     int *size_graphe_ptr=NULL;
     *size_graphe_ptr=10;
     
@@ -48,7 +48,7 @@ auteur_struct** creation_graphe(void)
     
     for(int i=0; i<*size_graphe_ptr; i++)
     {
-        auteur_struct ai= graphe_de_test_Katie[i]; /*unwrap_Graph.tab_auteur_struct->tab_auteur[i];*/
+        auteur_struct ai= graphe_test[i]; /*unwrap_Graph.tab_auteur_struct->tab_auteur[i];*/
         graphe[i]= &ai;
     }
 
@@ -106,7 +106,7 @@ auteur_struct** creation_graphe(void)
                 if(flag== a_mettre)
                 {
                     nb_actuel_voisins++;
-                    ptr_ak->tab_voisins=realleoc(ptr_ak->tab_voisins, sizeof(auteur_struct*)*nb_actuel_voisins);
+                    ptr_ak->tab_voisins=realloc(ptr_ak->tab_voisins, sizeof(auteur_struct*)*nb_actuel_voisins);
                     ptr_ak->tab_voisins[nb_actuel_voisins-1]= ptr_am;
                    
                 }
@@ -141,3 +141,33 @@ void free_graphe(auteur_struct** graphe, int* size_graphe_ptr)
     }
 }
 
+
+//test: affichage des voisins des auteurs du graphe_test
+int main(void)
+{
+    
+    auteur_struct **graphe=creation_graphe();
+    for(int i=0; i< 10; i++)
+    {
+    
+        int nb_voisin= graphe[i]->nb_voisins;
+        char* nom_auteur= graphe[i]->nom_auteur;
+        printf("voisins de %s :\n", nom_auteur);
+        
+        for(int k=0; k <nb_voisin; k++)
+        {
+            char *nom_voisin= graphe[i]->tab_voisins[k]->nom_auteur;
+            printf("%s\n", nom_voisin);
+        }
+    }
+
+    int* size_graphe_ptr=NULL;
+    *size_graphe_ptr=10;
+
+    free_graphe(graphe, size_graphe_ptr);
+
+
+    
+    
+    return 0;
+}
