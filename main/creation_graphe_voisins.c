@@ -12,14 +12,10 @@ typedef enum a_mettre_dans_voisins_ou_pas
 
 }a_mettre_dans_voisins_ou_pas;
 
-// struct auteur_graphe_struct;
 
 
-
-//graphe= tableau des ptr vers les auteur_struct avec pour chacun, leur tableau de ptr vers leurs voisins
-auteur_struct** creation_graphe(void)
+unwrap_Graph_struct do_unwrap_graphe(int* size_graphe_ptr)
 {
-/*
     FILE * DBxml = fopen("DATA/SerializedStruc.data","r");
     FILE * DBinverse = fopen("DATA/SerializedStrucInverse.data","r");
 
@@ -31,7 +27,18 @@ auteur_struct** creation_graphe(void)
     
     int *size_graphe_ptr= malloc(sizeof(int));
     *size_graphe_ptr= unwrap_Graph.tab_auteur_struct->taille;
-*/
+
+    return unwrap_Graph;
+}
+
+
+
+//graphe= tableau des ptr vers les auteur_struct avec pour chacun, leur tableau de ptr vers leurs voisins
+auteur_struct** creation_graphe(void)
+{
+    /*int* size_graphe_ptr=NULL;
+    unwrap_Graph_struct unwrap_graphe= do_unwrap_graphe(size_graphe_ptr);*/
+
 
     auteur_struct* graphe_test= creation_graphe_test();
     int *size_graphe_ptr=NULL;
@@ -139,6 +146,8 @@ void free_graphe(auteur_struct** graphe, int* size_graphe_ptr)
         free(ptr_ak->tab_voisins);
         free(ptr_ak);
     }
+
+    free(size_graphe_ptr);
 }
 
 
