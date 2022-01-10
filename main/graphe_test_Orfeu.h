@@ -196,10 +196,4 @@ void free_graphe_test(auteur_struct** graphe_test, Article_struct** tab_Articles
 
 }
 
-
-
-
-
-
-
 #endif
