@@ -67,8 +67,8 @@ auteur_struct** creation_graphe(void)
     {
         auteur_struct *ptr_ak= graphe[k];
         
-        ptr_ak->tab_voisins= malloc(sizeof(auteur_struct*));
-        if(ptr_ak->tab_voisins== NULL)
+        ptr_ak->tab_ptr_voisins= malloc(sizeof(auteur_struct*));
+        if(ptr_ak->tab_ptr_voisins== NULL)
         {
             printf("%s%i\n", "erreur de malloc du tableau des voisins de ags",k);
             return NULL;
@@ -102,7 +102,7 @@ auteur_struct** creation_graphe(void)
                 {
 
 
-                    auteur_struct *ptr_an= ptr_ak->tab_voisins[n];
+                    auteur_struct *ptr_an= ptr_ak->tab_ptr_voisins[n];
 
                     if(ptr_am== ptr_an)
                         flag= a_ne_pas_mettre;
@@ -113,8 +113,8 @@ auteur_struct** creation_graphe(void)
                 if(flag== a_mettre)
                 {
                     nb_actuel_voisins++;
-                    ptr_ak->tab_voisins=realloc(ptr_ak->tab_voisins, sizeof(auteur_struct*)*nb_actuel_voisins);
-                    ptr_ak->tab_voisins[nb_actuel_voisins-1]= ptr_am;
+                    ptr_ak->tab_ptr_voisins=realloc(ptr_ak->tab_ptr_voisins, sizeof(auteur_struct*)*nb_actuel_voisins);
+                    ptr_ak->tab_ptr_voisins[nb_actuel_voisins-1]= ptr_am;
                    
                 }
 
@@ -143,7 +143,7 @@ void free_graphe(auteur_struct** graphe, int* size_graphe_ptr)
         auteur_struct *ptr_ak= graphe[k];
         
         
-        free(ptr_ak->tab_voisins);
+        free(ptr_ak->tab_ptr_voisins);
         free(ptr_ak);
     }
 
@@ -165,7 +165,7 @@ int main(void)
         
         for(int k=0; k <nb_voisin; k++)
         {
-            char *nom_voisin= graphe[i]->tab_voisins[k]->nom_auteur;
+            char *nom_voisin= graphe[i]->tab_ptr_voisins[k]->nom_auteur;
             printf("%s\n", nom_voisin);
         }
     }
