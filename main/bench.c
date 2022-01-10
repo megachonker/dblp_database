@@ -101,6 +101,18 @@ void unwrwap_deserialise(int print){
     parsing_free(azer);
     unwrap_List_Auteur_free(malistauteur);
 }
+void ggen_unwrap_Graph(){
+    FILE * DBxml = fopen(serializedb,"r");
+    FILE * DBinverse = fopen(serializedbunwrap,"r");
+    exitIfNull(DBxml,"INPUT PAS CHEMAIN")
+    exitIfNull(DBinverse,"INPUT PAS CHEMAIN")
+    gen_unwrap_Graph(DBxml,DBinverse);
+}
+void uunwrap_ListArticle_from_xml(){
+    // plusieuyr pour la taille ?
+    FILE * DBxml = fopen(originedb,"r");
+    unwrap_ListArticle_from_xml(DBxml);
+}
 
     // FILE * ouputDB = fopen(serializedbunwrap,"w");
     // exitIfNull(inputDB,"imposible d'ouvrire "serializedbunwrap)
@@ -209,6 +221,16 @@ int main(int argc, char const *argv[])
     {
         unwrwap_deserialise(1);
     }
+    else if (strcmp("gen_unwrap_Graph",compstr)==0)
+    {
+        ggen_unwrap_Graph();
+    }
+    else if (strcmp("unwrap_ListArticle_from_xml",compstr)==0)
+    {
+        uunwrap_ListArticle_from_xml();
+    }
+    
+    
     else{
         fprintf(stderr,"PAS BON TEST!\n");
     }

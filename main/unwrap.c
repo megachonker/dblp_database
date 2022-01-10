@@ -199,16 +199,22 @@ tab_Article_struct* gen_List_Article(Paire_Article_auteur * liste,int sizeArticl
     int j = 0;
     //on parcoure liste
     while (j < sizeArticleHauteur)
-    {        
+    {   
         Article_struct * tb_Somet_h = reallocarray(ListDesArticle->tab_Article,(*nbarticle)+1,sizeof(Article_struct));
         exitIfNull(tb_Somet_h,"Erreur création de auteur_struct\n")
         ListDesArticle->tab_Article = tb_Somet_h;
+
+        
 
         //on add le premier nom_Article
         ListDesArticle->tab_Article[(*nbarticle)].nombre_auteur=0;
         ListDesArticle->tab_Article[(*nbarticle)].nom_Article=liste[j].article;
         ListDesArticle->tab_Article[(*nbarticle)].tab_ptr_auteur = NULL;
-        printf("%s:\n",ListDesArticle->tab_Article[(*nbarticle)].nom_Article);
+        for (int i = 0; i < *nbarticle+1; i++)
+        {
+            printf("%d %p:\n",i,&ListDesArticle->tab_Article[i]);
+        }
+        
 
         int i = 0;
         //tant le prochain est le meme auteur et que on attein pas la fin de la liste
@@ -217,12 +223,12 @@ tab_Article_struct* gen_List_Article(Paire_Article_auteur * liste,int sizeArticl
             Article_struct * dernierarticle = &ListDesArticle->tab_Article[(*nbarticle)];
             int * last_auteur  = &dernierarticle->nombre_auteur;
 
-            // printf("dernierarticle:%s %d\n",dernierarticle->nom_Article,*last_auteur);
+            // printf("dernierarticle:%p %p\n",dernierarticle,&ListDesArticle->tab_Article[(*nbarticle)]);
 
             // auteur_struct ** temparray = reallocarray(listcorrespondancelocal->tab_ptr_auteur,*nombre_auteur+1,8); //8 taille d'un pointeur 
 
             //création d'auteur struct
-            auteur_struct * temparray = reallocarray(dernierarticle->tab_ptr_auteur,*last_auteur+1,8); //8 taille d'un pointeur 
+            auteur_struct * temparray = reallocarray(dernierarticle->tab_ptr_auteur,(*last_auteur)+1,8); //8 taille d'un pointeur 
             exitIfNull(temparray,"gen_List_Article auteur_struct realockarrayfail\n");            
             dernierarticle->tab_ptr_auteur = (auteur_struct**)temparray;
             dernierarticle->tab_ptr_auteur[*last_auteur] = liste[i+j].pointeur_Auteur;// < nbelementmagi ?
@@ -252,7 +258,11 @@ tab_Article_struct* gen_List_Article(Paire_Article_auteur * liste,int sizeArticl
 
                 //on boucle indicemagiqueindicemagiqueindicemagiqueindiceindicemagiquemagique
                 dernierarticle->tab_ptr_auteur[*last_auteur]->tab_ptr_Article[*localnbelementmaj] = dernierarticle;
-                            printf("article:\t\t%s\n",dernierarticle->tab_ptr_auteur[*last_auteur]->tab_ptr_Article[*localnbelementmaj]->nom_Article);
+                for (int y = 0; y < *localnbelementmaj+1; y++)
+                {
+                    printf("article:\t\t%p\n",dernierarticle->tab_ptr_auteur[*last_auteur]->tab_ptr_Article[y]);
+                }
+                
 
                 (*localnbelementmaj)++;
             }

@@ -86,26 +86,25 @@ int main()
 #define customxml    "DATA/custom.xml"
 
 
-    // FILE * DBxml = fopen(serializedb,"r");
-    // FILE * DBinverse = fopen(serializedbunwrap,"r");
+    FILE * DBxml = fopen(serializedb,"r");
+    FILE * DBinverse = fopen(serializedbunwrap,"r");
 
 
-    // FILE * DBxml = fopen(originedb,"r");
+    // FILE * DBxml = fopen(smallserializedb,"r");
     // FILE * DBinverse = fopen(smallserializedbunwrap,"r");
 
 
-    // exitIfNull(DBxml,"INPUT PAS CHEMAIN")
-    // exitIfNull(DBinverse,"INPUT PAS CHEMAIN")
+    exitIfNull(DBxml,"INPUT PAS CHEMAIN")
+    exitIfNull(DBinverse,"INPUT PAS CHEMAIN")
 
-    // unwrap_Graph_struct mongraph =  gen_unwrap_Graph(DBxml,DBinverse);
-    // tab_Article_struct * matable = mongraph.tab_Article_struct;
+    unwrap_Graph_struct mongraph =  gen_unwrap_Graph(DBxml,DBinverse);
+    tab_Article_struct * matable = mongraph.tab_Article_struct;
 
 
-    FILE * DBxml = fopen(customxml,"r");
+    // FILE * DBxml = fopen(originedb,"r");
 
     tab_Article_struct * matable = unwrap_ListArticle_from_xml(DBxml);
-
-
+//Preface. 7280
     for (int i = 0; i < matable->nombre_Article ; i++)
     {
             printf("%s ==> %d\n",matable->tab_Article[i].nom_Article, matable->tab_Article[i].nombre_auteur);
@@ -114,16 +113,10 @@ int main()
                 printf("\t%s ==> %d\n",matable->tab_Article[i].tab_ptr_auteur[u]->nom_auteur,matable->tab_Article[i].tab_ptr_auteur[u]->nbelementmagi);
                 for (int pp = 0; pp < matable->tab_Article[i].tab_ptr_auteur[u]->nbelementmagi; pp++)
                 {
-                    if (matable->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nombre_auteur > 0 && matable->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->tab_ptr_auteur[0])
+                    printf("\t\t%s ==> %d\n",matable->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nom_Article,matable->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nombre_auteur); 
+                    for (int UI = 0; UI < matable->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nombre_auteur; UI++)
                     {
-                        printf("\t\t%s ==> %d\n",matable->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nom_Article,matable->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nombre_auteur); 
-                        for (int UI = 0; UI < matable->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nombre_auteur; UI++)
-                        {
-                            printf("\t\t\t%s\n",matable->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->tab_ptr_auteur[UI]->nom_auteur); 
-                        }
-                                       
-                    }else{
-                        printf("NOPE\n");
+                        printf("\t\t\t%s\n",matable->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->tab_ptr_auteur[UI]->nom_auteur); 
                     }
                 }           
             }

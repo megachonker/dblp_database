@@ -5,8 +5,12 @@ LDLIBS ?= -lm -pthread -ftest-coverage -fprofile-arcs
 graph:	creation_graphe_voisins creation_Gt test_creation_Gt
 	./test_creation_Gt
 
-go:	tests 
-	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all ./tests
+
+go:	tests
+	./tests
+
+val:	tests 
+	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./tests
 
 abench.sh: bench gen_cache_data
 
@@ -40,7 +44,7 @@ doc:
 	firefox html/index.html
 
 callgrind:	bench
-	valgrind --dump-instr=yes --collect-jumps=yes --tool=callgrind --callgrind-out-file=callgrind_trace ./bench unwrwap_gen_cache
+	valgrind --dump-instr=yes --collect-jumps=yes --tool=callgrind --callgrind-out-file=callgrind_trace ./bench gen_unwrap_Graph
 	kcachegrind callgrind_trace
 	rm callgrind_trace
 # lunch kprok pour profiler le temps d'execution
@@ -54,9 +58,9 @@ DATA/dblp.xml:
 	gzip dblp.xml.gz -d
 	mv dblp.xml DATA/dblp.xml
 	rm -f dblp.xml.gz
-
+#10966843
 DATA/dblp1sur8.xml: DATA/dblp.xml
-	head DATA/dblp.xml -n 10966843 > DATA/dblp1sur8.xml
+	head DATA/dblp.xml -n 10010 > DATA/dblp1sur8.xml
 
 #regénère tout les fichier lier a bench quand un .o change Ces regretabkle donc on enleve bench par .O
 DATA/SerializedStruc.data:	DATA/dblp.xml parsing.o
@@ -77,7 +81,7 @@ gen_cache_data: DATA/dblp.xml DATA/dblp1sur8.xml DATA/SerializedStrucInverse.dat
 r: clean abench.sh
 
 clean:
-	rm -f  *.o *.so *.gcno *.gcda *.gch *.gcov coverage.info
+	rm -f  *.o *.so *.gcno *.gcda *.gch *.gcov coverage.info vgcore.*
 	rm -fr tests bench main GCOVtests LcovRapport html latex
 
 cleanall: clean Update
