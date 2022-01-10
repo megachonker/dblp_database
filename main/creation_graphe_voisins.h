@@ -6,10 +6,10 @@
 #include "list.h"
 #include <stdlib.h>
 
-unwrap_Graph_struct do_unwrap_graphe(int* size_graphe_ptr);
+auteur_struct** faire_graphe_avec_unwrap_graphe(int* size_graphe_ptr);
 
-auteur_struct** creation_graphe(void);
+auteur_struct** creation_graphe_avec_voisins(auteur_struct** graphe, int* ptr_size_graphe);
 
-void free_graphe(auteur_struct** graphe, int* size_graphe);
+void free_graphe_avec_voisins(auteur_struct** free_graphe_avec_voisins, int* ptr_size_graphe);
 
 #endif

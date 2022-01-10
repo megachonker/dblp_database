@@ -8,10 +8,8 @@
 #include "creation_graphe_voisins.h"
 
 
-//Je crée des 10 auteurs ayant écrit des Articles
-//Je crée aussi les Articles ayant leur tableau d'auteur 
-
-auteur_struct* creation_graphe_test(void)
+//Je crée 10 auteurs ayant écrit des Articles, 9 Articles crées de toutes pieces de la même façon
+auteur_struct** creation_graphe_test(Article_struct** tab_Articles_test) //tab_Articles est le tableau de pointeur vers les Articles du graphe test
 {
     auteur_struct a0;
     auteur_struct a1;
@@ -154,51 +152,49 @@ auteur_struct* creation_graphe_test(void)
     A8.tab_ptr_auteur[0]= &a2;
 
     
-    auteur_struct *graphe_test=malloc(sizeof(auteur_struct*)*10);
-    graphe_test[0]=a0;
-    graphe_test[1]=a1;
-    graphe_test[2]=a2;
-    graphe_test[3]=a3;
-    graphe_test[4]=a4;
-    graphe_test[5]=a5;
-    graphe_test[6]=a6;
-    graphe_test[7]=a7;
-    graphe_test[8]=a8;
-    graphe_test[9]=a9;
+    tab_Articles_test= malloc(sizeof(Article_struct*)*9);
+    tab_Articles_test[0]= &A0;
+    tab_Articles_test[1]= &A1;
+    tab_Articles_test[2]= &A2;
+    tab_Articles_test[3]= &A3;
+    tab_Articles_test[4]= &A4;
+    tab_Articles_test[5]= &A5;
+    tab_Articles_test[6]= &A6;
+    tab_Articles_test[7]= &A7;
+    tab_Articles_test[8]= &A8;
+    
+    
+    auteur_struct** graphe_test= malloc(sizeof(auteur_struct*)*10);
+    graphe_test[0]=&a0;
+    graphe_test[1]=&a1;
+    graphe_test[2]=&a2;
+    graphe_test[3]=&a3;
+    graphe_test[4]=&a4;
+    graphe_test[5]=&a5;
+    graphe_test[6]=&a6;
+    graphe_test[7]=&a7;
+    graphe_test[8]=&a8;
+    graphe_test[9]=&a9;
 
     return graphe_test;
 }
 
 
-/*void free_tout(auteur_struct *graphe_test)
+void free_graphe_test(auteur_struct** graphe_test, Article_struct** tab_Articles_test)
 {
-    
-    free(a0.tab_ptr_Article);
-    free(a1.tab_ptr_Article);
-    free(a2.tab_ptr_Article);
-    free(a3.tab_ptr_Article);
-    free(a4.tab_ptr_Article);
-    free(a5.tab_ptr_Article);
-    free(a6.tab_ptr_Article);
-    free(a7.tab_ptr_Article);
-    free(a8.tab_ptr_Article);
-    free(a9.tab_ptr_Article);
+    for(int i=0; i<10; i++)
+    {
+        free(graphe_test[i]->tab_ptr_Article);
+    }
+    free(graphe_test);
 
-    
-    free(A0.tab_ptr_auteur);
-    free(A1.tab_ptr_auteur);
-    free(A2.tab_ptr_auteur);
-    free(A3.tab_ptr_auteur);
-    free(A4.tab_ptr_auteur);
-    free(A5.tab_ptr_auteur);
-    free(A6.tab_ptr_auteur);
-    free(A7.tab_ptr_auteur);
-    free(A8.tab_ptr_auteur);
+    for(int i=0; i<9; i++)
+    {
+       free(tab_Articles_test[i]->tab_ptr_auteur); 
+    }
+    free(tab_Articles_test);
 
-
-}*/
-
-
+}
 
 
 
