@@ -52,16 +52,17 @@ char * getanchor(char * recherche, char * ligne){
     strcat(critaire,recherche);
     if(strstr(ligne,critaire)){ //slow ?
         char * start = strchr(ligne,'>');
-        exitIfNull(start,"getanchor: pas de start")
         start++;
-        int diff = strcspn(start,"<");
-        char * out  = calloc(1,diff);
-        if (!out)
+        //vérifie quon a bien la bazlise fermeante
+        if (*start=='\n') //Peut etre omis
         {
-            fprintf(stderr,"pas de match");
+            fprintf(stderr,"que une balise fermantge dans la ligne\n");
             return NULL;
         }
-        memcpy(out,start,diff);
+        int diff = strcspn(start,"<");
+        start[diff] = '\0';
+        char * out = strdup(start);
+        exitIfNull(out,"getchar: stdrup imposible");
         return out;
     }
     return NULL;
