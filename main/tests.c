@@ -112,7 +112,7 @@ int main()
             for (int u = 0; u < matable->tab_Article[i].nombre_auteur; u++)
             {
                 printf("\t%s ==> %d\n",matable->tab_Article[i].tab_ptr_auteur[u]->nom_auteur,matable->tab_Article[i].tab_ptr_auteur[u]->nbelementmagi);
-                for (int pp = 1; pp < matable->tab_Article[i].tab_ptr_auteur[u]->nbelementmagi; pp++)
+                for (int pp = 0; pp < matable->tab_Article[i].tab_ptr_auteur[u]->nbelementmagi; pp++)
                 {
                     if (matable->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nombre_auteur > 0 && matable->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->tab_ptr_auteur[0])
                     {

@@ -163,12 +163,13 @@ tab_auteur_struct* gen_List_Auteur(const Paire_auteur_oeuvre * liste,int sizeHau
         auteur_struct * tb_Somet_h = reallocarray(listes_Auteur_arrTitre->tab_auteur,(*nb_auteur)+1,sizeof(auteur_struct));//fasink alocate error
         exitIfNull(tb_Somet_h,"Erreur création de auteur_struct\n")
         listes_Auteur_arrTitre->tab_auteur = tb_Somet_h;
-
+            
         //initialisation de l'auteur crée
         listes_Auteur_arrTitre->tab_auteur[(*nb_auteur)].size=0;
         listes_Auteur_arrTitre->tab_auteur[(*nb_auteur)].nbelementmagi = 0;
         listes_Auteur_arrTitre->tab_auteur[(*nb_auteur)].nom_auteur = NULL;
         listes_Auteur_arrTitre->tab_auteur[(*nb_auteur)].tab_ptr_Article = NULL;
+        listes_Auteur_arrTitre->tab_auteur[(*nb_auteur)].tab_ptr_fiche_min = NULL;
         listes_Auteur_arrTitre->tab_auteur[(*nb_auteur)].nom_auteur=liste[j].nom_auteur;
 
         int i = 0;
@@ -207,6 +208,7 @@ tab_Article_struct* gen_List_Article(Paire_Article_auteur * liste,int sizeArticl
         ListDesArticle->tab_Article[(*nbarticle)].nombre_auteur=0;
         ListDesArticle->tab_Article[(*nbarticle)].nom_Article=liste[j].article;
         ListDesArticle->tab_Article[(*nbarticle)].tab_ptr_auteur = NULL;
+        printf("%s:\n",ListDesArticle->tab_Article[(*nbarticle)].nom_Article);
 
         int i = 0;
         //tant le prochain est le meme auteur et que on attein pas la fin de la liste
@@ -214,14 +216,18 @@ tab_Article_struct* gen_List_Article(Paire_Article_auteur * liste,int sizeArticl
         {
             Article_struct * dernierarticle = &ListDesArticle->tab_Article[(*nbarticle)];
             int * last_auteur  = &dernierarticle->nombre_auteur;
+
+            // printf("dernierarticle:%s %d\n",dernierarticle->nom_Article,*last_auteur);
+
             // auteur_struct ** temparray = reallocarray(listcorrespondancelocal->tab_ptr_auteur,*nombre_auteur+1,8); //8 taille d'un pointeur 
 
+            //création d'auteur struct
             auteur_struct * temparray = reallocarray(dernierarticle->tab_ptr_auteur,*last_auteur+1,8); //8 taille d'un pointeur 
-            exitIfNull(temparray,"gen_List_Article auteur_struct realockarrayfail\n");
-            
-            
+            exitIfNull(temparray,"gen_List_Article auteur_struct realockarrayfail\n");            
             dernierarticle->tab_ptr_auteur = (auteur_struct**)temparray;
-            dernierarticle->tab_ptr_auteur[*last_auteur] = liste[i+j].pointeur_Auteur;
+            dernierarticle->tab_ptr_auteur[*last_auteur] = liste[i+j].pointeur_Auteur;// < nbelementmagi ?
+            printf("hauteur:\t%s\n",dernierarticle->tab_ptr_auteur[*last_auteur]->nom_auteur);
+
             int found=0;
 
             int *localnbelementmaj = &dernierarticle->tab_ptr_auteur[*last_auteur]->nbelementmagi ;
@@ -241,11 +247,12 @@ tab_Article_struct* gen_List_Article(Paire_Article_auteur * liste,int sizeArticl
                     dernierarticle->tab_ptr_auteur[*last_auteur]->tab_ptr_Article,
                     (*localnbelementmaj)+1, ///< sur a 0 ?  
                     sizeof(Article_struct**));
-
                 exitIfNull(tmptest,"imposible alouer dernierarticle->tab_ptr_auteur[*last_auteur]->tab_ptr_Article[i]\n");
                 dernierarticle->tab_ptr_auteur[*last_auteur]->tab_ptr_Article = tmptest;
+
                 //on boucle indicemagiqueindicemagiqueindicemagiqueindiceindicemagiquemagique
-                dernierarticle->tab_ptr_auteur[*last_auteur]->tab_ptr_Article[*localnbelementmaj] = dernierarticle; /// 
+                dernierarticle->tab_ptr_auteur[*last_auteur]->tab_ptr_Article[*localnbelementmaj] = dernierarticle;
+                            printf("article:\t\t%s\n",dernierarticle->tab_ptr_auteur[*last_auteur]->tab_ptr_Article[*localnbelementmaj]->nom_Article);
 
                 (*localnbelementmaj)++;
             }

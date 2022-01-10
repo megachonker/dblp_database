@@ -32,10 +32,10 @@ typedef struct auteur_struct
     int size;                           ///<taille du tableaux dynamique
     
     //ajoue d'Katie de ce qui est utile pour Dijkstra
-    auteur_struct **tab_ptr_voisins;        //tableau de pointeur vers les voisins de l'auteur
+    struct auteur_struct **tab_ptr_voisins;        //tableau de pointeur vers les voisins de l'auteur
     int nb_voisins;
     int etiquette;    //distance a la source dans dijkstra
-    auteur_struct** plus_court_chemin; //tableau des auteurs parcourus pour arriver a cet auteur dans Dijkstra
+    struct auteur_struct** plus_court_chemin; //tableau des auteurs parcourus pour arriver a cet auteur dans Dijkstra
     int size_plus_court_chemin; //nombre d'auteur dans chemin
     
 }auteur_struct;

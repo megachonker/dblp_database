@@ -5,8 +5,8 @@ LDLIBS ?= -lm -pthread -ftest-coverage -fprofile-arcs
 graph:	creation_graphe_voisins creation_Gt test_creation_Gt
 	./test_creation_Gt
 
-go:	tests abench.sh
-	./tests
+go:	tests 
+	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all ./tests
 
 abench.sh: bench gen_cache_data
 
@@ -79,8 +79,8 @@ r: clean abench.sh
 clean:
 	rm -f  *.o *.so *.gcno *.gcda *.gch *.gcov coverage.info
 	rm -fr tests bench main GCOVtests LcovRapport html latex
-# Update
-cleanall: clean 
+
+cleanall: clean Update
 	rm -f DATA/SerializedStrucInverse.data\
 		DATA/dblp1sur8.xml\
 		DATA/SerializedStruc.data\
