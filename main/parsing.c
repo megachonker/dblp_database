@@ -131,7 +131,9 @@ void sortlist(tableaux_fiche * mesfiche ){
 tableaux_fiche parse(FILE * inputDB){
     printf("début du parsing:\n");
     char ligne[BALISESIZE];
-    fiche_minimale * fichelocalM = calloc(1,sizeof(fiche_minimale));
+    fiche_minimale * fichelocalM = NULL;
+    fichelocalM = calloc(1,sizeof(fiche_minimale));
+    exitIfNull(fichelocalM,"imposible de crée fichelocalM");
     fichelocalM->nombre_auteur = 0;
     fichelocalM->ADDR = 0;
     tableaux_fiche tableaux_allfiche;// ce n'es pas maloc donc a la sortie de la fonction l'object est détruit ? ? ??
