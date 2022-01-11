@@ -43,10 +43,10 @@ doc:
 	doxygen Doxyfile
 	firefox html/index.html
 
-callgrind:	bench
+callgrind:	abench.sh
 	valgrind --dump-instr=yes --collect-jumps=yes --tool=callgrind --callgrind-out-file=callgrind_trace ./bench gen_unwrap_Graph
 	kcachegrind callgrind_trace
-	rm callgrind_trace
+	# rm callgrind_trace
 # lunch kprok pour profiler le temps d'execution
 
 Update: DATA/dblp.xml
