@@ -10,10 +10,13 @@
 
 auteur_struct** relachemment_arretes_reccursif(auteur_struct* ptr_auteur_courant, auteur_struct* ptr_auteur_destination)
 {
+    
     if(ptr_auteur_courant== ptr_auteur_destination)
     {
         return ptr_auteur_destination->plus_court_chemin;
     }
+
+    
     else
     {
         for(int i=0; i< ptr_auteur_courant->nb_voisins; i++)
@@ -61,26 +64,25 @@ auteur_struct** Dijkstra_auteur(auteur_struct **graphe, int* size_graphe_ptr, ch
 
     comparaison_auteur_1 trouver_ou_pas_1= auteur_1_pas_trouver;
     comparaison_auteur_2 trouver_ou_pas_2= auteur_2_pas_trouver;
-    int indice_auteur= -1;
     auteur_struct* ptr_a2= NULL;
     auteur_struct* ptr_a1= NULL;
 
     for(int i=0; i<*size_graphe_ptr; i++)
     {
         
-        if(strcomp(nom_auteur_1, graphe[i]->nom_auteur))
+        if(strcmp(nom_auteur_1, graphe[i]->nom_auteur))
         {
             trouver_ou_pas_1= auteur_1_trouver;
             ptr_a1= graphe[i];
         }
 
-        if(strcomp(nom_auteur_2, graphe[i]->nom_auteur))
+        if(strcmp(nom_auteur_2, graphe[i]->nom_auteur))
         {
             trouver_ou_pas_2= auteur_2_trouver;
             ptr_a2= graphe[i];
         }
 
-        if(trouver_ou_pas_2== auteur_2_trouver & trouver_ou_pas_1== auteur_1_trouver)
+        if((trouver_ou_pas_2== auteur_2_trouver) & (trouver_ou_pas_1== auteur_1_trouver))
             break;
 
     }
@@ -116,19 +118,18 @@ auteur_struct** Dijkstra_auteur(auteur_struct **graphe, int* size_graphe_ptr, ch
 
 
 
-void free_Dijkstra(auteur_struct** plus_court_chemin, auteur_struct **graphe, int size_graphe)
+void free_Dijkstra(auteur_struct **graphe, int size_graphe)
 {
     for(int i=0; i< size_graphe; i++)
     {
-        free(graphe[i]->size_plus_court_chemin);
+        free(graphe[i]->plus_court_chemin);
     }
-    free(plus_court_chemin);
 }
 
 //je test Dijkstra sur mon graphe test en affichant les noms des auteurs du plus court chemin de a0 a a9
 int main(void)
 {
-    Article_struct** tab_Articles_test=NULL;
+    /*Article_struct** tab_Articles_test=NULL;
     auteur_struct** graphe_test= creation_graphe_test(tab_Articles_test);
 
     Article_struct** graphe_test_avec_voisins= creation_graphe_avec_voisins(graphe_test, 10);
@@ -142,7 +143,7 @@ int main(void)
     }
     
     free_Dijkstra(plus_court_chemin, graphe_test, 10);
-    free_graphe_avec_voisins(graphe_test_avec_voisins, 10);
+    free_graphe_avec_voisins(graphe_test_avec_voisins, 10);*/
     
 
    

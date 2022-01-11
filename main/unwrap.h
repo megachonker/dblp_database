@@ -6,7 +6,7 @@
 
 
 /**
- * @brief couple nom_auteur <=> Heuvre
+ * @brief couple nom_auteur <=> oeuvre
  * utiliser pour qsort donc interne
  */
 typedef struct Paire_auteur_oeuvre
@@ -32,10 +32,10 @@ typedef struct auteur_struct
     int size;                           ///<taille du tableaux dynamique
     
     //ajoue d'Katie de ce qui est utile pour Dijkstra
-    auteur_struct **tab_ptr_voisins;        //tableau de pointeur vers les voisins de l'auteur
+    struct auteur_struct **tab_ptr_voisins;        //tableau de pointeur vers les voisins de l'auteur
     int nb_voisins;
     int etiquette;    //distance a la source dans dijkstra
-    auteur_struct** plus_court_chemin; //tableau des auteurs parcourus pour arriver a cet auteur dans Dijkstra
+    struct auteur_struct** plus_court_chemin; //tableau des auteurs parcourus pour arriver a cet auteur dans Dijkstra
     int size_plus_court_chemin; //nombre d'auteur dans chemin
     
 }auteur_struct;
@@ -122,19 +122,19 @@ typedef struct unwrap_Graph_struct
  * @param [in] b object B
  * @return int 
  */
-int comphauteur(const void * a, const void * b);
+int compauteur(const void * a, const void * b);
 
 /**
- * @brief Affiche nom_auteur <=> Heuvre
+ * @brief Affiche nom_auteur <=> oeuvre
  * 
  * @param [in] OwI  Paire_auteur_oeuvre
- * @param [in] sizeHauteurHeuvre nombre d'élément 
+ * @param [in] sizeauteuroeuvre nombre d'élément 
  */
-void printPaire_HauteurHeurvre(Paire_auteur_oeuvre * OwI,int sizeHauteurHeuvre );
+void printPaire_auteurHeurvre(Paire_auteur_oeuvre * OwI,int sizeauteuroeuvre );
 
 
 /**
- * @brief génère un tableaux d' HauteurToHeurvre 
+ * @brief génère un tableaux d' auteurToHeurvre 
  * 
  * déplie tableaux_fiche pour généré unt tableaux
  * d'élément Paire_auteur_oeuvre
@@ -153,10 +153,10 @@ int SwapStruct(tableaux_fiche input, Paire_auteur_oeuvre * arrayout );
  * auteur ce suit ajoute tout les oeuvre dans un nouveaux tableaux
  * 
  * @param [in] liste                liste trier par auteur des paire auteur titre
- * @param [in] sizeHauteurHeuvre    taille de cette liste
+ * @param [in] sizeauteuroeuvre    taille de cette liste
  * @return tab_auteur_struct* addressse de la liste final générée auteur to Multiple titre  
  */
-tab_auteur_struct* gen_List_Auteur(const Paire_auteur_oeuvre * liste,int sizeHauteurHeuvre);
+tab_auteur_struct* gen_List_Auteur(const Paire_auteur_oeuvre * liste,int sizeauteuroeuvre);
 
 /**
  * @brief Affiche la liste final d'auteur To multiple Titre

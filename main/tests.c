@@ -24,7 +24,7 @@ if (!p)\
 }\
 
 // #define MAXarraySIZE 21143793
-// Paire_auteur_oeuvre HauteurHeuvre[MAXarraySIZE];
+// Paire_auteur_oeuvre auteuroeuvre[MAXarraySIZE];
 
 // void shift(int decalage){
 // for(int p = 0; p < decalage ; p++)
@@ -262,7 +262,7 @@ int main()
 
 
     // liste des nom_auteur trier
-    // dans la fonction de trie si 2 foit meme nom_auteur crée un structure SommetHauteur qui liste les nom_auteur
+    // dans la fonction de trie si 2 foit meme nom_auteur crée un structure Sommetauteur qui liste les nom_auteur
     // a chaque comparaison qui match on suprime les occurance le mieux est de décaler 
     // on peut faire une pille de comparaison pour en faire en paralle
 

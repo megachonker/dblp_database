@@ -235,8 +235,8 @@ tableaux_fiche * deserialisation(FILE * input){
         fichelocalM->titre = strdup(ligne);
         fgets(ligne,BALISESIZE,input);
         enlever_retour_a_la_ligne(ligne);
-        int nbhauteur = atoi(ligne);
-        for (int i = 0; i < nbhauteur; i++)
+        int nbauteur = atoi(ligne);
+        for (int i = 0; i < nbauteur; i++)
         {
             fgets(ligne,BALISESIZE,input);
             enlever_retour_a_la_ligne(ligne);
@@ -257,7 +257,7 @@ tableaux_fiche * deserialisation(FILE * input){
 //     // fseek(input,0,SEEK_SET);
 
 //     char ligne[BALISESIZE];
-//     ll_list * list_hauteur_heuvre = ll_create();
+//     ll_list * list_auteur_oeuvre = ll_create();
 //     Sommet_Auteur_ListChainer * sommet_titre =  malloc(sizeof(Sommet_Auteur_ListChainer));
 //     exitIfNull(sommet_titre, "new calloc null")
 //     sommet_titre->titre_article = ll_create();
@@ -273,7 +273,7 @@ tableaux_fiche * deserialisation(FILE * input){
 //         sommet_titre->auteur = strdup(ligne);
 //         fgets(ligne,BALISESIZE,input);
 //         enlever_retour_a_la_ligne(ligne);
-//         int nbhauteur = atoi(ligne);
+//         int nbauteur = atoi(ligne);
 //         //fast append prend une node en entrée et fait plus 1
 
 //         char * burst[960810];
@@ -283,15 +283,15 @@ tableaux_fiche * deserialisation(FILE * input){
 //         enlever_retour_a_la_ligne(ligne);
 //         ll_append(sommet_titre->titre_article,strdup(ligne));
 //         //on fait un buffer
-//         for (int i = 0; i < nbhauteur-1; i++)
+//         for (int i = 0; i < nbauteur-1; i++)
 //         {
 //             fgets(ligne,BALISESIZE,input);
 //             enlever_retour_a_la_ligne(ligne);
 //             burst[i] = strdup(ligne);
 //         }
-//         stack_append(sommet_titre->titre_article,burst,nbhauteur);
+//         stack_append(sommet_titre->titre_article,burst,nbauteur);
 
-//         addresse_node = ll_append_fromAddr(list_hauteur_heuvre,addresse_node,sommet_titre);
+//         addresse_node = ll_append_fromAddr(list_auteur_oeuvre,addresse_node,sommet_titre);
 //         // printf("%f:TITRE: %s\n",(((float)ftell(input)+1)/(float)maxline)*100,sommet_titre->auteur);
 //         // printf("%d\n",ll_size(sommet_titre->titre_article));       
 //         // ll_print_list_as_char(sommet_titre->titre_article);       
@@ -299,7 +299,7 @@ tableaux_fiche * deserialisation(FILE * input){
 //         exitIfNull(sommet_titre, "new calloc null")
 //         sommet_titre->titre_article = ll_create();
 //     }
-//     return list_hauteur_heuvre;
+//     return list_auteur_oeuvre;
 // }
 
 

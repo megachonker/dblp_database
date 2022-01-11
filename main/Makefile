@@ -2,8 +2,12 @@ CCA ?= cc -O0
 CFLAGS ?= -Wall -Wextra -g
 LDLIBS ?= -lm -pthread -ftest-coverage -fprofile-arcs
 
-graph:	creation_graphe_voisins creation_Gt test_creation_Gt
-	./test_creation_Gt
+
+graphe_test: creation_graphe_test
+	./creation_graphe_test
+
+graph_voisin:	creation_graphe_voisins 
+	./creation_graphe_voisins
 
 go:	tests abench.sh
 	./tests
@@ -15,6 +19,16 @@ bench:	bench.o parsing.o list.o unwrap.o
 
 tests:	tests.o parsing.o list.o unwrap.o
 	$(CCA) -o tests  $^ $(CFLAGS) $(LDLIBS)
+
+creation_graphe_test: graphe_test_Katie.o unwrap.o parsing.o 
+	$(CCA) -o creation_graphe_test  $^ $(CFLAGS) $(LDLIBS)
+
+
+creation_graphe_voisins: creation_graphe_voisins.o graphe_test_Katie.o parsing.o 
+	$(CCA) -o creation_graphe_voisins  $^ $(CFLAGS) $(LDLIBS)
+	
+graphe_test_Katie.o: graphe_test_Katie.h
+
 
 main:	main.o parsing.o
 	$(CCA) -o main  $^ $(CFLAGS) $(LDLIBS)

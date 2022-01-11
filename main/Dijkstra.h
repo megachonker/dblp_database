@@ -24,6 +24,6 @@ auteur_struct** relachemment_arretes_reccursif(auteur_struct* ptr_auteur_courant
 
 auteur_struct** Dijkstra_auteur(auteur_struct **graphe, int* size_graphe_ptr, char* nom_auteur_1, char* nom_auteur_2, int* ptr_size_plus_court_chemin_a1_a2);
 
-void free_Dijkstra(auteur_struct** plus_court_chemin, auteur_struct **graphe, int size_graphe);
+void free_Dijkstra(auteur_struct **graphe, int size_graphe);
 
 #endif

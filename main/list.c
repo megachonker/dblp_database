@@ -279,9 +279,9 @@ void add_entry(ll_list * list_chainer_auteur,char * auteur, char* titre){
     ll_node *list_chainer_article = ll_search_auteur(list_chainer_auteur,auteur);
     if (list_chainer_article)
     {
-        Sommet_Auteur_ListChainer * list_chainer_Somet_hauteur = list_chainer_article->value;
+        Sommet_Auteur_ListChainer * list_chainer_Somet_auteur = list_chainer_article->value;
         // printf("append: %s to %s\n",titre,auteur);
-        ll_append(list_chainer_Somet_hauteur->titre_article,strdup(titre));
+        ll_append(list_chainer_Somet_auteur->titre_article,strdup(titre));
     }else{
         Sommet_Auteur_ListChainer * new_sommet = malloc(sizeof(Sommet_Auteur_ListChainer));
         if(new_sommet == NULL) {
