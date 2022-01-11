@@ -25,10 +25,6 @@ typedef struct fiche_minimale
     int ADDR;               ///< Indice permetant d'acceder a cette fiche_minimale depuis tableaux_fiche.fiche[ADDR] (initialiser a la création) 
 }fiche_minimale;
 
-
-
-
-
 /**
  * @brief Contien toute les fiche_minimale
  * 
@@ -51,21 +47,6 @@ typedef struct tableaux_fiche
  */
 tableaux_fiche parse(FILE * inputDB);
 
-char * getanchor(char * recherche, char * ligne);
-
-
-void appendAuteurM(fiche_minimale * mafiche,char * nomsauteur);
-void appendTabmeaux(tableaux_fiche * table, fiche_minimale * a_ajouter);
-
-/**
- * @brief print fiche_minimale
- * 
- * print le titre de l'euvre suivit de ces auteur
- * 
- * @param UwO 
- */
-void printM(fiche_minimale UwO);
-
 /**
  * @brief Print tableaux_fiche
  * 
@@ -75,11 +56,22 @@ void printM(fiche_minimale UwO);
  */
 void printTabmeaux(tableaux_fiche OwU);
 
+/**
+ * @brief Sérialise tableaux_fiche
+ * 
+ * @param [in]  mastertab 
+ * @param [out] outfichier 
+ */
 void serialize(tableaux_fiche mastertab, FILE * outfichier);
+
+/**
+ * @brief Désérialise tableaux_fiche
+ * 
+ * @param [in] input 
+ * @return tableaux_fiche* 
+ */
 tableaux_fiche * deserialisation(FILE * input);
-// ll_list * deserialisation_Liste(FILE * input);
 
 void parsing_free(tableaux_fiche * DEGAGE);
-
 
 #endif
