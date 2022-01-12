@@ -3,13 +3,7 @@
 #include <stdlib.h>
 #include "parsing.h"
 
-
-#define exitIfNull(p,msg)\
-if (!p)\
-{\
-    fprintf(stderr,msg);\
-}\
-
+#include "macro.h"
 
 //prend du temps l'utiliser directement ?
 void enlever_retour_a_la_ligne(char * ligne){
@@ -178,7 +172,7 @@ void sortlist(tableaux_fiche * mesfiche ){
  * @return tableaux_fiche 
  */
 tableaux_fiche parse(FILE * inputDB){
-    //INFO printf("début du parsing:\n");
+    INFO("début du parsing:");
     char ligne[BALISESIZE];
 
     //génère le tablaux
@@ -193,6 +187,7 @@ tableaux_fiche parse(FILE * inputDB){
     fichelocalM->ADDR = 0;
     fichelocalM->nombre_auteur = 0;
 
+    //chargement
     while (fgets(ligne,BALISESIZE,inputDB))// <================ prend masse temps le remplacer par un buffer ? (simple ici a faire)
     {
         int flagt = 0;
@@ -238,13 +233,11 @@ tableaux_fiche parse(FILE * inputDB){
     //WARNING
     // printTabmeaux(tableaux_allfiche);
 
-    //INFO DANS LE process ?
-    printf("PARSE OK\ndébut du trie:\n");
+    INFO("PARSE OK\ndébut du trie:\n");
     sortlist(&tableaux_allfiche);
-    //INFO
-    printf("Trie OK\ndébut de genereation des id:\n");
+    INFO("Trie OK\ndébut de genereation des id:");
     gen_id_fiche(&tableaux_allfiche);
-    printf("Id générée!\n");
+    INFO("Id générée!");
     return tableaux_allfiche;
 }
 
