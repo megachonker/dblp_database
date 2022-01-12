@@ -53,6 +53,22 @@ if (!p)\
 //     }
 // }
 
+
+
+// exploration(auteur_struct * monauteur){
+
+//     for (int i = 0; i < monauteur->nbelementmagi ; i++)
+//     {
+//             monauteur;
+//             printf("%s ==> %d\n",monauteur->tab_ptr_Article[i],monauteur->tab_ptr_Article[i] );
+//             for (int u = 0; u < monauteur->tab_ptr_Article[i].nombre_auteur; u++)
+//             {
+//                 exploration(monauteur->tab_ptr_Article[i].tab_ptr_auteur[u]);
+//             }
+//     }
+// }
+
+
 int main()
 {
 
@@ -106,28 +122,28 @@ int main()
     tab_Article_struct * matable = unwrap_ListArticle_from_xml(DBxml);
 
 
-    for (int i = 0; i < matable->nombre_Article ; i++)
-    {
-            printf("%s ==> %d\n",matable->tab_Article[i].nom_Article, matable->tab_Article[i].nombre_auteur);
-            for (int u = 0; u < matable->tab_Article[i].nombre_auteur; u++)
-            {
-                printf("\t%s ==> %d\n",matable->tab_Article[i].tab_ptr_auteur[u]->nom_auteur,matable->tab_Article[i].tab_ptr_auteur[u]->nbelementmagi);
-                for (int pp = 0; pp < matable->tab_Article[i].tab_ptr_auteur[u]->nbelementmagi; pp++)
-                {
-                    if (matable->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nombre_auteur > 0 && matable->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->tab_ptr_auteur[0])
-                    {
-                        printf("\t\t%s ==> %d\n",matable->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nom_Article,matable->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nombre_auteur); 
-                        for (int UI = 0; UI < matable->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nombre_auteur; UI++)
-                        {
-                            printf("\t\t\t%s\n",matable->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->tab_ptr_auteur[UI]->nom_auteur); 
-                        }
+    // for (int i = 0; i < matable->nombre_Article ; i++)
+    // {
+    //         printf("%s ==> %d\n",matable->tab_Article[i].nom_Article, matable->tab_Article[i].nombre_auteur);
+    //         for (int u = 0; u < matable->tab_Article[i].nombre_auteur; u++)
+    //         {
+    //             printf("\t%s ==> %d\n",matable->tab_Article[i].tab_ptr_auteur[u]->nom_auteur,matable->tab_Article[i].tab_ptr_auteur[u]->nbelementmagi);
+    //             for (int pp = 0; pp < matable->tab_Article[i].tab_ptr_auteur[u]->nbelementmagi; pp++)
+    //             {
+    //                 if (matable->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nombre_auteur > 0 && matable->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->tab_ptr_auteur[0])
+    //                 {
+    //                     printf("\t\t%s ==> %d\n",matable->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nom_Article,matable->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nombre_auteur); 
+    //                     for (int UI = 0; UI < matable->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nombre_auteur; UI++)
+    //                     {
+    //                         printf("\t\t\t%s\n",matable->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->tab_ptr_auteur[UI]->nom_auteur); 
+    //                     }
                                        
-                    }else{
-                        printf("NOPE\n");
-                    }
-                }           
-            }
-    }
+    //                 }else{
+    //                     printf("NOPE\n");
+    //                 }
+    //             }           
+    //         }
+    // }
     
 
 

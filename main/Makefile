@@ -42,7 +42,7 @@ doc:
 callgrind:	bench
 	valgrind --dump-instr=yes --collect-jumps=yes --tool=callgrind --callgrind-out-file=callgrind_trace ./bench unwrwap_gen_cache
 	kcachegrind callgrind_trace
-	rm callgrind_trace
+	# rm callgrind_trace
 # lunch kprok pour profiler le temps d'execution
 
 Update: DATA/dblp.xml
