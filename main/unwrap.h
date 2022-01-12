@@ -265,4 +265,8 @@ void unwrap_List_Auteur_free(tab_auteur_struct * free);
 
 tab_Article_struct * unwrap_ListArticle_from_xml(FILE * dbinput);
 
+void serialisation_tab_Article_struct(tab_Article_struct * inputlist, FILE * outputfile);
+
+deserialisation_tab_Article_struct(tab_auteur_struct * mesauteur, FILE * inputfile);
+
 #endif
