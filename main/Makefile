@@ -2,8 +2,8 @@ CCA ?= cc -O0
 CFLAGS ?= -Wall -Wextra -g
 LDLIBS ?= -lm -pthread -ftest-coverage -fprofile-arcs
 
-# graph_voisin:	fonctions_graphe 
-# 	valgrind ./fonctions_graphe
+fct_gr:  fonctions_graphe 
+	./fonctions_graphe
 
 go:	tests
 	./tests
@@ -22,7 +22,8 @@ tests:	tests.o parsing.o list.o unwrap.o
 Dijkstra: Dijkstra.o unwrap.o parsing.o
 	$(CCA) -o Dijkstra $^ $(CFLAGS) $(LDLIBS)
 	
-graphe_test_Katie.o: graphe_test_Katie.h
+fonctions_graphe: fonctions_graphe.o unwrap.o  parsing.o
+	$(CCA) -o fonctions_graphe $^ $(CFLAGS) $(LDLIBS)
 
 
 main:	main.o parsing.o

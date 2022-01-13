@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "fonctions_graphe.h"
-#include "graphe_test_Katie.h"
+#include "unwrap.h"
+
 
 
 typedef enum a_mettre_dans_voisins_ou_pas
@@ -23,12 +24,14 @@ auteur_struct** faire_graphe_avec_unwrap_graphe(int* size_graphe_ptr, FILE *DBxm
     unwrap_Serilise_Index(malistauteur,DBinverse);
     unwrap_List_Auteur_free(malistauteur);
     
+    fclose(DBinverse);
+    FILE * DBinvers_re = fopen("DATA/test_Katie.cache", "r");
     // tab_Article_struct * matable = unwrap_ListArticle_from_xml(DBxml);
 
-    unwrap_Graph_struct unwrap_Graph= gen_unwrap_Graph(DBxml, DBinverse); //< erreur peut etre la ?
+    unwrap_Graph_struct unwrap_Graph= gen_unwrap_Graph(DBxml, DBinvers_re); //< erreur peut etre la ?
     
     
-    fclose(DBinverse);
+    fclose(DBinvers_re);
 
     //creation du tableau de ptr d'auteur correspondant a unwrap_Graph
     *size_graphe_ptr= unwrap_Graph.tab_auteur_struct->taille;
@@ -145,45 +148,35 @@ void free_graphe_avec_voisins(auteur_struct** graphe_avec_voisins, int* size_gra
     }
     free(graphe_avec_voisins);
 }
-
+*/
 
 //test: affichage des voisins des auteurs du graphe_test
 int main(void)
 {
+    
     int *size_ptr= NULL;
 
     FILE * DBinverse = fopen("DATA/test_Katie.cache", "w");
     
     FILE* test_xml= fopen("DATA/test_Katie.xml", "r");
 
-    auteur_struct** graphe_sans_voisins= faire_graphe_avec_unwrap_graphe(size_ptr, test_xml, DBinverse);
+    auteur_struct** graphe= faire_graphe_avec_unwrap_graphe(size_ptr, test_xml, DBinverse);
     
     fclose(test_xml);
     fclose(DBinverse);
 
-    auteur_struct **graphe_avec_voisins= creation_graphe_avec_voisins(graphe_sans_voisins, size_ptr);
-    printf("\n\n\n");
-    for(int i=0; i< 10; i++)
+  
+    for(int k=0; k <*size_ptr; k++)
     {
-    
-        int nb_voisin= graphe_avec_voisins[i]->nb_voisins;
-        char* nom_auteur= graphe_avec_voisins[i]->nom_auteur;
-        printf("\n voisins de %s :\n", nom_auteur);
-        
-        for(int k=0; k <nb_voisin; k++)
-        {
-            char *nom_voisin= graphe_avec_voisins[i]->tab_ptr_voisins[k]->nom_auteur;
-            printf("%s\n", nom_voisin);
-        }
+        char *nom_auteur= graphe[k]->nom_auteur;
+        printf("%s\n", nom_auteur);
     }
+    
 
-    printf("\n\n\n");
 
-    free_graphe_avec_voisins(graphe_avec_voisins, size_ptr);
     
 
     
     
     return 0;
 }
-*/
