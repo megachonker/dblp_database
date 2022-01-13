@@ -15,8 +15,10 @@
  */
 void progressbar(int indice, int total)
 {
-    int taille = 8; //taille de l'écrant a faire plus tard
+    int taille = 20; //taille de l'écrant a faire plus tard
 
+    if(indice%(total/8))
+        return;
     //afficher que 8 foit donc a chaque changement de bare
     //que quand l'égaliter fait avancer la bar
 
