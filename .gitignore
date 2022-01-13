@@ -1401,3 +1401,8 @@ main/creation_Gt.h.gch
 main/list.h.gch
 main/parsing.h.gch
 main/unwrap.h.gch
+main/Dijkstra
+.gitignore
+main/abench
+.gitignore
+main/DATA/test_Katie.cache
