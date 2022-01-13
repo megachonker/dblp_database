@@ -233,7 +233,7 @@ tableaux_fiche parse(FILE * inputDB){
     //WARNING
     // printTabmeaux(tableaux_allfiche);
 
-    INFO("PARSE OK\ndébut du trie:\n");
+    INFO("PARSE OK\ndébut du trie:");
     sortlist(&tableaux_allfiche);
     INFO("Trie OK\ndébut de genereation des id:");
     gen_id_fiche(&tableaux_allfiche);
@@ -278,6 +278,11 @@ void serialize(const tableaux_fiche mastertab, FILE * output){
  * @return pointeur ver tableaux_fiche 
  */
 tableaux_fiche * deserialisation(FILE * input){
+    fseek(input,0,SEEK_END);
+    int nombreligne = ftell(input);
+    fseek(input,0,SEEK_SET);
+
+
     //INFO début de la désérialisation
     char ligne[BALISESIZE];
 
@@ -301,6 +306,8 @@ tableaux_fiche * deserialisation(FILE * input){
     int indice = 0;
     while (fgets(ligne,BALISESIZE,input))                           //<============= un soeul gros buffer ?
     {
+        progressbar(ftell(input),nombreligne);
+        //progesse bar?
         if (feof(input))
         {
             fprintf(stderr,"fin fichier deserialisation\n");
@@ -319,7 +326,7 @@ tableaux_fiche * deserialisation(FILE * input){
         {
             fgets(ligne,BALISESIZE,input);
             enlever_retour_a_la_ligne(ligne);
-            appendAuteurM(fichelocalM,strdup(ligne));
+            appendAuteurM(fichelocalM,strdup(ligne));// ICI on doit réloc pour iren
         }
         appendTabmeaux(tableaux_allfiche,fichelocalM);
         fichelocalM = calloc(1,sizeof(fiche_minimale));
@@ -327,6 +334,8 @@ tableaux_fiche * deserialisation(FILE * input){
         fichelocalM->nombre_auteur = 0;
         indice++;
     }
+
+    DEBUG("Deseraialisation %d FAIRE UN MALOC",indice);
     return tableaux_allfiche;
 }
 

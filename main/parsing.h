@@ -22,16 +22,22 @@ typedef struct fiche_minimale
     int ADDR;               ///< Indice permetant d'acceder a cette fiche_minimale depuis tableaux_fiche.fiche[ADDR] (initialiser a la création) 
 }fiche_minimale;
 
+
+
 /**
  * @brief Contien toute les fiche_minimale
  * 
- * doublon avec tableaux_fiche !! ?
+ * une fiche a une ADDResse
+ * les addresse sont utilise pour retrouver l'index 
+ * 
+ * tableaux 
  * 
  * @struct tableaux_fiche
  */
 typedef struct tableaux_fiche
 {
     fiche_minimale ** fiche; ///< tableaux des fiche_minimale utiliser
+    // int * ADDR;               ///<UNE FICHE UNE ADDRESS
     int taille;             ///<taille tableaux
 }tableaux_fiche;
 
