@@ -1,8 +1,8 @@
 #include <stdio.h>
-/*#include "unwrap.h"*/
 #include <stdlib.h>
 #include "creation_graphe_voisins.h"
 #include "graphe_test_Katie.h"
+
 
 typedef enum a_mettre_dans_voisins_ou_pas
 {
@@ -15,10 +15,15 @@ typedef enum a_mettre_dans_voisins_ou_pas
 //on appelera "graphe" le tableau de ptr d'auteur correspondant a unwrap_Graph
 //avant d'appeler cette fonction, il faut fopen DBxml et déclarer le pointeur size_graphe_ptr
 //et après faut close le file
-auteur_struct** faire_graphe_avec_unwrap_graphe(int* size_graphe_ptr, FILE *DBxml)
+auteur_struct** faire_graphe_avec_unwrap_graphe(int* size_graphe_ptr, FILE *DBxml, FILE *DBinverse)
 {
     
-    FILE * DBinverse = fopen("DATA/SerializedStrucInverse.data","r");
+    
+    tab_auteur_struct * malistauteur = unwrap_from_file(DBxml);
+    unwrap_Serilise_Index(malistauteur,DBinverse);
+    unwrap_List_Auteur_free(malistauteur);
+    
+    // tab_Article_struct * matable = unwrap_ListArticle_from_xml(DBxml);
 
     unwrap_Graph_struct unwrap_Graph= gen_unwrap_Graph(DBxml, DBinverse); //< erreur peut etre la ?
     
@@ -37,14 +42,16 @@ auteur_struct** faire_graphe_avec_unwrap_graphe(int* size_graphe_ptr, FILE *DBxm
     for(int i=0; i<*size_graphe_ptr; i++)
     {
         auteur_struct ai= unwrap_Graph.tab_auteur_struct->tab_auteur[i];
+        ai.size_pcc_auteur= -1;
         graphe[i]= &ai;
+        printf("%s", ai.nom_auteur);
     }
 
     return graphe;
 }
 
 
-
+/*
 //graphe= tableau des ptr vers les auteur_struct avec pour chacun, leur tableau de ptr vers leurs voisins
 auteur_struct** creation_graphe_avec_voisins(auteur_struct** graphe, int* ptr_size_graphe)
 {
@@ -116,7 +123,7 @@ auteur_struct** creation_graphe_avec_voisins(auteur_struct** graphe, int* ptr_si
         }
         
         ptr_ak->nb_voisins= nb_actuel_voisins;
-        ptr_ak->etiquette=-1; //on set up toutes les etiquettes a -1 en prevision pour Dijkstra
+       
 
 
 
@@ -143,13 +150,16 @@ void free_graphe_avec_voisins(auteur_struct** graphe_avec_voisins, int* size_gra
 //test: affichage des voisins des auteurs du graphe_test
 int main(void)
 {
-    int *size_ptr;
+    int *size_ptr= NULL;
+
+    FILE * DBinverse = fopen("DATA/test_Katie.cache", "w");
     
     FILE* test_xml= fopen("DATA/test_Katie.xml", "r");
 
-    auteur_struct** graphe_sans_voisins= faire_graphe_avec_unwrap_graphe(size_ptr, test_xml);
+    auteur_struct** graphe_sans_voisins= faire_graphe_avec_unwrap_graphe(size_ptr, test_xml, DBinverse);
     
-    close(test_xml);
+    fclose(test_xml);
+    fclose(DBinverse);
 
     auteur_struct **graphe_avec_voisins= creation_graphe_avec_voisins(graphe_sans_voisins, size_ptr);
     printf("\n\n\n");
@@ -176,3 +186,4 @@ int main(void)
     
     return 0;
 }
+*/

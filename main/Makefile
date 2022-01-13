@@ -2,15 +2,14 @@ CCA ?= cc -O0
 CFLAGS ?= -Wall -Wextra -g
 LDLIBS ?= -lm -pthread -ftest-coverage -fprofile-arcs
 
+# graph_voisin:	creation_graphe_voisins 
+# 	valgrind ./creation_graphe_voisins
 
-graphe_test: creation_graphe_test
-	./creation_graphe_test
-
-graph_voisin:	creation_graphe_voisins 
-	./creation_graphe_voisins
-
-go:	tests abench.sh
+go:	tests
 	./tests
+
+val:	tests 
+	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./tests
 
 abench.sh: bench gen_cache_data
 
@@ -20,12 +19,8 @@ bench:	bench.o parsing.o list.o unwrap.o
 tests:	tests.o parsing.o list.o unwrap.o
 	$(CCA) -o tests  $^ $(CFLAGS) $(LDLIBS)
 
-creation_graphe_test: graphe_test_Katie.o unwrap.o parsing.o 
-	$(CCA) -o creation_graphe_test  $^ $(CFLAGS) $(LDLIBS)
-
-
-creation_graphe_voisins: creation_graphe_voisins.o graphe_test_Katie.o parsing.o 
-	$(CCA) -o creation_graphe_voisins  $^ $(CFLAGS) $(LDLIBS)
+Dijkstra: Dijkstra.o unwrap.o parsing.o
+	$(CCA) -o Dijkstra $^ $(CFLAGS) $(LDLIBS)
 	
 graphe_test_Katie.o: graphe_test_Katie.h
 
@@ -54,7 +49,7 @@ doc:
 	firefox html/index.html
 
 callgrind:	bench
-	valgrind --dump-instr=yes --collect-jumps=yes --tool=callgrind --callgrind-out-file=callgrind_trace ./bench unwrwap_gen_cache
+	valgrind --dump-instr=yes --collect-jumps=yes --tool=callgrind --callgrind-out-file=callgrind_trace ./bench gen_unwrap_Graph
 	kcachegrind callgrind_trace
 	rm callgrind_trace
 # lunch kprok pour profiler le temps d'execution
@@ -68,9 +63,9 @@ DATA/dblp.xml:
 	gzip dblp.xml.gz -d
 	mv dblp.xml DATA/dblp.xml
 	rm -f dblp.xml.gz
-
+#10966843
 DATA/dblp1sur8.xml: DATA/dblp.xml
-	head DATA/dblp.xml -n 10966843 > DATA/dblp1sur8.xml
+	head DATA/dblp.xml -n 10010 > DATA/dblp1sur8.xml
 
 #regénère tout les fichier lier a bench quand un .o change Ces regretabkle donc on enleve bench par .O
 DATA/SerializedStruc.data:	DATA/dblp.xml parsing.o
@@ -91,10 +86,10 @@ gen_cache_data: DATA/dblp.xml DATA/dblp1sur8.xml DATA/SerializedStrucInverse.dat
 r: clean abench.sh
 
 clean:
-	rm -f  *.o *.so *.gcno *.gcda *.gch *.gcov coverage.info
+	rm -f  *.o *.so *.gcno *.gcda *.gch *.gcov coverage.info vgcore.*
 	rm -fr tests bench main GCOVtests LcovRapport html latex
-# Update
-cleanall: clean 
+
+cleanall: clean Update
 	rm -f DATA/SerializedStrucInverse.data\
 		DATA/dblp1sur8.xml\
 		DATA/SerializedStruc.data\

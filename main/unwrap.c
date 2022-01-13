@@ -24,7 +24,7 @@ if (!p)\
  * @param [in] b object B
  * @return int 
  */
-int compauteur(const void * a, const void * b){
+int comphauteur(const void * a, const void * b){
     //moche
     Paire_Article_auteur * aa = (Paire_Article_auteur*)a;
     Paire_Article_auteur * bb = (Paire_Article_auteur*)b;
@@ -65,7 +65,7 @@ int SwapStruct(tableaux_fiche input, Paire_auteur_oeuvre * arrayout ){
 }
 
 
-int SwapPaire_auteurHeurvreToPaire_auteurHeurvre(const tab_auteur_struct * input, Paire_Article_auteur * Article_auteur_Array ){
+int SwapPaire_HauteurHeurvreToPaire_HauteurHeurvre(const tab_auteur_struct * input, Paire_Article_auteur * Article_auteur_Array ){
     int indice = 0;
     for (int i = 0; i < input->taille; i++)
     {
@@ -95,11 +95,11 @@ int SwapPaire_auteurHeurvreToPaire_auteurHeurvre(const tab_auteur_struct * input
  * auteurB => hoeuvreU\n
  * auteurB => hoeuvreT\n
  * 
- * @param [in,out]  auteuroeuvre     Structure a trier
- * @param [in]      sizeauteuroeuvre taille de la tructure
+ * @param [in,out]  HauteurHeuvre     Structure a trier
+ * @param [in]      sizeHauteurHeuvre taille de la tructure
  */
-void sort_tableaux_fiche(Paire_auteur_oeuvre * auteuroeuvre,int sizeauteuroeuvre ){
-    qsort(auteuroeuvre,sizeauteuroeuvre ,sizeof(Paire_auteur_oeuvre),compauteur);
+void sort_tableaux_fiche(Paire_auteur_oeuvre * HauteurHeuvre,int sizeHauteurHeuvre ){
+    qsort(HauteurHeuvre,sizeHauteurHeuvre ,sizeof(Paire_auteur_oeuvre),comphauteur);
 }
 /**
  * @brief 
@@ -114,11 +114,11 @@ void sort_tableaux_fiche(Paire_auteur_oeuvre * auteuroeuvre,int sizeauteuroeuvre
  * hoeuvreB => auteurY \n
  * hoeuvreB => auteurB \n
  * 
- * @param Articleuauteur 
- * @param sizeArticleauteur 
+ * @param ArticleuHauteur 
+ * @param sizeArticleHauteur 
  */
-void sort_tableaux_Article(Paire_Article_auteur * Articleuauteur,int sizeArticleauteur ){
-    qsort(Articleuauteur,sizeArticleauteur ,sizeof(Paire_Article_auteur),comparticle);
+void sort_tableaux_Article(Paire_Article_auteur * ArticleuHauteur,int sizeArticleHauteur ){
+    qsort(ArticleuHauteur,sizeArticleHauteur ,sizeof(Paire_Article_auteur),comparticle);
 }
 
 
@@ -139,14 +139,14 @@ void add_titre_to_auteur(auteur_struct * list,const Paire_auteur_oeuvre HtH){//c
 
 
 
-void printPaire_Heurvreauteur(Paire_Article_auteur * OwI,int sizeauteuroeuvre ){
-    for (int i = 0; i < sizeauteuroeuvre ; i++)
+void printPaire_HeurvreHauteur(Paire_Article_auteur * OwI,int sizeHauteurHeuvre ){
+    for (int i = 0; i < sizeHauteurHeuvre ; i++)
     {
         printf("%s => %s\n",OwI[i].article,OwI[i].pointeur_Auteur->nom_auteur);
     }
 }
 
-tab_auteur_struct* gen_List_Auteur(const Paire_auteur_oeuvre * liste,int sizeauteuroeuvre){
+tab_auteur_struct* gen_List_Auteur(const Paire_auteur_oeuvre * liste,int sizeHauteurHeuvre){
     tab_auteur_struct * listes_Auteur_arrTitre = malloc(sizeof(tab_auteur_struct));
     exitIfNull(listes_Auteur_arrTitre,"Erreur création liste de tab_auteur_struct\n")
     int * nb_auteur = &listes_Auteur_arrTitre->taille; 
@@ -158,22 +158,23 @@ tab_auteur_struct* gen_List_Auteur(const Paire_auteur_oeuvre * liste,int sizeaut
 
     int j = 0;
     //on parcoure liste
-    while (j < sizeauteuroeuvre)
+    while (j < sizeHauteurHeuvre)
     {
         auteur_struct * tb_Somet_h = reallocarray(listes_Auteur_arrTitre->tab_auteur,(*nb_auteur)+1,sizeof(auteur_struct));//fasink alocate error
         exitIfNull(tb_Somet_h,"Erreur création de auteur_struct\n")
         listes_Auteur_arrTitre->tab_auteur = tb_Somet_h;
-
+            
         //initialisation de l'auteur crée
         listes_Auteur_arrTitre->tab_auteur[(*nb_auteur)].size=0;
         listes_Auteur_arrTitre->tab_auteur[(*nb_auteur)].nbelementmagi = 0;
         listes_Auteur_arrTitre->tab_auteur[(*nb_auteur)].nom_auteur = NULL;
         listes_Auteur_arrTitre->tab_auteur[(*nb_auteur)].tab_ptr_Article = NULL;
+        listes_Auteur_arrTitre->tab_auteur[(*nb_auteur)].tab_ptr_fiche_min = NULL;
         listes_Auteur_arrTitre->tab_auteur[(*nb_auteur)].nom_auteur=liste[j].nom_auteur;
 
         int i = 0;
         //tant le prochain est le meme auteur et que on attein pas la fin de la liste
-        while (i+j < sizeauteuroeuvre && strcmp(liste[j].nom_auteur,liste[j+i].nom_auteur) == 0)//ordre important
+        while (i+j < sizeHauteurHeuvre && strcmp(liste[j].nom_auteur,liste[j+i].nom_auteur) == 0)//ordre important
         {
             add_titre_to_auteur(&listes_Auteur_arrTitre->tab_auteur[(*nb_auteur)],liste[i+j]);
             i++;// truc de simon ?
@@ -185,43 +186,61 @@ tab_auteur_struct* gen_List_Auteur(const Paire_auteur_oeuvre * liste,int sizeaut
     return listes_Auteur_arrTitre;
 }
 
-tab_Article_struct* gen_List_Article(Paire_Article_auteur * liste,int sizeArticleauteur){
-
+/**
+ * @brief generer tab_Article_struct*
+ * 
+ * @param [in] liste 
+ * @param [in] sizeArticleHauteur nombre de structure Paire_Article_auteur
+ * @param [in] nombretotalarticle nombre d'article total
+ * @return tab_Article_struct* 
+ */
+tab_Article_struct* gen_List_Article(Paire_Article_auteur * liste,int sizeArticleHauteur,int nombretotalarticle){
 
     tab_Article_struct * ListDesArticle = malloc(sizeof(tab_Article_struct));
     exitIfNull(ListDesArticle,"Erreur création liste de tab_Article_struct\n")
     int * nbarticle =  &ListDesArticle->nombre_Article;
 
+
+
+    //combien d'article je doit faire ?
     ListDesArticle->tab_Article = NULL;
+    ListDesArticle->tab_Article = malloc(nombretotalarticle*sizeof(Article_struct));
+    exitIfNull(ListDesArticle->tab_Article,"genarticlelist: Imposible d'allouer tout les tableaux ")
     (*nbarticle) = 0;
 
     int j = 0;
     //on parcoure liste
-    while (j < sizeArticleauteur)
-    {        
-        Article_struct * tb_Somet_h = reallocarray(ListDesArticle->tab_Article,(*nbarticle)+1,sizeof(Article_struct));
-        exitIfNull(tb_Somet_h,"Erreur création de auteur_struct\n")
-        ListDesArticle->tab_Article = tb_Somet_h;
+    while (j < sizeArticleHauteur)
+    {   
 
         //on add le premier nom_Article
         ListDesArticle->tab_Article[(*nbarticle)].nombre_auteur=0;
         ListDesArticle->tab_Article[(*nbarticle)].nom_Article=liste[j].article;
         ListDesArticle->tab_Article[(*nbarticle)].tab_ptr_auteur = NULL;
+        // for (int i = 0; i < *nbarticle+1; i++)
+        // {
+        //     printf("%d %p:\n",i,&ListDesArticle->tab_Article[i]);
+        // }
+        
 
         int i = 0;
         //tant le prochain est le meme auteur et que on attein pas la fin de la liste
-        while (i+j < sizeArticleauteur && strcmp(liste[j].article,liste[j+i].article) == 0)//ordre important
+        while (i+j < sizeArticleHauteur && strcmp(liste[j].article,liste[j+i].article) == 0)//ordre important
         {
             Article_struct * dernierarticle = &ListDesArticle->tab_Article[(*nbarticle)];
             int * last_auteur  = &dernierarticle->nombre_auteur;
+
+            // printf("dernierarticle:%p %p\n",dernierarticle,&ListDesArticle->tab_Article[(*nbarticle)]);
+
             // auteur_struct ** temparray = reallocarray(listcorrespondancelocal->tab_ptr_auteur,*nombre_auteur+1,8); //8 taille d'un pointeur 
 
-            auteur_struct * temparray = reallocarray(dernierarticle->tab_ptr_auteur,*last_auteur+1,8); //8 taille d'un pointeur 
-            exitIfNull(temparray,"gen_List_Article auteur_struct realockarrayfail\n");
-            
-            
+            //création d'auteur struct
+            auteur_struct * temparray = reallocarray(dernierarticle->tab_ptr_auteur,(*last_auteur)+1,8); //8 taille d'un pointeur 
+            exitIfNull(temparray,"gen_List_Article auteur_struct realockarrayfail\n");            
             dernierarticle->tab_ptr_auteur = (auteur_struct**)temparray;
-            dernierarticle->tab_ptr_auteur[*last_auteur] = liste[i+j].pointeur_Auteur;
+            dernierarticle->tab_ptr_auteur[*last_auteur] = liste[i+j].pointeur_Auteur;// < nbelementmagi ?
+            // printf("hauteur:\t%s\n",dernierarticle->tab_ptr_auteur[*last_auteur]->nom_auteur);
+
             int found=0;
 
             int *localnbelementmaj = &dernierarticle->tab_ptr_auteur[*last_auteur]->nbelementmagi ;
@@ -237,15 +256,21 @@ tab_Article_struct* gen_List_Article(Paire_Article_auteur * liste,int sizeArticl
 
             if (found == 0)
             {
+                //array plus grand
                 Article_struct ** tmptest  = reallocarray(
                     dernierarticle->tab_ptr_auteur[*last_auteur]->tab_ptr_Article,
                     (*localnbelementmaj)+1, ///< sur a 0 ?  
                     sizeof(Article_struct**));
-
                 exitIfNull(tmptest,"imposible alouer dernierarticle->tab_ptr_auteur[*last_auteur]->tab_ptr_Article[i]\n");
                 dernierarticle->tab_ptr_auteur[*last_auteur]->tab_ptr_Article = tmptest;
+
                 //on boucle indicemagiqueindicemagiqueindicemagiqueindiceindicemagiquemagique
-                dernierarticle->tab_ptr_auteur[*last_auteur]->tab_ptr_Article[*localnbelementmaj] = dernierarticle; /// 
+                dernierarticle->tab_ptr_auteur[*last_auteur]->tab_ptr_Article[*localnbelementmaj] = dernierarticle;
+                // for (int y = 0; y < *localnbelementmaj+1; y++)
+                // {
+                //     printf("article:\t\t%p\n",dernierarticle->tab_ptr_auteur[*last_auteur]->tab_ptr_Article[y]);
+                // }
+                
 
                 (*localnbelementmaj)++;
             }
@@ -298,7 +323,29 @@ tab_Article_struct* gen_List_Article(Paire_Article_auteur * liste,int sizeArticl
     return ListDesArticle;
 }
 
-
+//print est test de profondeur 1
+// for (int i = 0; i < matable->nombre_Article ; i++)
+// {
+//         printf("%s ==> %d\n",matable->tab_Article[i].nom_Article, matable->tab_Article[i].nombre_auteur);
+//         for (int u = 0; u < matable->tab_Article[i].nombre_auteur; u++)
+//         {
+//             printf("\t%s ==> %d\n",matable->tab_Article[i].tab_ptr_auteur[u]->nom_auteur,matable->tab_Article[i].tab_ptr_auteur[u]->nbelementmagi);
+//             for (int pp = 0; pp < matable->tab_Article[i].tab_ptr_auteur[u]->nbelementmagi; pp++)
+//             {
+//                 if (matable->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nombre_auteur > 0 && matable->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->tab_ptr_auteur[0])
+//                 {
+//                     printf("\t\t%s ==> %d\n",matable->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nom_Article,matable->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nombre_auteur); 
+//                     for (int UI = 0; UI < matable->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nombre_auteur; UI++)
+//                     {
+//                         printf("\t\t\t%s\n",matable->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->tab_ptr_auteur[UI]->nom_auteur); 
+//                     }
+                                    
+//                 }else{
+//                     printf("NOPE\n");
+//                 }
+//             }           
+//         }
+// }
 
 void printList_Auteur(tab_auteur_struct * OwO){
     for (int i = 0; i < OwO->taille; i++)
@@ -327,8 +374,8 @@ void printList_Article(tab_Article_struct * OwO){
     
 }
 
-void printPaire_auteurHeurvre(Paire_auteur_oeuvre * OwI,int sizeauteuroeuvre ){
-    for (int i = 0; i < sizeauteuroeuvre ; i++)
+void printPaire_HauteurHeurvre(Paire_auteur_oeuvre * OwI,int sizeHauteurHeuvre ){
+    for (int i = 0; i < sizeHauteurHeuvre ; i++)
     {
         printf("%s => %s\n",OwI[i].nom_auteur,OwI[i].oeuvre->titre);
     }
@@ -559,34 +606,35 @@ tab_auteur_struct * unwrap_Deserilise_Index(const tableaux_fiche * tableaux_fich
 
 //PABIEN
 #define MAXarraySIZE 21143793
-Paire_auteur_oeuvre auteuroeuvre[MAXarraySIZE];
+Paire_auteur_oeuvre HauteurHeuvre[MAXarraySIZE];
 
-tab_auteur_struct * unwrap_ListAuteur_from_xml(FILE * dbinput){
+tab_auteur_struct * unwrap_ListAuteur_from_xml(FILE * dbinput,int * nbauteur){
     tableaux_fiche mesfiche =  parse(dbinput);
-    int sizeauteuroeuvre = SwapStruct(mesfiche,auteuroeuvre);
-    sort_tableaux_fiche(auteuroeuvre,sizeauteuroeuvre);
-    tab_auteur_struct * malistedauteur = gen_List_Auteur(auteuroeuvre,sizeauteuroeuvre);
+    *nbauteur = mesfiche.taille;
+    int sizeHauteurHeuvre = SwapStruct(mesfiche,HauteurHeuvre);
+    sort_tableaux_fiche(HauteurHeuvre,sizeHauteurHeuvre);
+    tab_auteur_struct * malistedauteur = gen_List_Auteur(HauteurHeuvre,sizeHauteurHeuvre);
     return malistedauteur;
 }
 
 
 tab_auteur_struct * unwrap_from_tabfich(tableaux_fiche * mesfiches){
-    int sizeauteuroeuvre = SwapStruct(*mesfiches,auteuroeuvre);
-    sort_tableaux_fiche(auteuroeuvre,sizeauteuroeuvre);
-    tab_auteur_struct * malistedauteur = gen_List_Auteur(auteuroeuvre,sizeauteuroeuvre);
+    int sizeHauteurHeuvre = SwapStruct(*mesfiches,HauteurHeuvre);
+    sort_tableaux_fiche(HauteurHeuvre,sizeHauteurHeuvre);
+    tab_auteur_struct * malistedauteur = gen_List_Auteur(HauteurHeuvre,sizeHauteurHeuvre);
     return malistedauteur;
 }
 
 tab_auteur_struct * unwrap_from_file(FILE * inputFile){
 
     tableaux_fiche * mesfiches = deserialisation(inputFile);
-    int sizeauteuroeuvre = SwapStruct(*mesfiches,auteuroeuvre);
-    sort_tableaux_fiche(auteuroeuvre,sizeauteuroeuvre);
-    tab_auteur_struct * malistedauteur = gen_List_Auteur(auteuroeuvre,sizeauteuroeuvre);
+    int sizeHauteurHeuvre = SwapStruct(*mesfiches,HauteurHeuvre);
+    sort_tableaux_fiche(HauteurHeuvre,sizeHauteurHeuvre);
+    tab_auteur_struct * malistedauteur = gen_List_Auteur(HauteurHeuvre,sizeHauteurHeuvre);
     return malistedauteur;
 }
 
-tab_Article_struct * gen_ListaArticle(const tab_auteur_struct * Malistauteur){
+tab_Article_struct * gen_ListaArticle(const tab_auteur_struct * Malistauteur, int nbArticle){
     //compte le nombre de structure pour le maloc
     int nbstructure = 0;
     for (int i = 0; i < Malistauteur->taille; i++)
@@ -595,22 +643,40 @@ tab_Article_struct * gen_ListaArticle(const tab_auteur_struct * Malistauteur){
     }
     Paire_Article_auteur * Paire_auteur_oeuvre = calloc(nbstructure,sizeof(Article_struct));
     exitIfNull(Paire_auteur_oeuvre,"imposible de crée Paire_auteur_oeuvre");
-    int sizeauteuroeuvre = SwapPaire_auteurHeurvreToPaire_auteurHeurvre(Malistauteur,Paire_auteur_oeuvre);
-    sort_tableaux_Article(Paire_auteur_oeuvre,sizeauteuroeuvre);
-    tab_Article_struct * malistedauteur = gen_List_Article(Paire_auteur_oeuvre,sizeauteuroeuvre);
+    int sizeHauteurHeuvre = SwapPaire_HauteurHeurvreToPaire_HauteurHeurvre(Malistauteur,Paire_auteur_oeuvre);
+    sort_tableaux_Article(Paire_auteur_oeuvre,sizeHauteurHeuvre);
+    tab_Article_struct * malistedauteur = gen_List_Article(Paire_auteur_oeuvre,sizeHauteurHeuvre,nbArticle);
     return malistedauteur;
 }
 
+/**
+ * @brief article depuit le xml de base
+ * 
+ * @param dbinput 
+ * @return tab_Article_struct* 
+ */
 tab_Article_struct * unwrap_ListArticle_from_xml(FILE * dbinput){
-    tab_auteur_struct * malistauteur = unwrap_ListAuteur_from_xml(dbinput);
-    tab_Article_struct * malistaarticle = gen_ListaArticle(malistauteur);
+    int nbauteur = -1;
+    int * pointeurnbauteur = &nbauteur ;
+        printf("Generation Tab auteur:\n");
+    tab_auteur_struct * malistauteur = unwrap_ListAuteur_from_xml(dbinput,pointeurnbauteur);
+        printf("Generation Tab Article:\n");
+    tab_Article_struct * malistaarticle = gen_ListaArticle(malistauteur,*pointeurnbauteur);
     return malistaarticle ;
 }
 
+/**
+ * @brief genere tout
+ * 
+ * @param dblpxml 
+ * @param inverted 
+ * @return unwrap_Graph_struct 
+ */
 unwrap_Graph_struct gen_unwrap_Graph(FILE * dblpxml, FILE * inverted){
+    //check si les cache sont la 
     tableaux_fiche * matablefiche = deserialisation(dblpxml);
     tab_auteur_struct * malistaauteur =   unwrap_Deserilise_Index(matablefiche,inverted);
-    tab_Article_struct * malistearticle = gen_ListaArticle(malistaauteur);
+    tab_Article_struct * malistearticle = gen_ListaArticle(malistaauteur,matablefiche->taille);
     unwrap_Graph_struct graph  = {malistaauteur, malistearticle,matablefiche};
     return graph;
 }
@@ -646,4 +712,4 @@ void unwrap_List_Auteur_free(tab_auteur_struct * afree){
     // memcpy(new_array,listes_Auteur_arrTitre->tab_auteur,(listes_Auteur_arrTitre->taille)*sizeof(auteur_struct)); // < ne déplace pas ...
     // free(listes_Auteur_arrTitre->tab_auteur); // < double free or corruption (out)
     // listes_Auteur_arrTitre->tab_auteur = new_array;
-    // free(new_array);
+    // free(new_array);%   

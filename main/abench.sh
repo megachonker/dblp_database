@@ -18,6 +18,8 @@ help(){
     - unwrap_from_file
     - unwrwap_deserialise
     - unwrwap_gen_cache_small
+    - gen_unwrap_Graph
+    - unwrap_ListArticle_from_xml
     - ALL'
 }
 

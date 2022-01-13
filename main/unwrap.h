@@ -2,7 +2,8 @@
 #define UNWRAP
 // #include "unwrap.h" ///< j'include 
 #include "parsing.h"
-// #include "list.h"
+#include "list.h"
+
 
 
 /**
@@ -32,12 +33,9 @@ typedef struct auteur_struct
     int size;                           ///<taille du tableaux dynamique
     
     //ajoue d'Katie de ce qui est utile pour Dijkstra
-    struct auteur_struct **tab_ptr_voisins;        //tableau de pointeur vers les voisins de l'auteur
-    int nb_voisins;
-    int etiquette;    //distance a la source dans dijkstra
-    struct auteur_struct** plus_court_chemin; //tableau des auteurs parcourus pour arriver a cet auteur dans Dijkstra
-    int size_plus_court_chemin; //nombre d'auteur dans chemin
-    
+    struct auteur_struct* ptr_auteur_predecesseur_pcc; //auteur predecesseur dans le plus court chemin
+    struct Article_struct* ptr_Article_predecesseur_pcc; //auteur predecesseur dans le plus court chemin
+    int size_pcc_auteur; // distance en nombre d'auteur pour passer de l'auteur de depart a l'auteur d'arriver
 }auteur_struct;
 
 /**
