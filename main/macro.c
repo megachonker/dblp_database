@@ -8,7 +8,7 @@
  * @brief progresse bar
  * 
  * utile pour les fonction for
- * e
+ *  premier carac peut buguer ??
  * Un nouvaux argument TITRE pour avoir le context
  * @param indice 
  * @param total 
