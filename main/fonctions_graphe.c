@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "creation_graphe_voisins.h"
+#include "fonctions_graphe.h"
 #include "graphe_test_Katie.h"
 
 

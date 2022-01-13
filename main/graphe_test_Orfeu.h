@@ -5,7 +5,7 @@
 #include "unwrap.h"
 #include "list.h"
 #include <stdlib.h>
-#include "creation_graphe_voisins.h"
+#include "fonctions_graphe.h"
 
 
 auteur_struct** creation_graphe_test(Article_struct** tab_Articles_test);

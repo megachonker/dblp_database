@@ -2,8 +2,8 @@ CCA ?= cc -O0
 CFLAGS ?= -Wall -Wextra -g
 LDLIBS ?= -lm -pthread -ftest-coverage -fprofile-arcs
 
-# graph_voisin:	creation_graphe_voisins 
-# 	valgrind ./creation_graphe_voisins
+# graph_voisin:	fonctions_graphe 
+# 	valgrind ./fonctions_graphe
 
 go:	tests
 	./tests

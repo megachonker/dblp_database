@@ -5,7 +5,7 @@
 #include "unwrap.h"
 #include "list.h"
 #include <stdlib.h>
-#include "creation_graphe_voisins.h"
+#include "fonctions_graphe.h"
 #include<string.h>
 
 typedef enum comparaison_auteur_1

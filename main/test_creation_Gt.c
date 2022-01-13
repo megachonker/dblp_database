@@ -3,7 +3,7 @@
 #include "list.h"
 #include "creation_Gt.h"
 
-#include "creation_graphe_voisins.h"
+#include "fonctions_graphe.h"
 
 
 
