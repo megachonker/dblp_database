@@ -1,6 +1,5 @@
 #ifndef UNWRAP
 #define UNWRAP
-// #include "unwrap.h" ///< j'include 
 #include "parsing.h"
 #include "list.h"
 
@@ -53,6 +52,7 @@ typedef struct Article_struct
 {
     char * nom_Article; ///< générée par deserialisation Contien toute les info d'un article\n qui provienne du parsing
     auteur_struct ** tab_ptr_auteur; ///< Liste de pointeur (meme indice que liste_auteur ) qui reboucle sur auteur avec sont auteur
+    // fiche_minimale * fiche_lier;///<fiche minimal lier a cette article 
     int nombre_auteur;
 }Article_struct;
 
@@ -177,29 +177,6 @@ void printList_Auteur(tab_auteur_struct * OwO);
  */
 tab_auteur_struct * unwrap_from_file(FILE * inputFile);
 
-
-// /**
-//  * @brief DéPRéCIER! voir unwrap_Serilise_Index
-//  * 
-//  * Serialise la structeur tab_auteur_struct
-//  * 
-//  * @param [in] List_des_Auteur 
-//  * @param [out] output
-//  */
-// void unwrap_Serilise(const tab_auteur_struct * List_des_Auteur, FILE * output);
-
-// /**
-//  * @brief DéPRéCIER! voir unwrap_Deserilise_Index
-//  * 
-//  * désérialise l'index des auteur depuis un fichier
-//  * 
-//  * 
-//  * @param [in] input => unwrap_serilise file 
-//  * @return tab_auteur_struct*
-//  */
-// tab_auteur_struct * unwrap_Deserilise(FILE * input);
-
-
 /**
  * @brief sérialisation de tab_auteur_struct
  * 
@@ -226,36 +203,6 @@ void unwrap_Serilise_Index(const tab_auteur_struct * List_des_Auteur, FILE * out
  */
 tab_auteur_struct * unwrap_Deserilise_Index(const tableaux_fiche * List_des_Auteur, FILE * input);
 
-
-// void unwrap_sinc(tab_auteur_struct * List_des_Auteur ,const tableaux_fiche input);
-// /**
-//  * @brief 
-//  * 
-//  * 
-//  * n'ayant pas les object Euvre/auteur
-//  *  apres la décérialisation
-//  *  ajout fonction résolution qui va ajouterune entrée a chaque foit qu'on l'interroge
-//  *  de magnierre a ce qu'il soit possible d'executer l'algo sans avoir tout résolut
-//  *
-//  *  néamoins recalculer depuit from file est plus rapide ...
-//  * 
-//  * @param List_des_Auteur 
-//  * @param resove 
-//  * @param input 
-//  */
-// void unwrap_resolve(tab_auteur_struct * List_des_Auteur, auteur_struct * resove, const tableaux_fiche * input);
-
-// /**
-//  * @brief D2PR3CIER génère une liste chainer a partire d'un tableaux
-//  * 
-//  * 
-//  * @param input 
-//  * @param list_chainer_auteur 
-//  */
-// void convertStruct(tableaux_fiche input, ll_list * list_chainer_auteur );
-
-
-
 unwrap_Graph_struct gen_unwrap_Graph(FILE * dblpxml, FILE * inverted);
 
 
@@ -265,4 +212,10 @@ void unwrap_List_Auteur_free(tab_auteur_struct * free);
 
 tab_Article_struct * unwrap_ListArticle_from_xml(FILE * dbinput);
 
+void serialisation_tab_Article_struct(tab_Article_struct * inputlist, FILE * outputfile);
+
+tab_Article_struct * deserialisation_tab_Article_struct(tab_auteur_struct * mesauteur, FILE * inputfile);
+
+
+tab_Article_struct * gen_ListaArticle(const tab_auteur_struct * Malistauteur, int nbArticle);
 #endif

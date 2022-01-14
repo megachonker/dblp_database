@@ -1,13 +1,11 @@
 #ifndef PARSING_H
 #define PARSING_H
 #include <stdio.h>
-// #include "list.h"
-// #include "unwrap.h"
 
 #define BALISESIZE 1000
 
 /**
- * @brief Titre && liste des auteur
+ * @brief Titre && liste des auteur 
  * 
  * Fiche extraite de parse(FILE * inputDB)
  * 
@@ -17,36 +15,53 @@
  */
 typedef struct fiche_minimale
 {
-    char * titre;           ///< titre de l'nom_auteur / article
+    char * titre;           ///< renomer par article ?
+    //< date de création ?
     int nombre_auteur;      ///< nombre d'auteur contenue dans liste_auteur
     char ** liste_auteur;   ///< liste de liste de caractere des noms d'auteur (Trier gain perf ?)
-    // auteur_struct ** tab_ptr_auteur; ///< Liste de pointeur (meme indice que liste_auteur ) qui reboucle sur auteur_struct avec sont auteur
-    //add une uid pour un auteur :3
     int ADDR;               ///< Indice permetant d'acceder a cette fiche_minimale depuis tableaux_fiche.fiche[ADDR] (initialiser a la création) 
 }fiche_minimale;
+
+
 
 /**
  * @brief Contien toute les fiche_minimale
  * 
- * doublon avec tableaux_fiche !! ?
+ * une fiche a une ADDResse
+ * les addresse sont utilise pour retrouver l'index 
+ * 
+ * tableaux 
  * 
  * @struct tableaux_fiche
  */
 typedef struct tableaux_fiche
 {
     fiche_minimale ** fiche; ///< tableaux des fiche_minimale utiliser
+    // int * ADDR;               ///<UNE FICHE UNE ADDRESS
     int taille;             ///<taille tableaux
 }tableaux_fiche;
 
 
 /**
- * @brief Parse la base de donnée dblp
+ * @brief Parse un fichier XML DBLP
+ * 
+ *  Va générée un tableaux_fiche ainsie que ces fiche_minimale
+ * -    Article
+ * -    auteur
+ *  
+ *  mais aussi
+ *  - génère ADDR de chaque fiche
+ *  - trie les fiche
+ *  
+ * ## Doit pouvoir utiliser les date !
  * 
  * @param inputDB 
  * @return tableaux_fiche 
  */
 tableaux_fiche parse(FILE * inputDB);
 
+
+//arename
 /**
  * @brief Print tableaux_fiche
  * 
@@ -57,21 +72,31 @@ tableaux_fiche parse(FILE * inputDB);
 void printTabmeaux(tableaux_fiche OwU);
 
 /**
- * @brief Sérialise tableaux_fiche
+ * @brief Sérialisation du XML
  * 
- * @param [in]  mastertab 
- * @param [out] outfichier 
+ *  ajouter un truc pour la validitée checksum du programe qui la compiler ?
+ * 
+ * @param [in] mastertab structure tableaux_fiche a sérialiser
+ * @param [out] output    fichier de sortie 
  */
 void serialize(tableaux_fiche mastertab, FILE * outfichier);
 
 /**
- * @brief Désérialise tableaux_fiche
+ * @brief génère tableaux_fiche depuis un cache générée par serialize 
  * 
- * @param [in] input 
- * @return tableaux_fiche* 
+ * test avec des maloc 
+ * 
+ * @param [in] input générée par serialize 
+ * @return pointeur ver tableaux_fiche 
  */
 tableaux_fiche * deserialisation(FILE * input);
 
+//renomer
+/**
+ * @brief free tableaux_fiche
+ * 
+ * @param DEGAGE 
+ */
 void parsing_free(tableaux_fiche * DEGAGE);
 
 #endif

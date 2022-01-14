@@ -1401,3 +1401,7 @@ main/creation_Gt.h.gch
 main/list.h.gch
 main/parsing.h.gch
 main/unwrap.h.gch
+main/a.out
+main/macro.o
+main/callgrind_traceOLD
+main/DATA/SerializedStrucArticle.data
