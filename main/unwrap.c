@@ -256,7 +256,7 @@ tab_Article_struct* gen_List_Article(Paire_Article_auteur * liste,int sizeArticl
 
             if (found == 0)
             {
-                //array plus grand
+                //20% du temps d'execution
                 Article_struct ** tmptest  = reallocarray(
                     dernierarticle->tab_ptr_auteur[*last_auteur]->tab_ptr_Article,
                     (*localnbelementmaj)+1, ///< sur a 0 ?  

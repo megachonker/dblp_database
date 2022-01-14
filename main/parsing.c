@@ -221,7 +221,7 @@ tableaux_fiche parse(FILE * inputDB){
             // printM_titre(*fichelocalM);
             // printM_liste_auteur(*fichelocalM);
 
-            //moche ajouter l'exclusion Preface.  (faire une blackliste a importer ? voir qand trie)
+            //moche ajouter l'exclusion Preface. Editorial. (faire une blackliste a importer ? voir qand trie)
             if (strcmp(fichelocalM->titre,"Home Page")!=0 
             && fichelocalM->nombre_auteur != 0 
             && strcmp(fichelocalM->titre,"")!=0)//ces con mais fichelocalM->titre ou fichelocalM->titre != '' devrais fonctioner..
