@@ -1,22 +1,26 @@
 CCA ?= cc -O0
 CFLAGS ?= -Wall -Wextra -g
-LDLIBS ?= -lm -pthread -ftest-coverage -fprofile-arcs
+LDLIBS ?= -lm -pthread
 
 fct_gr:  fonctions_graphe 
 	./fonctions_graphe
+#gcc -shared -o libfoo.so foo.o
 
-go:	tests
+# graph:	creation_graphe_voisins creation_Gt test_creation_Gt
+# 	./test_creation_Gt
+
+go:	tests abench.sh
 	./tests
+
+abench.sh: bench gen_cache_data
 
 val:	tests 
 	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./tests
 
-abench.sh: bench gen_cache_data
-
-bench:	bench.o parsing.o list.o unwrap.o
+bench:	bench.o parsing.o list.o unwrap.o macro.o
 	$(CCA) -o bench  $^ $(CFLAGS) $(LDLIBS)
 
-tests:	tests.o parsing.o list.o unwrap.o
+tests:	tests.o parsing.o list.o unwrap.o macro.o
 	$(CCA) -o tests  $^ $(CFLAGS) $(LDLIBS)
 
 Dijkstra: Dijkstra.o unwrap.o parsing.o
@@ -25,17 +29,17 @@ Dijkstra: Dijkstra.o unwrap.o parsing.o
 fonctions_graphe: fonctions_graphe.o unwrap.o  parsing.o
 	$(CCA) -o fonctions_graphe $^ $(CFLAGS) $(LDLIBS)
 
-
-main:	main.o parsing.o
+main:	main.o parsing.o macro.o
 	$(CCA) -o main  $^ $(CFLAGS) $(LDLIBS)
 
 %.o: %.c
-	$(CCA) -o $@ -c $< $(CFLAGS)
+	$(CCA) -o $@ -c $< $(CFLAGS) $(LDLIBS)
 
 # %.gcno: %.c
 # 	$(CCA) -o $@ -c $< $(CFLAGS)
 
 raport: bench.c parsing.c list.c unwrap.c
+	LDLIBS ?= -lm -pthread -ftest-coverage -fprofile-arcs
 	$(CCA) -O0 -o GCOVtests  $^ $(CFLAGS) $(LDLIBS)
 	./GCOVtests unwrwap_deserialise
 	./GCOVtests serialized
@@ -49,10 +53,13 @@ doc:
 	doxygen Doxyfile
 	firefox html/index.html
 
-callgrind:	bench
+callgrind:	abench.sh
+	LDLIBS ?= -lm -pthread -ftest-coverage -fprofile-arcs
+	make clean
+	make bench
 	valgrind --dump-instr=yes --collect-jumps=yes --tool=callgrind --callgrind-out-file=callgrind_trace ./bench gen_unwrap_Graph
-	kcachegrind callgrind_trace
-	rm callgrind_trace
+	kcachegrind callgrind_trace_gen_unwrap_Graph
+	# rm callgrind_trace_gen_unwrap_Graph
 # lunch kprok pour profiler le temps d'execution
 
 Update: DATA/dblp.xml
@@ -72,32 +79,35 @@ DATA/dblp1sur8.xml: DATA/dblp.xml
 DATA/SerializedStruc.data:	DATA/dblp.xml parsing.o
 	./bench serialized
 
-DATA/Serialzed1000.data: 	DATA/dblp1sur8.xml
+DATA/Serialzed1000.data: 	DATA/dblp1sur8.xml parsing.o
 	./bench serializedsmall
 
-DATA/SerializedStrucInverse1000.data:	DATA/Serialzed1000.data
+DATA/SerializedStrucInverse1000.data:	DATA/Serialzed1000.data 
+#unwrap.o
 	./bench unwrwap_gen_cache_small
 
 #LA
-DATA/SerializedStrucInverse.data: DATA/SerializedStruc.data
+DATA/SerializedStrucInverse.data: DATA/SerializedStruc.data 
+#unwrap.o
 	./bench unwrwap_gen_cache
 
-gen_cache_data: DATA/dblp.xml DATA/dblp1sur8.xml DATA/SerializedStrucInverse.data DATA/Serialzed1000.data DATA/SerializedStruc.data DATA/SerializedStrucInverse1000.data
+DATA/SerializedStrucArticle.data: DATA/SerializedStruc.data 
+#unwrap.o
+	./bench unwrap_serialise_Article
 
-r: clean abench.sh
+gen_cache_data: DATA/dblp.xml DATA/dblp1sur8.xml DATA/SerializedStrucInverse.data DATA/Serialzed1000.data DATA/SerializedStruc.data DATA/SerializedStrucInverse1000.data DATA/SerializedStrucArticle.data
+
+r: cleanall go
 
 clean:
 	rm -f  *.o *.so *.gcno *.gcda *.gch *.gcov coverage.info vgcore.*
 	rm -fr tests bench main GCOVtests LcovRapport html latex
-
-cleanall: clean Update
+# Update
+cleanall: clean 
 	rm -f DATA/SerializedStrucInverse.data\
 		DATA/dblp1sur8.xml\
 		DATA/SerializedStruc.data\
 		DATA/Serialzed1000.data\
 		DATA/SerializedStrucInverse1000.data\
-
-
-
 
 # instaler doxygene est lcov

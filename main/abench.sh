@@ -5,7 +5,7 @@ help(){
     echo "Help"
     echo "  calcule le temps moyen d'une fonction en prenant le temps cpu est temps user"
     echo "./bench TEST NUBERoftime"
-    echo ' les diférant test disponible
+    echo ' les diférants test disponible
     - readb
     - readsmaldb
     - serialized
