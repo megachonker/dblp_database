@@ -300,26 +300,8 @@ tab_Article_struct* gen_List_Article(Paire_Article_auteur * liste,int sizeArticl
 
         j+=i;//mais ici
 
-        // Article_struct Sometgenere = ListDesArticle->tab_Article[ListDesArticle->nombre_Article];
-        // fprintf(stderr,"%s\n",Sometgenere.nom_Article);
-        // fprintf(stderr,"\tnombre d'auteur %d\n",Sometgenere.nombre_auteur); ///BIZARD BUG ?
-        // for (int ii = 0; ii < Sometgenere.nombre_auteur; ii++)
-        // {
-        //     fprintf(stderr,"\t%s\n",Sometgenere.tab_ptr_auteur[ii]->nom_auteur);
-        //     fprintf(stderr,"\t\tnombre d'nom_Article %d\n",Sometgenere.tab_ptr_auteur[ii]->nbelementmagi); ///BIZARD BUG ?
-        //     for (int Uu = 0; Uu < Sometgenere.tab_ptr_auteur[ii]->nbelementmagi; Uu++)
-        //     {
-        //         fprintf(stderr,"\t\t%s\n",Sometgenere.tab_ptr_auteur[ii]->tab_ptr_Article[Uu]->nom_Article);
-        //     }
-         
-        // }
         (*nbarticle)++;
     }
-    // for (int i = 0; i < ListDesArticle->nombre_Article; i++)
-    // {
-    //     fprintf(stderr,"%s\n",ListDesArticle->tab_Article[i].tab_ptr_auteur[0]->tab_ptr_Article[0]->nom_Article);
-    // }
-    
     return ListDesArticle;
 }
 
@@ -381,12 +363,12 @@ void unwrap_Serilise_Index(const tab_auteur_struct * List_des_Auteur, FILE * out
     INFO("génération unwrap_Serilise_Index")
     DEBUG("unwrap:unwrap_Serilise_Index")
     //fonction d'qui fait la moyenne des nom_auteur pour pouvoir fair un maloque que une foit en moyenne
-    fprintf(output,"%d\n",count_isolate_autor(List_des_Auteur));
+    fprintf(output,"%d\n",count_isolate_autor(List_des_Auteur));// est egale a List_des_Auteur->taille
     for (int i = 0; i < List_des_Auteur->taille; i++)
     {
         #ifdef WARN_ON
-        progressbar(i,List_des_Auteur->taille);
-                #endif
+        progressbar(i+1,List_des_Auteur->taille);
+        #endif
         if(List_des_Auteur->tab_auteur[i].size > 0){
             // List_des_Auteur->tab_auteur[i].
             // fprintf(output,"%d\n",List_des_Auteur->tab_auteur[i].DECALAGE);
@@ -470,7 +452,7 @@ tab_auteur_struct * unwrap_ListAuteur_from_xml(FILE * dbinput,int * nbauteur){
     //faire une fonciton pour sacoir la taille total verifier le temps
     int sizeHauteurHeuvre = SwapStruct(mesfiche,HauteurHeuvre);
     DEBUG("DEBUGGG ARRAY %d, %d",MAXarraySIZE,sizeHauteurHeuvre);
-    exit(0);
+    // exit(0);
     // Paire_auteur_oeuvre HauteurHeuvre = malloc(sizeHauteurHeuvre*sizeof(Paire_auteur_oeuvre));
     // exitIfNull(HauteurHeuvre,"erreur allocation HauteurHeuvre");
     sort_tableaux_fiche(HauteurHeuvre,sizeHauteurHeuvre);
@@ -549,6 +531,7 @@ void serialisation_tab_Article_struct(tab_Article_struct * inputlist, FILE * out
     }
     INFO("Sérialisation des Article: Terminer")
 }
+
 /**
  * @brief Ajouter un article a l'auteur
  * ## a faire
@@ -558,18 +541,19 @@ void serialisation_tab_Article_struct(tab_Article_struct * inputlist, FILE * out
  * @param monArticle 
  */
 void ajout_Article_in_auteur(auteur_struct * monauteur,Article_struct * monArticle){
-    // monauteur->size????
-    for (int i = 0; i < monauteur->nbelementmagi; i++)
-    {
-        if(monauteur->tab_ptr_Article[i] == monArticle){
-            return;
-        }
-    }
+    // Check doublon
+    // for (int i = 0; i < monauteur->nbelementmagi; i++)
+    // {
+    //     if(monauteur->tab_ptr_Article[i] == monArticle){
+    //         return;
+    //     }
+    // }
     Article_struct ** tmptest = reallocarray(monauteur->tab_ptr_Article,monauteur->nbelementmagi+1,sizeof(Article_struct*));
     exitIfNull(tmptest,"ajout article erreur realockarray")
     tmptest[monauteur->nbelementmagi] = monArticle;
     monauteur->tab_ptr_Article = tmptest;
     monauteur->nbelementmagi++;
+    DEBUG("\t\t tableauxd d'article %p nb element %d ",monauteur->tab_ptr_Article,monauteur->nbelementmagi)
     // DEBUG("%d",monauteur->nbelementmagi)
 }
 
@@ -600,7 +584,7 @@ tab_Article_struct * deserialisation_tab_Article_struct(tab_auteur_struct * mesa
         
         //pas si utile .... Peut faire autrement
         fgets(ligne,BALISESIZE,inputfile);
-        DEBUG(ligne)
+        // DEBUG("%s",ligne)
         monArticle->nom_Article = strdup(ligne);
 
         //nombre d'auteur sur cette structure
@@ -612,24 +596,49 @@ tab_Article_struct * deserialisation_tab_Article_struct(tab_auteur_struct * mesa
 
 
         monArticle->tab_ptr_auteur = NULL;
-        auteur_struct * structauteur = malloc(sizeof(auteur_struct)*nbauteur);
+        auteur_struct * structauteur = calloc(sizeof(auteur_struct),nbauteur);
         exitIfNull(structauteur,"deserialisation article maloc fail, %dauteur %luocter"
         ,nbauteur,sizeof(auteur_struct)*nbauteur)
-        monArticle->tab_ptr_auteur = &structauteur;
+        monArticle->tab_ptr_auteur = structauteur;
+        //je parcoure tout mes auteur
         for (int i = 0; i < nbauteur; i++)
         {
             int indexmagie = 0;
             fgets(ligne,BALISESIZE,inputfile);
             sscanf(ligne,"%d\n",&indexmagie);
+            //je cherche dans le tab auteur en fc de l'index trouver
             structauteur[i] = mesauteur->tab_auteur[indexmagie];
+
+            //je doit  associer a mon auteur de quoi joindre mon article
+
             //pas obligatoir
             // structauteur[i].nbelementmagi = indexmagie;
             // DEBUG("size %d nombre element maj %d", structauteur[i].size,structauteur[i].nbelementmagi)
             // YOLO("hauteur: %s",structauteur[i].nom_auteur);
+            DEBUG("Ajout de l'article a  %")
             ajout_Article_in_auteur(&structauteur[i],monArticle);
+            DEBUG("!!! addresse %p, nombre d'article contenue %d, %s",structauteur[i].tab_ptr_Article,structauteur[i].nbelementmagi,structauteur[i].nom_auteur)
+        }
+
+        //le réalock fout la merde 
+
+        INFO("Noms article %s",monArticle->nom_Article)
+        INFO("Nombre d'article %d",monArticle->nombre_auteur)
+        for (int i = 0; i < monArticle->nombre_auteur; i++)
+        {
+            DEBUG("\tAddresse alouer: %p",monArticle->tab_ptr_auteur[i])
+            DEBUG("\tNoms auteur %s",monArticle->tab_ptr_auteur[i]->nom_auteur)
+            WARNING("-----")
         }
         
+        
     }
+
+    //tester ici? 
+
+
+
+
     return mon_tab_Article_struct;
 }
 
@@ -643,7 +652,7 @@ tab_Article_struct * unwrap_ListArticle_from_xml(FILE * dbinput){
     DEBUG("unwrap_ListArticle_from_xml:")
     int nbauteur = -1;
     int * pointeurnbauteur = &nbauteur ;
-    tab_auteur_struct * malistauteur = unwrap_ListAuteur_from_xml(dbinput,pointeurnbauteur);
+    tab_auteur_struct * malistauteur = unwrap_ListAuteur_from_xml(dbinput,pointeurnbauteur);//la
     tab_Article_struct * malistaarticle = gen_ListaArticle(malistauteur,*pointeurnbauteur);
     INFO("tab_Article_struct générée")
     return malistaarticle ;
