@@ -216,6 +216,7 @@ void serialisation_tab_Article_struct(tab_Article_struct * inputlist, FILE * out
 
 tab_Article_struct * deserialisation_tab_Article_struct(tab_auteur_struct * mesauteur, FILE * inputfile);
 
-
 tab_Article_struct * gen_ListaArticle(const tab_auteur_struct * Malistauteur, int nbArticle);
+
+tab_auteur_struct * unwrap_ListAuteur_from_xml(FILE * dbinput,int * nbauteur);
 #endif
