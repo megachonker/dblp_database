@@ -48,53 +48,49 @@ int main()
 {
     INFO("exection de tests")
 
-    FILE * DBxml            = fopen(serializedb,"r");
-    FILE * DBinverse        = fopen(serializedbunwrap,"r");
-    FILE * CacheArticleW    = fopen(serialised_Article,"r");
-
-    // // DEBUG("fichier ouver")
-
-    // FILE * DBxml = fopen(smallserializedb,"r");
-    // FILE * DBinverse = fopen(smallserializedbunwrap,"r");
+    // FILE * DBxml            = fopen(serializedb,"r");
+    // FILE * DBinverse        = fopen(serializedbunwrap,"r");
+    // FILE * CacheArticleW    = fopen(serialised_Article,"r");
 
 
-    // exitIfNull(DBxml,"INPUT PAS CHEMAIN")
-    // exitIfNull(DBinverse,"INPUT PAS CHEMAIN")
-    // exitIfNull(CacheArticleW,"INPUT PAS CHEMAIN")
+
+    FILE * DBxml            = fopen(customxml,"r");
+    // FILE * DBinverse        = fopen(serializedbunwrap,"r");
+    // FILE * CacheArticleW    = fopen(serialised_Article,"r");
+//serialised_Articlecustom
 
 
-    // DEBUG("check fichier\nok")
-    // INFO("generate graph:")
-    // unwrap_Graph_struct mongraph =  gen_unwrap_Graph(DBxml,DBinverse);
-    // INFO("genoK")
-    // tab_Article_struct * matable = mongraph.tab_Article_struct;
+    FILE * custominverarti            = fopen(serialised_Articlecustom,"w");
 
+    FILE * ouputDB = fopen(customserializedbunwrap,"w");
+    exitIfNull(ouputDB,"imposible d'ouvrire "customserializedbunwrap)
+    int nbauteur = -1;
+    int * pointeurnbauteur = &nbauteur ;
+    tab_auteur_struct * malistauteur = unwrap_ListAuteur_from_xml(DBxml,pointeurnbauteur);
+    unwrap_Serilise_Index(malistauteur,ouputDB);
+    
+    fclose(ouputDB);
+    //customserializedbunwrap
 
-    // INFO("sérialisation Article")    
-    // serialisation_tab_Article_struct(matable,CacheArticleW);
+    FILE * inn = fopen(customserializedbunwrap,"r");
+    exitIfNull(inn,"imposible d'ouvrire "customserializedbunwrap)
 
+// ces bon
+fseek(DBxml,0,SEEK_SET);
+    tab_Article_struct * azerazer = unwrap_ListArticle_from_xml(DBxml);
+    serialisation_tab_Article_struct(azerazer,custominverarti);
 
-    // WARNING("ptitearticlestructok")
-    // exit(1);
-    // fclose(serializedb);
-    // fclose(serializedbunwrap);
-    // fclose(serialised_Article);
+    fclose(custominverarti);
+    FILE * aaaaaaa            = fopen(serialised_Articlecustom,"r");
 
-
-    // FILE * DBxml = fopen(smallserializedb,"r");
-    // FILE * DBinverse = fopen(smallserializedbunwrap,"r");
-    // exitIfNull(DBxml,"INPUT PAS CHEMAIN")
-    // exitIfNull(DBinverse,"INPUT PAS CHEMAIN")
-    tableaux_fiche * matablefiche = deserialisation(DBxml);
-
-    tab_auteur_struct * malistaauteur = unwrap_Deserilise_Index(matablefiche,DBinverse);
+    // tab_auteur_struct * malistaauteur = unwrap_Deserilise_Index(matablefiche,DBinverse);
 
     // FILE * CacheArticleW    = fopen(serialised_Article,"r");
     // exitIfNull(CacheArticleW,"INPUT PAS CHEMAIN")
 
-    tab_Article_struct * matable = deserialisation_tab_Article_struct(malistaauteur,CacheArticleW);
+    tab_Article_struct * matable = deserialisation_tab_Article_struct(malistauteur,aaaaaaa);
     INFO("deserialisation terminer")
-
+    exit(0);
     // serialised_Article
 
     //gérée la création
@@ -110,11 +106,11 @@ int main()
                 printf("\t%s ==> %d\n",matable->tab_Article[i].tab_ptr_auteur[u]->nom_auteur,matable->tab_Article[i].tab_ptr_auteur[u]->nbelementmagi);
                 for (int pp = 0; pp < matable->tab_Article[i].tab_ptr_auteur[u]->nbelementmagi; pp++)
                 {
-                    printf("\t\t%s ==> %d\n",matable->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nom_Article,matable->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nombre_auteur); 
-                    for (int UI = 0; UI < matable->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nombre_auteur; UI++)
-                    {
-                        printf("\t\t\t%s\n",matable->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->tab_ptr_auteur[UI]->nom_auteur); 
-                    }
+                    // // printf("\t\t%s ==> %d\n",matable->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nom_Article,matable->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nombre_auteur); 
+                    // for (int UI = 0; UI < matable->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nombre_auteur; UI++)
+                    // {
+                    //     printf("\t\t\t%s\n",matable->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->tab_ptr_auteur[UI]->nom_auteur); 
+                    // }
                 }           
             }
     }
