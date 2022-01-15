@@ -39,7 +39,7 @@ moyenne(){
     
     for nbtest in $(seq $NUBMER);
     do
-        /bin/time -f "%S+%U" ./bench $1 2>&1 |bc|tee -a /tmp/tmpIwI
+        /bin/time -f "START%S+%U" ./bench $1 2>&1|tail -n1|grep -oP "START\K.*$" |bc |bc|tee -a /tmp/tmpIwI
     done
     echo temps moyen:
     OP=$(echo -n \( ; tr '\n' '+' < /tmp/tmpIwI ; echo 0\)/${NUBMER})
