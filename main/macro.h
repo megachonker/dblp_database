@@ -17,8 +17,12 @@
 #define serializedb             "DATA/SerializedStruc.data"
 #define smallserializedb        "DATA/Serialzed1000.data"
 #define serializedbunwrap       "DATA/SerializedStrucInverse.data"
+//custom
 #define smallserializedbunwrap  "DATA/SerializedStrucInverse1000.data"
+#define customserializedbunwrap  "DATA/SerializedStrucInverseCustom.data"
 #define serialised_Article      "DATA/SerializedStrucArticle.data"
+#define serialised_Articlecustom      "DATA/SerializedStrucArticleCustom.data"
+
 
 //macro pour les couleur
 #define GREEN() fprintf(stderr,"\033[1;32m");
