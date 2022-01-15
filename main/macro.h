@@ -17,46 +17,46 @@
 #define serializedb             "DATA/SerializedStruc.data"
 #define smallserializedb        "DATA/Serialzed1000.data"
 #define serializedbunwrap       "DATA/SerializedStrucInverse.data"
-//custom
 #define smallserializedbunwrap  "DATA/SerializedStrucInverse1000.data"
 #define customserializedbunwrap  "DATA/SerializedStrucInverseCustom.data"
 #define serialised_Article      "DATA/SerializedStrucArticle.data"
 #define serialised_Articlecustom      "DATA/SerializedStrucArticleCustom.data"
 
+#define SIZEBAR 30
 
 //macro pour les couleur
-#define GREEN() fprintf(stderr,"\033[1;32m");
-#define BLUE()  fprintf(stderr,"\033[1;34m");
-#define RED()   fprintf(stderr,"\033[1;31m");
-#define YELLO() fprintf(stderr,"\033[1;93m");
-#define GREY() fprintf(stderr,"\033[1;90m");
-#define CLR()   fprintf(stderr,"\033[0m");
+#define GREEN()     fprintf(stderr,"\033[1;32m");
+#define BLUE()      fprintf(stderr,"\033[1;34m");
+#define RED()       fprintf(stderr,"\033[1;31m");
+#define YELLO()     fprintf(stderr,"\033[1;93m");
+#define GREY()      fprintf(stderr,"\033[1;90m");
+#define CLRCOLOR()  fprintf(stderr,"\033[0m");
+#define CLRLINE()   fprintf(stderr,"\033[%dD\033[K",3*SIZEBAR);
 
 //definition des marcro variadique
 
 #ifdef DEBUG_ON
-#define DEBUG(...) GREEN() fprintf(stderr,"\t"); fprintf(stderr, __VA_ARGS__); CLR() fprintf(stderr,"\n");
+#define DEBUG(...) GREEN() fprintf(stderr,"\033[K\t"); fprintf(stderr, __VA_ARGS__); CLRCOLOR() fprintf(stderr,"\n");
 #else
 #define DEBUG(...) ;
 #endif
 #ifdef INFO_ON
-#define INFO(...) BLUE() fprintf(stderr, __VA_ARGS__); CLR() fprintf(stderr,"\n");
+#define INFO(...) BLUE() fprintf(stderr,"\033[K\t"); fprintf(stderr, __VA_ARGS__); CLRCOLOR() fprintf(stderr,"\n");
 #else
 #define INFO(...) ;
 #endif
 #ifdef WARN_ON
-#define WARNING(...) YELLO() fprintf(stderr, __VA_ARGS__); CLR() fprintf(stderr,"\n");
+#define WARNING(...) YELLO() fprintf(stderr,"\033[K\t"); fprintf(stderr, __VA_ARGS__); CLRCOLOR() fprintf(stderr,"\n");
 #else
 #define WARNING(...) ;
 #endif
 #ifdef YOLO_ON
-#define YOLO(...) GREY() fprintf(stderr, __VA_ARGS__); CLR() fprintf(stderr,"\n");
+#define YOLO(...) GREY() fprintf(stderr,"\033[K\t"); fprintf(stderr, __VA_ARGS__); CLRCOLOR() fprintf(stderr,"\n");
 #else
 #define YOLO(...);
 #endif
 
-
-#define ERROR(...) RED() fprintf(stderr, __VA_ARGS__); CLR() fprintf(stderr,"\n");//faire un fprint
+#define ERROR(...) RED() fprintf(stderr,"\033[K\t"); fprintf(stderr, __VA_ARGS__); CLRCOLOR() fprintf(stderr,"\n");
 
 #define exitIfNull(p,...)\
 if (!p)\

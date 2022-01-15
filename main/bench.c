@@ -245,5 +245,6 @@ int main(int argc, char const *argv[])
     else{
         fprintf(stderr,"PAS BON TEST!\n");
     }
+    CLRLINE()
     return 0;
 }

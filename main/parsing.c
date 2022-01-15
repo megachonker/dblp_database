@@ -129,6 +129,7 @@ void appendTabmeaux(tableaux_fiche * table, fiche_minimale * a_ajouter){
 void gen_id_fiche(tableaux_fiche * tableaux_allfiche){
     for (int i = 0; i < tableaux_allfiche->taille; i++)
     {
+        progressbar(i,tableaux_allfiche->taille);
         tableaux_allfiche->fiche[i]->ADDR = i;
     }
 }
@@ -150,7 +151,7 @@ static int cmptabfiche(const void * maficheA,const void * maficheB){
 }
 
 void sortlist(tableaux_fiche * mesfiche ){
-    //INFO trie des liste parsing
+    DEBUG("trie des liste parsing")
     qsort(mesfiche->fiche,mesfiche->taille,sizeof(mesfiche->fiche),cmptabfiche);   
 }
 
@@ -257,10 +258,12 @@ void serialize(const tableaux_fiche mastertab, FILE * output){
         //validitée
     for (int i = 0; i < mastertab.taille; i++)
     {
+        progressbar(i,mastertab.taille);
         fprintf(output,"%s\n",mastertab.fiche[i]->titre);
         fprintf(output,"%i\n",mastertab.fiche[i]->nombre_auteur); //fusioner les 2 en une écritur ?
         for (int  u = 0; u < mastertab.fiche[i]->nombre_auteur; u++)//tout concaténée
         {
+            progressbar(i,mastertab.taille);
             fprintf(output,"%s\n",mastertab.fiche[i]->liste_auteur[u]);
         }
         //une soeule écriture ici
@@ -345,8 +348,10 @@ tableaux_fiche * deserialisation(FILE * input){
  * @param DEGAGE 
  */
 void parsing_free(tableaux_fiche * DEGAGE){
+    INFO("Free parsing")
     for (int i = 0; i < DEGAGE->taille; i++)
     {
+        progressbar(i,DEGAGE->taille);
         free(DEGAGE->fiche[i]->titre);
         for (int u = 0; u < DEGAGE->fiche[i]->nombre_auteur; u++)
         {

@@ -15,16 +15,20 @@
  */
 void progressbar(int indice, int total)
 {
-    indice++;//pour eviter div 0
-    int taille = 20; //taille de l'écrant a faire plus tard
+    exitIfNull(total    ,"progress bar total  0 or null")    
+    int taille = SIZEBAR; //taille de l'écrant a faire plus tard
+    if (total<taille)
+        taille = total;
 
-    if(indice%((total/8)+1))//+1 pour eviter division par zero
+    //check division par zer
+    if (indice%(total/taille))
         return;
-    //afficher que 8 foit donc a chaque changement de bare
-    //que quand l'égaliter fait avancer la bar
 
-    char arrow[100];//taille max de la flech
+    char arrow[2*SIZEBAR];//taille max de la fleche
     float rapport = (float)indice/total;
+    if (!rapport)
+        arrow[0] = '>';
+    
     for (int i = 0; i < taille; i++)
     {
         float progression = rapport * taille;
@@ -37,8 +41,26 @@ void progressbar(int indice, int total)
         }
     }
     arrow[taille+1] = '\0';
-    WARNING("[%s] %d/%d",arrow,indice,total);
+    YELLO()
+    fprintf(stderr,"\t\t[%s] (%d / %d)",arrow,indice,total);
+    CLRCOLOR()
+    fprintf(stderr,"\033[%dD",3*SIZEBAR);
 }
+// #include <unistd.h>
+
+// int main(int argc, char const *argv[])
+// {
+//     DEBUG("moaarr")
+//     for (int b = 0; b < 100000; b++)
+//     {
+//         sleep(0.1);        
+//         progressbar(b,100000);
+//     }
+//     DEBUG("fuck me dady")
+//     return 0;
+// }
+
+// clear   \033[K
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
