@@ -132,25 +132,27 @@ void add_titre_to_auteur(auteur_struct * list,const Paire_auteur_oeuvre HtH){//c
     list->size++;
 }
 
+#define PROFONDEUREXP 3
 
 void exploreauteur(const auteur_struct * monauteur,int profondeur);
 
 void explorearticle(const Article_struct * monarticle, int profondeur){
-    if (profondeur > 3)
+    // INFO("Exploration Article")
+    if (profondeur > PROFONDEUREXP)
     {
         return;
     }
     
-    BLUE()
-    tabulation(profondeur);
-    printf("%s\n",monarticle->nom_Article);
+    // BLUE()
+    // tabulation(profondeur);
+    // printf("%s\n",monarticle->nom_Article);
+    profondeur++;
     for (int i = 0; i < monarticle->nombre_auteur; i++)
     {
-        GREEN()
-        profondeur++;
-        tabulation(profondeur);
-        printf("%s\n",monarticle->tab_ptr_auteur[i]->nom_auteur);
-         CLRCOLOR()
+        // GREEN()
+        // tabulation(profondeur);
+        // printf("%s\n",monarticle->tab_ptr_auteur[i]->nom_auteur);
+        //  CLRCOLOR()
 
         exploreauteur(monarticle->tab_ptr_auteur[i],profondeur);
     }
@@ -158,7 +160,8 @@ void explorearticle(const Article_struct * monarticle, int profondeur){
 }
 
 void exploreauteur(const auteur_struct * monauteur,int profondeur){
-    if (profondeur > 3)
+    // INFO("Exploration auteur")
+    if (profondeur > PROFONDEUREXP)
     {
         return;
     }
@@ -166,7 +169,8 @@ void exploreauteur(const auteur_struct * monauteur,int profondeur){
     tabulation(profondeur);
     printf("%s\n",monauteur->nom_auteur);
     CLRCOLOR()
-    for (int i = 0; i < monauteur->nbelementmagi; i++)
+    profondeur++;
+    for (int i = 0; i < monauteur->nbArticlecontenue; i++)
     {
         BLUE()
         profondeur++;
