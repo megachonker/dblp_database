@@ -8,7 +8,7 @@ LDLIBS ?= -lm -pthread -ftest-coverage -fprofile-arcs
 # graph:	creation_graphe_voisins creation_Gt test_creation_Gt
 # 	./test_creation_Gt
 
-fonctions_graphe: fonctions_graphe
+graphe: fonctions_graphe
 	./fonctions_graphe
 
 go:	tests abench.sh
@@ -22,7 +22,7 @@ val:	abench.sh
 bench:	bench.o parsing.o list.o unwrap.o macro.o
 	$(CCA) -o bench  $^ $(CFLAGS) $(LDLIBS)
 
-tests:	tests.o parsing.o list.o unwrap.o macro.o
+tests:	tests.o parsing.o list.o unwrap.o macro.o search.o
 	$(CCA) -o tests  $^ $(CFLAGS) $(LDLIBS)
 
 Dijkstra: Dijkstra.o unwrap.o parsing.o

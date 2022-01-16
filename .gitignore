@@ -1428,3 +1428,8 @@ main/macro.gcda
 main/macro.gcno
 main/tests.gcno
 main/tests.gcda
+main/search.o
+main/search.gcda
+main/search.gcno
+main/DATA/small_article.data
+main/DATA/customfichecache.data

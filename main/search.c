@@ -1,20 +1,18 @@
 #include <stdio.h>
-#include <unwrap.h>
+#include "unwrap.h"
 #include "macro.h"
+#include "search.h"
 
-unwrap_Graph_struct * graph;
+// unwrap_Graph_struct * graph;
 
-enum{
-    TOP_Article,
-    TOP_auteur
-}
-search(char * auteurA, char * auteurB){
 
-}
+// search(char * auteurA, char * auteurB){
 
-sort(){
+// }
 
-}
+// sort(){
+
+// }
 
 
 /**
@@ -28,43 +26,64 @@ sort(){
 tab_Article_struct get_top_Article(const tab_Article_struct * tout_article,int topX){
     INFO("get top %d des Article",topX);
     int indicepill=0;
-    topX%indicepill;
     Article_struct * pile = calloc(sizeof(Article_struct),topX);
     exitIfNull(pile,"imposible de faire la pille")
 
-    Article_struct premier ={premier.nom_Article  = "test",
-                            premier.nombre_auteur = 0};
+    Article_struct premier ={.nom_Article  = "test",
+                            .nombre_auteur = 0};
     pile[0] = premier;
 
     for (int i = 0; i < tout_article->nombre_Article; i++)
     {
         progressbar(i,tout_article->nombre_Article);
-        if (pile[topX%indicepill].nombre_auteur < tout_article->tab_Article[i].nombre_auteur)
+        if (pile[indicepill%topX].nombre_auteur < tout_article->tab_Article[i].nombre_auteur)
         {
             indicepill++;
-            pile[topX%indicepill] = tout_article->tab_Article[i];
+            pile[indicepill%topX] = tout_article->tab_Article[i];
         }
     }
     tab_Article_struct top_article = {
-            top_article.nombre_Article = topX,
-            top_article.tab_Article = pile};
+                .nombre_Article = topX,
+                .tab_Article = pile};
     return top_article;
 }
 
 
-// get_top_auteur(){
+tab_auteur_struct get_top_auteur(const tab_auteur_struct * tout_auteur,int topX){
+    INFO("get top %d des auteur",topX);
+    int indicepill=0;
+    auteur_struct * pile = calloc(sizeof(auteur_struct),topX);
+    exitIfNull(pile,"imposible de faire la pille")
 
-// }
+    auteur_struct premier ={.nom_auteur  = "test",
+                            .nbelementmagi = 0};
+    pile[0] = premier;
 
-scoarboard(unwrap_Graph_struct * mongraph , int getwhat ,int nbentrer){
+    for (int i = tout_auteur->nombre_auteur; i > 0; i--)
+    {
+        progressbar(i,tout_auteur->nombre_auteur);
+        if (pile[indicepill%topX].nbelementmagi < tout_auteur->tab_auteur[i].nbelementmagi)
+        {
+            indicepill++;
+            pile[indicepill%topX] = tout_auteur->tab_auteur[i];
+        }
+    }
+    tab_auteur_struct top_auteur = {
+                .nombre_auteur = topX,
+                .tab_auteur = pile};
+    return top_auteur;
+}
+
+void scoarboard(const unwrap_Graph_struct * mongraph ,const int getwhat ,const int nbentrer){
     switch (getwhat)
     {
     case TOP_Article:
-        tab_Article_struct monTop = get_top_Article(mongraph->tab_Article_struct,nbentrer);
-        printList_Article(&monTop);
+        tab_Article_struct monTopArticle = get_top_Article(mongraph->tab_Article_struct,nbentrer);
+        printList_Article(&monTopArticle);
         break;
     case TOP_auteur:
-
+        tab_auteur_struct monTopauteur = get_top_auteur(mongraph->tab_auteur_struct,nbentrer);
+        printList_auteur(&monTopauteur);
         break;
 
     default:

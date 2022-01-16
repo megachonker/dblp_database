@@ -9,6 +9,8 @@
 
 #include "macro.h"
 
+#include "search.h"
+
 //écrire des int dans un fichier
 
 //bench la vitese des comparaison een fonction de la taille des var
@@ -17,40 +19,38 @@ int main()
 {
     INFO("exection de tests")
 
+    // FILE * DBficheLecture   = fopen(cache_fiche     ,"r");
+    // FILE * DBauteurLecture  = fopen(auteur_cache    ,"r");
+    // FILE * DBArticleLecture = fopen(Article_cache   ,"r");
+
+
+    // unwrap_Graph_struct graph = deserialise_Graph(DBficheLecture
+    //                                 ,DBauteurLecture
+    //                                 ,DBArticleLecture);
+
+    // exitIfNull(DBficheLecture  ,"erreur ouverture bd")
+    // exitIfNull(DBauteurLecture ,"erreur ouverture bd")
+    // exitIfNull(DBArticleLecture,"erreur ouverture bd")
+
+    // fclose(DBficheLecture);
+    // fclose(DBauteurLecture);
+    // fclose(DBArticleLecture);
+
+
     FILE * XML               = fopen(origineXML      ,"r");
     
     exitIfNull(XML  ,"erreur ouverture bd")
 
     unwrap_Graph_struct graph= gen_Graph_from_XML(XML);
 
-    FILE * DBficheEcriture   = fopen(cache_fiche     ,"w");
-    FILE * DBauteurEcriture  = fopen(auteur_cache    ,"w");
-    FILE * DBArticleEcriture = fopen(Article_cache   ,"w");
+    fclose(XML);
 
-    serialise_Graph(graph   ,DBficheEcriture
-                            ,DBauteurEcriture
-                            ,DBArticleEcriture);
-
-    fclose(DBficheEcriture);
-    fclose(DBauteurEcriture);
-    fclose(DBArticleEcriture);
+    // printList_auteur(graph.tab_auteur_struct);
+    // printList_Article(graph.tab_Article_struct);
+    scoarboard(&graph,TOP_auteur,10);
 
 
-    FILE * DBficheLecture   = fopen(cache_fiche     ,"r");
-    FILE * DBauteurLecture  = fopen(auteur_cache    ,"r");
-    FILE * DBArticleLecture = fopen(Article_cache   ,"r");
-
-
-    unwrap_Graph_struct graph2 = deserialise_Graph(DBficheLecture
-                                    ,DBauteurLecture
-                                    ,DBArticleLecture);
-
-    exitIfNull(DBficheLecture  ,"erreur ouverture bd")
-    exitIfNull(DBauteurLecture ,"erreur ouverture bd")
-    exitIfNull(DBArticleLecture,"erreur ouverture bd")
-
-
-    test_exploration_Article(graph2.tab_Article_struct);
+    // test_exploration_Article(graph1.tab_Article_struct);
 
 
 
