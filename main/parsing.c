@@ -128,6 +128,7 @@ void gen_id_fiche(tableaux_fiche * tableaux_allfiche){
     {
         PROGRESSBAR(i,tableaux_allfiche->taille);
         tableaux_allfiche->fiche[i]->ADDR = i;
+        tableaux_allfiche->nbAuteurXarticle+=tableaux_allfiche->fiche[i]->nombre_auteur;
     }
 }
 
@@ -176,7 +177,7 @@ tableaux_fiche parse(FILE * inputDB){
     PROGRESSBAR_DECL(inputDB)
 
     //génère le tablaux
-    tableaux_fiche tableaux_allfiche;// DOIT ETRE DUPLIQUER A LA SORTIE ???
+    tableaux_fiche tableaux_allfiche;
     tableaux_allfiche.taille = 0;
     tableaux_allfiche.fiche = NULL;
 
@@ -250,6 +251,7 @@ tableaux_fiche parse(FILE * inputDB){
  * @param [out] output    fichier de sortie 
  */
 void serialisation_tableaux_fiche(const tableaux_fiche mastertab, FILE * output){
+    INFO("Serialisation des fiche")
     //une sorte de header du fichier ici !
         //taille de la structure
         //validitée
@@ -288,9 +290,10 @@ tableaux_fiche * deserialisation_tableaux_fiche(FILE * input){
 
     //read tailletotal
 
-    tableaux_fiche * tableaux_allfiche = malloc(sizeof(tableaux_fiche));//valgrind leak
+    tableaux_fiche * tableaux_allfiche = malloc(sizeof(tableaux_fiche));//valgrind leak 
     exitIfNull(tableaux_allfiche,"deserialisation:imposible d'alouer le tableaux de toute les fiche\n")
     tableaux_allfiche->taille = 0;//<=  = tailletotal
+    tableaux_allfiche->nbAuteurXarticle = 0;
     //AFAIRE un soeule maloc tableaux_allfiche->taille*sizeof !!
     tableaux_allfiche->fiche = NULL;
 
@@ -318,6 +321,7 @@ tableaux_fiche * deserialisation_tableaux_fiche(FILE * input){
             fgets(ligne,BALISESIZE,input);
             enlever_retour_a_la_ligne(ligne);
             appendAuteurM(fichelocalM,strdup(ligne));// ICI on doit réloc pour iren VALGRINND
+            tableaux_allfiche->nbAuteurXarticle++;
         }
         appendTabmeaux(tableaux_allfiche,fichelocalM);
         fichelocalM = calloc(1,sizeof(fiche_minimale));//MLOC
