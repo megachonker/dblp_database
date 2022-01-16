@@ -40,12 +40,12 @@ main:	main.o parsing.o macro.o
 # %.gcno: %.c
 # 	$(CCA) -o $@ -c $< $(CFLAGS)
 
-raport: bench.c parsing.c list.c unwrap.c
+raport: bench.c parsing.c unwrap.c macro.c search.c
 	$(CCA) -O0 -o GCOVtests  $^ $(CFLAGS) $(LDLIBS)
 	./GCOVtests gen_graph_from_XML
 	./GCOVtests serialise_Graph
 	./GCOVtests deserialise_Graph
-	gcov -abcfu bench.c parsing.c list.c unwrap.c macro.c search.c
+	gcov -abcfu bench.c parsing.c unwrap.c macro.c search.c
 	lcov --capture --directory . --output-file coverage.info
 	genhtml coverage.info --output-directory LcovRapport
 	firefox LcovRapport/main/index.html
@@ -55,8 +55,8 @@ doc:
 	firefox html/index.html
 
 callgrind:	abench.sh
-	valgrind --dump-instr=yes --collect-jumps=yes --tool=callgrind --callgrind-out-file=callgrind_trace__unwrap_deserialise_Article	./bench unwrap_deserialise_Article
-	valgrind --dump-instr=yes --collect-jumps=yes --tool=callgrind --callgrind-out-file=callgrind_trace__gen_tab_Article_from_xml	./bench gen_tab_Article_from_xml
+	valgrind --dump-instr=yes --collect-jumps=yes --tool=callgrind --callgrind-out-file=callgrind_trace__unwrap_deserialise_Article	./bench serialise_Graph
+	valgrind --dump-instr=yes --collect-jumps=yes --tool=callgrind --callgrind-out-file=callgrind_trace__gen_tab_Article_from_xml	./bench deserialise_Graph
 	kcachegrind callgrind_trace__unwrap_deserialise_Article
 	kcachegrind callgrind_trace__gen_tab_Article_from_xml
 	# rm callgrind_trace_gen_unwrap_Graph
