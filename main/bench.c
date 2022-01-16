@@ -98,7 +98,8 @@ void ggen_unwrap_Graph(){
 void uunwrap_ListArticle_from_xml(int a){
     // plusieuyr pour la taille ?
     FILE * DBxml = fopen(originedb,"r");   
-    tab_Article_struct * montab = gen_tab_Article_from_xml(DBxml);
+    tab_auteur_struct* malistauteur= NULL;
+    tab_Article_struct * montab = gen_tab_Article_from_xml(DBxml, malistauteur);
     if (a)
     {
         printList_Article(montab);

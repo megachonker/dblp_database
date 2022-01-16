@@ -6,7 +6,8 @@
 #include "list.h"
 #include <stdlib.h>
 
-auteur_struct** faire_graphe_avec_unwrap_graphe(int* size_graphe_ptr, FILE *DBxml, FILE *DBinverse);
+
+auteur_struct** faire_graphe_ptr_auteur(int* size_graphe_ptr, FILE *file_xml);
 
 auteur_struct** creation_graphe_avec_voisins(auteur_struct** graphe, int* ptr_size_graphe);
 

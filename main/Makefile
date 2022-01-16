@@ -3,12 +3,13 @@ CFLAGS ?= -Wall -Wextra -g
 LDLIBS ?= -lm -pthread -ftest-coverage -fprofile-arcs
 # -lm -pthread
 
-fct_gr:  fonctions_graphe 
-	./fonctions_graphe
 #gcc -shared -o libfoo.so foo.o
 
 # graph:	creation_graphe_voisins creation_Gt test_creation_Gt
 # 	./test_creation_Gt
+
+fonctions_graphe: fonctions_graphe
+	./fonctions_graphe
 
 go:	tests abench.sh
 	./tests
@@ -27,7 +28,7 @@ tests:	tests.o parsing.o list.o unwrap.o macro.o
 Dijkstra: Dijkstra.o unwrap.o parsing.o
 	$(CCA) -o Dijkstra $^ $(CFLAGS) $(LDLIBS)
 	
-fonctions_graphe: fonctions_graphe.o unwrap.o  parsing.o
+fonctions_graphe: fonctions_graphe.o unwrap.o  parsing.o macro.o
 	$(CCA) -o fonctions_graphe $^ $(CFLAGS) $(LDLIBS)
 
 main:	main.o parsing.o macro.o

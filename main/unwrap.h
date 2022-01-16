@@ -77,7 +77,7 @@ typedef struct Paire_Article_auteur
 typedef struct tab_auteur_struct
 {
     auteur_struct * tab_auteur;
-    int taille;
+    int nombre_auteur;
     int nombre_article;
 }tab_auteur_struct;
 
@@ -163,7 +163,7 @@ void printList_Article(tab_Article_struct * OwO);
 
 void unwrap_List_Auteur_free(tab_auteur_struct * free);
 
-tab_Article_struct * gen_tab_Article_from_xml(FILE * dbinput);
+tab_Article_struct * gen_tab_Article_from_xml(FILE * dbinput, tab_auteur_struct * malistauteur);
 
 void serialisation_tab_Article_struct(tab_Article_struct * inputlist, FILE * outputfile);
 
