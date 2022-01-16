@@ -163,7 +163,7 @@ void printList_Article(tab_Article_struct * OwO);
 
 void unwrap_List_Auteur_free(tab_auteur_struct * free);
 
-tab_Article_struct * gen_tab_Article_from_xml(FILE * dbinput, tab_auteur_struct * malistauteur);
+tab_Article_struct * gen_tab_Article_from_xml(FILE * dbinput);
 
 void serialisation_tab_Article_struct(tab_Article_struct * inputlist, FILE * outputfile);
 
@@ -174,5 +174,7 @@ tab_Article_struct * convertTab_Article2auteur(const tab_auteur_struct * Malista
 tab_auteur_struct * gen_tab_auteur_from_xml(FILE * dbinput);
 
 void test_exploration_Article(const tab_Article_struct * mesarticle);
+
+tab_auteur_struct * gen_tab_auteur_from_xml_et_liaison_article(FILE * dbinput);
 
 #endif
