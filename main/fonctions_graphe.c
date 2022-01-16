@@ -22,7 +22,7 @@ auteur_struct** faire_graphe_avec_unwrap_graphe(int* size_graphe_ptr, FILE *DBxm
     
     
     tab_auteur_struct * malistauteur = unwrap_from_file(DBxml);
-    unwrap_Serilise_Index(malistauteur,DBinverse);
+    serialise_tab_auteur_struct(malistauteur,DBinverse);
     unwrap_List_Auteur_free(malistauteur);
     
     fclose(DBinverse);

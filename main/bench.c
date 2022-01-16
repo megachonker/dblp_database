@@ -1,27 +1,14 @@
 #include "parsing.h"
-#include "list.h"
 #include "unwrap.h"
 #include <stdio.h>
 #include <string.h>
 
 
-#define originedb           "DATA/dblp.xml"
-#define smalloriginedb      "DATA/dblp1sur8.xml"
-#define serializedb         "DATA/SerializedStruc.data"
-#define smallserializedb    "DATA/Serialzed1000.data"
-#define serializedbunwrap   "DATA/SerializedStrucInverse.data"
-#define smallserializedbunwrap    "DATA/SerializedStrucInverse1000.data"
+#include "macro.h"
 
+//fair des argument preselectioner pour toute les fonction 1 defaut dblp 2 dblp1000 3 custom
 
-
-
-#define exitIfNull(p,msg)\
-if (!p)\
-{\
-    fprintf(stderr,msg);\
-}\
-
-
+/* Liste Des Fonction TEST a Appeler */
 
 void readb(){
     FILE * fichier = fopen(originedb,"r");
@@ -35,13 +22,14 @@ void readsmaldb(){
     parse(fichier); //utiliser des address pour eviter la copie ?? 
 }
 
+//en argument enable des débug ?
 void serialized(){
     FILE * in = fopen(originedb,"r");
     exitIfNull(in,"imposible d'ouvrire "originedb);
     tableaux_fiche coucou = parse(in); //utiliser des address pour eviter la copie ?? 
     FILE * out = fopen(serializedb,"w");
     exitIfNull(out,"imposible d'ouvrire "serializedb);
-    serialize(coucou,out); //utiliser des address pour eviter la copie ??
+    serialisation_tableaux_fiche(coucou,out); //utiliser des address pour eviter la copie ??
     // printTabmeaux(coucou);
 }
 void serializedsmall(){
@@ -50,7 +38,7 @@ void serializedsmall(){
     tableaux_fiche coucou = parse(in); //utiliser des address pour eviter la copie ?? 
     FILE * out = fopen(smallserializedb,"w");
     exitIfNull(out,"imposible d'ouvrire "smallserializedb);
-    serialize(coucou,out); //utiliser des address pour eviter la copie ??
+    serialisation_tableaux_fiche(coucou,out); //utiliser des address pour eviter la copie ??
     // printTabmeaux(coucou);
 }
 //serialise small db manque 
@@ -58,25 +46,25 @@ void serializedsmall(){
 tableaux_fiche * deserialisedb(){
     FILE * fichier = fopen(serializedb,"r");
     exitIfNull(fichier,"imposible d'ouvrire "serializedb);
-    return deserialisation(fichier);    
+    return deserialisation_tableaux_fiche(fichier);    
 }
 
 void deserialisesmalldb(){
     FILE * fichier = fopen(smallserializedb,"r");
     exitIfNull(fichier,"imposible d'ouvrire "smallserializedb);
-    deserialisation(fichier);
+    deserialisation_tableaux_fiche(fichier);
 }
 
 tab_auteur_struct * unwrap_from_filE(){ //E pas inspi
     FILE * inputDB = fopen(serializedb,"r");
     exitIfNull(inputDB,"imposible d'ouvrire "serializedb)
-    return unwrap_from_file(inputDB);
+    return tab_auteur_from_file(inputDB);
 }
 void unwrwap_gen_cache(){
     FILE * ouputDB = fopen(serializedbunwrap,"w");
     exitIfNull(ouputDB,"imposible d'ouvrire "serializedbunwrap)
-    tab_auteur_struct * malistauteur = unwrap_from_filE();
-    unwrap_Serilise_Index(malistauteur,ouputDB);
+    tab_auteur_struct * malistauteur = unwrap_from_filE(); //80%
+    serialise_tab_auteur_struct(malistauteur,ouputDB);           //18%
     unwrap_List_Auteur_free(malistauteur);
 }
 void unwrwap_gen_cache_small(){
@@ -84,22 +72,21 @@ void unwrwap_gen_cache_small(){
     exitIfNull(ouputDB,"imposible d'ouvrire "smallserializedbunwrap)
     FILE * inputDB = fopen(smallserializedb,"r");
     exitIfNull(inputDB,"imposible d'ouvrire "smallserializedb)
-    tab_auteur_struct * malistauteur = unwrap_from_file(inputDB);
-    unwrap_Serilise_Index(malistauteur,ouputDB);
+    tab_auteur_struct * malistauteur = tab_auteur_from_file(inputDB);
+    serialise_tab_auteur_struct(malistauteur,ouputDB);
     unwrap_List_Auteur_free(malistauteur);
 }
-void unwrwap_deserialise(int print){
+tab_auteur_struct * deserialise_tab_auteur(int print){
     FILE * input = fopen(serializedbunwrap,"r");
     exitIfNull(input,"imposible d'ouvrire "serializedbunwrap)
     FILE * fichier = fopen(serializedb,"r");
     exitIfNull(fichier,"imposible d'ouvrire "serializedb);
-    tableaux_fiche * azer = deserialisation(fichier);
-    tab_auteur_struct * malistauteur =  unwrap_Deserilise_Index(azer,input);
+    tableaux_fiche * azer = deserialisation_tableaux_fiche(fichier);
+    tab_auteur_struct * malistauteur =  deserialise_tab_auteur_struct(azer,input);
     if(print == 1){
         printList_Auteur(malistauteur);
     }
-    parsing_free(azer);
-    unwrap_List_Auteur_free(malistauteur);
+    return malistauteur;
 }
 void ggen_unwrap_Graph(){
     FILE * DBxml = fopen(serializedb,"r");
@@ -108,39 +95,45 @@ void ggen_unwrap_Graph(){
     exitIfNull(DBinverse,"INPUT PAS CHEMAIN")
     gen_unwrap_Graph(DBxml,DBinverse);
 }
-void uunwrap_ListArticle_from_xml(){
+void uunwrap_ListArticle_from_xml(int a){
     // plusieuyr pour la taille ?
-    FILE * DBxml = fopen(originedb,"r");
-    unwrap_ListArticle_from_xml(DBxml);
+    FILE * DBxml = fopen(originedb,"r");   
+    tab_Article_struct * montab = gen_tab_Article_from_xml(DBxml);
+    if (a)
+    {
+        printList_Article(montab);
+    }
+}
+tab_Article_struct * gen_article(){
+    FILE * DBxmll = fopen(serializedb,"r");
+    FILE * DBinversee = fopen(serializedbunwrap,"r");
+    exitIfNull(DBxmll,"INPUT PAS CHEMAIN")
+    exitIfNull(DBinversee,"INPUT PAS CHEMAIN")
+    tableaux_fiche * matablefiche = deserialisation_tableaux_fiche(DBxmll);
+    tab_auteur_struct * malistaauteur =   deserialise_tab_auteur_struct(matablefiche,DBinversee);
+    tab_Article_struct * malistearticle = convertTab_Article2auteur(malistaauteur);
+    return malistearticle;
 }
 
-    // FILE * ouputDB = fopen(serializedbunwrap,"w");
-    // exitIfNull(inputDB,"imposible d'ouvrire "serializedbunwrap)
+void serialisation_tab_Article_structt(){
+    FILE * DBarticle = fopen(serialised_Article,"w");
+    exitIfNull(DBarticle,"INPUT PAS CHEMAIN");
+    serialisation_tab_Article_struct(gen_article(),DBarticle);
+}
 
-// void testListchainer(){
-//     FILE * inputDB = fopen("DATA/SerializedStruc.data","r");
-//     exitIfNull(inputDB,"INPUT PAS CHEMAIN")
-//     ll_list * Liste_chainer = deserialisation_Liste(inputDB);
-//     ll_list_link(Liste_chainer);
-//     print_liste_chainer_Auteur_titre(Liste_chainer);
-//     tableaux_fiche mesfiches = deserialisation(inputDB);
-
-//     ll_list * Liste_chainer = ll_create();
-//     Sommet_Auteur_ListChainer new_sommet;
-//     new_sommet.auteur = mesfiches.fiche[0]->liste_auteur[0];
-//     new_sommet.titre_article = ll_create();
-//     ll_append(new_sommet.titre_article,mesfiches.fiche[0]->titre);
-//     ll_append(Liste_chainer,&new_sommet);
-
-//     convertStruct(mesfiches,Liste_chainer);
-
-//     print_liste_chainer_Auteur_titre(Liste_chainer);
-// }
+void deserialisation_tab_Article_structt(){
+    FILE * DBxml = fopen(serializedb,"r");
+    FILE * DBinverse = fopen(serialised_Article,"r");
+    exitIfNull(DBxml,"INPUT PAS CHEMAIN")
+    exitIfNull(DBinverse,"INPUT PAS CHEMAIN")
+    tab_auteur_struct * matablefiche = deserialise_tab_auteur(0);
+    deserialisation_tab_Article_struct(matablefiche,DBinverse);
+}
 
 void swap(int print){
     FILE * inputDB = fopen("DATA/SerializedStruc.data","r");
     exitIfNull(inputDB,"INPUT PAS CHEMAIN")
-    tab_auteur_struct * malistedauteur = unwrap_from_file(inputDB);
+    tab_auteur_struct * malistedauteur = tab_auteur_from_file(inputDB);
 
     if (print==1)
     {
@@ -148,23 +141,30 @@ void swap(int print){
     }
 }
 
+
+
+// soucis de free?
 void bench_all(){
     parsing_free(deserialisedb());
     unwrwap_gen_cache();
-    unwrwap_deserialise(0);
+    deserialise_tab_auteur(0);
 }
 
+/* Selection de la fonction */
 
 int main(int argc, char const *argv[])
 {
     if (argc != 2)
     {
+        //laide qui vien de abench
         printf("PAS BIEN OPTION");
         return 1;
     }
 
     const char * compstr = argv[1];
 
+    
+    //Faire un switch
     if(strcmp("readb",compstr)==0){
         // printf("readb\n");
         readb();    
@@ -209,30 +209,52 @@ int main(int argc, char const *argv[])
     {
         unwrwap_gen_cache_small();
     }
-    else if (strcmp("unwrap_from_file",compstr)==0)
+    else if (strcmp("tab_auteur_from_file",compstr)==0)
     {
         unwrap_from_filE();
     }
-    else if (strcmp("unwrwap_deserialise",compstr)==0)
+    else if (strcmp("deserialise_tab_auteur",compstr)==0)
     {
-        unwrwap_deserialise(0);
+        deserialise_tab_auteur(0);
     }
-    else if (strcmp("unwrwap_deserialiseprint",compstr)==0)
+    else if (strcmp("deserialise_tab_auteurprint",compstr)==0)
     {
-        unwrwap_deserialise(1);
+        deserialise_tab_auteur(1);
     }
     else if (strcmp("gen_unwrap_Graph",compstr)==0)
     {
         ggen_unwrap_Graph();
     }
-    else if (strcmp("unwrap_ListArticle_from_xml",compstr)==0)
+    else if (strcmp("gen_tab_Article_from_xml",compstr)==0)
     {
-        uunwrap_ListArticle_from_xml();
+        uunwrap_ListArticle_from_xml(0);
     }
-    
-    
+    else if (strcmp("unwrap_ListArticle_from_xmlprint",compstr)==0)
+    {
+        uunwrap_ListArticle_from_xml(1);
+    }else if (strcmp("unwrap_deserialise_Article",compstr)==0)
+    {
+        deserialisation_tab_Article_structt();
+    }
+    else if (strcmp("unwrap_serialise_Article",compstr)==0)
+    {
+        serialisation_tab_Article_structt();
+    }
+    // else if (strcmp("unwrap_serialise_Article",compstr)==0)
+    // {
+    //     serialisation_tab_Article_structt();
+    // }
+    else if (strcmp("gen_article",compstr)==0)
+    {
+        gen_article();
+    }
+    // else if (strcmp("deserialisation_tab_auteur_struct",compstr)==0)
+    // {
+    //     deserialisation_tab_auteur_structt();
+    // }
     else{
         fprintf(stderr,"PAS BON TEST!\n");
     }
+    CLRLINE()
     return 0;
 }

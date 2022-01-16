@@ -1410,3 +1410,12 @@ main/fonctions_graphe
 main/fonctions_graphe.c
 main/fonctions_graphe.gcno
 main/fonctions_graphe.o
+main/macro.o
+main/a.out
+main/macro.o
+main/callgrind_traceOLD
+main/DATA/SerializedStrucArticle.data
+main/DATA/SerializedStrucArticleCustom.data
+main/DATA/SerializedStrucInverseCustom.data
+main/macro
+main/==17549== Using Valgrind-3.18.1 and LibV.pl

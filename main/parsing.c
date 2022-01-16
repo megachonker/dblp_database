@@ -1,25 +1,18 @@
-#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "parsing.h"
 
-
-
-#define exitIfNull(p,msg)\
-if (!p)\
-{\
-    fprintf(stderr,msg);\
-}\
+#include "macro.h"
 
 
 
-void enlever_retour_a_la_ligne(char * ligne){
-    ligne[strcspn(ligne, "\n")]=0;    
-}
-
+//renomer
 void printM_titre(fiche_minimale OwO){
     printf("titre:    %s",OwO.titre);
 }
+
+//renomer
 void printM_liste_auteur(fiche_minimale UwU){
     printf("auteurs:\n\t");
     for (int i = 0; i < UwU.nombre_auteur; i++)
@@ -31,12 +24,14 @@ void printM_liste_auteur(fiche_minimale UwU){
     printf("\n");
 }
 
+//renomer
 void printM(fiche_minimale OwU){
     printM_titre(OwU);
     printf("\n");
     printM_liste_auteur(OwU);   
 }
 
+//renomer
 void printTabmeaux(tableaux_fiche UwO){
 
     for (int i = 0; i < UwO.taille; i++)
@@ -45,20 +40,30 @@ void printTabmeaux(tableaux_fiche UwO){
     }
 }
 
-//fonction qui cherche le string dans ldes <>
-
+/**
+ * @brief extrait un string entre les balise
+ * 
+ * @param [in] recherche noms de balise  
+ * @param [in] ligne dans l'aquellle rechercher la balise 
+ * @return char* renvoit l'élément entre les balise
+ */
 char * getanchor(char * recherche, char * ligne){
+    //on crée la balise a chercher ATENTION tailel de la baslise limiter a 18caractere
     char critaire[20] = "<";
     strcat(critaire,recherche);
+    //si la balise existe
     if(strstr(ligne,critaire)){ //slow ?
+        //on chercher quand la balise prend fin
         char * start = strchr(ligne,'>');
+        //on ce déplace apres l'acolade fermante
         start++;
-        //vérifie quon a bien la bazlise fermeante
-        if (*start=='\n') //Peut etre omis
+        //vérifie que nous ne somme pas au 2ème >
+        if (*start=='\n') //Peut etre omis si ralentis beaucoup
         {
             fprintf(stderr,"que une balise fermantge dans la ligne\n");
             return NULL;
         }
+        //on chercher la prochaine acolade ouvrante (donc la fin de la balise)
         int diff = strcspn(start,"<");
         start[diff] = '\0';
         char * out = strdup(start);
@@ -68,40 +73,52 @@ char * getanchor(char * recherche, char * ligne){
     return NULL;
 }
 
+//renomer IMPORTANT
+/**
+ * @brief ajoute un nouvel auteur a ma fiche_minimale
+ * 
+ * fonction clef utiliser des buffer pour diminuer les réaloc ?
+ * 
+ * @param [in,out] mafiche chiche a modifier
+ * @param [in] nomsauteur addrese de la chaine de caractere
+ */
 void appendAuteurM(fiche_minimale * mafiche,char * nomsauteur){
-    void * addrListeauteur = realloc(mafiche->liste_auteur,sizeof(fiche_minimale)*(mafiche->nombre_auteur+1));
- 
-    if (!addrListeauteur)
-    {
-        fprintf(stderr,"appendAuteurM: allocation imposible");
-    }else if (mafiche->liste_auteur != addrListeauteur)
-    {
+    char ** addrListeauteur = NULL;
+    addrListeauteur = realloc(mafiche->liste_auteur,sizeof(fiche_minimale)*(mafiche->nombre_auteur+1));//MALOC
+
+    exitIfNull(addrListeauteur,"appendAuteurM: allocation imposible")
+
+    if (mafiche->liste_auteur != addrListeauteur)//plus opti que d'assigner dirrectment ?
         mafiche->liste_auteur = addrListeauteur;
-    }
+
     mafiche->liste_auteur[mafiche->nombre_auteur] = nomsauteur;
     mafiche->nombre_auteur++;
 }
 
+/**
+ * @brief Ajoute une nouvelle fiche au tableaux
+ * 
+ * attention réaloc ?
+ * 
+ * @param [in,out] table table des fiche 
+ * @param [in] a_ajouter nouvelle fiche
+ */
 void appendTabmeaux(tableaux_fiche * table, fiche_minimale * a_ajouter){
+    fiche_minimale ** addrListFiche = NULL;
+    addrListFiche = realloc(table->fiche,sizeof(fiche_minimale*)*(table->taille+1));//MLOC
+    exitIfNull(addrListFiche,"appendTabmeaux: allocation imposible")
 
-    void * addrListFiche = realloc(table->fiche,sizeof(tableaux_fiche)*(table->taille+1));
- 
-    if (!addrListFiche)
-    {
-        fprintf(stderr,"appendTabmeaux: allocation imposible");
-        exit(1);
-    }else if (table != addrListFiche)
-    {
+    if (table->fiche != addrListFiche)  //cout du check de cette fonction ?
         table->fiche = addrListFiche;
-    }
+
     table->fiche[table->taille] = a_ajouter;
     table->taille++;   
 }
 
-
 /**
- * @brief chaque fiche a sont id
+ * @brief initialise le champ ADDR de tableaux_fiche
  * 
+ * permet d'aceder a une fiche avec ADDR comme un inded // MALDI
  * l'id est l'indice pour acceder a la fiche dpuis la structure  tableaux_fiche
  * 
  * @param [in,out] tableaux_allfiche 
@@ -109,46 +126,77 @@ void appendTabmeaux(tableaux_fiche * table, fiche_minimale * a_ajouter){
 void gen_id_fiche(tableaux_fiche * tableaux_allfiche){
     for (int i = 0; i < tableaux_allfiche->taille; i++)
     {
+        PROGRESSBAR(i,tableaux_allfiche->taille);
         tableaux_allfiche->fiche[i]->ADDR = i;
     }
 }
 
-
+//renomer les variable
+/**
+ * @brief fonction comparer les fiches utilser par sortlist
+ * 
+ * @param [in] maficheA fiche a comparer
+ * @param [in] maficheB fiche a comparer
+ * @return int indice utilser par quicksort
+ */
 static int cmptabfiche(const void * maficheA,const void * maficheB){
     //MAGIE NOIIIIIIIIIIIIIIIIIIIIIREEE
     struct fiche_minimale* maficheAA = *(struct fiche_minimale**) maficheA;
     struct fiche_minimale* maficheBB = *(struct fiche_minimale**) maficheB;
-    // printf("%s <=> %s\n",maficheAA->titre,maficheAA->titre);
+    // DEBUG => printf("%s <=> %s\n",maficheAA->titre,maficheAA->titre);
     return strcmp(maficheAA->titre,maficheBB->titre);
 }
 
 void sortlist(tableaux_fiche * mesfiche ){
-    // fiche_minimale * start  =  *mesfiche->fiche;
+    DEBUG("trie des liste parsing")
     qsort(mesfiche->fiche,mesfiche->taille,sizeof(mesfiche->fiche),cmptabfiche);   
 }
 
-//on retourne pas l'original mais une copie ?
+//on retourne pas l'original mais une copie ? <= pourquoi ?? ?
+/**
+ * @brief Parse un fichier XML DBLP
+ * 
+ *  Va générée un tableaux_fiche ainsie que ces fiche_minimale
+ * -    Article
+ * -    auteur
+ *  
+ *  mais aussi
+ *  - génère ADDR de chaque fiche
+ *  - trie les fiche
+ *  
+ * ## Doit pouvoir utiliser les date !
+ * 
+ * @param inputDB 
+ * @return tableaux_fiche 
+ */
 tableaux_fiche parse(FILE * inputDB){
-    printf("début du parsing:\n");
+    INFO("début du parsing:");
     char ligne[BALISESIZE];
-    fiche_minimale * fichelocalM = NULL;
-    fichelocalM = calloc(1,sizeof(fiche_minimale));
-    exitIfNull(fichelocalM,"imposible de crée fichelocalM");
-    fichelocalM->nombre_auteur = 0;
-    fichelocalM->ADDR = 0;
-    tableaux_fiche tableaux_allfiche;// ce n'es pas maloc donc a la sortie de la fonction l'object est détruit ? ? ??
+
+    PROGRESSBAR_DECL(inputDB)
+
+    //génère le tablaux
+    tableaux_fiche tableaux_allfiche;// DOIT ETRE DUPLIQUER A LA SORTIE ???
     tableaux_allfiche.taille = 0;
     tableaux_allfiche.fiche = NULL;
 
-    while (fgets(ligne,BALISESIZE,inputDB))
+    //premierre fiche
+    fiche_minimale * fichelocalM = NULL;
+    fichelocalM = calloc(1,sizeof(fiche_minimale)); //initialiser a 0 pas opti ?
+    exitIfNull(fichelocalM,"parse: imposible d'alouer crée fichelocalM");
+    fichelocalM->ADDR = 0;
+    fichelocalM->nombre_auteur = 0;
+
+    //chargement
+    while (fgets(ligne,BALISESIZE,inputDB))// <================ prend masse temps le remplacer par un buffer ? (simple ici a faire)
     {
+
+        PROGRESSBAR_FILE_PRINT(inputDB)
+
         int flagt = 0;
-        
-        if (!fichelocalM)
-        {
-            fprintf(stderr,"création de la zone de mémoir pour ficheloca1m compromis calloc");
-        }
-        
+        exitIfNull(fichelocalM,"création de la zone de mémoir pour ficheloca1m compromis calloc")
+
+        //passer une liste des argument interresant est recherer ??
         char * tmpauteur = getanchor("author",ligne);
         if (tmpauteur)
         {
@@ -159,83 +207,109 @@ tableaux_fiche parse(FILE * inputDB){
             {
                 flagt = 1;
             }
+            // else{
+            //     getanchor("date",ligne);
+            // }
         }
-
+        // DATE!
+        //PASBEAUX
         if (flagt == 1)
         {
-            // printM_titre(*fichelocalM);
-            // printM_liste_auteur(*fichelocalM);
-
+            //moche ajouter l'exclusion Preface. Editorial. (faire une blackliste a importer ? voir qand trie)
             if (strcmp(fichelocalM->titre,"Home Page")!=0 
             && fichelocalM->nombre_auteur != 0 
             && strcmp(fichelocalM->titre,"")!=0)//ces con mais fichelocalM->titre ou fichelocalM->titre != '' devrais fonctioner..
             {
+                //DEGUG ajout de 
                 // printM_titre(*fichelocalM);
                 appendTabmeaux(&tableaux_allfiche,fichelocalM);
             }
 
-            fichelocalM = calloc(1,sizeof(fiche_minimale));
-            exitIfNull(fichelocalM, "new calloc null")
+            fichelocalM = calloc(1,sizeof(fiche_minimale));//maloc ?
             fichelocalM->nombre_auteur = 0;
         }        
     }
+    //WARNING
     // printTabmeaux(tableaux_allfiche);
 
-    printf("PARSE OK\ndébut du trie:\n");
+    DEBUG("début du trie:");
     sortlist(&tableaux_allfiche);
-    printf("Trie OK\ndébut de genereation des id:\n");
+    DEBUG("début de genereation des id:");
     gen_id_fiche(&tableaux_allfiche);
-    printf("Id générée!\n");
     return tableaux_allfiche;
 }
 
 
-
-
 //utiliser l'addresse pour pas copier ?
-void serialize(const tableaux_fiche mastertab, FILE * output){
+/**
+ * @brief Sérialisation du XML
+ * 
+ *  ajouter un truc pour la validitée checksum du programe qui la compiler ?
+ * 
+ * @param [in] mastertab structure tableaux_fiche a sérialiser
+ * @param [out] output    fichier de sortie 
+ */
+void serialisation_tableaux_fiche(const tableaux_fiche mastertab, FILE * output){
+    //une sorte de header du fichier ici !
+        //taille de la structure
+        //validitée
     for (int i = 0; i < mastertab.taille; i++)
     {
+        PROGRESSBAR(i,mastertab.taille);
         fprintf(output,"%s\n",mastertab.fiche[i]->titre);
-        fprintf(output,"%i\n",mastertab.fiche[i]->nombre_auteur);
-        for (int  u = 0; u < mastertab.fiche[i]->nombre_auteur; u++)
+        fprintf(output,"%i\n",mastertab.fiche[i]->nombre_auteur); //fusioner les 2 en une écritur ?
+        for (int  u = 0; u < mastertab.fiche[i]->nombre_auteur; u++)//tout concaténée
         {
             fprintf(output,"%s\n",mastertab.fiche[i]->liste_auteur[u]);
-        }       
+        }
+        //une soeule écriture ici
     }
 }
 
-//gratter en efficience en donneant au début les taille des structure
-//grater en fesant une structure avec des dico est des referancement
+//grater en fesant une structure avec des dico est des referancement < ?
 
 /**
- * @brief génère tableaux_fiche depuis un cache générée par serialize 
+ * @brief génère tableaux_fiche depuis un cache générée par serialisation_tableaux_fiche 
  * 
  * test avec des maloc 
  * 
- * @param [in] input générée par serialize 
- * @return tableaux_fiche 
+ * @param [in] input générée par serialisation_tableaux_fiche 
+ * @return pointeur ver tableaux_fiche 
  */
-tableaux_fiche * deserialisation(FILE * input){
+tableaux_fiche * deserialisation_tableaux_fiche(FILE * input){
+    INFO("Deserialisation DBXML")
 
+    PROGRESSBAR_DECL(input);
+
+    //INFO début de la désérialisation
     char ligne[BALISESIZE];
-    fiche_minimale * fichelocalM = calloc(1,sizeof(fiche_minimale));
-    fichelocalM->nombre_auteur = 0;
-    tableaux_fiche * tableaux_allfiche = malloc(sizeof(tableaux_fiche));
-    exitIfNull(tableaux_allfiche,"tableaux all fiche null dans deserialisation\n")
-    tableaux_allfiche->taille = 0;
+
+    //valide read du checksum
+
+    //read tailletotal
+
+    tableaux_fiche * tableaux_allfiche = malloc(sizeof(tableaux_fiche));//valgrind leak
+    exitIfNull(tableaux_allfiche,"deserialisation:imposible d'alouer le tableaux de toute les fiche\n")
+    tableaux_allfiche->taille = 0;//<=  = tailletotal
+    //AFAIRE un soeule maloc tableaux_allfiche->taille*sizeof !!
     tableaux_allfiche->fiche = NULL;
+
+
+    fiche_minimale * fichelocalM = calloc(1,sizeof(fiche_minimale));//valgrind
+    fichelocalM->nombre_auteur = 0;
+
+
+    //check la validitée ?
+
     int indice = 0;
-    while (fgets(ligne,BALISESIZE,input))
+    while (fgets(ligne,BALISESIZE,input))                           //<============= un soeul gros buffer ?
     {
-        if (feof(input))
-        {
-            fprintf(stderr,"fin fichier deserialisation\n");
-            exit(3);
-        }
+        PROGRESSBAR_FILE_PRINT(input);
+        
         enlever_retour_a_la_ligne(ligne);
-        fichelocalM->ADDR = indice;
+        fichelocalM->ADDR = indice;     //<=== explicitée
         fichelocalM->titre = strdup(ligne);
+
         fgets(ligne,BALISESIZE,input);
         enlever_retour_a_la_ligne(ligne);
         int nbauteur = atoi(ligne);
@@ -243,73 +317,30 @@ tableaux_fiche * deserialisation(FILE * input){
         {
             fgets(ligne,BALISESIZE,input);
             enlever_retour_a_la_ligne(ligne);
-            appendAuteurM(fichelocalM,strdup(ligne));
+            appendAuteurM(fichelocalM,strdup(ligne));// ICI on doit réloc pour iren VALGRINND
         }
         appendTabmeaux(tableaux_allfiche,fichelocalM);
-        fichelocalM = calloc(1,sizeof(fiche_minimale));
+        fichelocalM = calloc(1,sizeof(fiche_minimale));//MLOC
         exitIfNull(fichelocalM, "new calloc null")
         fichelocalM->nombre_auteur = 0;
         indice++;
     }
+
+    DEBUG("Deseraialisation %d FAIRE UN MALOC",indice);
     return tableaux_allfiche;
 }
 
-// ll_list * deserialisation_Liste(FILE * input){
-//     // fseek(input,0,SEEK_END);
-//     // int maxline = ftell(input);
-//     // fseek(input,0,SEEK_SET);
-
-//     char ligne[BALISESIZE];
-//     ll_list * list_auteur_oeuvre = ll_create();
-//     Sommet_Auteur_ListChainer * sommet_titre =  malloc(sizeof(Sommet_Auteur_ListChainer));
-//     exitIfNull(sommet_titre, "new calloc null")
-//     sommet_titre->titre_article = ll_create();
-//     void * addresse_node = NULL;
-//     while (fgets(ligne,BALISESIZE,input))
-//     {
-//         if (feof(input))
-//         {
-//             fprintf(stderr,"fin fichier deserialisation\n");
-//             exit(3);
-//         }
-//         enlever_retour_a_la_ligne(ligne);
-//         sommet_titre->auteur = strdup(ligne);
-//         fgets(ligne,BALISESIZE,input);
-//         enlever_retour_a_la_ligne(ligne);
-//         int nbauteur = atoi(ligne);
-//         //fast append prend une node en entrée et fait plus 1
-
-//         char * burst[960810];
-
-
-//         fgets(ligne,BALISESIZE,input);
-//         enlever_retour_a_la_ligne(ligne);
-//         ll_append(sommet_titre->titre_article,strdup(ligne));
-//         //on fait un buffer
-//         for (int i = 0; i < nbauteur-1; i++)
-//         {
-//             fgets(ligne,BALISESIZE,input);
-//             enlever_retour_a_la_ligne(ligne);
-//             burst[i] = strdup(ligne);
-//         }
-//         stack_append(sommet_titre->titre_article,burst,nbauteur);
-
-//         addresse_node = ll_append_fromAddr(list_auteur_oeuvre,addresse_node,sommet_titre);
-//         // printf("%f:TITRE: %s\n",(((float)ftell(input)+1)/(float)maxline)*100,sommet_titre->auteur);
-//         // printf("%d\n",ll_size(sommet_titre->titre_article));       
-//         // ll_print_list_as_char(sommet_titre->titre_article);       
-//         sommet_titre = calloc(1,sizeof(sommet_titre));
-//         exitIfNull(sommet_titre, "new calloc null")
-//         sommet_titre->titre_article = ll_create();
-//     }
-//     return list_auteur_oeuvre;
-// }
-
-
-
+//renomer
+/**
+ * @brief free tableaux_fiche
+ * 
+ * @param DEGAGE 
+ */
 void parsing_free(tableaux_fiche * DEGAGE){
+    INFO("Free parsing")
     for (int i = 0; i < DEGAGE->taille; i++)
     {
+        PROGRESSBAR(i,DEGAGE->taille);
         free(DEGAGE->fiche[i]->titre);
         for (int u = 0; u < DEGAGE->fiche[i]->nombre_auteur; u++)
         {
@@ -318,25 +349,4 @@ void parsing_free(tableaux_fiche * DEGAGE){
         free(DEGAGE->fiche[i]);
     }
     free(DEGAGE);
-
 }
-
-
-
-// int main(){
-
-
-// #define originedb           "DATA/dblp.xml"
-// #define smalloriginedb      "DATA/dblp1sur8.xml"
-// #define serializedb         "DATA/SerializedStruc.data"
-// #define smallserializedb    "DATA/Serialzed1000.data"
-// #define serializedbunwrap   "DATA/SerializedStrucInverse.data"
-
-//     FILE * in = fopen(originedb,"r");
-//     exitIfNull(in,"imposible d'ouvrire "originedb);
-//     tableaux_fiche coucou = parse(in); //utiliser des address pour eviter la copie ?? 
-//     FILE * out = fopen(serializedb,"w");
-//     exitIfNull(out,"imposible d'ouvrire "serializedb);
-//     serialize(coucou,out); //utiliser des address pour eviter la copie ?? 
-//     printTabmeaux(coucou);
-// }
