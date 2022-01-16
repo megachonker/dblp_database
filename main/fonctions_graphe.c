@@ -21,12 +21,12 @@ graphe_struct faire_graphe_ptr_auteur(FILE *file_xml)
     
     tab_auteur_struct * malistauteur= gen_tab_auteur_from_xml_et_liaison_article(file_xml);
     
-    int size_graphe_ptr= malistauteur->nombre_auteur;
+    int size_graphe= malistauteur->nombre_auteur;
     graphe_struct graphe_struct;
-    graphe_struct.graphe= malloc(sizeof(auteur_struct*)*size_graphe_ptr);
-    graphe_struct.size_graphe= size_graphe_ptr;
+    graphe_struct.graphe= malloc(sizeof(auteur_struct*)*size_graphe);
+    graphe_struct.size_graphe= size_graphe;
 
-    for(int i=0; i<size_graphe_ptr; i++)
+    for(int i=0; i<size_graphe; i++)
     {
         printf("%s", malistauteur->tab_auteur[i].nom_auteur);
     }
@@ -34,7 +34,7 @@ graphe_struct faire_graphe_ptr_auteur(FILE *file_xml)
 
 
 
-    for(int i=0; i<size_graphe_ptr; i++)
+    for(int i=0; i<size_graphe; i++)
     {
         auteur_struct ai= malistauteur->tab_auteur[i];
         ai.size_pcc_auteur= -1;
