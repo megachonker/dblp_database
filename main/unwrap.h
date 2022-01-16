@@ -24,7 +24,8 @@ struct Article_struct;
 typedef struct auteur_struct
 {
     struct Article_struct ** tab_ptr_Article; ///La magie qui pointe sur  Article_struct
-    int nbelementmagi;      ///<compteur d'élément Article_struct
+    int nbArticlecontenue;      ///<compteur d'élément Article_struct
+    int indiceDeCreation;
     char * nom_auteur;
     fiche_minimale ** tab_ptr_fiche_min;///<tableaux dynamique d'adresse pointant sur des structure contenant oeuvre
     int size;                           ///<taille du tableaux dynamique

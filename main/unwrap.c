@@ -247,6 +247,8 @@ tab_auteur_struct* gen_List_auteur(const Paire_auteur_oeuvre * liste,int sizeHau
         listes_Auteur_arrTitre->tab_auteur[(*nb_auteur)].tab_ptr_Article = NULL         ;    //ducoup malloc le code 
         listes_Auteur_arrTitre->tab_auteur[(*nb_auteur)].tab_ptr_fiche_min = NULL       ;
         listes_Auteur_arrTitre->tab_auteur[(*nb_auteur)].nom_auteur=liste[posTabPaireaA].nom_auteur ;
+        listes_Auteur_arrTitre->tab_auteur[(*nb_auteur)].indiceDeCreation = id; //id qui est utilise le graph pour explorer 
+        id++;
 
         int noArticle = 0;
         //tant le prochain auteur est et que l'on n'attein pas la fin de la liste
@@ -594,8 +596,8 @@ void serialisation_tab_Article_struct(tab_Article_struct * inputlist, FILE * out
         fprintf(outputfile,"%d\n",nombreauteur);
         for (int u = 0; u < nombreauteur; u++)
         {
-            int indiceAuteur = article.tab_ptr_auteur[u]->nbelementmagi;
-            // DEBUG("%d",indiceAuteur)
+            int indiceAuteur = article.tab_ptr_auteur[u]->indiceDeCreation;
+            YOLO("%d don? %s",indiceAuteur,article.tab_ptr_auteur[u]->nom_auteur)
             fprintf(outputfile,"%d\n",indiceAuteur);
         } 
     }
