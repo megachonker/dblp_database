@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <string.h>
 
 /**
  * @brief progresse bar
@@ -46,6 +46,17 @@ void progressbar(int indice, int total)
     CLRCOLOR()
     fprintf(stderr,"\033[%dD",3*SIZEBAR);
 }
+
+//prend du temps l'utiliser directement ?
+void enlever_retour_a_la_ligne(char * ligne){
+    ligne[strcspn(ligne, "\n")]=0;    
+}
+
+//fonction pour convertire
+// int octerToMega(int taille){
+
+// }
+
 // #include <unistd.h>
 
 // int main(int argc, char const *argv[])

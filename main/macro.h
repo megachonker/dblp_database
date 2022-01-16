@@ -4,12 +4,17 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+
+//taille de la bar de chargement
+#define SIZEBAR 30
+//taille balise max pour fgets
+#define BALISESIZE 1000
+
+//degrée de verbositée
 #define DEBUG_ON
 #define INFO_ON
 #define WARN_ON
 // #define YOLO_ON
-
-//si fichier tests est benchmark ?
 
 #define customxml               "DATA/custom.xml"
 #define originedb               "DATA/dblp.xml"
@@ -22,7 +27,6 @@
 #define serialised_Article      "DATA/SerializedStrucArticle.data"
 #define serialised_Articlecustom      "DATA/SerializedStrucArticleCustom.data"
 
-#define SIZEBAR 30
 
 //macro pour les couleur
 #define GREEN()     fprintf(stderr,"\033[1;32m");
@@ -36,7 +40,7 @@
 //definition des marcro variadique
 
 #ifdef DEBUG_ON
-#define DEBUG(...) GREEN() fprintf(stderr,"\033[K\t"); fprintf(stderr, __VA_ARGS__); CLRCOLOR() fprintf(stderr,"\n");
+#define DEBUG(...) GREEN() fprintf(stderr,"\033[K\t\t"); fprintf(stderr, __VA_ARGS__); CLRCOLOR() fprintf(stderr,"\n");
 #else
 #define DEBUG(...) ;
 #endif
@@ -65,7 +69,23 @@ if (!p)\
     exit(1);\
 }
 
-
+/**
+ * @brief affiche une bar de progression
+ * 
+ * la taille maximal de la bar est défini par
+ * la definition SIZEBAR
+ *
+ *  
+ * @param [in] indice 
+ * @param [in] total 
+ */
 void progressbar(int indice, int total);
+
+/**
+ * @brief permet de retirer le \n
+ * 
+ * @param [in,out] ligne 
+ */
+void enlever_retour_a_la_ligne(char * ligne);
 
 #endif
