@@ -28,17 +28,11 @@ graphe_struct faire_graphe_ptr_auteur(FILE *file_xml)
 
     for(int i=0; i<size_graphe; i++)
     {
-        printf("%s", malistauteur->tab_auteur[i].nom_auteur);
-    }
-    printf("%s", "\n\n\n");
-
-
-
-    for(int i=0; i<size_graphe; i++)
-    {
-        auteur_struct ai= malistauteur->tab_auteur[i];
-        ai.size_pcc_auteur= -1;
-        graphe_struct.graphe[i]= &ai;
+        auteur_struct* ai_ptr= &(malistauteur->tab_auteur[i]);
+        ai_ptr->size_pcc_auteur= -1;
+        ai_ptr->ptr_Article_predecesseur_pcc= NULL;
+        ai_ptr->ptr_auteur_predecesseur_pcc= NULL;
+        graphe_struct.graphe[i]= ai_ptr;
     }
 
     free(malistauteur);
@@ -143,6 +137,7 @@ void free_graphe_avec_voisins(auteur_struct** graphe_avec_voisins, int* size_gra
 }
 */
 
+/*
 //test: affichage des voisins des auteurs du graphe_test
 int main(void)
 {
@@ -156,8 +151,7 @@ int main(void)
   
     for(int k=0; k <mon_graphe.size_graphe; k++)
     {
-        char *nom_auteur= mon_graphe.graphe[k]->nom_auteur;
-        printf("%s\n", nom_auteur);
+        printf("%s\n",  mon_graphe.graphe[k]->nom_auteur);
     }
     
     free(mon_graphe.graphe);
@@ -165,3 +159,4 @@ int main(void)
     
     return 0;
 }
+*/

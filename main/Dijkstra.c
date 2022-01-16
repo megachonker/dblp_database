@@ -1,17 +1,18 @@
 #include <stdio.h>
 #include "unwrap.h"
 #include <stdlib.h>
-// #include "fonctions_graphe.h"
 #include <string.h>
 #include "Dijkstra.h"
-// #include "graphe_test_Katie.h"
+#include "fonctions_graphe.h"
 
 
 
 plus_court_chemin_struct reconstitution_du_pcc_apres_parcours(auteur_struct* ptr_auteur_destination, auteur_struct* ptr_auteur_depart)
 {
     auteur_struct** pcc_tab_ptr_auteur= malloc(sizeof(auteur_struct*)*ptr_auteur_destination->size_pcc_auteur+1);
+    exitIfNull(pcc_tab_ptr_auteur,"echec malloc pcc_tab_ptr_auteur"); 
     Article_struct** pcc_tab_ptr_Article= malloc(sizeof(Article_struct*)*ptr_auteur_destination->size_pcc_auteur);
+    exitIfNull(pcc_tab_ptr_Article,"echec malloc pcc_tab_ptr_Article"); 
 
     pcc_tab_ptr_auteur[ptr_auteur_destination->size_pcc_auteur]= ptr_auteur_destination;
     
@@ -28,8 +29,11 @@ plus_court_chemin_struct reconstitution_du_pcc_apres_parcours(auteur_struct* ptr
     }
 
     plus_court_chemin_struct plus_court_chemin;
-    plus_court_chemin.pcc_tab_ptr_Article= pcc_tab_ptr_Article;
     plus_court_chemin.pcc_tab_ptr_auteur= pcc_tab_ptr_auteur;
+    plus_court_chemin.size_pcc_auteur= i;
+    plus_court_chemin.pcc_tab_ptr_Article= pcc_tab_ptr_Article;
+    plus_court_chemin.size_pcc_Article= i-1;
+    
 
     return plus_court_chemin;
 }
@@ -58,10 +62,12 @@ void traitement_auteur_courant_et_mise_a_jour_pile_suivante(auteur_struct** pile
 
                 //On set up l'auteur_predecesseur de voisin_k
                 ptr_voisin_k->ptr_auteur_predecesseur_pcc= malloc(sizeof(auteur_struct*));
+                exitIfNull(ptr_voisin_k->ptr_auteur_predecesseur_pcc, "echec malloc ptr_auteur_predecesseur_pcc ");
                 ptr_voisin_k->ptr_auteur_predecesseur_pcc= ptr_auteur_courant;
 
                 //On set up l'Article_predecesseur de voisin_k
                 ptr_voisin_k->ptr_Article_predecesseur_pcc= malloc(sizeof(Article_struct*));
+                exitIfNull(ptr_voisin_k->ptr_Article_predecesseur_pcc, "echec malloc ptr_Article_predecesseur_pcc");
                 ptr_voisin_k->ptr_Article_predecesseur_pcc= ptr_Article_l;
 
                 //On ajoute tous les voisins de voisin_k dans la pile_suivante
@@ -83,10 +89,13 @@ void traitement_auteur_courant_et_mise_a_jour_pile_suivante(auteur_struct** pile
 
                 //On set up l'auteur_predecesseur de voisin_k
                 ptr_voisin_k->ptr_auteur_predecesseur_pcc= malloc(sizeof(auteur_struct*));
+                exitIfNull( ptr_voisin_k->ptr_auteur_predecesseur_pcc, "echec malloc ptr_auteur_predecesseur_pcc");
+                
                 ptr_voisin_k->ptr_auteur_predecesseur_pcc= ptr_auteur_courant;
 
                 //On set up l'Article_predecesseur de voisin_k
                 ptr_voisin_k->ptr_Article_predecesseur_pcc= malloc(sizeof(Article_struct*));
+                exitIfNull(ptr_voisin_k->ptr_Article_predecesseur_pcc, "echec malloc ptr_Article_predecesseur_pcc");
                 ptr_voisin_k->ptr_Article_predecesseur_pcc= ptr_Article_l;
 
                 //On ajoute tous les voisins de voisin_k dans la pile_suivante
@@ -154,6 +163,7 @@ plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcour
             {
                 
                 plus_court_chemin_struct* pcc_ptr= malloc(sizeof(plus_court_chemin_struct));
+                exitIfNull(pcc_ptr, "echec malloc pcc_ptr");
                 *pcc_ptr= reconstitution_du_pcc_apres_parcours(ptr_auteur_destination, ptr_auteur_depart);
                 return pcc_ptr;
             }
@@ -173,7 +183,7 @@ plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcour
 
 
 //renvoie le tableau des ptr vers les auteur_struct du chemin de auteur_1 (a1) a auteur_2 (a2)
-plus_court_chemin_struct* Dijkstra(auteur_struct **graphe, int* size_graphe_ptr, char* nom_auteur_1, char* nom_auteur_2)
+plus_court_chemin_struct* Dijkstra(graphe_struct graphe_struct, char* nom_auteur_1, char* nom_auteur_2)
 {
     //verification de la presence de a1 et a2 dans le graphe
 
@@ -182,19 +192,19 @@ plus_court_chemin_struct* Dijkstra(auteur_struct **graphe, int* size_graphe_ptr,
     auteur_struct* ptr_a2= NULL;
     auteur_struct* ptr_a1= NULL;
 
-    for(int i=0; i<*size_graphe_ptr; i++)
+    for(int i=0; i<graphe_struct.size_graphe; i++)
     {
         
-        if(strcmp(nom_auteur_1, graphe[i]->nom_auteur))
+        if(strcmp(nom_auteur_1, graphe_struct.graphe[i]->nom_auteur))
         {
             trouver_ou_pas_1= auteur_1_trouver;
-            ptr_a1= graphe[i];
+            ptr_a1= graphe_struct.graphe[i];
         }
 
-        if(strcmp(nom_auteur_2, graphe[i]->nom_auteur))
+        if(strcmp(nom_auteur_2, graphe_struct.graphe[i]->nom_auteur))
         {
             trouver_ou_pas_2= auteur_2_trouver;
-            ptr_a2= graphe[i];
+            ptr_a2= graphe_struct.graphe[i];
         }
 
         if((trouver_ou_pas_2== auteur_2_trouver) & (trouver_ou_pas_1== auteur_1_trouver))
@@ -224,6 +234,8 @@ plus_court_chemin_struct* Dijkstra(auteur_struct **graphe, int* size_graphe_ptr,
     
 
     plus_court_chemin_struct* plus_court_chemin_de_a1_a_a2= relachement_de_arretes_jusqu_a_trouver_ou_tout_parcourir(ptr_a1, ptr_a2, nom_auteur_1);
+    
+    //cas ou j'ai tout parcouru
     if(plus_court_chemin_de_a1_a_a2== NULL)
         return NULL;
     
@@ -233,15 +245,15 @@ plus_court_chemin_struct* Dijkstra(auteur_struct **graphe, int* size_graphe_ptr,
 
 
 
-void free_Dijkstra(auteur_struct** graphe, int size_graphe, plus_court_chemin_struct *pcc_ptr, int size_pcc_auteur, int size_pcc_Article)
+void free_Dijkstra(graphe_struct* graphe_struct, plus_court_chemin_struct *pcc_ptr)
 {
     if(pcc_ptr!= NULL)
     {
-        for(int i=0; i< size_pcc_auteur; i++)
+        for(int i=0; i< pcc_ptr->size_pcc_auteur; i++)
         {
             free(pcc_ptr->pcc_tab_ptr_auteur);
         }
-        for(int i=0; i< size_pcc_Article; i++)
+        for(int i=0; i< pcc_ptr->size_pcc_Article; i++)
         {
             free(pcc_ptr->pcc_tab_ptr_Article);
         }
@@ -249,10 +261,12 @@ void free_Dijkstra(auteur_struct** graphe, int size_graphe, plus_court_chemin_st
     }
 
 
-    for(int k=0; k< size_graphe; k++)
+    for(int k=0; k< graphe_struct->size_graphe; k++)
     {
-        free(graphe[k]->ptr_Article_predecesseur_pcc);
-        free(graphe[k]->ptr_auteur_predecesseur_pcc);
+        if(graphe_struct->graphe[k]->ptr_Article_predecesseur_pcc!= NULL)
+            free(graphe_struct->graphe[k]->ptr_Article_predecesseur_pcc);
+        if(graphe_struct->graphe[k]->ptr_auteur_predecesseur_pcc!= NULL)
+            free(graphe_struct->graphe[k]->ptr_auteur_predecesseur_pcc);
     }
 
 
@@ -260,20 +274,23 @@ void free_Dijkstra(auteur_struct** graphe, int size_graphe, plus_court_chemin_st
 
 //je test Dijkstra sur mon graphe test en affichant les noms des auteurs du plus court chemin de a0 a a9
 int main(void)
-{
-    /*Article_struct** tab_Articles_test=NULL;
-    auteur_struct** graphe_test= creation_graphe_test(tab_Articles_test);
-    
-    int* ptr_size_plus_court_chemin_a0_a9= NULL;
-    plus_court_chemin_struct plus_court_chemin=  Dijkstra(graphe_test_avec_voisins, 10, "a0", "a9", ptr_size_plus_court_chemin_a0_a9);
+{   
+    FILE* graphe_test_Katie= fopen("DATA/test_Katie.xml", "r");
 
-    for(int i=0; i< *ptr_size_plus_court_chemin_a0_a9; i++)
+    graphe_struct mon_graphe= faire_graphe_ptr_auteur(graphe_test_Katie);
+
+    fclose(graphe_test_Katie);
+    
+    
+    plus_court_chemin_struct* plus_court_chemin=  Dijkstra(mon_graphe,"a4", "a8");
+
+    for(int i=0; i< plus_court_chemin->size_pcc_auteur; i++)
     {
-        printf("%s\n", plus_court_chemin.pcc_tab_ptr_auteur[i]->nom_auteur);
+        printf("%s\n", plus_court_chemin->pcc_tab_ptr_auteur[i]->nom_auteur);
     }
     
-    free_Dijkstra(plus_court_chemin.pcc_tab_ptr_auteur, graphe_test, 10);
-    free_graphe_avec_voisins(graphe_test_avec_voisins, 10);*/
+    free_Dijkstra(&mon_graphe, plus_court_chemin);
+    
     
 
    

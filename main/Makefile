@@ -5,8 +5,8 @@ LDLIBS ?= -lm -pthread -ftest-coverage -fprofile-arcs
 
 #gcc -shared -o libfoo.so foo.o
 
-# graph:	creation_graphe_voisins creation_Gt test_creation_Gt
-# 	./test_creation_Gt
+Dijkstra: Dijkstra
+	./Dijkstra
 
 graphe: fonctions_graphe
 	./fonctions_graphe
@@ -25,7 +25,7 @@ bench:	bench.o parsing.o list.o unwrap.o macro.o
 tests:	tests.o parsing.o list.o unwrap.o macro.o search.o
 	$(CCA) -o tests  $^ $(CFLAGS) $(LDLIBS)
 
-Dijkstra: Dijkstra.o unwrap.o parsing.o
+Dijkstra: Dijkstra.o unwrap.o parsing.o macro.o fonctions_graphe.o
 	$(CCA) -o Dijkstra $^ $(CFLAGS) $(LDLIBS)
 	
 fonctions_graphe: fonctions_graphe.o unwrap.o  parsing.o macro.o
