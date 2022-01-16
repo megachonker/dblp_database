@@ -52,6 +52,13 @@ void enlever_retour_a_la_ligne(char * ligne){
     ligne[strcspn(ligne, "\n")]=0;    
 }
 
+tabulation(int nombre){
+    for (size_t i = 0; i < nombre; i++)
+    {
+        printf("\t");
+    }
+}
+
 //fonction pour convertire
 // int octerToMega(int taille){
 

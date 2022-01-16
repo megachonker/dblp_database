@@ -37,6 +37,7 @@ typedef struct tableaux_fiche
     fiche_minimale ** fiche; ///< tableaux des fiche_minimale utiliser
     // int * ADDR;               ///<UNE FICHE UNE ADDRESS
     int taille;             ///<taille tableaux
+    int nbAuteurXarticle;
 }tableaux_fiche;
 
 

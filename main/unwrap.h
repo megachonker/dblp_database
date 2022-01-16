@@ -101,7 +101,7 @@ typedef struct unwrap_Graph_struct
 {
     tab_auteur_struct * tab_auteur_struct;
     tab_Article_struct * tab_Article_struct;
-    tableaux_fiche * tableaux_de_fiche;
+    tableaux_fiche tableaux_de_fiche;
 }unwrap_Graph_struct;
 
 /**
@@ -119,6 +119,7 @@ void printPaire_auteurHeurvre(Paire_auteur_oeuvre * OwI,int sizeauteuroeuvre );
  */
 void printList_auteur(tab_auteur_struct * OwO);
 
+void printList_Article(tab_Article_struct * OwO);
 
 /**
  * @brief génère un index des auteur a partire d'un fichier
@@ -156,10 +157,14 @@ void serialise_tab_auteur_struct(const tab_auteur_struct * List_des_Auteur, FILE
  */
 tab_auteur_struct * deserialise_tab_auteur_struct(const tableaux_fiche * List_des_Auteur, FILE * input);
 
-unwrap_Graph_struct gen_unwrap_Graph(FILE * dblpxml, FILE * inverted);
 
 
-void printList_Article(tab_Article_struct * OwO);
+unwrap_Graph_struct deserialise_Graph(FILE * dbxmlCache, FILE * auteurCache, FILE * ArticleCache);
+unwrap_Graph_struct gen_Graph_from_XML(FILE * dbxmlCache);
+void serialise_Graph(unwrap_Graph_struct graph, FILE * dbxmlCache, FILE * auteurCache, FILE * ArticleCache);
+
+
+
 
 void unwrap_List_Auteur_free(tab_auteur_struct * free);
 
@@ -169,7 +174,7 @@ void serialisation_tab_Article_struct(tab_Article_struct * inputlist, FILE * out
 
 tab_Article_struct * deserialisation_tab_Article_struct(tab_auteur_struct * mesauteur, FILE * inputfile);
 
-tab_Article_struct * convertTab_Article2auteur(const tab_auteur_struct * Malistauteur);
+tab_Article_struct * convertTab_auteur2Article(const tab_auteur_struct * Malistauteur);
 
 tab_auteur_struct * gen_tab_auteur_from_xml(FILE * dbinput);
 

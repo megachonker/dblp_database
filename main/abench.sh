@@ -18,7 +18,7 @@ help(){
     - tab_auteur_from_file
     - deserialise_tab_auteur
     - unwrwap_gen_cache_small
-    - gen_unwrap_Graph
+    - deserialise_Graph
     - gen_tab_Article_from_xml
     - unwrap_deserialise_Article
     - ALL'
