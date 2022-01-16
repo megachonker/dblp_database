@@ -17,7 +17,7 @@ int main()
 {
 //     INFO("exection de tests")
 
-    FILE * DBxml            = fopen(serializedb,"r");
+    // FILE * DBxml            = fopen(serializedb,"r");
 //     // FILE * DBinverse        = fopen(serializedbunwrap,"r");
 //     // FILE * CacheArticleW    = fopen(serialised_Article,"r");
 
@@ -64,12 +64,11 @@ int main()
 
     //gérée la création
 
-    // FILE * DBxml = fopen(originedb,"r");
-
-    tab_Article_struct * matable = gen_tab_Article_from_xml(DBxml);
-
+    FILE * DBxml = fopen(customxml,"r");
+    tab_auteur_struct ** truc = malloc(8);
+    tab_Article_struct * matable = gen_tab_Article_from_xml(DBxml,truc);
     test_exploration_Article(matable);
-
+    printList_auteur(*truc);
     return 0;
 }
 

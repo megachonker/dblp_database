@@ -19,15 +19,18 @@ typedef enum a_mettre_dans_voisins_ou_pas
 auteur_struct** faire_graphe_ptr_auteur(int* size_graphe_ptr, FILE *file_xml)
 {
     
-    tab_auteur_struct * malistauteur= malloc(sizeof(tab_auteur_struct*));
+    tab_auteur_struct * malistauteur = NULL;
     tab_Article_struct * malistaarticle= gen_tab_Article_from_xml(file_xml, malistauteur);
-    
+    exitIfNull(malistauteur,"generation imposible  malistaarticle imposible")
+    exitIfNull(malistaarticle,"generation malistaarticle imposible")
+
+    test_exploration_Article(malistaarticle);
+
 
     //creation du tableau de ptr d'auteur
     
-
-
     size_graphe_ptr= &(malistauteur->nombre_auteur);
+    DEBUG("%d et %d",*(&(malistauteur->nombre_auteur)),*(&malistauteur->nombre_auteur))
     auteur_struct** graphe= malloc(sizeof(auteur_struct*)**size_graphe_ptr);
 
     for(int i=0; i<*size_graphe_ptr; i++)
@@ -153,7 +156,7 @@ int main(void)
     
     int *size_ptr= malloc(sizeof(int*));
 
-    FILE* graphe_test_Katie= fopen("DATA/test_Katie.xml", "r");
+    FILE* graphe_test_Katie= fopen(dbtestKatie "r");
 
     auteur_struct** graphe= faire_graphe_ptr_auteur(size_ptr, graphe_test_Katie);
 
