@@ -19,45 +19,45 @@ int main()
 {
     INFO("exection de tests")
 
-    INFO("tests:generation graph")
+    // INFO("tests:generation graph")
 
-    FILE * XML               = fopen(origineXML      ,"r");
-    exitIfNull(XML  ,"erreur ouverture bd")
-    unwrap_Graph_struct graph= gen_Graph_from_XML(XML);
-    fclose(XML);
+    // FILE * XML               = fopen(origineXML      ,"r");
+    // exitIfNull(XML  ,"erreur ouverture bd")
+    // unwrap_Graph_struct graph= gen_Graph_from_XML(XML);
+    // fclose(XML);
 
-    INFO("tests:Serialisation")
+    // INFO("tests:Serialisation")
 
-    FILE * DBficheEcriture   = fopen(cache_fiche     ,"w");
-    FILE * DBauteurEcriture  = fopen(auteur_cache    ,"w");
-    FILE * DBArticleEcriture = fopen(Article_cache   ,"w");
-    serialise_Graph(graph,
-        DBficheEcriture,
-        DBauteurEcriture,
-        DBArticleEcriture);
+    // FILE * DBficheEcriture   = fopen(cache_fiche     ,"w");
+    // FILE * DBauteurEcriture  = fopen(auteur_cache    ,"w");
+    // FILE * DBArticleEcriture = fopen(Article_cache   ,"w");
+    // serialise_Graph(graph,
+    //     DBficheEcriture,
+    //     DBauteurEcriture,
+    //     DBArticleEcriture);
 
-    fclose(DBficheEcriture);
-    fclose(DBauteurEcriture);
-    fclose(DBArticleEcriture);
+    // fclose(DBficheEcriture);
+    // fclose(DBauteurEcriture);
+    // fclose(DBArticleEcriture);
 
-    // INFO("tests:deserialisation")
+    INFO("tests:deserialisation")
 
-    // FILE * DBficheLecture   = fopen(cache_fiche     ,"r");
-    // FILE * DBauteurLecture  = fopen(auteur_cache    ,"r");
-    // FILE * DBArticleLecture = fopen(Article_cache   ,"r");
+    FILE * DBficheLecture   = fopen(cache_fiche     ,"r");
+    FILE * DBauteurLecture  = fopen(auteur_cache    ,"r");
+    FILE * DBArticleLecture = fopen(Article_cache   ,"r");
 
 
-    // unwrap_Graph_struct graph1 = deserialise_Graph(DBficheLecture
-    //                                 ,DBauteurLecture
-    //                                 ,DBArticleLecture);
+    unwrap_Graph_struct graph1 = deserialise_Graph(DBficheLecture
+                                    ,DBauteurLecture
+                                    ,DBArticleLecture);
 
-    // exitIfNull(DBficheLecture  ,"erreur ouverture bd")
-    // exitIfNull(DBauteurLecture ,"erreur ouverture bd")
-    // exitIfNull(DBArticleLecture,"erreur ouverture bd")
+    exitIfNull(DBficheLecture  ,"erreur ouverture bd")
+    exitIfNull(DBauteurLecture ,"erreur ouverture bd")
+    exitIfNull(DBArticleLecture,"erreur ouverture bd")
 
-    // fclose(DBficheLecture);
-    // fclose(DBauteurLecture);
-    // fclose(DBArticleLecture);
+    fclose(DBficheLecture);
+    fclose(DBauteurLecture);
+    fclose(DBArticleLecture);
 
 
     // scoarboard(&graph1,TOP_auteur,5);

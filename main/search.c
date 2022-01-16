@@ -56,13 +56,13 @@ tab_auteur_struct get_top_auteur(const tab_auteur_struct * tout_auteur,int topX)
     exitIfNull(pile,"imposible de faire la pille")
 
     auteur_struct premier ={.nom_auteur  = "test",
-                            .nbelementmagi = 0};
+                            .size = 0};
     pile[0] = premier;
 
-    for (int i = tout_auteur->nombre_auteur; i > 0; i--)
+    for (int i = 0; i < tout_auteur->nombre_auteur; i++)
     {
         progressbar(i,tout_auteur->nombre_auteur);
-        if (pile[indicepill%topX].nbelementmagi < tout_auteur->tab_auteur[i].nbelementmagi)
+        if (pile[indicepill%topX].size < tout_auteur->tab_auteur[i].size)
         {
             indicepill++;
             pile[indicepill%topX] = tout_auteur->tab_auteur[i];
@@ -78,10 +78,12 @@ void scoarboard(const unwrap_Graph_struct * mongraph ,const int getwhat ,const i
     switch (getwhat)
     {
     case TOP_Article:
+        INFO("Top %d des Article",nbentrer)
         tab_Article_struct monTopArticle = get_top_Article(mongraph->tab_Article_struct,nbentrer);
         printList_Article(&monTopArticle);
         break;
     case TOP_auteur:
+        INFO("Top %d des auteur",nbentrer)
         tab_auteur_struct monTopauteur = get_top_auteur(mongraph->tab_auteur_struct,nbentrer);
         printList_auteur(&monTopauteur);
         break;

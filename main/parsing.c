@@ -251,7 +251,7 @@ tableaux_fiche parse(FILE * inputDB){
  * @param [out] output    fichier de sortie 
  */
 void serialisation_tableaux_fiche(const tableaux_fiche mastertab, FILE * output){
-    INFO("Serialisation des fiche")
+    INFO("\tSerialisation des fiche")
     //une sorte de header du fichier ici !
         //taille de la structure
         //validitée
@@ -279,7 +279,7 @@ void serialisation_tableaux_fiche(const tableaux_fiche mastertab, FILE * output)
  * @return pointeur ver tableaux_fiche 
  */
 tableaux_fiche * deserialisation_tableaux_fiche(FILE * input){
-    INFO("Deserialisation tableaux fiche DBXML")
+    INFO("\tDeserialisation tableaux fiche DBXML")
 
     PROGRESSBAR_DECL(input);
 

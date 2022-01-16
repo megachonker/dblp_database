@@ -173,7 +173,6 @@ void exploreauteur(const auteur_struct * monauteur,int profondeur){
     for (int i = 0; i < monauteur->nbArticlecontenue; i++)
     {
         BLUE()
-        profondeur++;
         tabulation(profondeur);
         printf("%s\n",monauteur->tab_ptr_Article[i]->nom_Article);
         CLRCOLOR()
@@ -197,8 +196,8 @@ void test_exploration_Article(const tab_Article_struct * mesarticle){
     //     for (int u = 0; u < mesarticle->tab_Article[i].nombre_auteur; u++)
     //     {
     //         GREEN()
-    //         printf("\t%s ==> %d\n",mesarticle->tab_Article[i].tab_ptr_auteur[u]->nom_auteur,mesarticle->tab_Article[i].tab_ptr_auteur[u]->nbelementmagi);
-    //         // for (int pp = 0; pp < mesarticle->tab_Article[i].tab_ptr_auteur[u]->nbelementmagi; pp++)
+    //         printf("\t%s ==> %d\n",mesarticle->tab_Article[i].tab_ptr_auteur[u]->nom_auteur,mesarticle->tab_Article[i].tab_ptr_auteur[u]->nbArticlecontenue);
+    //         // for (int pp = 0; pp < mesarticle->tab_Article[i].tab_ptr_auteur[u]->nbArticlecontenue; pp++)
     //         // {
     //         //     BLUE()
     //         //     printf("\t\t%s ==> %d\n",mesarticle->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nom_Article,mesarticle->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nombre_auteur); 
@@ -234,6 +233,7 @@ tab_auteur_struct* gen_List_auteur(const Paire_auteur_oeuvre * liste,int sizeHau
     listes_Auteur_arrTitre->nombre_auteur = 0;
     listes_Auteur_arrTitre->tab_auteur = NULL;
 
+    int id = 0;
     int posTabPaireaA = 0;
     //on parcoure liste
     while (posTabPaireaA < sizeHauteurHeuvre)
@@ -246,7 +246,7 @@ tab_auteur_struct* gen_List_auteur(const Paire_auteur_oeuvre * liste,int sizeHau
             
         //initialisation de l'auteur crée
         listes_Auteur_arrTitre->tab_auteur[(*nb_auteur)].size=0                         ;
-        listes_Auteur_arrTitre->tab_auteur[(*nb_auteur)].nbelementmagi = 0              ;
+        listes_Auteur_arrTitre->tab_auteur[(*nb_auteur)].nbArticlecontenue = 0              ;
         listes_Auteur_arrTitre->tab_auteur[(*nb_auteur)].nom_auteur = NULL              ;
         listes_Auteur_arrTitre->tab_auteur[(*nb_auteur)].tab_ptr_Article = NULL         ;    //ducoup malloc le code 
         listes_Auteur_arrTitre->tab_auteur[(*nb_auteur)].tab_ptr_fiche_min = NULL       ;
@@ -321,14 +321,14 @@ tab_Article_struct* assemble_tab_Article(Paire_Article_auteur * liste,int sizeAr
             auteur_struct * temparray = reallocarray(dernierarticle->tab_ptr_auteur,(*nb_auteur)+1,8); //8 taille d'un pointeur 
             exitIfNull(temparray,"assemble_tab_Article auteur_struct realockarrayfail\n");            
             dernierarticle->tab_ptr_auteur = (auteur_struct**)temparray;
-            dernierarticle->tab_ptr_auteur[*nb_auteur] = liste[(*nb_auteur)+posTabPairAa].pointeur_Auteur;// < nbelementmagi ?
+            dernierarticle->tab_ptr_auteur[*nb_auteur] = liste[(*nb_auteur)+posTabPairAa].pointeur_Auteur;// < nbArticlecontenue ?
 
             YOLO("hauteur:\t%s\n",dernierarticle->tab_ptr_auteur[*nb_auteur]->nom_auteur);
 
             //flag pour passer au prochain article
             int found=0;
                                                                                 //pASInitialiser ?
-            int *localnbelementmaposTabPairAa = &dernierarticle->tab_ptr_auteur[*nb_auteur]->nbelementmagi ;
+            int *localnbelementmaposTabPairAa = &dernierarticle->tab_ptr_auteur[*nb_auteur]->nbArticlecontenue ;
 
             //on vérifie qu'il n'existe pas déja un article 
             for (int o = 0; o < *localnbelementmaposTabPairAa; o++)
@@ -374,7 +374,6 @@ void printList_auteur(tab_auteur_struct * OwO){
         BLUE()
         printf("%s (%d):\n",OwO->tab_auteur[i].nom_auteur,OwO->tab_auteur[i].size);    
         GREY()
-        // DEBUG("Print: %d",OwO->tab_auteur[i].size)
         for (int j = 0; j < OwO->tab_auteur[i].size; j++)
         {
             printf("\t%s\n",OwO->tab_auteur[i].tab_ptr_fiche_min[j]->titre);
@@ -387,14 +386,12 @@ void printList_auteur(tab_auteur_struct * OwO){
 
 void printList_Article(tab_Article_struct * OwO){
     DEBUG("il y a %d article a print ", OwO->nombre_Article)
-
     for (int i = 0; i < OwO->nombre_Article; i++)
     {
-        PROGRESSBAR(i,OwO->nombre_Article);
         BLUE()
         printf("%s (%d):\n",OwO->tab_Article[i].nom_Article,OwO->tab_Article[i].nombre_auteur);    
         GREY()
-        DEBUG("Print: %d",OwO->tab_Article[i].nombre_auteur)
+        // DEBUG("Print: %d/%d",i,OwO->nombre_Article)
         for (int j = 0; j < OwO->tab_Article[i].nombre_auteur; j++)
         {
             printf("\t%s\n",OwO->tab_Article[i].tab_ptr_auteur[j]->nom_auteur);
@@ -433,7 +430,7 @@ int count_isolate_autor(const tab_auteur_struct * List_des_Auteur){
  * @param output 
  */
 void serialise_tab_auteur_struct(const tab_auteur_struct * List_des_Auteur, FILE * output){
-    INFO("sérialisation des auteur:")
+    INFO("\tsérialisation des auteur:")
     //fonction d'qui fait la moyenne des nom_auteur pour pouvoir fair un maloque que une foit en moyenne
     fprintf(output,"%d\n",count_isolate_autor(List_des_Auteur));// est egale a List_des_Auteur->taille
     for (int i = 0; i < List_des_Auteur->nombre_auteur; i++)
@@ -465,7 +462,7 @@ void serialise_tab_auteur_struct(const tab_auteur_struct * List_des_Auteur, FILE
  * @return tab_auteur_struct* 
  */
 tab_auteur_struct * deserialise_tab_auteur_struct(const tableaux_fiche * tableaux_fiche,FILE * input){
-    INFO("deserialise tab auteur")
+    INFO("\tdeserialise tab auteur")
 
     char ligne[BALISESIZE];
     tab_auteur_struct * master_List_Auteur = malloc(sizeof(tab_auteur_struct));
@@ -488,7 +485,7 @@ tab_auteur_struct * deserialise_tab_auteur_struct(const tableaux_fiche * tableau
         master_List_Auteur->tab_auteur[nbauteur].nom_auteur = strdup(ligne);
 
         // on initialise le compteur d'élément 
-        master_List_Auteur->tab_auteur[nbauteur].nbelementmagi = 0;
+        master_List_Auteur->tab_auteur[nbauteur].nbArticlecontenue = 0;
         // master_List_Auteur->tab_auteur[nbauteur].nbmembreTabarticleALOUER = 0;
         master_List_Auteur->tab_auteur[nbauteur].tab_ptr_Article = NULL;
 
@@ -581,7 +578,7 @@ tab_Article_struct * convertTab_auteur2Article(const tab_auteur_struct * Malista
 }
 
 void serialisation_tab_Article_struct(tab_Article_struct * inputlist, FILE * outputfile){
-    INFO("Sérialisation des Article:")
+    INFO("\tSérialisation des Article:")
     int nombreArticle = inputlist->nombre_Article;
     DEBUG("sérialisation de  %d article",nombreArticle)
     fprintf(outputfile,"%d\n",inputlist->nombre_Article);
@@ -618,7 +615,7 @@ void serialisation_tab_Article_struct(tab_Article_struct * inputlist, FILE * out
  */
 void ajout_Article_in_auteur(auteur_struct * monauteur,Article_struct * monArticle){
     // Check doublon
-    // for (int i = 0; i < monauteur->nbelementmagi; i++)
+    // for (int i = 0; i < monauteur->nbArticlecontenue; i++)
     // {
     //     // DEBUG("%p !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! %p",monauteur->tab_ptr_Article[i],monArticle)
     //     if(strcmp(monauteur->tab_ptr_Article[i]->nom_Article,monArticle->nom_Article)){
@@ -626,25 +623,25 @@ void ajout_Article_in_auteur(auteur_struct * monauteur,Article_struct * monArtic
     //         return;
     //     }
     // }
-            // DEBUG("ALOUER %d DEMANDER %d",monauteur->nbmembreTabarticleALOUER,monauteur->nbelementmagi)
+            // DEBUG("ALOUER %d DEMANDER %d",monauteur->nbmembreTabarticleALOUER,monauteur->nbArticlecontenue)
 
-    if (monauteur->nbmembreTabarticleALOUER<=monauteur->nbelementmagi)
+    if (monauteur->nbmembreTabarticleALOUER<=monauteur->nbArticlecontenue)
     {
-        monauteur->nbmembreTabarticleALOUER=(monauteur->nbelementmagi+1)*2;
+        monauteur->nbmembreTabarticleALOUER=(monauteur->nbArticlecontenue+1)*2;
         Article_struct ** tmptest = reallocarray(monauteur->tab_ptr_Article,monauteur->nbmembreTabarticleALOUER,sizeof(Article_struct*));
         exitIfNull(tmptest,"ajout article erreur realockarray")
         monauteur->tab_ptr_Article = tmptest;
     }
 
-    monauteur->tab_ptr_Article[monauteur->nbelementmagi] = monArticle;
-    monauteur->nbelementmagi++;
-    // DEBUG("\t\t tableauxd d'article %p nb element %d ",monauteur->tab_ptr_Article,monauteur->nbelementmagi)
-    // DEBUG("%d",monauteur->nbelementmagi)
+    monauteur->tab_ptr_Article[monauteur->nbArticlecontenue] = monArticle;
+    monauteur->nbArticlecontenue++;
+    // DEBUG("\t\t tableauxd d'article %p nb element %d ",monauteur->tab_ptr_Article,monauteur->nbArticlecontenue)
+    // DEBUG("%d",monauteur->nbArticlecontenue)
 }
 
 //faire une interface pour sérialiser deserialiser ?
 tab_Article_struct * deserialisation_tab_Article_struct(tab_auteur_struct * mesauteur, FILE * inputfile){
-    INFO("deserailisation Article")
+    INFO("\tdeserailisation Article")
     char ligne[BALISESIZE];
     tab_Article_struct * mon_tab_Article_struct = malloc(sizeof(tab_Article_struct));
     mon_tab_Article_struct->nombre_Article=0;
@@ -670,14 +667,13 @@ tab_Article_struct * deserialisation_tab_Article_struct(tab_auteur_struct * mesa
         //pas si utile .... Peut faire autrement
         fgets(ligne,BALISESIZE,inputfile);
         enlever_retour_a_la_ligne(ligne);
-        YOLO("%s",ligne)
+        YOLO("ligneNomsarticle=%s",ligne)
         monArticle->nom_Article = strdup(ligne);
 
         //nombre d'auteur sur cette structure
         fgets(ligne,BALISESIZE,inputfile);
         int nbauteur = 0;
         nbauteur = atoi(ligne);
-        // sscanf(ligne,"%d\n",&nbauteur);
         monArticle->nombre_auteur = nbauteur;
         exitIfNull(nbauteur,"il y a 0 article")
         enlever_retour_a_la_ligne(ligne);
@@ -696,31 +692,33 @@ tab_Article_struct * deserialisation_tab_Article_struct(tab_auteur_struct * mesa
             fgets(ligne,BALISESIZE,inputfile);
             enlever_retour_a_la_ligne(ligne);
             indexmagie = atoi(ligne);
-            exitIfNull(indexmagie,"indexmagienule")
+            YOLO("nombre ID auteur %d",indexmagie)
             //je cherche dans le tab auteur en fc de l'index trouver
             structauteur[i] = &(mesauteur->tab_auteur[indexmagie]);
+            YOLO("noms de l'auteur %s",structauteur[i]->nom_auteur)
 
             //je doit  associer a mon auteur de quoi joindre mon article
 
             //pas obligatoir
-            // structauteur[i].nbelementmagi = indexmagie;
-            // DEBUG("size %d nombre element maj %d", structauteur[i].size,structauteur[i].nbelementmagi)
+            // structauteur[i].nbArticlecontenue = indexmagie;
+            // DEBUG("size %d nombre element maj %d", structauteur[i].size,structauteur[i].nbArticlecontenue)
             // YOLO("hauteur: %s",structauteur[i].nom_auteur);
             // DEBUG("Ajout de l'article a  %s",monArticle->nom_Article)
             ajout_Article_in_auteur(structauteur[i],monArticle);
-            // DEBUG("!!! addresse %p, nombre d'article contenue %d, %s",structauteur[i].tab_ptr_Article,structauteur[i].nbelementmagi,structauteur[i].nom_auteur)
+            // DEBUG("!!! addresse %p, nombre d'article contenue %d, %s",structauteur[i].tab_ptr_Article,structauteur[i].nbArticlecontenue,structauteur[i].nom_auteur)
         }
 
-        //le réalock fout la merde 
-
-        // INFO("Noms article %s",monArticle->nom_Article)
-        // INFO("Nombre d'article %d",monArticle->nombre_auteur)
-        // for (int i = 0; i < monArticle->nombre_auteur; i++)
-        // {
-        //     DEBUG("\tAddresse alouer: %p",monArticle->tab_ptr_auteur[i])
-        //     DEBUG("\tNoms auteur %s",monArticle->tab_ptr_auteur[i]->nom_auteur)
-        //     WARNING("-----")
-        // }
+        // le réalock fout la merde 
+        #ifdef YOLO_ON
+        INFO("Noms article %s",monArticle->nom_Article)
+        INFO("Nombre d'article %d",monArticle->nombre_auteur)
+        for (int i = 0; i < monArticle->nombre_auteur; i++)
+        {
+            DEBUG("\tAddresse alouer: %p",monArticle->tab_ptr_auteur[i])
+            DEBUG("\tNoms auteur %s",monArticle->tab_ptr_auteur[i]->nom_auteur)
+            WARNING("-----")
+        }
+        #endif
         
         
     }
@@ -772,7 +770,7 @@ tab_auteur_struct * gen_tab_auteur_from_xml_et_liaison_article(FILE * dbinput){
  * @return unwrap_Graph_struct 
  */
 unwrap_Graph_struct deserialise_Graph(FILE * dbxmlCache, FILE * auteurCache, FILE * ArticleCache){
-    INFO("Désérialisation du Graph")
+    INFO("Désérialisation du Graph:")
     tableaux_fiche * matablefiche = deserialisation_tableaux_fiche(dbxmlCache);
     tab_auteur_struct * malistaauteur =   deserialise_tab_auteur_struct(matablefiche,auteurCache);
     tab_Article_struct * malistearticle = deserialisation_tab_Article_struct(malistaauteur,ArticleCache);
@@ -790,7 +788,7 @@ unwrap_Graph_struct gen_Graph_from_XML(FILE * dbxmlCache){
 }
 
 void serialise_Graph(unwrap_Graph_struct graph, FILE * dbxmlCache, FILE * auteurCache, FILE * ArticleCache){
-    INFO("Sérialisation du graph")
+    INFO("Sérialisation du graph:")
     serialisation_tableaux_fiche(graph.tableaux_de_fiche,dbxmlCache);
     serialise_tab_auteur_struct(graph.tab_auteur_struct,auteurCache);
     serialisation_tab_Article_struct(graph.tab_Article_struct,ArticleCache);
