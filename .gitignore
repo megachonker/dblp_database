@@ -1419,3 +1419,4 @@ main/DATA/SerializedStrucArticleCustom.data
 main/DATA/SerializedStrucInverseCustom.data
 main/macro
 main/==17549== Using Valgrind-3.18.1 and LibV.pl
+main/.vscode/c_cpp_properties.json

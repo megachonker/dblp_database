@@ -2,7 +2,8 @@
 #include <stdlib.h>
 #include "fonctions_graphe.h"
 #include "unwrap.h"
-#include "test.h"
+
+
 
 
 
@@ -14,41 +15,31 @@ typedef enum a_mettre_dans_voisins_ou_pas
 }a_mettre_dans_voisins_ou_pas;
 
 
-//on appelera "graphe" le tableau de ptr d'auteur correspondant a unwrap_Graph
-//avant d'appeler cette fonction, il faut fopen DBxml et déclarer le pointeur size_graphe_ptr
-//et après faut close le file
-auteur_struct** faire_graphe_avec_unwrap_graphe(int* size_graphe_ptr, FILE *DBxml, FILE *DBinverse, char* chemin_vers_cache_fichier_xml)
+//on appelera "graphe" le tableau des ptr vers les auteurs contenues dans malistauteur
+auteur_struct** faire_graphe_ptr_auteur(int* size_graphe_ptr, FILE *file_xml)
 {
     
+    tab_auteur_struct * malistauteur= NULL;
+    tab_Article_struct * malistaarticle= gen_tab_Article_from_xml(file_xml, malistauteur);
     
-    tab_auteur_struct * malistauteur = unwrap_from_file(DBxml);
-    serialise_tab_auteur_struct(malistauteur,DBinverse);
-    unwrap_List_Auteur_free(malistauteur);
-    
-    fclose(DBinverse);
-    FILE * DBinvers_re = fopen(chemin_vers_cache_fichier_xml, "r");
-    // tab_Article_struct * matable = unwrap_ListArticle_from_xml(DBxml);
-
-    unwrap_Graph_struct unwrap_Graph= gen_unwrap_Graph(DBxml, DBinvers_re); //< erreur peut etre la ?
-    
-    
-    fclose(DBinvers_re);
 
     //creation du tableau de ptr d'auteur correspondant a unwrap_Graph
-    *size_graphe_ptr= unwrap_Graph.tab_auteur_struct->taille;
+    *size_graphe_ptr= malistauteur->nombre_auteur;
     auteur_struct** graphe= malloc(sizeof(auteur_struct*)**size_graphe_ptr);
-    if(graphe== NULL)
-    {
-        printf("%s\n", "erreur de malloc du graphe");
-        return NULL;
-    }
-    
+
     for(int i=0; i<*size_graphe_ptr; i++)
     {
-        auteur_struct ai= unwrap_Graph.tab_auteur_struct->tab_auteur[i];
+        printf("%s", malistauteur->tab_auteur[i].nom_auteur);
+    }
+    printf("%s", "\n\n\n");
+
+
+
+    for(int i=0; i<*size_graphe_ptr; i++)
+    {
+        auteur_struct ai= malistauteur->tab_auteur[i];
         ai.size_pcc_auteur= -1;
         graphe[i]= &ai;
-        printf("%s", ai.nom_auteur);
     }
 
     return graphe;
@@ -157,14 +148,11 @@ int main(void)
     
     int *size_ptr= NULL;
 
-    FILE* DBinverse= fopen(serializedbunwrap, "w");
-    
-    FILE* DBxml= fopen(originedb, "r");
+    FILE* graphe_test_Katie= fopen("DATA/test_Katie.xml", "r");
 
-    auteur_struct** graphe= faire_graphe_avec_unwrap_graphe(size_ptr, DBxml, DBinverse, , );
-    
-    fclose(test_xml);
-    fclose(DBinverse);
+    auteur_struct** graphe= faire_graphe_ptr_auteur(size_ptr, graphe_test_Katie);
+
+    fclose(graphe_test_Katie);
 
   
     for(int k=0; k <*size_ptr; k++)
@@ -172,9 +160,8 @@ int main(void)
         char *nom_auteur= graphe[k]->nom_auteur;
         printf("%s\n", nom_auteur);
     }
-    
 
-
+    free(graphe);
     
 
     
