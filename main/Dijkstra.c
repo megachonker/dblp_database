@@ -234,6 +234,8 @@ plus_court_chemin_struct* Dijkstra(graphe_struct graphe_struct, char* nom_auteur
     
 
     plus_court_chemin_struct* plus_court_chemin_de_a1_a_a2= relachement_de_arretes_jusqu_a_trouver_ou_tout_parcourir(ptr_a1, ptr_a2, nom_auteur_1);
+    
+    //cas ou j'ai tout parcouru
     if(plus_court_chemin_de_a1_a_a2== NULL)
         return NULL;
     
@@ -273,7 +275,7 @@ void free_Dijkstra(graphe_struct* graphe_struct, plus_court_chemin_struct *pcc_p
 //je test Dijkstra sur mon graphe test en affichant les noms des auteurs du plus court chemin de a0 a a9
 int main(void)
 {   
-    FILE* graphe_test_Katie= fopen(dbtestKatie "r");
+    FILE* graphe_test_Katie= fopen("DATA/test_Katie.xml", "r");
 
     graphe_struct mon_graphe= faire_graphe_ptr_auteur(graphe_test_Katie);
 
