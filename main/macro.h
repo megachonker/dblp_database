@@ -17,18 +17,18 @@
 #define PROGRESSBAR_ON
 // #define YOLO_ON
 
-#define originedb               "DATA/dblp.xml"
-#define customxml               "DATA/custom.xml"
-#define smalloriginedb          "DATA/dblp1sur8.xml"
-#define dbtestKatie           "DATA/test_Katie.xml"
-#define serializedb             "DATA/SerializedStruc.data"
-#define smallserializedb        "DATA/Serialzed1000.data"
-#define serializedbunwrap       "DATA/SerializedStrucInverse.data"
-#define smallserializedbunwrap  "DATA/SerializedStrucInverse1000.data"
-#define customserializedbunwrap  "DATA/SerializedStrucInverseCustom.data"
-#define serialised_Article      "DATA/SerializedStrucArticle.data"
-#define serialised_Articlecustom      "DATA/SerializedStrucArticleCustom.data"
-#define serialised_Articlecustom      "DATA/SerializedStrucArticleCustom.data"
+#define origineXML               "DATA/dblp.xml"
+#define customXML               "DATA/custom.xml"
+#define smallorigineXML          "DATA/dblp1sur8.xml"
+#define Katie           "DATA/test_Katie.xml"
+#define cache_fiche             "DATA/SerializedStruc.data"
+#define small_fiche_cache        "DATA/Serialzed1000.data"
+#define auteur_cache       "DATA/SerializedStrucInverse.data"
+#define small_auteur_cache  "DATA/SerializedStrucInverse1000.data"
+#define custom_auteur_cache  "DATA/SerializedStrucInverseCustom.data"
+#define Article_cache               "DATA/SerializedStrucArticle.data"
+#define custom_Article_cache      "DATA/SerializedStrucArticleCustom.data"
+#define custom_Article_cache      "DATA/SerializedStrucArticleCustom.data"
 
 //macro pour les couleur
 #define GREEN()     fprintf(stderr,"\033[1;32m");
@@ -100,5 +100,12 @@ void progressbar(int indice, int total);
  * @param [in,out] ligne 
  */
 void enlever_retour_a_la_ligne(char * ligne);
+
+/**
+ * @brief fait x tabbulation pour l'afichage
+ * 
+ * @param nombre 
+ */
+void tabulation(int nombre);
 
 #endif

@@ -17,54 +17,60 @@ int main()
 {
     INFO("exection de tests")
 
-    // FILE * DBxml            = fopen(serializedb,"r");
-    // FILE * DBinverse        = fopen(serializedbunwrap,"r");
-    // FILE * CacheArticleW    = fopen(serialised_Article,"r");
+    // FILE * DBxml            = fopen(cache_fiche,"r");
+    // FILE * DBinverse        = fopen(auteur_cache,"r");
+    // FILE * CacheArticleW    = fopen(Article_cache,"r");
 
 
 
-//     FILE * DBxml            = fopen(customxml,"r");
-//     // FILE * DBinverse        = fopen(serializedbunwrap,"r");
-//     // FILE * CacheArticleW    = fopen(serialised_Article,"r");
-// //serialised_Articlecustom
+    FILE * DBxml            = fopen(customXML,"r");
+    // FILE * DBinverse        = fopen(auteur_cache,"r");
+    // FILE * CacheArticleW    = fopen(Article_cache,"r");
+//custom_Article_cache
 
 
-//     FILE * custominverarti            = fopen(serialised_Articlecustom,"w");
+    FILE * custominverarti            = fopen(custom_Article_cache,"w");
 
-//     FILE * ouputDB = fopen(customserializedbunwrap,"w");
-//     exitIfNull(ouputDB,"imposible d'ouvrire "customserializedbunwrap)
-//     int nbauteur = -1;
-//     int * pointeurnbauteur = &nbauteur ;
-//     tab_auteur_struct * malistauteur = gen_tab_auteur_from_xml(DBxml);
-//     serialise_tab_auteur_struct(malistauteur,ouputDB);
+    FILE * ouputDB = fopen(custom_auteur_cache,"w");
+    exitIfNull(ouputDB,"imposible d'ouvrire "custom_auteur_cache)
+
+    tab_auteur_struct * malistauteur = gen_tab_auteur_from_xml(DBxml);
+    serialise_tab_auteur_struct(malistauteur,ouputDB);
     
-//     fclose(ouputDB);
-//     //customserializedbunwrap
+    fclose(ouputDB);
+    //custom_auteur_cache
 
-//     FILE * inn = fopen(customserializedbunwrap,"r");
-//     exitIfNull(inn,"imposible d'ouvrire "customserializedbunwrap)
+    FILE * inn = fopen(custom_auteur_cache,"r");
+    exitIfNull(inn,"imposible d'ouvrire "custom_auteur_cache)
 
-// // ces bon
-//     fseek(DBxml,0,SEEK_SET);
-//     tab_Article_struct * azerazer = gen_tab_Article_from_xml(DBxml);
-//     serialisation_tab_Article_struct(azerazer,custominverarti);
+// ces bon
+    fseek(DBxml,0,SEEK_SET);
+    tab_Article_struct * azerazer = gen_tab_Article_from_xml(DBxml);
+    serialisation_tab_Article_struct(azerazer,custominverarti);
 
-//     fclose(custominverarti);
-//     FILE * aaaaaaa            = fopen(serialised_Articlecustom,"r");
+    fclose(custominverarti);
+    FILE * aaaaaaa            = fopen(custom_Article_cache,"r");
 
-//     // tab_auteur_struct * malistaauteur = deserialise_tab_auteur_struct(matablefiche,DBinverse);
+    // tab_auteur_struct * malistaauteur = deserialise_tab_auteur_struct(matablefiche,DBinverse);
 
-//     // FILE * CacheArticleW    = fopen(serialised_Article,"r");
-//     // exitIfNull(CacheArticleW,"INPUT PAS CHEMAIN")
+    // FILE * CacheArticleW    = fopen(Article_cache,"r");
+    // exitIfNull(CacheArticleW,"INPUT PAS CHEMAIN")
 
-//     tab_Article_struct * matable = deserialisation_tab_Article_struct(malistauteur,aaaaaaa);
-//     INFO("deserialisation terminer")
+    tab_Article_struct * matable = deserialisation_tab_Article_struct(malistauteur,aaaaaaa);
+    INFO("deserialisation terminer")
+
+    // Article_cache
+
+    //gérée la création
+
+    // FILE * DBxml = fopen(origineXML,"r");
+
+    // tab_Article_struct * matable = gen_tab_Article_from_xml(DBxml);
 
 
-    FILE * DBxml = fopen(customxml,"r");
-    tab_Article_struct * matable = gen_tab_Article_from_xml(DBxml);
+
     test_exploration_Article(matable);
-    // printList_auteur(*);
+
     return 0;
 }
 
