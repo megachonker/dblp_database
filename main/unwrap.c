@@ -307,7 +307,7 @@ tab_Article_struct* assemble_tab_Article(Paire_Article_auteur * liste,int sizeAr
     return ListDesArticle;
 }
 
-void printList_Auteur(tab_auteur_struct * OwO){
+void printList_auteur(tab_auteur_struct * OwO){
     for (int i = 0; i < OwO->nombre_auteur; i++)
     {
         printf("%s:\n",OwO->tab_auteur[i].nom_auteur);    
@@ -649,10 +649,12 @@ tab_Article_struct * deserialisation_tab_Article_struct(tab_auteur_struct * mesa
  * @param dbinput 
  * @return tab_Article_struct* 
  */
-tab_Article_struct * gen_tab_Article_from_xml(FILE * dbinput, tab_auteur_struct * malistauteur){
+tab_Article_struct * gen_tab_Article_from_xml(FILE * dbinput, tab_auteur_struct ** malistauteur){
     INFO("gen_tab_Article_from_xml:")
-    malistauteur = gen_tab_auteur_from_xml(dbinput);//la
-    tab_Article_struct * malistaarticle = convertTab_Article2auteur(malistauteur);
+    tab_auteur_struct * a =NULL;
+    a = gen_tab_auteur_from_xml(dbinput);//la
+    tab_Article_struct * malistaarticle = convertTab_Article2auteur(a);
+    *malistauteur = a;
     INFO("tab_Article_struct générée")
     return malistaarticle ;
 }
