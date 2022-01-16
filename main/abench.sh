@@ -21,6 +21,9 @@ help(){
     - deserialise_Graph
     - gen_tab_Article_from_xml
     - unwrap_deserialise_Article
+    - deserialise_Graph
+    - gen_graph_from_XML
+    - serialise_Graph
     - ALL'
 }
 

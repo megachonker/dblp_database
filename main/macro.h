@@ -23,12 +23,13 @@
 #define Katie           "DATA/test_Katie.xml"
 #define cache_fiche             "DATA/SerializedStruc.data"
 #define small_fiche_cache        "DATA/Serialzed1000.data"
+#define custom_fiche_cache       "DATA/customfichecache.data"
 #define auteur_cache       "DATA/SerializedStrucInverse.data"
 #define small_auteur_cache  "DATA/SerializedStrucInverse1000.data"
 #define custom_auteur_cache  "DATA/SerializedStrucInverseCustom.data"
 #define Article_cache               "DATA/SerializedStrucArticle.data"
 #define custom_Article_cache      "DATA/SerializedStrucArticleCustom.data"
-#define custom_Article_cache      "DATA/SerializedStrucArticleCustom.data"
+#define small_Article_cache      "DATA/small_article.data"
 
 //macro pour les couleur
 #define GREEN()     fprintf(stderr,"\033[1;32m");

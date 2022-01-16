@@ -194,17 +194,17 @@ void test_exploration_Article(const tab_Article_struct * mesarticle){
     //     {
     //         GREEN()
     //         printf("\t%s ==> %d\n",mesarticle->tab_Article[i].tab_ptr_auteur[u]->nom_auteur,mesarticle->tab_Article[i].tab_ptr_auteur[u]->nbelementmagi);
-    //         for (int pp = 0; pp < mesarticle->tab_Article[i].tab_ptr_auteur[u]->nbelementmagi; pp++)
-    //         {
-    //             BLUE()
-    //             printf("\t\t%s ==> %d\n",mesarticle->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nom_Article,mesarticle->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nombre_auteur); 
-    //             for (int UI = 0; UI < mesarticle->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nombre_auteur; UI++)
-    //             {
-    //                 GREEN()
-    //                 printf("\t\t\t%s\n",mesarticle->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->tab_ptr_auteur[UI]->nom_auteur);
-    //                 exploreauteur(mesarticle->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->tab_ptr_auteur[UI],3);
-    //             }
-    //         }           
+    //         // for (int pp = 0; pp < mesarticle->tab_Article[i].tab_ptr_auteur[u]->nbelementmagi; pp++)
+    //         // {
+    //         //     BLUE()
+    //         //     printf("\t\t%s ==> %d\n",mesarticle->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nom_Article,mesarticle->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nombre_auteur); 
+    //         //     for (int UI = 0; UI < mesarticle->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nombre_auteur; UI++)
+    //         //     {
+    //         //         GREEN()
+    //         //         printf("\t\t\t%s\n",mesarticle->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->tab_ptr_auteur[UI]->nom_auteur);
+    //         //         // exploreauteur(mesarticle->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->tab_ptr_auteur[UI],3);
+    //         //     }
+    //         // }           
     //     }
     // }
 }
@@ -606,9 +606,11 @@ void ajout_Article_in_auteur(auteur_struct * monauteur,Article_struct * monArtic
     // Check doublon
     // for (int i = 0; i < monauteur->nbelementmagi; i++)
     // {
-    //     if(monauteur->tab_ptr_Article[i] == monArticle){
-    //         return;
-    //     }
+        // DEBUG("%p !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! %p",monauteur->tab_ptr_Article[i],monArticle)
+        // if(monauteur->nbelementmagi > 0 && monauteur->tab_ptr_Article[monauteur->nbelementmagi-1] == monArticle){
+        //     DEBUG("HIT %p",monArticle)
+        //     return;
+        // }
     // }
     Article_struct ** tmptest = reallocarray(monauteur->tab_ptr_Article,monauteur->nbelementmagi+1,sizeof(Article_struct*));
     exitIfNull(tmptest,"ajout article erreur realockarray")
@@ -653,8 +655,11 @@ tab_Article_struct * deserialisation_tab_Article_struct(tab_auteur_struct * mesa
         //nombre d'auteur sur cette structure
         fgets(ligne,BALISESIZE,inputfile);
         int nbauteur = 0;
-        sscanf(ligne,"%d\n",&nbauteur);
+        nbauteur = atoi(ligne);
+        // sscanf(ligne,"%d\n",&nbauteur);
         monArticle->nombre_auteur = nbauteur;
+        exitIfNull(nbauteur,"il y a 0 article")
+        enlever_retour_a_la_ligne(ligne);
         YOLO("nombre dauteur %d",nbauteur);
 
 

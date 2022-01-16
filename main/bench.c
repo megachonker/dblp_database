@@ -6,7 +6,11 @@
 
 #include "macro.h"
 
-//fair des argument preselectioner pour toute les fonction 1 defaut dblp 2 dblp1000 3 custom
+enum{
+    dblp,
+    smalldblp,
+    customdb,
+    Katie des argument preselectioner pour toute les fonction 1 defaut dblp 2 dblp1000 3 custom
 
 /* Liste Des Fonction TEST a Appeler */
 
@@ -100,7 +104,6 @@ void ggen_unwrap_Graph(){
 void uunwrap_ListArticle_from_xml(int a){
     // plusieuyr pour la taille ?
     FILE * DBxml = fopen(origineXML,"r");   
-    tab_auteur_struct* malistauteur= NULL;
     tab_Article_struct * montab = gen_tab_Article_from_xml(DBxml);
     if (a)
     {
@@ -145,6 +148,75 @@ void swap(int print){
 }
 
 
+void local_deserialise_Graph(){
+    FILE * DBficheLecture   = fopen(cache_fiche     ,"r");
+    FILE * DBauteurLecture  = fopen(auteur_cache    ,"r");
+    FILE * DBArticleLecture = fopen(Article_cache   ,"r");
+
+
+    deserialise_Graph(DBficheLecture
+                                    ,DBauteurLecture
+                                    ,DBArticleLecture);
+
+    exitIfNull(DBficheLecture  ,"erreur ouverture bd")
+    exitIfNull(DBauteurLecture ,"erreur ouverture bd")
+    exitIfNull(DBArticleLecture,"erreur ouverture bd")
+
+    fclose(DBficheLecture);
+    fclose(DBauteurLecture);
+    fclose(DBArticleLecture);
+}
+
+unwrap_Graph_struct local_gen_Graph_from_XML(){
+    FILE * XML               = fopen(origineXML      ,"r");
+    exitIfNull(XML  ,"erreur ouverture bd")
+    return gen_Graph_from_XML(XML);
+    fclose(XML);
+}
+
+void local_serialise_Graph(){
+
+    unwrap_Graph_struct graph = local_gen_Graph_from_XML();
+
+    FILE * DBficheEcriture   = fopen(cache_fiche     ,"w");
+    FILE * DBauteurEcriture  = fopen(auteur_cache    ,"w");
+    FILE * DBArticleEcriture = fopen(Article_cache   ,"w");
+
+    serialise_Graph(graph   ,DBficheEcriture
+                            ,DBauteurEcriture
+                            ,DBArticleEcriture);
+
+    fclose(DBficheEcriture);
+    fclose(DBauteurEcriture);
+    fclose(DBArticleEcriture);
+
+}
+
+unwrap_Graph_struct local_gen_custom_Graph_from_XML(){
+    FILE * XML               = fopen(customXML      ,"r");
+    exitIfNull(XML  ,"erreur ouverture bd")
+    return gen_Graph_from_XML(XML);
+    fclose(XML);
+}
+
+
+void local_custom_serialise_Graph(){
+
+    unwrap_Graph_struct graph = local_gen_Graph_from_XML();
+
+    FILE * DBficheEcriture   = fopen(custom_fiche_cache     ,"w");
+    FILE * DBauteurEcriture  = fopen(custom_auteur_cache    ,"w");
+    FILE * DBArticleEcriture = fopen(custom_Article_cache   ,"w");
+
+    serialise_Graph(graph   ,DBficheEcriture
+                            ,DBauteurEcriture
+                            ,DBArticleEcriture);
+
+    fclose(DBficheEcriture);
+    fclose(DBauteurEcriture);
+    fclose(DBArticleEcriture);
+
+}
 
 // soucis de free?
 void bench_all(){
@@ -157,16 +229,97 @@ void bench_all(){
 
 int main(int argc, char const *argv[])
 {
-    if (argc != 2)
+    const char * compstr = argv[1];
+
+    if (argc == 3)
+    {
+        FILE * XML                  = NULL ;
+        FILE * DBficheLecture       = NULL ;
+        FILE * DBauteurLecture      = NULL ;
+        FILE * DBArticleLecture     = NULL ;
+        FILE * DBficheEcriture      = NULL ;
+        FILE * DBauteurEcriture     = NULL ;
+        FILE * DBArticleEcriture    = NULL ;
+
+
+        switch (atoi(argv[2]))
+        {
+        case dblp:
+            XML               = fopen(origineXML      ,"r");
+            DBficheLecture    = fopen(cache_fiche     ,"r");
+            DBauteurLecture   = fopen(auteur_cache    ,"r");
+            DBArticleLecture  = fopen(Article_cache   ,"r");
+            DBficheEcriture   = fopen(cache_fiche     ,"w");
+            DBauteurEcriture  = fopen(auteur_cache    ,"w");
+            DBArticleEcriture = fopen(Article_cache   ,"w");
+            break;
+        case smalldblp:
+            XML               = fopen(smallorigineXML     ,"r");
+            DBficheLecture    = fopen(small_fiche_cache  ,"r");
+            DBauteurLecture   = fopen(small_auteur_cache ,"r");
+            DBArticleLecture  = fopen(small_Article_cache,"r");
+            DBficheEcriture   = fopen(small_fiche_cache  ,"w");
+            DBauteurEcriture  = fopen(small_auteur_cache ,"w");
+            DBArticleEcriture = fopen(small_Article_cache,"w");
+            break;
+        case customdb:
+            XML               = fopen(customXML              ,"r");
+            DBficheLecture    = fopen(custom_fiche_cache     ,"r");
+            DBauteurLecture   = fopen(custom_auteur_cache    ,"r");
+            DBArticleLecture  = fopen(custom_Article_cache   ,"r");
+            DBficheEcriture   = fopen(custom_fiche_cache     ,"w");
+            DBauteurEcriture  = fopen(custom_auteur_cache    ,"w");
+            DBArticleEcriture = fopen(custom_Article_cache   ,"w");
+            break;
+        case Katie:
+            XML               = fopen(Katie      ,"r");
+            DBficheLecture    = fopen(cache_fiche     ,"r");
+            DBauteurLecture   = fopen(auteur_cache    ,"r");
+            DBArticleLecture  = fopen(Article_cache   ,"r");
+            DBficheEcriture   = fopen(cache_fiche     ,"w");
+            DBauteurEcriture  = fopen(auteur_cache    ,"w");
+            DBArticleEcriture = fopen(Article_cache   ,"w");
+            break;   
+        default:
+            break;
+        }
+        exitIfNull(XML              ,"erreur ouverture bd %s.",origineXML)
+
+
+        exitIfNull(DBficheEcriture  ,"erreur ouverture bd %s.",cache_fiche)
+        exitIfNull(DBauteurEcriture ,"erreur ouverture bd %s.",auteur_cache)
+        exitIfNull(DBArticleEcriture,"erreur ouverture bd %s.",Article_cache)
+
+        //Faire un switch
+        if(strcmp("serialize_graph_custom",compstr)==0){
+            serialise_Graph(gen_Graph_from_XML(XML),
+                DBficheEcriture,
+                DBauteurEcriture,
+                DBArticleEcriture);
+        }
+
+        exitIfNull(DBficheLecture   ,"erreur ouverture bd %s.",cache_fiche)
+        exitIfNull(DBauteurLecture  ,"erreur ouverture bd %s.",auteur_cache)
+        exitIfNull(DBArticleLecture ,"erreur ouverture bd %s.",Article_cache)
+
+        CLRLINE()
+
+        fclose(DBficheEcriture);
+        fclose(DBauteurEcriture);
+        fclose(DBArticleEcriture);
+        fclose(DBficheEcriture);
+        fclose(DBauteurEcriture);
+        fclose(DBArticleEcriture);
+
+        return 0;
+    }else if (argc != 2)
     {
         //laide qui vien de abench
         printf("PAS BIEN OPTION");
         return 1;
     }
 
-    const char * compstr = argv[1];
 
-    
     //Faire un switch
     if(strcmp("readb",compstr)==0){
         // printf("readb\n");
@@ -251,6 +404,19 @@ int main(int argc, char const *argv[])
     {
         gen_article();
     }
+    else if (strcmp("deserialise_Graph",compstr)==0)
+    {
+        local_deserialise_Graph();
+    }
+    else if (strcmp("gen_graph_from_XML",compstr)==0)
+    {
+        local_gen_Graph_from_XML();
+    }
+    else if (strcmp("serialise_Graph",compstr)==0)
+    {
+        local_serialise_Graph();
+    }
+    
     // else if (strcmp("deserialisation_tab_auteur_struct",compstr)==0)
     // {
     //     deserialisation_tab_auteur_structt();
