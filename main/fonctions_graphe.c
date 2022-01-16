@@ -16,17 +16,17 @@ typedef enum a_mettre_dans_voisins_ou_pas
 
 
 //on appelera "graphe" le tableau des ptr vers les auteurs contenues dans malistauteur
-auteur_struct** faire_graphe_ptr_auteur(FILE *file_xml)
+graphe_struct faire_graphe_ptr_auteur(FILE *file_xml)
 {
     
     tab_auteur_struct * malistauteur= gen_tab_auteur_from_xml_et_liaison_article(file_xml);
     
     int size_graphe_ptr= malistauteur->nombre_auteur;
-    graphe_t graphe_struct;
-    graphe_struct.graphe= malloc(sizeof(auteur_struct*)**size_graphe_ptr);
-    graphe_struct.size_graphe= *size_graphe_ptr;
+    graphe_struct graphe_struct;
+    graphe_struct.graphe= malloc(sizeof(auteur_struct*)*size_graphe_ptr);
+    graphe_struct.size_graphe= size_graphe_ptr;
 
-    for(int i=0; i<*size_graphe_ptr; i++)
+    for(int i=0; i<size_graphe_ptr; i++)
     {
         printf("%s", malistauteur->tab_auteur[i].nom_auteur);
     }
@@ -34,16 +34,16 @@ auteur_struct** faire_graphe_ptr_auteur(FILE *file_xml)
 
 
 
-    for(int i=0; i<*size_graphe_ptr; i++)
+    for(int i=0; i<size_graphe_ptr; i++)
     {
         auteur_struct ai= malistauteur->tab_auteur[i];
         ai.size_pcc_auteur= -1;
-        graphe[i]= &ai;
+        graphe_struct.graphe[i]= &ai;
     }
 
     free(malistauteur);
 
-    return graphe;
+    return graphe_struct;
 }
 
 
@@ -149,20 +149,18 @@ int main(void)
 
     FILE* graphe_test_Katie= fopen(dbtestKatie "r");
 
-    auteur_struct** graphe= faire_graphe_ptr_auteur(size_ptr, graphe_test_Katie);
+    graphe_struct mon_graphe= faire_graphe_ptr_auteur(graphe_test_Katie);
 
     fclose(graphe_test_Katie);
 
   
-    for(int k=0; k <*size_ptr; k++)
+    for(int k=0; k <mon_graphe.size_graphe; k++)
     {
-        char *nom_auteur= graphe[k]->nom_auteur;
+        char *nom_auteur= mon_graphe.graphe[k]->nom_auteur;
         printf("%s\n", nom_auteur);
     }
-
-    free(graphe);
     
-
+    free(mon_graphe.graphe);
     
     
     return 0;
