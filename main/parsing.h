@@ -2,8 +2,6 @@
 #define PARSING_H
 #include <stdio.h>
 
-#define BALISESIZE 1000
-
 /**
  * @brief Titre && liste des auteur 
  * 
@@ -79,17 +77,17 @@ void printTabmeaux(tableaux_fiche OwU);
  * @param [in] mastertab structure tableaux_fiche a sérialiser
  * @param [out] output    fichier de sortie 
  */
-void serialize(tableaux_fiche mastertab, FILE * outfichier);
+void serialisation_tableaux_fiche(tableaux_fiche mastertab, FILE * outfichier);
 
 /**
- * @brief génère tableaux_fiche depuis un cache générée par serialize 
+ * @brief génère tableaux_fiche depuis un cache générée par serialisation_tableaux_fiche 
  * 
  * test avec des maloc 
  * 
- * @param [in] input générée par serialize 
+ * @param [in] input générée par serialisation_tableaux_fiche 
  * @return pointeur ver tableaux_fiche 
  */
-tableaux_fiche * deserialisation(FILE * input);
+tableaux_fiche * deserialisation_tableaux_fiche(FILE * input);
 
 //renomer
 /**

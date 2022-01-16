@@ -5,10 +5,7 @@
 
 #include "macro.h"
 
-//prend du temps l'utiliser directement ?
-void enlever_retour_a_la_ligne(char * ligne){
-    ligne[strcspn(ligne, "\n")]=0;    
-}
+
 
 //renomer
 void printM_titre(fiche_minimale OwO){
@@ -87,7 +84,7 @@ char * getanchor(char * recherche, char * ligne){
  */
 void appendAuteurM(fiche_minimale * mafiche,char * nomsauteur){
     char ** addrListeauteur = NULL;
-    addrListeauteur = realloc(mafiche->liste_auteur,sizeof(fiche_minimale)*(mafiche->nombre_auteur+1));
+    addrListeauteur = realloc(mafiche->liste_auteur,sizeof(fiche_minimale)*(mafiche->nombre_auteur+1));//MALOC
 
     exitIfNull(addrListeauteur,"appendAuteurM: allocation imposible")
 
@@ -108,7 +105,7 @@ void appendAuteurM(fiche_minimale * mafiche,char * nomsauteur){
  */
 void appendTabmeaux(tableaux_fiche * table, fiche_minimale * a_ajouter){
     fiche_minimale ** addrListFiche = NULL;
-    addrListFiche = realloc(table->fiche,sizeof(fiche_minimale*)*(table->taille+1));
+    addrListFiche = realloc(table->fiche,sizeof(fiche_minimale*)*(table->taille+1));//MLOC
     exitIfNull(addrListFiche,"appendTabmeaux: allocation imposible")
 
     if (table->fiche != addrListFiche)  //cout du check de cette fonction ?
@@ -129,7 +126,7 @@ void appendTabmeaux(tableaux_fiche * table, fiche_minimale * a_ajouter){
 void gen_id_fiche(tableaux_fiche * tableaux_allfiche){
     for (int i = 0; i < tableaux_allfiche->taille; i++)
     {
-        progressbar(i,tableaux_allfiche->taille);
+        PROGRESSBAR(i,tableaux_allfiche->taille);
         tableaux_allfiche->fiche[i]->ADDR = i;
     }
 }
@@ -176,6 +173,8 @@ tableaux_fiche parse(FILE * inputDB){
     INFO("début du parsing:");
     char ligne[BALISESIZE];
 
+    PROGRESSBAR_DECL(inputDB)
+
     //génère le tablaux
     tableaux_fiche tableaux_allfiche;// DOIT ETRE DUPLIQUER A LA SORTIE ???
     tableaux_allfiche.taille = 0;
@@ -191,6 +190,9 @@ tableaux_fiche parse(FILE * inputDB){
     //chargement
     while (fgets(ligne,BALISESIZE,inputDB))// <================ prend masse temps le remplacer par un buffer ? (simple ici a faire)
     {
+
+        PROGRESSBAR_FILE_PRINT(inputDB)
+
         int flagt = 0;
         exitIfNull(fichelocalM,"création de la zone de mémoir pour ficheloca1m compromis calloc")
 
@@ -213,10 +215,6 @@ tableaux_fiche parse(FILE * inputDB){
         //PASBEAUX
         if (flagt == 1)
         {
-            //DEBUG
-            // printM_titre(*fichelocalM);
-            // printM_liste_auteur(*fichelocalM);
-
             //moche ajouter l'exclusion Preface. Editorial. (faire une blackliste a importer ? voir qand trie)
             if (strcmp(fichelocalM->titre,"Home Page")!=0 
             && fichelocalM->nombre_auteur != 0 
@@ -234,11 +232,10 @@ tableaux_fiche parse(FILE * inputDB){
     //WARNING
     // printTabmeaux(tableaux_allfiche);
 
-    INFO("PARSE OK\ndébut du trie:");
+    DEBUG("début du trie:");
     sortlist(&tableaux_allfiche);
-    INFO("Trie OK\ndébut de genereation des id:");
+    DEBUG("début de genereation des id:");
     gen_id_fiche(&tableaux_allfiche);
-    INFO("Id générée!");
     return tableaux_allfiche;
 }
 
@@ -252,18 +249,17 @@ tableaux_fiche parse(FILE * inputDB){
  * @param [in] mastertab structure tableaux_fiche a sérialiser
  * @param [out] output    fichier de sortie 
  */
-void serialize(const tableaux_fiche mastertab, FILE * output){
+void serialisation_tableaux_fiche(const tableaux_fiche mastertab, FILE * output){
     //une sorte de header du fichier ici !
         //taille de la structure
         //validitée
     for (int i = 0; i < mastertab.taille; i++)
     {
-        progressbar(i,mastertab.taille);
+        PROGRESSBAR(i,mastertab.taille);
         fprintf(output,"%s\n",mastertab.fiche[i]->titre);
         fprintf(output,"%i\n",mastertab.fiche[i]->nombre_auteur); //fusioner les 2 en une écritur ?
         for (int  u = 0; u < mastertab.fiche[i]->nombre_auteur; u++)//tout concaténée
         {
-            progressbar(i,mastertab.taille);
             fprintf(output,"%s\n",mastertab.fiche[i]->liste_auteur[u]);
         }
         //une soeule écriture ici
@@ -273,18 +269,17 @@ void serialize(const tableaux_fiche mastertab, FILE * output){
 //grater en fesant une structure avec des dico est des referancement < ?
 
 /**
- * @brief génère tableaux_fiche depuis un cache générée par serialize 
+ * @brief génère tableaux_fiche depuis un cache générée par serialisation_tableaux_fiche 
  * 
  * test avec des maloc 
  * 
- * @param [in] input générée par serialize 
+ * @param [in] input générée par serialisation_tableaux_fiche 
  * @return pointeur ver tableaux_fiche 
  */
-tableaux_fiche * deserialisation(FILE * input){
-    fseek(input,0,SEEK_END);
-    int nombreligne = ftell(input);
-    fseek(input,0,SEEK_SET);
+tableaux_fiche * deserialisation_tableaux_fiche(FILE * input){
+    INFO("Deserialisation DBXML")
 
+    PROGRESSBAR_DECL(input);
 
     //INFO début de la désérialisation
     char ligne[BALISESIZE];
@@ -293,14 +288,14 @@ tableaux_fiche * deserialisation(FILE * input){
 
     //read tailletotal
 
-    tableaux_fiche * tableaux_allfiche = malloc(sizeof(tableaux_fiche));
+    tableaux_fiche * tableaux_allfiche = malloc(sizeof(tableaux_fiche));//valgrind leak
     exitIfNull(tableaux_allfiche,"deserialisation:imposible d'alouer le tableaux de toute les fiche\n")
     tableaux_allfiche->taille = 0;//<=  = tailletotal
     //AFAIRE un soeule maloc tableaux_allfiche->taille*sizeof !!
     tableaux_allfiche->fiche = NULL;
 
 
-    fiche_minimale * fichelocalM = calloc(1,sizeof(fiche_minimale));
+    fiche_minimale * fichelocalM = calloc(1,sizeof(fiche_minimale));//valgrind
     fichelocalM->nombre_auteur = 0;
 
 
@@ -309,14 +304,8 @@ tableaux_fiche * deserialisation(FILE * input){
     int indice = 0;
     while (fgets(ligne,BALISESIZE,input))                           //<============= un soeul gros buffer ?
     {
-        progressbar(ftell(input),nombreligne);
-        //progesse bar?
-        if (feof(input))
-        {
-            fprintf(stderr,"fin fichier deserialisation\n");
-            exit(3);//jamais etait triguerre donc pas utile ?
-        }
-
+        PROGRESSBAR_FILE_PRINT(input);
+        
         enlever_retour_a_la_ligne(ligne);
         fichelocalM->ADDR = indice;     //<=== explicitée
         fichelocalM->titre = strdup(ligne);
@@ -328,10 +317,10 @@ tableaux_fiche * deserialisation(FILE * input){
         {
             fgets(ligne,BALISESIZE,input);
             enlever_retour_a_la_ligne(ligne);
-            appendAuteurM(fichelocalM,strdup(ligne));// ICI on doit réloc pour iren
+            appendAuteurM(fichelocalM,strdup(ligne));// ICI on doit réloc pour iren VALGRINND
         }
         appendTabmeaux(tableaux_allfiche,fichelocalM);
-        fichelocalM = calloc(1,sizeof(fiche_minimale));
+        fichelocalM = calloc(1,sizeof(fiche_minimale));//MLOC
         exitIfNull(fichelocalM, "new calloc null")
         fichelocalM->nombre_auteur = 0;
         indice++;
@@ -351,7 +340,7 @@ void parsing_free(tableaux_fiche * DEGAGE){
     INFO("Free parsing")
     for (int i = 0; i < DEGAGE->taille; i++)
     {
-        progressbar(i,DEGAGE->taille);
+        PROGRESSBAR(i,DEGAGE->taille);
         free(DEGAGE->fiche[i]->titre);
         for (int u = 0; u < DEGAGE->fiche[i]->nombre_auteur; u++)
         {
