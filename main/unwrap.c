@@ -171,8 +171,7 @@ tab_auteur_struct* gen_List_auteur(const Paire_auteur_oeuvre * liste,int sizeHau
     INFO("gen_List_auteur:")
     tab_auteur_struct * listes_Auteur_arrTitre = malloc(sizeof(tab_auteur_struct));
     exitIfNull(listes_Auteur_arrTitre,"Erreur création liste de tab_auteur_struct\n")
-    int * nb_auteur = malloc(sizeof(int*));
-    nb_auteur= &listes_Auteur_arrTitre->nombre_auteur; 
+    int * nb_auteur = &listes_Auteur_arrTitre->nombre_auteur; 
 
     listes_Auteur_arrTitre->nombre_auteur = 0;
     listes_Auteur_arrTitre->tab_auteur = NULL;
