@@ -15,6 +15,22 @@
 
 //bench la vitese des comparaison een fonction de la taille des var
 
+
+
+// exploration(auteur_struct * monauteur){
+
+//     for (int i = 0; i < monauteur->nbelementmagi ; i++)
+//     {
+//             monauteur;
+//             printf("%s ==> %d\n",monauteur->tab_ptr_Article[i],monauteur->tab_ptr_Article[i] );
+//             for (int u = 0; u < monauteur->tab_ptr_Article[i].nombre_auteur; u++)
+//             {
+//                 exploration(monauteur->tab_ptr_Article[i].tab_ptr_auteur[u]);
+//             }
+//     }
+// }
+
+
 int main()
 {
     INFO("exection de tests")
