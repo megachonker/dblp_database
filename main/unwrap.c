@@ -647,7 +647,7 @@ tab_Article_struct * deserialisation_tab_Article_struct(tab_auteur_struct * mesa
     mon_tab_Article_struct->nombre_Article=0;
     int * nombretotalarticle = & mon_tab_Article_struct->nombre_Article; 
     fgets(ligne,BALISESIZE,inputfile);
-    sscanf(ligne,"%d",nombretotalarticle);
+    *nombretotalarticle = atoi(ligne);
     exitIfNull(*nombretotalarticle,"nombre de structure manquand ...")
     DEBUG("il y a %d Article",*nombretotalarticle)
     DEBUG("Malloc de %luocter",sizeof(Article_struct)**nombretotalarticle)
