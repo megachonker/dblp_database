@@ -25,7 +25,7 @@ help(){
     - serialise_Graph
     - ALL'
 }
-
+s
 timecheck(){
     if [[ ! -f "/bin/time" ]]; then
         echo "installer le packet time MERCI"
