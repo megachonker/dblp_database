@@ -14,7 +14,7 @@
 void dfault(){
     printf("\
 • -c                calculer les composantes connexes & diamètre.\n\
-• -p AUT1 AUT2      plus court chemin auteurs indiqués.\n\
+• -p AUT1;AUT2      plus court chemin auteurs indiqués.\n\
 • -l MOT            Lister les auteurs qui contiennent le mot donné.\n\
 • -a auteur         Fnformations d'un auteur (liste des articles).\n\
 • -a auteur -n N    Liste les co-auteurs à distance N (ou moins) d'un auteur.\n\
