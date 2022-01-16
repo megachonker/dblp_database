@@ -14,6 +14,7 @@
 #define DEBUG_ON
 #define INFO_ON
 #define WARN_ON
+#define PROGRESSBAR_ON
 // #define YOLO_ON
 
 #define customxml               "DATA/custom.xml"
@@ -59,6 +60,17 @@
 #else
 #define YOLO(...);
 #endif
+#ifdef PROGRESSBAR_ON
+#define PROGRESSBAR(...)            progressbar(__VA_ARGS__)
+#define PROGRESSBAR_FILE_PRINT(fichier) progressbar((int)ftell(fichier)>>4&0x0FFFFFFF,nombreligne);
+#define PROGRESSBAR_DECL(fichier)       fseek(fichier,0,SEEK_END); int nombreligne = (int)ftell(fichier)>>4&0x0FFFFFFF; fseek(fichier,0,SEEK_SET);
+#else
+#define PROGRESSBAR(...) ;
+#define PROGRESSBAR_FILE_PRINT(...) ;
+#define PROGRESSBAR_DECL(...) ;
+#define YOLO(...);
+#endif
+
 
 #define ERROR(...) RED() fprintf(stderr,"\033[K\t"); fprintf(stderr, __VA_ARGS__); CLRCOLOR() fprintf(stderr,"\n");
 

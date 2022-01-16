@@ -1,6 +1,7 @@
 CCA ?= cc -O0
 CFLAGS ?= -Wall -Wextra -g
-LDLIBS ?= -lm -pthread
+LDLIBS ?= 
+# -lm -pthread
 
 fct_gr:  fonctions_graphe 
 	./fonctions_graphe
@@ -97,8 +98,8 @@ DATA/SerializedStrucArticle.data: DATA/SerializedStruc.data
 
 gen_cache_data: DATA/dblp.xml DATA/dblp1sur8.xml DATA/SerializedStrucInverse.data DATA/Serialzed1000.data DATA/SerializedStruc.data DATA/SerializedStrucInverse1000.data DATA/SerializedStrucArticle.data
 
-r: cleanall go
-
+r:	clean go
+rr:	cleanall go
 clean:
 	rm -f  *.o *.so *.gcno *.gcda *.gch *.gcov coverage.info vgcore.*
 	rm -fr tests bench main GCOVtests LcovRapport html latex
@@ -109,5 +110,8 @@ cleanall: clean
 		DATA/SerializedStruc.data\
 		DATA/Serialzed1000.data\
 		DATA/SerializedStrucInverse1000.data\
+		DATA/SerializedStrucArticle.data\
+		DATA/SerializedStrucArticleCustom.data\
+		DATA/SerializedStrucInverseCustom.data
 
 # instaler doxygene est lcov
