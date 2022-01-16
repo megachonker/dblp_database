@@ -595,7 +595,7 @@ tab_Article_struct * deserialisation_tab_Article_struct(tab_auteur_struct * mesa
 
 
         monArticle->tab_ptr_auteur = NULL;
-        auteur_struct ** structauteur = calloc(sizeof(auteur_struct),nbauteur);
+        auteur_struct ** structauteur = calloc(sizeof(auteur_struct*),nbauteur);
         exitIfNull(structauteur,"deserialisation article maloc fail, %dauteur %luocter"
         ,nbauteur,sizeof(auteur_struct)*nbauteur)
         monArticle->tab_ptr_auteur = structauteur;//pointer ?
