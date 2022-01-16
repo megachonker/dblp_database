@@ -1,9 +1,11 @@
 #include <stdio.h>
-#include "unwrap.h"
-#include "list.h"
 #include <stdlib.h>
-#include "creation_graphe_voisins.h"
-#include "graphe_test_Katie.h"
+#include "fonctions_graphe.h"
+#include "unwrap.h"
+
+
+
+
 
 typedef enum a_mettre_dans_voisins_ou_pas
 {
@@ -13,39 +15,33 @@ typedef enum a_mettre_dans_voisins_ou_pas
 }a_mettre_dans_voisins_ou_pas;
 
 
-//on appelera "graphe" le tableau de ptr d'auteur correspondant a unwrap_Graph
-auteur_struct** faire_graphe_avec_unwrap_graphe(int* size_graphe_ptr)
+//on appelera "graphe" le tableau des ptr vers les auteurs contenues dans malistauteur
+graphe_struct faire_graphe_ptr_auteur(FILE *file_xml)
 {
-    FILE * DBxml = fopen("DATA/SerializedStruc.data","r");
-    FILE * DBinverse = fopen("DATA/SerializedStrucInverse.data","r");
-
-    unwrap_Graph_struct unwrap_Graph= gen_unwrap_Graph(DBxml, DBinverse); //< erreur peut etre la ?
     
-    fclose(DBxml);
-    fclose(DBinverse);
+    tab_auteur_struct * malistauteur= gen_tab_auteur_from_xml_et_liaison_article(file_xml);
+    
+    int size_graphe= malistauteur->nombre_auteur;
+    graphe_struct graphe_struct;
+    graphe_struct.graphe= malloc(sizeof(auteur_struct*)*size_graphe);
+    graphe_struct.size_graphe= size_graphe;
 
-    //creation du tableau de ptr d'auteur correspondant a unwrap_Graph
-    auteur_struct** graphe=malloc(sizeof(auteur_struct*)**size_graphe_ptr);
-    if(graphe== NULL)
+    for(int i=0; i<size_graphe; i++)
     {
-        printf("%s\n", "erreur de malloc du graphe");
-        return NULL;
+        auteur_struct* ai_ptr= &(malistauteur->tab_auteur[i]);
+        ai_ptr->size_pcc_auteur= -1;
+        ai_ptr->ptr_Article_predecesseur_pcc= NULL;
+        ai_ptr->ptr_auteur_predecesseur_pcc= NULL;
+        graphe_struct.graphe[i]= ai_ptr;
     }
-    
-    for(int i=0; i<*size_graphe_ptr; i++)
-    {
-        auteur_struct ai= unwrap_Graph.tab_auteur_struct->tab_auteur[i];
-        graphe[i]= &ai;
-    }
-    
-    int *size_graphe_ptr= NULL;
-    *size_graphe_ptr= unwrap_Graph.tab_auteur_struct->taille;
 
-    return graphe;
+    free(malistauteur);
+
+    return graphe_struct;
 }
 
 
-
+/*
 //graphe= tableau des ptr vers les auteur_struct avec pour chacun, leur tableau de ptr vers leurs voisins
 auteur_struct** creation_graphe_avec_voisins(auteur_struct** graphe, int* ptr_size_graphe)
 {
@@ -53,7 +49,9 @@ auteur_struct** creation_graphe_avec_voisins(auteur_struct** graphe, int* ptr_si
     //pour tous les auteurs ak du graphe
     for(int k=0; k<*ptr_size_graphe; k++)
     {
+        
         auteur_struct *ptr_ak= graphe[k];
+        printf("%s%c\n", "auteur",k);
         
         ptr_ak->tab_ptr_voisins= malloc(sizeof(auteur_struct*));
         if(ptr_ak->tab_ptr_voisins== NULL)
@@ -101,6 +99,7 @@ auteur_struct** creation_graphe_avec_voisins(auteur_struct** graphe, int* ptr_si
                 if(flag== a_mettre)
                 {
                     nb_actuel_voisins++;
+                    printf("%s%i\n", "nb_voisin_actuel:", nb_actuel_voisins);
                     ptr_ak->tab_ptr_voisins=realloc(ptr_ak->tab_ptr_voisins, sizeof(auteur_struct*)*nb_actuel_voisins);
                     ptr_ak->tab_ptr_voisins[nb_actuel_voisins-1]= ptr_am;
                    
@@ -114,7 +113,7 @@ auteur_struct** creation_graphe_avec_voisins(auteur_struct** graphe, int* ptr_si
         }
         
         ptr_ak->nb_voisins= nb_actuel_voisins;
-        ptr_ak->etiquette=-1; //on set up toutes les etiquettes a -1 en prevision pour Dijkstra
+       
 
 
 
@@ -128,7 +127,7 @@ void free_graphe_avec_voisins(auteur_struct** graphe_avec_voisins, int* size_gra
 {
     for(int k=0; k<*size_graphe_ptr; k++)
     {
-        auteur_struct *ptr_ak= graphe_avec_voisins[k];
+        auteur_struct* ptr_ak= graphe_avec_voisins[k];
         
         
         free(ptr_ak->tab_ptr_voisins);
@@ -136,34 +135,28 @@ void free_graphe_avec_voisins(auteur_struct** graphe_avec_voisins, int* size_gra
     }
     free(graphe_avec_voisins);
 }
+*/
 
-
+/*
 //test: affichage des voisins des auteurs du graphe_test
 int main(void)
 {
-    
-    auteur_struct **graphe=creation_graphe();
-    for(int i=0; i< 10; i++)
+
+    FILE* graphe_test_Katie= fopen(dbtestKatie "r");
+
+    graphe_struct mon_graphe= faire_graphe_ptr_auteur(graphe_test_Katie);
+
+    fclose(graphe_test_Katie);
+
+  
+    for(int k=0; k <mon_graphe.size_graphe; k++)
     {
-    
-        int nb_voisin= graphe[i]->nb_voisins;
-        char* nom_auteur= graphe[i]->nom_auteur;
-        printf("voisins de %s :\n", nom_auteur);
-        
-        for(int k=0; k <nb_voisin; k++)
-        {
-            char *nom_voisin= graphe[i]->tab_ptr_voisins[k]->nom_auteur;
-            printf("%s\n", nom_voisin);
-        }
+        printf("%s\n",  mon_graphe.graphe[k]->nom_auteur);
     }
-
-    int* size_graphe_ptr=NULL;
-    *size_graphe_ptr=10;
-
-    free_graphe(graphe, size_graphe_ptr);
-
-
+    
+    free(mon_graphe.graphe);
     
     
     return 0;
 }
+*/

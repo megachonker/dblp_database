@@ -1,158 +1,334 @@
 #include "parsing.h"
-#include "list.h"
 #include "unwrap.h"
 #include <stdio.h>
 #include <string.h>
 
 
-#define originedb           "DATA/dblp.xml"
-#define smalloriginedb      "DATA/dblp1sur8.xml"
-#define serializedb         "DATA/SerializedStruc.data"
-#define smallserializedb    "DATA/Serialzed1000.data"
-#define serializedbunwrap   "DATA/SerializedStrucInverse.data"
-#define smallserializedbunwrap    "DATA/SerializedStrucInverse1000.data"
+#include "macro.h"
 
+enum{
+    dblp,
+    smalldblp,
+    customdb,
+    Katie des argument preselectioner pour toute les fonction 1 defaut dblp 2 dblp1000 3 custom
 
-
-
-#define exitIfNull(p,msg)\
-if (!p)\
-{\
-    fprintf(stderr,msg);\
-}\
-
-
+/* Liste Des Fonction TEST a Appeler */
 
 void readb(){
-    FILE * fichier = fopen(originedb,"r");
-    exitIfNull(fichier,"imposible d'ouvrire "originedb);
+    FILE * fichier = fopen(origineXML,"r");
+    exitIfNull(fichier,"imposible d'ouvrire "origineXML);
     parse(fichier); //utiliser des address pour eviter la copie ?? 
 }
 
 void readsmaldb(){
-    FILE * fichier = fopen(smalloriginedb,"r");
-    exitIfNull(fichier,"imposible d'ouvrire "smalloriginedb);
+    FILE * fichier = fopen(smallorigineXML,"r");
+    exitIfNull(fichier,"imposible d'ouvrire "smallorigineXML);
     parse(fichier); //utiliser des address pour eviter la copie ?? 
 }
 
+//en argument enable des débug ?
 void serialized(){
-    FILE * in = fopen(originedb,"r");
-    exitIfNull(in,"imposible d'ouvrire "originedb);
+    FILE * in = fopen(origineXML,"r");
+    exitIfNull(in,"imposible d'ouvrire "origineXML);
     tableaux_fiche coucou = parse(in); //utiliser des address pour eviter la copie ?? 
-    FILE * out = fopen(serializedb,"w");
-    exitIfNull(out,"imposible d'ouvrire "serializedb);
-    serialize(coucou,out); //utiliser des address pour eviter la copie ??
+    FILE * out = fopen(cache_fiche,"w");
+    exitIfNull(out,"imposible d'ouvrire "cache_fiche);
+    serialisation_tableaux_fiche(coucou,out); //utiliser des address pour eviter la copie ??
     // printTabmeaux(coucou);
 }
 void serializedsmall(){
-    FILE * in = fopen(smalloriginedb,"r");
-    exitIfNull(in,"imposible d'ouvrire "smalloriginedb);
+    FILE * in = fopen(smallorigineXML,"r");
+    exitIfNull(in,"imposible d'ouvrire "smallorigineXML);
     tableaux_fiche coucou = parse(in); //utiliser des address pour eviter la copie ?? 
-    FILE * out = fopen(smallserializedb,"w");
-    exitIfNull(out,"imposible d'ouvrire "smallserializedb);
-    serialize(coucou,out); //utiliser des address pour eviter la copie ??
+    FILE * out = fopen(small_fiche_cache,"w");
+    exitIfNull(out,"imposible d'ouvrire "small_fiche_cache);
+    serialisation_tableaux_fiche(coucou,out); //utiliser des address pour eviter la copie ??
     // printTabmeaux(coucou);
 }
 //serialise small db manque 
 
 tableaux_fiche * deserialisedb(){
-    FILE * fichier = fopen(serializedb,"r");
-    exitIfNull(fichier,"imposible d'ouvrire "serializedb);
-    return deserialisation(fichier);    
+    FILE * fichier = fopen(cache_fiche,"r");
+    exitIfNull(fichier,"imposible d'ouvrire "cache_fiche);
+    return deserialisation_tableaux_fiche(fichier);    
 }
 
 void deserialisesmalldb(){
-    FILE * fichier = fopen(smallserializedb,"r");
-    exitIfNull(fichier,"imposible d'ouvrire "smallserializedb);
-    deserialisation(fichier);
+    FILE * fichier = fopen(small_fiche_cache,"r");
+    exitIfNull(fichier,"imposible d'ouvrire "small_fiche_cache);
+    deserialisation_tableaux_fiche(fichier);
 }
 
 tab_auteur_struct * unwrap_from_filE(){ //E pas inspi
-    FILE * inputDB = fopen(serializedb,"r");
-    exitIfNull(inputDB,"imposible d'ouvrire "serializedb)
-    return unwrap_from_file(inputDB);
+    FILE * inputDB = fopen(cache_fiche,"r");
+    exitIfNull(inputDB,"imposible d'ouvrire "cache_fiche)
+    return tab_auteur_from_file(inputDB);
 }
 void unwrwap_gen_cache(){
-    FILE * ouputDB = fopen(serializedbunwrap,"w");
-    exitIfNull(ouputDB,"imposible d'ouvrire "serializedbunwrap)
-    tab_auteur_struct * malistauteur = unwrap_from_filE();
-    unwrap_Serilise_Index(malistauteur,ouputDB);
+    FILE * ouputDB = fopen(auteur_cache,"w");
+    exitIfNull(ouputDB,"imposible d'ouvrire "auteur_cache)
+    tab_auteur_struct * malistauteur = unwrap_from_filE(); //80%
+    serialise_tab_auteur_struct(malistauteur,ouputDB);           //18%
     unwrap_List_Auteur_free(malistauteur);
 }
 void unwrwap_gen_cache_small(){
-    FILE * ouputDB = fopen(smallserializedbunwrap,"w");
-    exitIfNull(ouputDB,"imposible d'ouvrire "smallserializedbunwrap)
-    FILE * inputDB = fopen(smallserializedb,"r");
-    exitIfNull(inputDB,"imposible d'ouvrire "smallserializedb)
-    tab_auteur_struct * malistauteur = unwrap_from_file(inputDB);
-    unwrap_Serilise_Index(malistauteur,ouputDB);
+    FILE * ouputDB = fopen(small_auteur_cache,"w");
+    exitIfNull(ouputDB,"imposible d'ouvrire "small_auteur_cache)
+    FILE * inputDB = fopen(small_fiche_cache,"r");
+    exitIfNull(inputDB,"imposible d'ouvrire "small_fiche_cache)
+    tab_auteur_struct * malistauteur = tab_auteur_from_file(inputDB);
+    serialise_tab_auteur_struct(malistauteur,ouputDB);
     unwrap_List_Auteur_free(malistauteur);
 }
-void unwrwap_deserialise(int print){
-    FILE * input = fopen(serializedbunwrap,"r");
-    exitIfNull(input,"imposible d'ouvrire "serializedbunwrap)
-    FILE * fichier = fopen(serializedb,"r");
-    exitIfNull(fichier,"imposible d'ouvrire "serializedb);
-    tableaux_fiche * azer = deserialisation(fichier);
-    tab_auteur_struct * malistauteur =  unwrap_Deserilise_Index(azer,input);
+tab_auteur_struct * deserialise_tab_auteur(int print){
+    FILE * input = fopen(auteur_cache,"r");
+    exitIfNull(input,"imposible d'ouvrire "auteur_cache)
+    FILE * fichier = fopen(cache_fiche,"r");
+    exitIfNull(fichier,"imposible d'ouvrire "cache_fiche);
+    tableaux_fiche * azer = deserialisation_tableaux_fiche(fichier);
+    tab_auteur_struct * malistauteur =  deserialise_tab_auteur_struct(azer,input);
     if(print == 1){
-        printList_Auteur(malistauteur);
+        printList_auteur(malistauteur);
     }
-    parsing_free(azer);
-    unwrap_List_Auteur_free(malistauteur);
+    return malistauteur;
+}
+void ggen_unwrap_Graph(){
+    FILE * DBxml = fopen(cache_fiche,"r");
+    FILE * DBinverse = fopen(auteur_cache,"r");
+    FILE * DBarticle = fopen(Article_cache,"r");
+    exitIfNull(DBxml,"INPUT PAS CHEMAIN")
+    exitIfNull(DBinverse,"INPUT PAS CHEMAIN")
+    exitIfNull(DBarticle,"INPUT PAS CHEMAIN")
+    deserialise_Graph(DBxml,DBinverse,DBarticle);
+}
+void uunwrap_ListArticle_from_xml(int a){
+    // plusieuyr pour la taille ?
+    FILE * DBxml = fopen(origineXML,"r");   
+    tab_Article_struct * montab = gen_tab_Article_from_xml(DBxml);
+    if (a)
+    {
+        printList_Article(montab);
+    }
+}
+tab_Article_struct * gen_article(){
+    FILE * DBxmll = fopen(cache_fiche,"r");
+    FILE * DBinversee = fopen(auteur_cache,"r");
+    exitIfNull(DBxmll,"INPUT PAS CHEMAIN")
+    exitIfNull(DBinversee,"INPUT PAS CHEMAIN")
+    tableaux_fiche * matablefiche = deserialisation_tableaux_fiche(DBxmll);
+    tab_auteur_struct * malistaauteur =   deserialise_tab_auteur_struct(matablefiche,DBinversee);
+    tab_Article_struct * malistearticle = convertTab_auteur2Article(malistaauteur);
+    return malistearticle;
 }
 
-    // FILE * ouputDB = fopen(serializedbunwrap,"w");
-    // exitIfNull(inputDB,"imposible d'ouvrire "serializedbunwrap)
+void serialisation_tab_Article_structt(){
+    FILE * DBarticle = fopen(Article_cache,"w");
+    exitIfNull(DBarticle,"INPUT PAS CHEMAIN");
+    serialisation_tab_Article_struct(gen_article(),DBarticle);
+}
 
-// void testListchainer(){
-//     FILE * inputDB = fopen("DATA/SerializedStruc.data","r");
-//     exitIfNull(inputDB,"INPUT PAS CHEMAIN")
-//     ll_list * Liste_chainer = deserialisation_Liste(inputDB);
-//     ll_list_link(Liste_chainer);
-//     print_liste_chainer_Auteur_titre(Liste_chainer);
-//     tableaux_fiche mesfiches = deserialisation(inputDB);
-
-//     ll_list * Liste_chainer = ll_create();
-//     Sommet_Auteur_ListChainer new_sommet;
-//     new_sommet.auteur = mesfiches.fiche[0]->liste_auteur[0];
-//     new_sommet.titre_article = ll_create();
-//     ll_append(new_sommet.titre_article,mesfiches.fiche[0]->titre);
-//     ll_append(Liste_chainer,&new_sommet);
-
-//     convertStruct(mesfiches,Liste_chainer);
-
-//     print_liste_chainer_Auteur_titre(Liste_chainer);
-// }
+void deserialisation_tab_Article_structt(){
+    FILE * DBxml = fopen(cache_fiche,"r");
+    FILE * DBinverse = fopen(Article_cache,"r");
+    exitIfNull(DBxml,"INPUT PAS CHEMAIN")
+    exitIfNull(DBinverse,"INPUT PAS CHEMAIN")
+    tab_auteur_struct * matablefiche = deserialise_tab_auteur(0);
+    deserialisation_tab_Article_struct(matablefiche,DBinverse);
+}
 
 void swap(int print){
     FILE * inputDB = fopen("DATA/SerializedStruc.data","r");
     exitIfNull(inputDB,"INPUT PAS CHEMAIN")
-    tab_auteur_struct * malistedauteur = unwrap_from_file(inputDB);
+    tab_auteur_struct * malistedauteur = tab_auteur_from_file(inputDB);
 
     if (print==1)
     {
-        printList_Auteur(malistedauteur);
+        printList_auteur(malistedauteur);
     }
 }
 
-void bench_all(){
-    parsing_free(deserialisedb());
-    unwrwap_gen_cache();
-    unwrwap_deserialise(0);
+
+void local_deserialise_Graph(){
+    FILE * DBficheLecture   = fopen(cache_fiche     ,"r");
+    FILE * DBauteurLecture  = fopen(auteur_cache    ,"r");
+    FILE * DBArticleLecture = fopen(Article_cache   ,"r");
+
+
+    deserialise_Graph(DBficheLecture
+                                    ,DBauteurLecture
+                                    ,DBArticleLecture);
+
+    exitIfNull(DBficheLecture  ,"erreur ouverture bd")
+    exitIfNull(DBauteurLecture ,"erreur ouverture bd")
+    exitIfNull(DBArticleLecture,"erreur ouverture bd")
+
+    fclose(DBficheLecture);
+    fclose(DBauteurLecture);
+    fclose(DBArticleLecture);
+}
+
+unwrap_Graph_struct local_gen_Graph_from_XML(){
+    FILE * XML               = fopen(origineXML      ,"r");
+    exitIfNull(XML  ,"erreur ouverture bd")
+    return gen_Graph_from_XML(XML);
+    fclose(XML);
+}
+
+void local_serialise_Graph(){
+
+    unwrap_Graph_struct graph = local_gen_Graph_from_XML();
+
+    FILE * DBficheEcriture   = fopen(cache_fiche     ,"w");
+    FILE * DBauteurEcriture  = fopen(auteur_cache    ,"w");
+    FILE * DBArticleEcriture = fopen(Article_cache   ,"w");
+
+    serialise_Graph(graph   ,DBficheEcriture
+                            ,DBauteurEcriture
+                            ,DBArticleEcriture);
+
+    fclose(DBficheEcriture);
+    fclose(DBauteurEcriture);
+    fclose(DBArticleEcriture);
+
+}
+
+unwrap_Graph_struct local_gen_custom_Graph_from_XML(){
+    FILE * XML               = fopen(customXML      ,"r");
+    exitIfNull(XML  ,"erreur ouverture bd")
+    return gen_Graph_from_XML(XML);
+    fclose(XML);
 }
 
 
+void local_custom_serialise_Graph(){
+
+    unwrap_Graph_struct graph = local_gen_Graph_from_XML();
+
+    FILE * DBficheEcriture   = fopen(custom_fiche_cache     ,"w");
+    FILE * DBauteurEcriture  = fopen(custom_auteur_cache    ,"w");
+    FILE * DBArticleEcriture = fopen(custom_Article_cache   ,"w");
+
+    serialise_Graph(graph   ,DBficheEcriture
+                            ,DBauteurEcriture
+                            ,DBArticleEcriture);
+
+    fclose(DBficheEcriture);
+    fclose(DBauteurEcriture);
+    fclose(DBArticleEcriture);
+
+}
+
+// soucis de free?
+void bench_all(){
+    parsing_free(deserialisedb());
+    unwrwap_gen_cache();
+    deserialise_tab_auteur(0);
+}
+
+/* Selection de la fonction */
+
 int main(int argc, char const *argv[])
 {
-    if (argc != 2)
+    const char * compstr = argv[1];
+
+    if (argc == 3)
     {
+        FILE * XML                  = NULL ;
+        FILE * DBficheLecture       = NULL ;
+        FILE * DBauteurLecture      = NULL ;
+        FILE * DBArticleLecture     = NULL ;
+        FILE * DBficheEcriture      = NULL ;
+        FILE * DBauteurEcriture     = NULL ;
+        FILE * DBArticleEcriture    = NULL ;
+
+
+        switch (atoi(argv[2]))
+        {
+        case dblp:
+            XML               = fopen(origineXML      ,"r");
+            DBficheLecture    = fopen(cache_fiche     ,"r");
+            DBauteurLecture   = fopen(auteur_cache    ,"r");
+            DBArticleLecture  = fopen(Article_cache   ,"r");
+            // DBficheEcriture   = fopen(cache_fiche     ,"w");
+            // DBauteurEcriture  = fopen(auteur_cache    ,"w");
+            // DBArticleEcriture = fopen(Article_cache   ,"w");
+            break;
+        case smalldblp:
+            XML               = fopen(smallorigineXML     ,"r");
+            DBficheLecture    = fopen(small_fiche_cache  ,"r");
+            DBauteurLecture   = fopen(small_auteur_cache ,"r");
+            DBArticleLecture  = fopen(small_Article_cache,"r");
+            DBficheEcriture   = fopen(small_fiche_cache  ,"w");
+            DBauteurEcriture  = fopen(small_auteur_cache ,"w");
+            DBArticleEcriture = fopen(small_Article_cache,"w");
+            break;
+        case customdb:
+            XML               = fopen(customXML              ,"r");
+            DBficheLecture    = fopen(custom_fiche_cache     ,"r");
+            DBauteurLecture   = fopen(custom_auteur_cache    ,"r");
+            DBArticleLecture  = fopen(custom_Article_cache   ,"r");
+            DBficheEcriture   = fopen(custom_fiche_cache     ,"w");
+            DBauteurEcriture  = fopen(custom_auteur_cache    ,"w");
+            DBArticleEcriture = fopen(custom_Article_cache   ,"w");
+            break;
+        case Katie:
+            XML               = fopen(Katie      ,"r");
+            DBficheLecture    = fopen(cache_fiche     ,"r");
+            DBauteurLecture   = fopen(auteur_cache    ,"r");
+            DBArticleLecture  = fopen(Article_cache   ,"r");
+            DBficheEcriture   = fopen(cache_fiche     ,"w");
+            DBauteurEcriture  = fopen(auteur_cache    ,"w");
+            DBArticleEcriture = fopen(Article_cache   ,"w");
+            break;   
+        default:
+            break;
+        }
+        exitIfNull(XML              ,"erreur ouverture bd %s.",origineXML)
+
+
+        exitIfNull(DBficheEcriture  ,"erreur ouverture bd %s.",cache_fiche)
+        exitIfNull(DBauteurEcriture ,"erreur ouverture bd %s.",auteur_cache)
+        exitIfNull(DBArticleEcriture,"erreur ouverture bd %s.",Article_cache)
+
+        //Faire un switch
+        if(strcmp("serialize_graph",compstr)==0){
+            serialise_Graph(gen_Graph_from_XML(XML),
+                DBficheEcriture,
+                DBauteurEcriture,
+                DBArticleEcriture);
+        }
+
+        exitIfNull(DBficheLecture   ,"erreur ouverture bd %s.",cache_fiche)
+        exitIfNull(DBauteurLecture  ,"erreur ouverture bd %s.",auteur_cache)
+        exitIfNull(DBArticleLecture ,"erreur ouverture bd %s.",Article_cache)
+
+        //Faire un switch
+        if(strcmp("deserialize_graph",compstr)==0){
+            deserialise_Graph(
+                DBficheEcriture,
+                DBauteurEcriture,
+                DBArticleEcriture);
+        }
+
+        CLRLINE()
+
+        // fclose(DBficheEcriture);
+        // fclose(DBauteurEcriture);
+        // fclose(DBArticleEcriture);
+        // fclose(DBficheEcriture);
+        // fclose(DBauteurEcriture);
+        // fclose(DBArticleEcriture);
+
+        return 0;
+    }else if (argc != 2)
+    {
+        //laide qui vien de abench
         printf("PAS BIEN OPTION");
         return 1;
     }
 
-    const char * compstr = argv[1];
 
+    //Faire un switch
     if(strcmp("readb",compstr)==0){
         // printf("readb\n");
         readb();    
@@ -197,20 +373,84 @@ int main(int argc, char const *argv[])
     {
         unwrwap_gen_cache_small();
     }
-    else if (strcmp("unwrap_from_file",compstr)==0)
+    else if (strcmp("tab_auteur_from_file",compstr)==0)
     {
         unwrap_from_filE();
     }
-    else if (strcmp("unwrwap_deserialise",compstr)==0)
+    else if (strcmp("deserialise_tab_auteur",compstr)==0)
     {
-        unwrwap_deserialise(0);
+        deserialise_tab_auteur(0);
     }
-    else if (strcmp("unwrwap_deserialiseprint",compstr)==0)
+    else if (strcmp("deserialise_tab_auteurprint",compstr)==0)
     {
-        unwrwap_deserialise(1);
+        deserialise_tab_auteur(1);
     }
+    else if (strcmp("deserialise_Graph",compstr)==0)
+    {
+        ggen_unwrap_Graph();
+    }
+    else if (strcmp("gen_tab_Article_from_xml",compstr)==0)
+    {
+        uunwrap_ListArticle_from_xml(0);
+    }
+    else if (strcmp("unwrap_ListArticle_from_xmlprint",compstr)==0)
+    {
+        uunwrap_ListArticle_from_xml(1);
+    }else if (strcmp("unwrap_deserialise_Article",compstr)==0)
+    {
+        deserialisation_tab_Article_structt();
+    }
+    else if (strcmp("unwrap_serialise_Article",compstr)==0)
+    {
+        serialisation_tab_Article_structt();
+    }
+    // else if (strcmp("unwrap_serialise_Article",compstr)==0)
+    // {
+    //     serialisation_tab_Article_structt();
+    // }
+    else if (strcmp("gen_article",compstr)==0)
+    {
+        gen_article();
+    }
+    else if (strcmp("deserialise_Graph",compstr)==0)
+    {
+        local_deserialise_Graph();
+    }
+    else if (strcmp("gen_graph_from_XML",compstr)==0)
+    {
+        local_gen_Graph_from_XML();
+    }
+    else if (strcmp("serialise_Graph",compstr)==0)
+    {
+        local_serialise_Graph();
+    }
+    
+    // else if (strcmp("deserialisation_tab_auteur_struct",compstr)==0)
+    // {
+    //     deserialisation_tab_auteur_structt();
+    // }
     else{
         fprintf(stderr,"PAS BON TEST!\n");
+        fprintf(stderr,"\
+    \n- readb\
+    \n- readsmaldb\
+    \n- serialized\
+    \n- serializedsmall\
+    \n- deserialisedb\
+    \n- deserialisesmalldb\
+    \n- swap\
+    \n- swaprint\
+    \n- unwrwap_gen_cache\
+    \n- tab_auteur_from_file\
+    \n- deserialise_tab_auteur\
+    \n- unwrwap_gen_cache_small\
+    \n- deserialise_Graph\
+    \n- gen_tab_Article_from_xml\
+    \n- unwrap_deserialise_Article\
+    \n- gen_graph_from_XML\
+    \n- serialise_Graph\
+    \n- ALL");
     }
+    CLRLINE()
     return 0;
 }

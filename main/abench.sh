@@ -5,7 +5,7 @@ help(){
     echo "Help"
     echo "  calcule le temps moyen d'une fonction en prenant le temps cpu est temps user"
     echo "./bench TEST NUBERoftime"
-    echo ' les diférant test disponible
+    echo ' les diférants test disponible
     - readb
     - readsmaldb
     - serialized
@@ -15,9 +15,14 @@ help(){
     - swap
     - swaprint
     - unwrwap_gen_cache
-    - unwrap_from_file
-    - unwrwap_deserialise
+    - tab_auteur_from_file
+    - deserialise_tab_auteur
     - unwrwap_gen_cache_small
+    - deserialise_Graph
+    - gen_tab_Article_from_xml
+    - unwrap_deserialise_Article
+    - gen_graph_from_XML
+    - serialise_Graph
     - ALL'
 }
 
@@ -37,7 +42,7 @@ moyenne(){
     
     for nbtest in $(seq $NUBMER);
     do
-        /bin/time -f "%S+%U" ./bench $1 2>&1 |bc|tee -a /tmp/tmpIwI
+        /bin/time -f "START%S+%U" ./bench $1 2>&1|tail -n1|grep -oP "START\K.*$" |bc |bc|tee -a /tmp/tmpIwI
     done
     echo temps moyen:
     OP=$(echo -n \( ; tr '\n' '+' < /tmp/tmpIwI ; echo 0\)/${NUBMER})

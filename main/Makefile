@@ -1,36 +1,51 @@
 CCA ?= cc -O0
 CFLAGS ?= -Wall -Wextra -g
 LDLIBS ?= -lm -pthread -ftest-coverage -fprofile-arcs
+# -lm -pthread
 
-graph:	creation_graphe_voisins creation_Gt test_creation_Gt
-	./test_creation_Gt
+#gcc -shared -o libfoo.so foo.o
 
-go:	tests 
-	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all ./tests
+Dijkstra: Dijkstra
+	./Dijkstra
+
+graphe: fonctions_graphe
+	./fonctions_graphe
+
+go:	tests abench.sh
+	./tests
 
 abench.sh: bench gen_cache_data
 
-bench:	bench.o parsing.o list.o unwrap.o
+val:	abench.sh
+	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./bench unwrap_deserialise_Article
+
+bench:	bench.o parsing.o list.o unwrap.o macro.o
 	$(CCA) -o bench  $^ $(CFLAGS) $(LDLIBS)
 
-tests:	tests.o parsing.o list.o unwrap.o
+tests:	tests.o parsing.o list.o unwrap.o macro.o search.o
 	$(CCA) -o tests  $^ $(CFLAGS) $(LDLIBS)
 
-main:	main.o parsing.o
+Dijkstra: Dijkstra.o unwrap.o parsing.o macro.o fonctions_graphe.o
+	$(CCA) -o Dijkstra $^ $(CFLAGS) $(LDLIBS)
+	
+fonctions_graphe: fonctions_graphe.o unwrap.o  parsing.o macro.o
+	$(CCA) -o fonctions_graphe $^ $(CFLAGS) $(LDLIBS)
+
+main:	main.o parsing.o macro.o
 	$(CCA) -o main  $^ $(CFLAGS) $(LDLIBS)
 
 %.o: %.c
-	$(CCA) -o $@ -c $< $(CFLAGS)
+	$(CCA) -o $@ -c $< $(CFLAGS) $(LDLIBS)
 
 # %.gcno: %.c
 # 	$(CCA) -o $@ -c $< $(CFLAGS)
 
 raport: bench.c parsing.c list.c unwrap.c
 	$(CCA) -O0 -o GCOVtests  $^ $(CFLAGS) $(LDLIBS)
-	./GCOVtests unwrwap_deserialise
-	./GCOVtests serialized
-	./GCOVtests unwrwap_gen_cache
-	gcov -abcfu bench.c parsing.c list.c unwrap.c
+	./GCOVtests gen_graph_from_XML
+	./GCOVtests serialise_Graph
+	./GCOVtests deserialise_Graph
+	gcov -abcfu bench.c parsing.c list.c unwrap.c macro.c search.c
 	lcov --capture --directory . --output-file coverage.info
 	genhtml coverage.info --output-directory LcovRapport
 	firefox LcovRapport/main/index.html
@@ -39,10 +54,12 @@ doc:
 	doxygen Doxyfile
 	firefox html/index.html
 
-callgrind:	bench
-	valgrind --dump-instr=yes --collect-jumps=yes --tool=callgrind --callgrind-out-file=callgrind_trace ./bench unwrwap_gen_cache
-	kcachegrind callgrind_trace
-	# rm callgrind_trace
+callgrind:	abench.sh
+	valgrind --dump-instr=yes --collect-jumps=yes --tool=callgrind --callgrind-out-file=callgrind_trace__unwrap_deserialise_Article	./bench unwrap_deserialise_Article
+	valgrind --dump-instr=yes --collect-jumps=yes --tool=callgrind --callgrind-out-file=callgrind_trace__gen_tab_Article_from_xml	./bench gen_tab_Article_from_xml
+	kcachegrind callgrind_trace__unwrap_deserialise_Article
+	kcachegrind callgrind_trace__gen_tab_Article_from_xml
+	# rm callgrind_trace_gen_unwrap_Graph
 # lunch kprok pour profiler le temps d'execution
 
 Update: DATA/dblp.xml
@@ -54,40 +71,46 @@ DATA/dblp.xml:
 	gzip dblp.xml.gz -d
 	mv dblp.xml DATA/dblp.xml
 	rm -f dblp.xml.gz
-
+#10966843
 DATA/dblp1sur8.xml: DATA/dblp.xml
-	head DATA/dblp.xml -n 10966843 > DATA/dblp1sur8.xml
+	head DATA/dblp.xml -n 10010 > DATA/dblp1sur8.xml
 
 #regénère tout les fichier lier a bench quand un .o change Ces regretabkle donc on enleve bench par .O
 DATA/SerializedStruc.data:	DATA/dblp.xml parsing.o
 	./bench serialized
 
-DATA/Serialzed1000.data: 	DATA/dblp1sur8.xml
+DATA/Serialzed1000.data: 	DATA/dblp1sur8.xml parsing.o
 	./bench serializedsmall
 
-DATA/SerializedStrucInverse1000.data:	DATA/Serialzed1000.data
+DATA/SerializedStrucInverse1000.data:	DATA/Serialzed1000.data 
+#unwrap.o
 	./bench unwrwap_gen_cache_small
 
 #LA
-DATA/SerializedStrucInverse.data: DATA/SerializedStruc.data
+DATA/SerializedStrucInverse.data: DATA/SerializedStruc.data 
+#unwrap.o
 	./bench unwrwap_gen_cache
 
-gen_cache_data: DATA/dblp.xml DATA/dblp1sur8.xml DATA/SerializedStrucInverse.data DATA/Serialzed1000.data DATA/SerializedStruc.data DATA/SerializedStrucInverse1000.data
+DATA/SerializedStrucArticle.data: DATA/SerializedStruc.data 
+#unwrap.o
+	./bench unwrap_serialise_Article
 
-r: clean abench.sh
+gen_cache_data: DATA/dblp.xml DATA/dblp1sur8.xml DATA/SerializedStrucInverse.data DATA/Serialzed1000.data DATA/SerializedStruc.data DATA/SerializedStrucInverse1000.data DATA/SerializedStrucArticle.data
 
+r:	clean go
+rr:	cleanall go
 clean:
-	rm -f  *.o *.so *.gcno *.gcda *.gch *.gcov coverage.info
+	rm -f  *.o *.so *.gcno *.gcda *.gch *.gcov coverage.info vgcore.*
 	rm -fr tests bench main GCOVtests LcovRapport html latex
-
-cleanall: clean Update
+# Update
+cleanall: clean 
 	rm -f DATA/SerializedStrucInverse.data\
 		DATA/dblp1sur8.xml\
 		DATA/SerializedStruc.data\
 		DATA/Serialzed1000.data\
 		DATA/SerializedStrucInverse1000.data\
-
-
-
+		DATA/SerializedStrucArticle.data\
+		DATA/SerializedStrucArticleCustom.data\
+		DATA/SerializedStrucInverseCustom.data
 
 # instaler doxygene est lcov
