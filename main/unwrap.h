@@ -161,7 +161,7 @@ tab_auteur_struct * deserialise_tab_auteur_struct(const tableaux_fiche * List_de
 
 unwrap_Graph_struct deserialise_Graph(FILE * dbxmlCache, FILE * auteurCache, FILE * ArticleCache);
 unwrap_Graph_struct gen_Graph_from_XML(FILE * dbxmlCache);
-unwrap_Graph_struct serialise_Graph(unwrap_Graph_struct graph, FILE * dbxmlCache, FILE * auteurCache, FILE * ArticleCache);
+void serialise_Graph(unwrap_Graph_struct graph, FILE * dbxmlCache, FILE * auteurCache, FILE * ArticleCache);
 
 
 

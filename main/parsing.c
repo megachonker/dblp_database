@@ -279,7 +279,7 @@ void serialisation_tableaux_fiche(const tableaux_fiche mastertab, FILE * output)
  * @return pointeur ver tableaux_fiche 
  */
 tableaux_fiche * deserialisation_tableaux_fiche(FILE * input){
-    INFO("Deserialisation DBXML")
+    INFO("Deserialisation tableaux fiche DBXML")
 
     PROGRESSBAR_DECL(input);
 

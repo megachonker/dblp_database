@@ -746,15 +746,16 @@ tab_auteur_struct * gen_tab_auteur_from_xml_et_liaison_article(FILE * dbinput){
  * @return unwrap_Graph_struct 
  */
 unwrap_Graph_struct deserialise_Graph(FILE * dbxmlCache, FILE * auteurCache, FILE * ArticleCache){
+    INFO("Désérialisation du Graph")
     tableaux_fiche * matablefiche = deserialisation_tableaux_fiche(dbxmlCache);
     tab_auteur_struct * malistaauteur =   deserialise_tab_auteur_struct(matablefiche,auteurCache);
     tab_Article_struct * malistearticle = deserialisation_tab_Article_struct(malistaauteur,ArticleCache);
-    unwrap_Graph_struct graph  = {malistaauteur, malistearticle,matablefiche};
+    unwrap_Graph_struct graph  = {malistaauteur, malistearticle,*matablefiche};
     return graph;
 }
 
 unwrap_Graph_struct gen_Graph_from_XML(FILE * dbxmlCache){
-    INFO("gen graph from xml")
+    INFO("Génération du graph (XML)")
     tableaux_fiche mesfiche =  parse(dbxmlCache);
     tab_auteur_struct * malistedauteur = convertTab_fiche2auteur(mesfiche);
     tab_Article_struct * malistaarticle = convertTab_auteur2Article(malistedauteur);
@@ -762,7 +763,8 @@ unwrap_Graph_struct gen_Graph_from_XML(FILE * dbxmlCache){
     return graph;
 }
 
-unwrap_Graph_struct serialise_Graph(unwrap_Graph_struct graph, FILE * dbxmlCache, FILE * auteurCache, FILE * ArticleCache){
+void serialise_Graph(unwrap_Graph_struct graph, FILE * dbxmlCache, FILE * auteurCache, FILE * ArticleCache){
+    INFO("Sérialisation du graph")
     serialisation_tableaux_fiche(graph.tableaux_de_fiche,dbxmlCache);
     serialise_tab_auteur_struct(graph.tab_auteur_struct,auteurCache);
     serialisation_tab_Article_struct(graph.tab_Article_struct,ArticleCache);
