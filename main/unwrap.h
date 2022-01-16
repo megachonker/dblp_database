@@ -117,7 +117,7 @@ void printPaire_auteurHeurvre(Paire_auteur_oeuvre * OwI,int sizeauteuroeuvre );
  * 
  * @param [in] OwO une addresse
  */
-void printList_Auteur(tab_auteur_struct * OwO);
+void printList_auteur(tab_auteur_struct * OwO);
 
 
 /**

@@ -147,7 +147,7 @@ void free_graphe_avec_voisins(auteur_struct** graphe_avec_voisins, int* size_gra
 int main(void)
 {
 
-    FILE* graphe_test_Katie= fopen("DATA/test_Katie.xml", "r");
+    FILE* graphe_test_Katie= fopen(dbtestKatie "r");
 
     auteur_struct** graphe= faire_graphe_ptr_auteur(size_ptr, graphe_test_Katie);
 

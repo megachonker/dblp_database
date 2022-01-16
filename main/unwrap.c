@@ -307,7 +307,7 @@ tab_Article_struct* assemble_tab_Article(Paire_Article_auteur * liste,int sizeAr
     return ListDesArticle;
 }
 
-void printList_Auteur(tab_auteur_struct * OwO){
+void printList_auteur(tab_auteur_struct * OwO){
     for (int i = 0; i < OwO->nombre_auteur; i++)
     {
         printf("%s:\n",OwO->tab_auteur[i].nom_auteur);    
@@ -666,7 +666,7 @@ tab_Article_struct * gen_tab_Article_from_xml(FILE * dbinput){
 tab_auteur_struct * gen_tab_auteur_from_xml_et_liaison_article(FILE * dbinput){
     INFO("gen_tab_Article_from_xml:")
     tab_auteur_struct * malistauteur = gen_tab_auteur_from_xml(dbinput);//la
-    tab_Article_struct * malistaarticle = convertTab_Article2auteur(malistauteur);
+    convertTab_Article2auteur(malistauteur);
     INFO("tab_Article_struct générée")
     return malistauteur ;
 }
