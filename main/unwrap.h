@@ -1,9 +1,7 @@
 #ifndef UNWRAP
 #define UNWRAP
 #include "parsing.h"
-#include "list.h"
-
-
+#include "macro.h"
 
 /**
  * @brief couple nom_auteur <=> oeuvre
@@ -70,10 +68,6 @@ typedef struct Paire_Article_auteur
     auteur_struct * pointeur_Auteur; ///< pointe ver un auteur auteur
 }Paire_Article_auteur;
 
-
-
-
-
 /**
  * @brief Stoque tout les auteur
  * 
@@ -84,6 +78,7 @@ typedef struct tab_auteur_struct
 {
     auteur_struct * tab_auteur;
     int taille;
+    int nombre_article;
 }tab_auteur_struct;
 
 /**
@@ -109,19 +104,6 @@ typedef struct unwrap_Graph_struct
     tableaux_fiche * tableaux_de_fiche;
 }unwrap_Graph_struct;
 
-
-
-/**
- * @brief fonction de comparaison pour qsort
- * 
- * elle pourait être mieux
- * 
- * @param [in] a object A
- * @param [in] b object B
- * @return int 
- */
-int compauteur(const void * a, const void * b);
-
 /**
  * @brief Affiche nom_auteur <=> oeuvre
  * 
@@ -129,32 +111,6 @@ int compauteur(const void * a, const void * b);
  * @param [in] sizeauteuroeuvre nombre d'élément 
  */
 void printPaire_auteurHeurvre(Paire_auteur_oeuvre * OwI,int sizeauteuroeuvre );
-
-
-/**
- * @brief génère un tableaux d' auteurToHeurvre 
- * 
- * déplie tableaux_fiche pour généré unt tableaux
- * d'élément Paire_auteur_oeuvre
- * qui est une association auteur <=> oeuvre unique
- * 
- * @param [in]  input toute les fiche des oeuvre qui comporte les liste auteur  
- * @param [out] arrayout liste qui associe un auteur a une oeuvre
- * @return nombre d'élément du tableaux
- */
-int SwapStruct(tableaux_fiche input, Paire_auteur_oeuvre * arrayout );
-
-/**
- * @brief génère tab_auteur_struct a partire de Paire_auteur_oeuvre
- * 
- * fonction pricipal elle parcoure Paire_auteur_oeuvre est quand le meme
- * auteur ce suit ajoute tout les oeuvre dans un nouveaux tableaux
- * 
- * @param [in] liste                liste trier par auteur des paire auteur titre
- * @param [in] sizeauteuroeuvre    taille de cette liste
- * @return tab_auteur_struct* addressse de la liste final générée auteur to Multiple titre  
- */
-tab_auteur_struct* gen_List_Auteur(const Paire_auteur_oeuvre * liste,int sizeauteuroeuvre);
 
 /**
  * @brief Affiche la liste final d'auteur To multiple Titre
@@ -164,16 +120,15 @@ tab_auteur_struct* gen_List_Auteur(const Paire_auteur_oeuvre * liste,int sizeaut
 void printList_Auteur(tab_auteur_struct * OwO);
 
 
-
 /**
  * @brief génère un index des auteur a partire d'un fichier
  * 
  * il faudrait pouvoir détecter le type de fichier mais de base on assume que ces une liste a inverser
  * 
- * @param [in] inputFile fichier générer par serialize() 
+ * @param [in] inputFile fichier générer par serialisation_tableaux_fiche() 
  * @return tab_auteur_struct* Structure  
  */
-tab_auteur_struct * unwrap_from_file(FILE * inputFile);
+tab_auteur_struct * tab_auteur_from_file(FILE * inputFile);
 
 /**
  * @brief sérialisation de tab_auteur_struct
@@ -187,10 +142,10 @@ tab_auteur_struct * unwrap_from_file(FILE * inputFile);
  * @param [in] List_des_Auteur le titre de l'oeuvre accesible avec tab_auteur_struct=>auteur=>fiche_minimal => ADDR
  * @param [out] output fichier de sortie 
  */
-void unwrap_Serilise_Index(const tab_auteur_struct * List_des_Auteur, FILE * output);
+void serialise_tab_auteur_struct(const tab_auteur_struct * List_des_Auteur, FILE * output);
 
 /**
- * @brief désérialise une un cache produit par unwrap_Serilise_Index
+ * @brief désérialise une un cache produit par serialise_tab_auteur_struct
  * 
  * 
  * 
@@ -199,7 +154,7 @@ void unwrap_Serilise_Index(const tab_auteur_struct * List_des_Auteur, FILE * out
  * @param [out] input on va pouvoir trouver ADDR et ne noms de l'auteur 
  * @return tab_auteur_struct* 
  */
-tab_auteur_struct * unwrap_Deserilise_Index(const tableaux_fiche * List_des_Auteur, FILE * input);
+tab_auteur_struct * deserialise_tab_auteur_struct(const tableaux_fiche * List_des_Auteur, FILE * input);
 
 unwrap_Graph_struct gen_unwrap_Graph(FILE * dblpxml, FILE * inverted);
 
@@ -208,13 +163,16 @@ void printList_Article(tab_Article_struct * OwO);
 
 void unwrap_List_Auteur_free(tab_auteur_struct * free);
 
-tab_Article_struct * unwrap_ListArticle_from_xml(FILE * dbinput);
+tab_Article_struct * gen_tab_Article_from_xml(FILE * dbinput);
 
 void serialisation_tab_Article_struct(tab_Article_struct * inputlist, FILE * outputfile);
 
 tab_Article_struct * deserialisation_tab_Article_struct(tab_auteur_struct * mesauteur, FILE * inputfile);
 
-tab_Article_struct * gen_ListaArticle(const tab_auteur_struct * Malistauteur, int nbArticle);
+tab_Article_struct * convertTab_Article2auteur(const tab_auteur_struct * Malistauteur);
 
-tab_auteur_struct * unwrap_ListAuteur_from_xml(FILE * dbinput,int * nbauteur);
+tab_auteur_struct * gen_tab_auteur_from_xml(FILE * dbinput);
+
+void test_exploration_Article(const tab_Article_struct * mesarticle);
+
 #endif
