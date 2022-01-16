@@ -1420,3 +1420,10 @@ main/DATA/SerializedStrucInverseCustom.data
 main/macro
 main/==17549== Using Valgrind-3.18.1 and LibV.pl
 main/.vscode/c_cpp_properties.json
+main/callgrind_trace__gen_tab_Article_from_xml
+main/callgrind_trace__unwrap_deserialise_Article
+main/callgrind_trace__unwrap_deserialise_Article_1sscanf
+main/fonctions_graphe.gcda
+main/macro.gcda
+main/macro.gcno
+main/tests.gcno
