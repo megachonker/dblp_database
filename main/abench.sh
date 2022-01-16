@@ -15,11 +15,12 @@ help(){
     - swap
     - swaprint
     - unwrwap_gen_cache
-    - unwrap_from_file
-    - unwrwap_deserialise
+    - tab_auteur_from_file
+    - deserialise_tab_auteur
     - unwrwap_gen_cache_small
     - gen_unwrap_Graph
-    - unwrap_ListArticle_from_xml
+    - gen_tab_Article_from_xml
+    - unwrap_deserialise_Article
     - ALL'
 }
 
