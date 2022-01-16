@@ -649,15 +649,28 @@ tab_Article_struct * deserialisation_tab_Article_struct(tab_auteur_struct * mesa
  * @param dbinput 
  * @return tab_Article_struct* 
  */
-tab_Article_struct * gen_tab_Article_from_xml(FILE * dbinput, tab_auteur_struct ** malistauteur){
+tab_Article_struct * gen_tab_Article_from_xml(FILE * dbinput){
     INFO("gen_tab_Article_from_xml:")
-    tab_auteur_struct * a =NULL;
-    a = gen_tab_auteur_from_xml(dbinput);//la
-    tab_Article_struct * malistaarticle = convertTab_Article2auteur(a);
-    *malistauteur = a;
+    tab_auteur_struct * malistauteur = gen_tab_auteur_from_xml(dbinput);//la
+    tab_Article_struct * malistaarticle = convertTab_Article2auteur(malistauteur);
     INFO("tab_Article_struct générée")
     return malistaarticle ;
 }
+
+/**
+ * @brief article depuit le xml de base
+ * 
+ * @param dbinput 
+ * @return tab_auteur_struct* 
+ */
+tab_auteur_struct * gen_tab_auteur_from_xml_et_liaison_article(FILE * dbinput){
+    INFO("gen_tab_Article_from_xml:")
+    tab_auteur_struct * malistauteur = gen_tab_auteur_from_xml(dbinput);//la
+    convertTab_Article2auteur(malistauteur);
+    INFO("tab_Article_struct générée")
+    return malistauteur ;
+}
+
 
 /**
  * @brief genere tout

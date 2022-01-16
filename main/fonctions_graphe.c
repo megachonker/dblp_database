@@ -19,13 +19,8 @@ typedef enum a_mettre_dans_voisins_ou_pas
 auteur_struct** faire_graphe_ptr_auteur(int* size_graphe_ptr, FILE *file_xml)
 {
     
-    tab_auteur_struct * malistauteur = NULL;
-    tab_Article_struct * malistaarticle= gen_tab_Article_from_xml(file_xml, malistauteur);
-    exitIfNull(malistauteur,"generation imposible  malistaarticle imposible")
-    exitIfNull(malistaarticle,"generation malistaarticle imposible")
-
-    test_exploration_Article(malistaarticle);
-
+    tab_auteur_struct * malistauteur= gen_tab_auteur_from_xml_et_liaison_article(file_xml);
+    
 
     //creation du tableau de ptr d'auteur
     
