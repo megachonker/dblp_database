@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "fonctions_graphe.h"
 #include "unwrap.h"
+#include "test.h"
 
 
 
@@ -16,7 +17,7 @@ typedef enum a_mettre_dans_voisins_ou_pas
 //on appelera "graphe" le tableau de ptr d'auteur correspondant a unwrap_Graph
 //avant d'appeler cette fonction, il faut fopen DBxml et déclarer le pointeur size_graphe_ptr
 //et après faut close le file
-auteur_struct** faire_graphe_avec_unwrap_graphe(int* size_graphe_ptr, FILE *DBxml, FILE *DBinverse)
+auteur_struct** faire_graphe_avec_unwrap_graphe(int* size_graphe_ptr, FILE *DBxml, FILE *DBinverse, char* chemin_vers_cache_fichier_xml)
 {
     
     
@@ -25,7 +26,7 @@ auteur_struct** faire_graphe_avec_unwrap_graphe(int* size_graphe_ptr, FILE *DBxm
     unwrap_List_Auteur_free(malistauteur);
     
     fclose(DBinverse);
-    FILE * DBinvers_re = fopen("DATA/test_Katie.cache", "r");
+    FILE * DBinvers_re = fopen(chemin_vers_cache_fichier_xml, "r");
     // tab_Article_struct * matable = unwrap_ListArticle_from_xml(DBxml);
 
     unwrap_Graph_struct unwrap_Graph= gen_unwrap_Graph(DBxml, DBinvers_re); //< erreur peut etre la ?
@@ -156,11 +157,11 @@ int main(void)
     
     int *size_ptr= NULL;
 
-    FILE * DBinverse = fopen("DATA/test_Katie.cache", "w");
+    FILE* DBinverse= fopen(serializedbunwrap, "w");
     
-    FILE* test_xml= fopen("DATA/test_Katie.xml", "r");
+    FILE* DBxml= fopen(originedb, "r");
 
-    auteur_struct** graphe= faire_graphe_avec_unwrap_graphe(size_ptr, test_xml, DBinverse);
+    auteur_struct** graphe= faire_graphe_avec_unwrap_graphe(size_ptr, DBxml, DBinverse, , );
     
     fclose(test_xml);
     fclose(DBinverse);
