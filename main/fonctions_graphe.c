@@ -16,18 +16,15 @@ typedef enum a_mettre_dans_voisins_ou_pas
 
 
 //on appelera "graphe" le tableau des ptr vers les auteurs contenues dans malistauteur
-auteur_struct** faire_graphe_ptr_auteur(int* size_graphe_ptr, FILE *file_xml)
+auteur_struct** faire_graphe_ptr_auteur(FILE *file_xml)
 {
     
     tab_auteur_struct * malistauteur= gen_tab_auteur_from_xml_et_liaison_article(file_xml);
     
-
-    //creation du tableau de ptr d'auteur
-    
-
-
-    size_graphe_ptr= &(malistauteur->nombre_auteur);
-    auteur_struct** graphe= malloc(sizeof(auteur_struct*)**size_graphe_ptr);
+    int size_graphe_ptr= malistauteur->nombre_auteur;
+    graphe_t graphe_struct;
+    graphe_struct.graphe= malloc(sizeof(auteur_struct*)**size_graphe_ptr);
+    graphe_struct.size_graphe= *size_graphe_ptr;
 
     for(int i=0; i<*size_graphe_ptr; i++)
     {
@@ -149,8 +146,6 @@ void free_graphe_avec_voisins(auteur_struct** graphe_avec_voisins, int* size_gra
 //test: affichage des voisins des auteurs du graphe_test
 int main(void)
 {
-    
-    int *size_ptr= malloc(sizeof(int*));
 
     FILE* graphe_test_Katie= fopen("DATA/test_Katie.xml", "r");
 
@@ -165,7 +160,6 @@ int main(void)
         printf("%s\n", nom_auteur);
     }
 
-    free(size_ptr);
     free(graphe);
     
 

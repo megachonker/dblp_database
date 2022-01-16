@@ -6,8 +6,15 @@
 #include "list.h"
 #include <stdlib.h>
 
+typedef struct graphe_t
+{
+    auteur_struct ** graphe;
+    int size_graphe;
 
-auteur_struct** faire_graphe_ptr_auteur(int* size_graphe_ptr, FILE *file_xml);
+}graphe_t;
+
+
+auteur_struct** faire_graphe_ptr_auteur(FILE *file_xml);
 
 auteur_struct** creation_graphe_avec_voisins(auteur_struct** graphe, int* ptr_size_graphe);
 
