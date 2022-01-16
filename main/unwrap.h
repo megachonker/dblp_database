@@ -33,6 +33,8 @@ typedef struct auteur_struct
     struct auteur_struct* ptr_auteur_predecesseur_pcc; //auteur predecesseur dans le plus court chemin
     struct Article_struct* ptr_Article_predecesseur_pcc; //auteur predecesseur dans le plus court chemin
     int size_pcc_auteur; // distance en nombre d'auteur pour passer de l'auteur de depart a l'auteur d'arriver
+    
+    int nbmembreTabarticleALOUER;
 }auteur_struct;
 
 /**

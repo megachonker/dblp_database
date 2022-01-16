@@ -361,11 +361,14 @@ tab_Article_struct* assemble_tab_Article(Paire_Article_auteur * liste,int sizeAr
 }
 
 void printList_auteur(tab_auteur_struct * OwO){
+    DEBUG("il y a %d auteur a print ", OwO->nombre_auteur)
     for (int i = 0; i < OwO->nombre_auteur; i++)
     {
+        PROGRESSBAR(i,OwO->nombre_auteur);
         BLUE()
         printf("%s (%d):\n",OwO->tab_auteur[i].nom_auteur,OwO->tab_auteur[i].size);    
         GREY()
+        // DEBUG("Print: %d",OwO->tab_auteur[i].size)
         for (int j = 0; j < OwO->tab_auteur[i].size; j++)
         {
             printf("\t%s\n",OwO->tab_auteur[i].tab_ptr_fiche_min[j]->titre);
@@ -377,11 +380,15 @@ void printList_auteur(tab_auteur_struct * OwO){
 
 
 void printList_Article(tab_Article_struct * OwO){
+    DEBUG("il y a %d article a print ", OwO->nombre_Article)
+
     for (int i = 0; i < OwO->nombre_Article; i++)
     {
+        PROGRESSBAR(i,OwO->nombre_Article);
         BLUE()
         printf("%s (%d):\n",OwO->tab_Article[i].nom_Article,OwO->tab_Article[i].nombre_auteur);    
         GREY()
+        DEBUG("Print: %d",OwO->tab_Article[i].nombre_auteur)
         for (int j = 0; j < OwO->tab_Article[i].nombre_auteur; j++)
         {
             printf("\t%s\n",OwO->tab_Article[i].tab_ptr_auteur[j]->nom_auteur);
@@ -476,6 +483,7 @@ tab_auteur_struct * deserialise_tab_auteur_struct(const tableaux_fiche * tableau
 
         // on initialise le compteur d'élément 
         master_List_Auteur->tab_auteur[nbauteur].nbelementmagi = 0;
+        // master_List_Auteur->tab_auteur[nbauteur].nbmembreTabarticleALOUER = 0;
         master_List_Auteur->tab_auteur[nbauteur].tab_ptr_Article = NULL;
 
         fgets(ligne,BALISESIZE,input);
@@ -606,16 +614,23 @@ void ajout_Article_in_auteur(auteur_struct * monauteur,Article_struct * monArtic
     // Check doublon
     // for (int i = 0; i < monauteur->nbelementmagi; i++)
     // {
-        // DEBUG("%p !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! %p",monauteur->tab_ptr_Article[i],monArticle)
-        // if(monauteur->nbelementmagi > 0 && monauteur->tab_ptr_Article[monauteur->nbelementmagi-1] == monArticle){
-        //     DEBUG("HIT %p",monArticle)
-        //     return;
-        // }
+    //     // DEBUG("%p !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! %p",monauteur->tab_ptr_Article[i],monArticle)
+    //     if(strcmp(monauteur->tab_ptr_Article[i]->nom_Article,monArticle->nom_Article)){
+    //         // DEBUG("HIT %p",monArticle)
+    //         return;
+    //     }
     // }
-    Article_struct ** tmptest = reallocarray(monauteur->tab_ptr_Article,monauteur->nbelementmagi+1,sizeof(Article_struct*));
-    exitIfNull(tmptest,"ajout article erreur realockarray")
-    tmptest[monauteur->nbelementmagi] = monArticle;
-    monauteur->tab_ptr_Article = tmptest;
+            // DEBUG("ALOUER %d DEMANDER %d",monauteur->nbmembreTabarticleALOUER,monauteur->nbelementmagi)
+
+    if (monauteur->nbmembreTabarticleALOUER<=monauteur->nbelementmagi)
+    {
+        monauteur->nbmembreTabarticleALOUER=(monauteur->nbelementmagi+1)*2;
+        Article_struct ** tmptest = reallocarray(monauteur->tab_ptr_Article,monauteur->nbmembreTabarticleALOUER,sizeof(Article_struct*));
+        exitIfNull(tmptest,"ajout article erreur realockarray")
+        monauteur->tab_ptr_Article = tmptest;
+    }
+
+    monauteur->tab_ptr_Article[monauteur->nbelementmagi] = monArticle;
     monauteur->nbelementmagi++;
     // DEBUG("\t\t tableauxd d'article %p nb element %d ",monauteur->tab_ptr_Article,monauteur->nbelementmagi)
     // DEBUG("%d",monauteur->nbelementmagi)
