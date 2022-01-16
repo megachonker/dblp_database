@@ -117,7 +117,7 @@ void printPaire_auteurHeurvre(Paire_auteur_oeuvre * OwI,int sizeauteuroeuvre );
  * 
  * @param [in] OwO une addresse
  */
-void printList_Auteur(tab_auteur_struct * OwO);
+void printList_auteur(tab_auteur_struct * OwO);
 
 
 /**
@@ -163,7 +163,7 @@ void printList_Article(tab_Article_struct * OwO);
 
 void unwrap_List_Auteur_free(tab_auteur_struct * free);
 
-tab_Article_struct * gen_tab_Article_from_xml(FILE * dbinput, tab_auteur_struct * malistauteur);
+tab_Article_struct * gen_tab_Article_from_xml(FILE * dbinput, tab_auteur_struct ** malistauteur);
 
 void serialisation_tab_Article_struct(tab_Article_struct * inputlist, FILE * outputfile);
 

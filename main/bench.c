@@ -84,7 +84,7 @@ tab_auteur_struct * deserialise_tab_auteur(int print){
     tableaux_fiche * azer = deserialisation_tableaux_fiche(fichier);
     tab_auteur_struct * malistauteur =  deserialise_tab_auteur_struct(azer,input);
     if(print == 1){
-        printList_Auteur(malistauteur);
+        printList_auteur(malistauteur);
     }
     return malistauteur;
 }
@@ -138,7 +138,7 @@ void swap(int print){
 
     if (print==1)
     {
-        printList_Auteur(malistedauteur);
+        printList_auteur(malistedauteur);
     }
 }
 
