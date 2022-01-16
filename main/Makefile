@@ -42,13 +42,10 @@ main:	main.o parsing.o macro.o
 
 raport: bench.c parsing.c list.c unwrap.c
 	$(CCA) -O0 -o GCOVtests  $^ $(CFLAGS) $(LDLIBS)
-	./GCOVtests unwrwap_deserialise
-	./GCOVtests serialized
-	./GCOVtests unwrwap_gen_cache
-	./GCOVtests serializedsmall
-	./GCOVtests unwrwap_gen_cache_small
-	./GCOVtests unwrwap_gen_cache_small
-	gcov -abcfu bench.c parsing.c list.c unwrap.c
+	./GCOVtests gen_graph_from_XML
+	./GCOVtests serialise_Graph
+	./GCOVtests deserialise_Graph
+	gcov -abcfu bench.c parsing.c list.c unwrap.c macro.c search.c
 	lcov --capture --directory . --output-file coverage.info
 	genhtml coverage.info --output-directory LcovRapport
 	firefox LcovRapport/main/index.html

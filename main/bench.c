@@ -431,6 +431,25 @@ int main(int argc, char const *argv[])
     // }
     else{
         fprintf(stderr,"PAS BON TEST!\n");
+        fprintf(stderr,"\
+    \n- readb\
+    \n- readsmaldb\
+    \n- serialized\
+    \n- serializedsmall\
+    \n- deserialisedb\
+    \n- deserialisesmalldb\
+    \n- swap\
+    \n- swaprint\
+    \n- unwrwap_gen_cache\
+    \n- tab_auteur_from_file\
+    \n- deserialise_tab_auteur\
+    \n- unwrwap_gen_cache_small\
+    \n- deserialise_Graph\
+    \n- gen_tab_Article_from_xml\
+    \n- unwrap_deserialise_Article\
+    \n- gen_graph_from_XML\
+    \n- serialise_Graph\
+    \n- ALL");
     }
     CLRLINE()
     return 0;
