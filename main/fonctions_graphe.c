@@ -19,12 +19,15 @@ typedef enum a_mettre_dans_voisins_ou_pas
 auteur_struct** faire_graphe_ptr_auteur(int* size_graphe_ptr, FILE *file_xml)
 {
     
-    tab_auteur_struct * malistauteur= NULL;
+    tab_auteur_struct * malistauteur= malloc(sizeof(tab_auteur_struct*));
     tab_Article_struct * malistaarticle= gen_tab_Article_from_xml(file_xml, malistauteur);
     
 
-    //creation du tableau de ptr d'auteur correspondant a unwrap_Graph
-    *size_graphe_ptr= malistauteur->nombre_auteur;
+    //creation du tableau de ptr d'auteur
+    
+
+
+    size_graphe_ptr= &(malistauteur->nombre_auteur);
     auteur_struct** graphe= malloc(sizeof(auteur_struct*)**size_graphe_ptr);
 
     for(int i=0; i<*size_graphe_ptr; i++)
@@ -41,6 +44,8 @@ auteur_struct** faire_graphe_ptr_auteur(int* size_graphe_ptr, FILE *file_xml)
         ai.size_pcc_auteur= -1;
         graphe[i]= &ai;
     }
+
+    free(malistauteur);
 
     return graphe;
 }
@@ -146,7 +151,7 @@ void free_graphe_avec_voisins(auteur_struct** graphe_avec_voisins, int* size_gra
 int main(void)
 {
     
-    int *size_ptr= NULL;
+    int *size_ptr= malloc(sizeof(int*));
 
     FILE* graphe_test_Katie= fopen("DATA/test_Katie.xml", "r");
 
@@ -161,6 +166,7 @@ int main(void)
         printf("%s\n", nom_auteur);
     }
 
+    free(size_ptr);
     free(graphe);
     
 
