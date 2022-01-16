@@ -45,6 +45,7 @@ qsort_compare_auteur(const void * a, const void * b){
  * @return nombre d'élément du tableaux
  */
 int deplier_fiche(tableaux_fiche input, Paire_auteur_oeuvre * arrayout ){
+    INFO("deplier les fiche")
     int indice = 0;
     for (int i = 0; i < input.taille; i++){
         PROGRESSBAR(i,input.taille);
@@ -453,6 +454,7 @@ tab_auteur_struct * gen_tab_auteur_from_xml(FILE * dbinput){
     //faire une fonciton pour sacoir la taille total verifier le temps
     int sizeHauteurHeuvre = deplier_fiche(mesfiche,HauteurHeuvre);
     // DEBUG("Taille du tableaux MAXarraySIZE %d, %d",MAXarraySIZE,sizeHauteurHeuvre);
+    INFO("Trie:")
     sort_tableaux_auteur(HauteurHeuvre,sizeHauteurHeuvre);
     tab_auteur_struct * malistedauteur = gen_List_auteur(HauteurHeuvre,sizeHauteurHeuvre);
     malistedauteur->nombre_article = mesfiche.taille;
@@ -601,7 +603,9 @@ tab_Article_struct * deserialisation_tab_Article_struct(tab_auteur_struct * mesa
         {
             int indexmagie = 0;
             fgets(ligne,BALISESIZE,inputfile);
-            sscanf(ligne,"%d\n",&indexmagie);
+            enlever_retour_a_la_ligne(ligne);
+            indexmagie = atoi(ligne);
+            exitIfNull(indexmagie,"indexmagienule")
             //je cherche dans le tab auteur en fc de l'index trouver
             structauteur[i] = mesauteur->tab_auteur[indexmagie];
 
@@ -665,6 +669,7 @@ unwrap_Graph_struct gen_unwrap_Graph(FILE * dblpxml, FILE * inverted){
     //check si les cache sont la 
     tableaux_fiche * matablefiche = deserialisation_tableaux_fiche(dblpxml);
     tab_auteur_struct * malistaauteur =   deserialise_tab_auteur_struct(matablefiche,inverted);
+    //ajouter la désérialisation
     tab_Article_struct * malistearticle = convertTab_Article2auteur(malistaauteur);
     unwrap_Graph_struct graph  = {malistaauteur, malistearticle,matablefiche};
     return graph;

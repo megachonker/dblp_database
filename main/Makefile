@@ -1,6 +1,6 @@
 CCA ?= cc -O0
 CFLAGS ?= -Wall -Wextra -g
-LDLIBS ?= 
+LDLIBS ?= -lm -pthread -ftest-coverage -fprofile-arcs
 # -lm -pthread
 
 fct_gr:  fonctions_graphe 
@@ -15,8 +15,8 @@ go:	tests abench.sh
 
 abench.sh: bench gen_cache_data
 
-val:	tests 
-	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./tests
+val:	abench.sh
+	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./bench unwrap_deserialise_Article
 
 bench:	bench.o parsing.o list.o unwrap.o macro.o
 	$(CCA) -o bench  $^ $(CFLAGS) $(LDLIBS)
@@ -40,11 +40,13 @@ main:	main.o parsing.o macro.o
 # 	$(CCA) -o $@ -c $< $(CFLAGS)
 
 raport: bench.c parsing.c list.c unwrap.c
-	LDLIBS ?= -lm -pthread -ftest-coverage -fprofile-arcs
 	$(CCA) -O0 -o GCOVtests  $^ $(CFLAGS) $(LDLIBS)
 	./GCOVtests unwrwap_deserialise
 	./GCOVtests serialized
 	./GCOVtests unwrwap_gen_cache
+	./GCOVtests serializedsmall
+	./GCOVtests unwrwap_gen_cache_small
+	./GCOVtests unwrwap_gen_cache_small
 	gcov -abcfu bench.c parsing.c list.c unwrap.c
 	lcov --capture --directory . --output-file coverage.info
 	genhtml coverage.info --output-directory LcovRapport
@@ -55,11 +57,10 @@ doc:
 	firefox html/index.html
 
 callgrind:	abench.sh
-	LDLIBS ?= -lm -pthread -ftest-coverage -fprofile-arcs
-	make clean
-	make bench
-	valgrind --dump-instr=yes --collect-jumps=yes --tool=callgrind --callgrind-out-file=callgrind_trace ./bench gen_unwrap_Graph
-	kcachegrind callgrind_trace_gen_unwrap_Graph
+	valgrind --dump-instr=yes --collect-jumps=yes --tool=callgrind --callgrind-out-file=callgrind_trace__unwrap_deserialise_Article	./bench unwrap_deserialise_Article
+	valgrind --dump-instr=yes --collect-jumps=yes --tool=callgrind --callgrind-out-file=callgrind_trace__gen_tab_Article_from_xml	./bench gen_tab_Article_from_xml
+	kcachegrind callgrind_trace__unwrap_deserialise_Article
+	kcachegrind callgrind_trace__gen_tab_Article_from_xml
 	# rm callgrind_trace_gen_unwrap_Graph
 # lunch kprok pour profiler le temps d'execution
 
