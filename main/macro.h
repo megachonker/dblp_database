@@ -58,7 +58,7 @@
 #define WARNING(...) ;
 #endif
 #ifdef YOLO_ON
-#define YOLO(...) GREY() fprintf(stderr,"\033[K\t"); fprintf(stderr, __VA_ARGS__); CLRCOLOR() fprintf(stderr,"\n");
+#define YOLO(...) GREY() fprintf(stderr,"\033[K\t\t\t"); fprintf(stderr, __VA_ARGS__); CLRCOLOR() fprintf(stderr,"\n");
 #else
 #define YOLO(...);
 #endif

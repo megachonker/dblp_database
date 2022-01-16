@@ -249,9 +249,9 @@ int main(int argc, char const *argv[])
             DBficheLecture    = fopen(cache_fiche     ,"r");
             DBauteurLecture   = fopen(auteur_cache    ,"r");
             DBArticleLecture  = fopen(Article_cache   ,"r");
-            DBficheEcriture   = fopen(cache_fiche     ,"w");
-            DBauteurEcriture  = fopen(auteur_cache    ,"w");
-            DBArticleEcriture = fopen(Article_cache   ,"w");
+            // DBficheEcriture   = fopen(cache_fiche     ,"w");
+            // DBauteurEcriture  = fopen(auteur_cache    ,"w");
+            // DBArticleEcriture = fopen(Article_cache   ,"w");
             break;
         case smalldblp:
             XML               = fopen(smallorigineXML     ,"r");
@@ -291,7 +291,7 @@ int main(int argc, char const *argv[])
         exitIfNull(DBArticleEcriture,"erreur ouverture bd %s.",Article_cache)
 
         //Faire un switch
-        if(strcmp("serialize_graph_custom",compstr)==0){
+        if(strcmp("serialize_graph",compstr)==0){
             serialise_Graph(gen_Graph_from_XML(XML),
                 DBficheEcriture,
                 DBauteurEcriture,
@@ -302,14 +302,22 @@ int main(int argc, char const *argv[])
         exitIfNull(DBauteurLecture  ,"erreur ouverture bd %s.",auteur_cache)
         exitIfNull(DBArticleLecture ,"erreur ouverture bd %s.",Article_cache)
 
+        //Faire un switch
+        if(strcmp("deserialize_graph",compstr)==0){
+            deserialise_Graph(
+                DBficheEcriture,
+                DBauteurEcriture,
+                DBArticleEcriture);
+        }
+
         CLRLINE()
 
-        fclose(DBficheEcriture);
-        fclose(DBauteurEcriture);
-        fclose(DBArticleEcriture);
-        fclose(DBficheEcriture);
-        fclose(DBauteurEcriture);
-        fclose(DBArticleEcriture);
+        // fclose(DBficheEcriture);
+        // fclose(DBauteurEcriture);
+        // fclose(DBArticleEcriture);
+        // fclose(DBficheEcriture);
+        // fclose(DBauteurEcriture);
+        // fclose(DBArticleEcriture);
 
         return 0;
     }else if (argc != 2)
