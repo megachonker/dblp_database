@@ -1,10 +1,10 @@
-#include "parsing.h"
-#include "unwrap.h"
+#include "../header/parsing.h"
+#include "../header/unwrap.h"
 #include <stdio.h>
 #include <string.h>
 
 
-#include "macro.h"
+#include "../header/macro.h"
 
 enum{
     dblp,

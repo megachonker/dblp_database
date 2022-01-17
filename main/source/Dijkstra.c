@@ -1,11 +1,11 @@
 
 
 #include <stdio.h>
-#include "unwrap.h"
+#include "../header/unwrap.h"
 #include <stdlib.h>
 #include <string.h>
-#include "fonctions_graphe.h"
-#include "Dijkstra.h"
+#include "../header/fonctions_graphe.h"
+#include "../header/Dijkstra.h"
 
 void print_pile_courante(int* pile_indice, int size, auteur_struct** graphe)
 {

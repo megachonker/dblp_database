@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "unwrap.h"
-#include "fonctions_graphe.h"
+#include "../header/unwrap.h"
+#include "../header/fonctions_graphe.h"
 
 
 

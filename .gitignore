@@ -1460,3 +1460,14 @@ main/DATA/SerializedStrucInverseSmall.data
 main/DATA/SerializedStrucKatie.data
 main/DATA/SerialzedSmall.data
 main/DATA/dblpSmall.xml
+main/bin/bench
+main/bin/bench.o
+main/bin/list.o
+main/bin/macro.o
+main/bin/parsing.o
+main/bin/unwrap.o
+main/build/bench.o
+main/build/list.o
+main/build/macro.o
+main/build/parsing.o
+main/build/unwrap.o

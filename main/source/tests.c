@@ -1,15 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "unwrap.h"
+#include "../header/unwrap.h"
 
 #include <string.h>
 // #include <pthread.h>
 #include <assert.h>
 
 
-#include "macro.h"
+#include "../header/macro.h"
 
-#include "search.h"
+#include "../header/search.h"
 
 //écrire des int dans un fichier
 

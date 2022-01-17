@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "parsing.h"
-#include "unwrap.h"
-#include "macro.h"
+#include "../header/parsing.h"
+#include "../header/unwrap.h"
+#include "../header/macro.h"
 
 
 /**
