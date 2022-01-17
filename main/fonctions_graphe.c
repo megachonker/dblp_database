@@ -30,7 +30,9 @@ graphe_struct faire_graphe_ptr_auteur(FILE *file_xml)
     {
         auteur_struct* ai_ptr= &(malistauteur->tab_auteur[i]);
         ai_ptr->size_pcc_auteur= -1;
+        ai_ptr->ptr_Article_predecesseur_pcc= malloc(8);
         ai_ptr->ptr_Article_predecesseur_pcc= NULL;
+        ai_ptr->ptr_auteur_predecesseur_pcc= malloc(8);
         ai_ptr->ptr_auteur_predecesseur_pcc= NULL;
         graphe_struct.graphe[i]= ai_ptr;
     }
