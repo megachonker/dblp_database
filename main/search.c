@@ -3,17 +3,6 @@
 #include "macro.h"
 #include "search.h"
 #include <string.h>
-// Graph_struct * graph;
-
-
-// search(char * auteurA, char * auteurB){
-
-// }
-
-// sort(){
-
-// }
-
 
 /**
  * @brief Get the top Article object
@@ -140,6 +129,7 @@ void explore(auteur_struct * auteurAexplorer, pille_auteur * pille){
     for (int i = 0; i < auteurAexplorer->nbArticlecontenue; i++)
     {
         //on visite les auteur
+        WARNING("Auteur: %s",auteurAexplorer->tab_ptr_Article[i]->nom_Article);
         for (int u = 0; u < auteurAexplorer->tab_ptr_Article[i]->nombre_auteur; u++)
         {
             DEBUG("exploration de: %s",auteurAexplorer->tab_ptr_Article[i]->tab_ptr_auteur[u]->nom_auteur)
@@ -148,6 +138,8 @@ void explore(auteur_struct * auteurAexplorer, pille_auteur * pille){
                 break;
             //on marque comme visiter
             auteurAexplorer->tab_ptr_Article[i]->tab_ptr_auteur[u]->auteur_parent = auteurAexplorer;
+            DEBUG("parent=>%s\n\tenfant:%s",auteurAexplorer->nom_auteur,auteurAexplorer->tab_ptr_Article[i]->tab_ptr_auteur[u]->auteur_parent->nom_auteur);
+            DEBUG("marquage:%p<=%p",auteurAexplorer->tab_ptr_Article[i]->tab_ptr_auteur[u]->auteur_parent,auteurAexplorer);
             //on ajoute a la pille
             pille->auteur[pille->pointeur] = auteurAexplorer->tab_ptr_Article[i]->tab_ptr_auteur[u];
             pille->nmemb_auteur++;
@@ -158,6 +150,8 @@ void explore(auteur_struct * auteurAexplorer, pille_auteur * pille){
 }
 
 #define TAILLE_DEPARD 10
+
+//fonction pour réalouer 
 
 void parcour_largeur(const Graph_struct graph){
 
@@ -170,16 +164,44 @@ void parcour_largeur(const Graph_struct graph){
     pille_auteur pile ={.auteur=&tabaddresseauteur,
                         .nmemb_alouer=TAILLE_DEPARD,
                         .nmemb_auteur=1};
-
-    for (int i = 0; i < pile.nmemb_auteur; i++)
+    printPile(&pile);
+    for (size_t i = 0; i < pile.nmemb_auteur; i++)
     {
         explore(pile.auteur[i],&pile);
         //on libere l'emplacement dans la pille
         pile.auteur[i] = NULL;
         pile.pointeur++;
+        DEBUG("on avance de 1")
+        printPile(&pile);
     }
 }
 
 
 
-//FAIRE SEARCH
+char * find_Article(char * querry, tab_Article_struct * tabarticle){
+    INFO("FIND Article:")
+    char out[BALISESIZE];
+    char machaine[BALISESIZE] = ".*";
+    strcat(machaine,querry);
+    DEBUG("querry: %s machaine %s",querry,machaine);
+    strcat(machaine,".*");
+    DEBUG("machaine: %s",machaine);
+    // for (int i = 0; i < tabarticle->nombre_Article; i++)
+    // {
+    //     printf("%s %i %i",tabarticle->tab_article[i]->,i,tabarticle->nombre_Article);
+    //     // PROGRESSBAR(i,10000);
+    //     // if (sscanf(tabarticle->tab_Article[i].nom_Article,machaine,out)){
+                // printf("%out")
+    //     // }
+    //         // DEBUG("%s constenue dans %s",machaine,tabarticle->tab_Article[i].nom_Article)
+    // }
+    
+
+}
+// char * find_auteur(const char * querry, const tab_auteur_struct * tabauteur){
+//     for (int i = 0; i < tabauteur->nombre_auteur; i++)
+//     {
+//         sscanf(tabauteur->tab_auteur[i].nom_auteur,querry);
+//     }
+    
+// }
