@@ -14,7 +14,7 @@ typedef struct graphe_struct
 }graphe_struct;
 
 
-graphe_struct faire_graphe_ptr_auteur(FILE *file_xml);
+graphe_struct faire_graphe_ptr_auteur();
 
 auteur_struct** creation_graphe_avec_voisins(auteur_struct** graphe, int* ptr_size_graphe);
 

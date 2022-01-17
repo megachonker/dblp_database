@@ -16,19 +16,37 @@ typedef enum a_mettre_dans_voisins_ou_pas
 
 
 //on appelera "graphe" le tableau des ptr vers les auteurs contenues dans malistauteur
-graphe_struct faire_graphe_ptr_auteur(FILE *file_xml)
+graphe_struct faire_graphe_ptr_auteur()
 {
     
-    tab_auteur_struct * malistauteur= gen_tab_auteur_from_xml_et_liaison_article(file_xml);
-    
-    int size_graphe= malistauteur->nombre_auteur;
+    INFO("tests:deserialisation")
+
+    FILE * DBficheLecture   = fopen(cache_fiche     ,"r");
+    FILE * DBauteurLecture  = fopen(auteur_cache    ,"r");
+    FILE * DBArticleLecture = fopen(Article_cache   ,"r");
+
+
+    unwrap_Graph_struct mongraph = deserialise_Graph(DBficheLecture
+                                    ,DBauteurLecture
+                                    ,DBArticleLecture);
+
+    exitIfNull(DBficheLecture  ,"erreur ouverture bd")
+    exitIfNull(DBauteurLecture ,"erreur ouverture bd")
+    exitIfNull(DBArticleLecture,"erreur ouverture bd")
+
+    fclose(DBficheLecture);
+    fclose(DBauteurLecture);
+    fclose(DBArticleLecture);
+
+
+    int size_graphe= mongraph.tab_auteur_struct->nombre_auteur;
     graphe_struct graphe_struct;
     graphe_struct.graphe= malloc(sizeof(auteur_struct*)*size_graphe);
     graphe_struct.size_graphe= size_graphe;
 
     for(int i=0; i<size_graphe; i++)
     {
-        auteur_struct* ai_ptr= &(malistauteur->tab_auteur[i]);
+        auteur_struct* ai_ptr= &(mongraph.tab_auteur_struct->tab_auteur[i]);
         ai_ptr->size_pcc_auteur= -1;
         ai_ptr->ptr_Article_predecesseur_pcc= malloc(8);
         ai_ptr->ptr_Article_predecesseur_pcc= NULL;
@@ -37,7 +55,7 @@ graphe_struct faire_graphe_ptr_auteur(FILE *file_xml)
         graphe_struct.graphe[i]= ai_ptr;
     }
 
-    free(malistauteur);
+    free(mongraph.tab_auteur_struct);
 
     return graphe_struct;
 }
