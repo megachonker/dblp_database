@@ -109,4 +109,15 @@ void enlever_retour_a_la_ligne(char * ligne);
  */
 void tabulation(int nombre);
 
+/**
+ * @brief repete un caracter X foit
+ * 
+ * pratique pour l'affichage
+ * 
+ * @param carac 
+ * @param nb 
+ */
+void repchar(char carac,size_t nb);
+
+
 #endif

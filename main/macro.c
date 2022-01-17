@@ -59,6 +59,11 @@ void tabulation(int nombre){
     }
 }
 
+void repchar(char carac,size_t nb){
+    for (size_t i = 0; i < nb; i++)
+        printf("%c",carac);
+}
+
 //fonction pour convertire
 // int octerToMega(int taille){
 
