@@ -108,12 +108,12 @@ typedef struct tab_auteur_struct
  * 
  * 
  */
-typedef struct unwrap_Graph_struct
+typedef struct Graph_struct
 {
     tab_auteur_struct * tab_auteur_struct;
     tab_Article_struct * tab_Article_struct;
     tableaux_fiche tableaux_de_fiche;
-}unwrap_Graph_struct;
+}Graph_struct;
 
 /**
  * @brief Affiche nom_auteur <=> oeuvre
@@ -170,9 +170,9 @@ tab_auteur_struct * deserialise_tab_auteur_struct(const tableaux_fiche * List_de
 
 
 
-unwrap_Graph_struct deserialise_Graph(FILE * dbxmlCache, FILE * auteurCache, FILE * ArticleCache);
-unwrap_Graph_struct gen_Graph_from_XML(FILE * dbxmlCache);
-void serialise_Graph(unwrap_Graph_struct graph, FILE * dbxmlCache, FILE * auteurCache, FILE * ArticleCache);
+Graph_struct deserialise_Graph(FILE * dbxmlCache, FILE * auteurCache, FILE * ArticleCache);
+Graph_struct gen_Graph_from_XML(FILE * dbxmlCache);
+void serialise_Graph(Graph_struct graph, FILE * dbxmlCache, FILE * auteurCache, FILE * ArticleCache);
 
 
 
