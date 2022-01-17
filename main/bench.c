@@ -73,7 +73,7 @@ void unwrwap_gen_cache(){
     exitIfNull(ouputDB,"imposible d'ouvrire "auteur_cache)
     tab_auteur_struct * malistauteur = unwrap_from_filE(); //80%
     serialise_tab_auteur_struct(malistauteur,ouputDB);           //18%
-    unwrap_List_Auteur_free(malistauteur);
+    free_tab_auteur(malistauteur);
 }
 void unwrwap_gen_cache_small(){
     FILE * ouputDB = fopen(small_auteur_cache,"w");
@@ -82,7 +82,7 @@ void unwrwap_gen_cache_small(){
     exitIfNull(inputDB,"imposible d'ouvrire "small_fiche_cache)
     tab_auteur_struct * malistauteur = tab_auteur_from_file(inputDB);
     serialise_tab_auteur_struct(malistauteur,ouputDB);
-    unwrap_List_Auteur_free(malistauteur);
+    free_tab_auteur(malistauteur);
 }
 tab_auteur_struct * deserialise_tab_auteur(int print){
     FILE * input = fopen(auteur_cache,"r");
@@ -224,7 +224,7 @@ void local_custom_serialise_Graph(){
 
 // soucis de free?
 void bench_all(){
-    parsing_free(deserialisedb());
+    free_tab_fiche(deserialisedb());
     unwrwap_gen_cache();
     deserialise_tab_auteur(0);
 }
@@ -272,7 +272,7 @@ listeFichier openDB(int type,int mode){
     {
     case dblp:
 
-    listefile.XML               = fopen(origineXML      ,"r");        
+        listefile.XML               = fopen(origineXML      ,"r");        
         if(mode == ecriture){
             listefile.DBficheEcriture   = fopen(cache_fiche     ,"w");
             listefile.DBauteurEcriture  = fopen(auteur_cache    ,"w");
@@ -327,7 +327,8 @@ listeFichier openDB(int type,int mode){
         ERROR("mauvais mode de base")
         break;
     }
-        exitIfNull(listefile.XML              ,"erreur ouverture bd %s.",origineXML);
+    //les message derreur sont claquer
+    exitIfNull(listefile.XML              ,"erreur ouverture bd %s.",origineXML);
     if (mode == lecture)
     {
         exitIfNull(listefile.DBficheLecture   ,"erreur ouverture bd %s.",cache_fiche);
@@ -352,28 +353,32 @@ int main(int argc, char const *argv[])
         //Faire un switch
         if(strcmp("sg",compstr)==0){
             listeFichier mesfichier = openDB(basenb,ecriture);
-            serialise_Graph(gen_Graph_from_XML(mesfichier.XML),
+            Graph_struct legraph = gen_Graph_from_XML(mesfichier.XML);
+            serialise_Graph(legraph,
                 mesfichier.DBficheEcriture,
                 mesfichier.DBauteurEcriture,
                 mesfichier.DBArticleEcriture);
             closeall(mesfichier);
+            free_Graph_struct(legraph);
         }
 
         if (strcmp("gxml",compstr)==0)
         {
             listeFichier mesfichier = openDB(basenb,lecture);
-            gen_Graph_from_XML(mesfichier.XML);
+            Graph_struct legraph = gen_Graph_from_XML(mesfichier.XML);
+            free_Graph_struct(legraph);
             closeall(mesfichier);
         }
         
         //Faire un switch
         if(strcmp("dg",compstr)==0){
             listeFichier mesfichier = openDB(basenb,lecture);
-            deserialise_Graph(
-                mesfichier.DBficheLecture,
-                mesfichier.DBauteurLecture,
-                mesfichier.DBArticleLecture);
-            closeall(mesfichier);
+            Graph_struct legraph =  deserialise_Graph(
+                                        mesfichier.DBficheLecture,
+                                        mesfichier.DBauteurLecture,
+                                        mesfichier.DBArticleLecture);
+        free_Graph_struct(legraph);
+        closeall(mesfichier);
         }
 
         CLRLINE()

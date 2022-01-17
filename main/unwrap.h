@@ -34,7 +34,7 @@ typedef struct auteur_struct
     int size;                           ///<taille du tableaux dynamique
     
 
-    struct auteur_struct * auteur_parent;
+    struct auteur_struct * auteur_parent;//adreses de l auteur parent quand on explore le graph
 
 
     //ajoue d'Katie de ce qui est utile pour Dijkstra
@@ -115,13 +115,6 @@ typedef struct Graph_struct
     tableaux_fiche tableaux_de_fiche;
 }Graph_struct;
 
-/**
- * @brief Affiche nom_auteur <=> oeuvre
- * 
- * @param [in] OwI  Paire_auteur_oeuvre
- * @param [in] sizeauteuroeuvre nombre d'élément 
- */
-void printPaire_auteurHeurvre(Paire_auteur_oeuvre * OwI,int sizeauteuroeuvre );
 
 /**
  * @brief Affiche la liste final d'auteur To multiple Titre
@@ -172,12 +165,12 @@ tab_auteur_struct * deserialise_tab_auteur_struct(const tableaux_fiche * List_de
 
 Graph_struct deserialise_Graph(FILE * dbxmlCache, FILE * auteurCache, FILE * ArticleCache);
 Graph_struct gen_Graph_from_XML(FILE * dbxmlCache);
+
 void serialise_Graph(Graph_struct graph, FILE * dbxmlCache, FILE * auteurCache, FILE * ArticleCache);
 
-
-
-
-void unwrap_List_Auteur_free(tab_auteur_struct * free);
+void free_tab_auteur(tab_auteur_struct * free);
+void free_tab_Article(tab_Article_struct * afree);
+void free_Graph_struct(Graph_struct afree);
 
 tab_Article_struct * gen_tab_Article_from_xml(FILE * dbinput);
 

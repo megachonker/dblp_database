@@ -66,7 +66,7 @@ char * getanchor(char * recherche, char * ligne){
         //on chercher la prochaine acolade ouvrante (donc la fin de la balise)
         int diff = strcspn(start,"<");
         start[diff] = '\0';
-        char * out = strdup(start);
+        char * out = strdup(start);//<ça fait des duplication
         exitIfNull(out,"getchar: stdrup imposible");
         return out;
     }
@@ -84,12 +84,23 @@ char * getanchor(char * recherche, char * ligne){
  */
 void appendAuteurM(fiche_minimale * mafiche,char * nomsauteur){
     char ** addrListeauteur = NULL;
-    addrListeauteur = realloc(mafiche->liste_auteur,sizeof(fiche_minimale)*(mafiche->nombre_auteur+1));//MALOC
+    addrListeauteur = reallocarray(mafiche->liste_auteur,(mafiche->nombre_auteur+1),sizeof(fiche_minimale));//MALOC
 
     exitIfNull(addrListeauteur,"appendAuteurM: allocation imposible")
 
-    if (mafiche->liste_auteur != addrListeauteur)//plus opti que d'assigner dirrectment ?
+    if (mafiche->liste_auteur != addrListeauteur){//plus opti que d'assigner dirrectment ?
+        YOLO("%p VS %p",mafiche->liste_auteur,addrListeauteur); // WTfu ?        
+
+        // if (mafiche->liste_auteur)
+        // {
+        //     YOLO("AVANT %p VS %p",mafiche->liste_auteur,addrListeauteur); // WTfu ?        
+        //     free(mafiche->liste_auteur);
+        //     YOLO("APRES %p VS %p",mafiche->liste_auteur,addrListeauteur); // WTfu ?        
+
+        // }
+        
         mafiche->liste_auteur = addrListeauteur;
+    }
 
     mafiche->liste_auteur[mafiche->nombre_auteur] = nomsauteur;
     mafiche->nombre_auteur++;
@@ -142,8 +153,8 @@ void gen_id_fiche(tableaux_fiche * tableaux_allfiche){
  */
 static int cmptabfiche(const void * maficheA,const void * maficheB){
     //MAGIE NOIIIIIIIIIIIIIIIIIIIIIREEE
-    struct fiche_minimale* maficheAA = *(struct fiche_minimale**) maficheA;
-    struct fiche_minimale* maficheBB = *(struct fiche_minimale**) maficheB;
+    fiche_minimale* maficheAA = *(fiche_minimale**) maficheA;
+    fiche_minimale* maficheBB = *(fiche_minimale**) maficheB;
     // DEBUG => printf("%s <=> %s\n",maficheAA->titre,maficheAA->titre);
     return strcmp(maficheAA->titre,maficheBB->titre);
 }
@@ -170,7 +181,7 @@ void sortlist(tableaux_fiche * mesfiche ){
  * @param inputDB 
  * @return tableaux_fiche 
  */
-tableaux_fiche parse(FILE * inputDB){
+tableaux_fiche parse(FILE * inputDB){ /// a besoin detre un pointeur pour le free ?? ? genr maloc
     INFO("début du parsing:");
     char ligne[BALISESIZE];
 
@@ -335,23 +346,30 @@ tableaux_fiche * deserialisation_tableaux_fiche(FILE * input){
     return tableaux_allfiche;
 }
 
+
+
+void free_fiche_minimale(fiche_minimale * fiche){
+    for (int u = 0; u < fiche->nombre_auteur; u++)
+    {
+        //desaloc un tableaux de char : stupide ?       
+        free(fiche->liste_auteur[u]);
+    }
+    free(fiche);
+}
+
 //renomer
 /**
  * @brief free tableaux_fiche
  * 
  * @param DEGAGE 
  */
-void parsing_free(tableaux_fiche * DEGAGE){
+void free_tab_fiche(tableaux_fiche * DEGAGE){
     INFO("Free parsing")
     for (int i = 0; i < DEGAGE->taille; i++)
     {
         PROGRESSBAR(i,DEGAGE->taille);
-        free(DEGAGE->fiche[i]->titre);
-        for (int u = 0; u < DEGAGE->fiche[i]->nombre_auteur; u++)
-        {
-            free(DEGAGE->fiche[i]->liste_auteur[u]);
-        }
-        free(DEGAGE->fiche[i]);
+        free_fiche_minimale(DEGAGE->fiche[i]);
     }
-    free(DEGAGE);
+    // free(DEGAGE);
 }
+

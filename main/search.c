@@ -24,7 +24,7 @@ tab_Article_struct get_top_Article(const tab_Article_struct * tout_article,int t
 
     for (int i = 0; i < tout_article->nombre_Article; i++)
     {
-        progressbar(i,tout_article->nombre_Article);
+        PROGRESSBAR(i,tout_article->nombre_Article);
         if (pile[indicepill%topX].nombre_auteur < tout_article->tab_Article[i].nombre_auteur)
         {
             indicepill++;
@@ -50,7 +50,7 @@ tab_auteur_struct get_top_auteur(const tab_auteur_struct * tout_auteur,int topX)
 
     for (int i = 0; i < tout_auteur->nombre_auteur; i++)
     {
-        progressbar(i,tout_auteur->nombre_auteur);
+        PROGRESSBAR(i,tout_auteur->nombre_auteur);
         if (pile[indicepill%topX].size < tout_auteur->tab_auteur[i].size)
         {
             indicepill++;

@@ -82,6 +82,7 @@ int main()
 
     // printList_auteur(graph1.tab_auteur_struct);
 
+    
 
     find_Article("A",graph.tab_Article_struct);
 
