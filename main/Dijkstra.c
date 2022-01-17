@@ -64,6 +64,8 @@ plus_court_chemin_struct reconstitution_du_pcc_apres_parcours(int* taille_pcc_pt
     //printf("%d\n", *taille_pcc_ptr);
 
     plus_court_chemin.pcc_tab_ptr_auteur= malloc(sizeof(auteur_struct*)**taille_pcc_ptr);
+    printf("p: %p\n", plus_court_chemin.pcc_tab_ptr_auteur);
+
     exitIfNull(plus_court_chemin.pcc_tab_ptr_auteur,"echec malloc pcc_tab_ptr_auteur"); 
 
     
@@ -335,17 +337,10 @@ void free_Dijkstra(graphe_struct* graphe_struct, plus_court_chemin_struct *pcc_p
 {
     
     if(pcc_ptr!= NULL)
-    {
-        for(int i=0; i< pcc_ptr->size_pcc_auteur; i++)
-        {
-            free(pcc_ptr->pcc_tab_ptr_auteur);
-        }
-        for(int i=0; i< pcc_ptr->size_pcc_Article; i++)
-        {
-            free(pcc_ptr->pcc_tab_ptr_Article);
-        }
+    {  
+        free(pcc_ptr->pcc_tab_ptr_auteur);
+        free(pcc_ptr->pcc_tab_ptr_Article);
         free(pcc_ptr);
-
     }
 
 
@@ -357,7 +352,6 @@ void free_Dijkstra(graphe_struct* graphe_struct, plus_court_chemin_struct *pcc_p
 
     free(graphe_struct->graphe);
 
-    
 
 
 }
@@ -395,7 +389,7 @@ int main(void)
 
     print_chemins_auteur_et_Artice(plus_court_chemin);
 
-    free_Dijkstra(&mon_graphe, plus_court_chemin);
+   //free_Dijkstra(&mon_graphe, plus_court_chemin);
     
     
 
