@@ -1,6 +1,6 @@
 
-#ifndef LIST_HEADER_GUARD
-#define LIST_HEADER_GUARD
+#ifndef LIST_H
+#define LIST_H
 #include <stddef.h>
 typedef struct ll_list ll_list;
 

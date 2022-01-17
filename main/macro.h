@@ -1,5 +1,5 @@
-#ifndef MACROH
-#define MACROH
+#ifndef MACRO_H
+#define MACRO_H
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -19,15 +19,18 @@
 
 #define origineXML               "DATA/dblp.xml"
 #define customXML               "DATA/custom.xml"
-#define smallorigineXML          "DATA/dblp1sur8.xml"
+#define smallorigineXML          "DATA/dblpSmall.xml"
 #define Katie           "DATA/test_Katie.xml"
 #define cache_fiche             "DATA/SerializedStruc.data"
-#define small_fiche_cache        "DATA/Serialzed1000.data"
+#define cache_ficheO             "DATA/SerializedStrucKatie.data"
+#define small_fiche_cache        "DATA/SerialzedSmall.data"
 #define custom_fiche_cache       "DATA/customfichecache.data"
 #define auteur_cache       "DATA/SerializedStrucInverse.data"
-#define small_auteur_cache  "DATA/SerializedStrucInverse1000.data"
+#define auteur_cacheO       "DATA/SerializedStrucInverseKatie.data"
+#define small_auteur_cache  "DATA/SerializedStrucInverseSmall.data"
 #define custom_auteur_cache  "DATA/SerializedStrucInverseCustom.data"
 #define Article_cache               "DATA/SerializedStrucArticle.data"
+#define Article_cacheO               "DATA/SerializedStrucArticleKatie.data"
 #define custom_Article_cache      "DATA/SerializedStrucArticleCustom.data"
 #define small_Article_cache      "DATA/small_article.data"
 
@@ -73,8 +76,7 @@
 #define YOLO(...);
 #endif
 
-
-#define ERROR(...) RED() fprintf(stderr,"\033[K\t"); fprintf(stderr, __VA_ARGS__); CLRCOLOR() fprintf(stderr,"\n");
+#define ERROR(...) RED() fprintf(stderr,"\033[K\t"); fprintf(stderr, __VA_ARGS__); CLRCOLOR() ; fprintf(stderr,"\n");
 
 #define exitIfNull(p,...)\
 if (!p)\

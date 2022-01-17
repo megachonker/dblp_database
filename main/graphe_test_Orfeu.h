@@ -1,5 +1,5 @@
-#ifndef _graphe_test_
-#define _graphe_test_
+#ifndef GRAPHE_TEST_ORFEU_H
+#define GRAPHE_TEST_ORFEU_H
 
 #include <stdio.h>
 #include "unwrap.h"
