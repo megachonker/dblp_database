@@ -1451,3 +1451,6 @@ main/LcovRapport/main/macro.c.gcov.html
 main/LcovRapport/main/search.c.func-sort-c.html
 main/LcovRapport/main/search.c.func.html
 main/LcovRapport/main/search.c.gcov.html
+main/Dijkstra.gcda
+main/Dijkstra.gcno
+main/Dijkstra.o

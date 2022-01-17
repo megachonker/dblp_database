@@ -268,7 +268,7 @@ plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcour
 
 
 //renvoie le tableau des ptr vers les auteur_struct du chemin de auteur_1 (a1) a auteur_2 (a2)
-plus_court_chemin_struct* Dijkstra(graphe_struct graphe_t, char* nom_auteur_1, char* nom_auteur_2)
+plus_court_chemin_struct* do_Dijkstra(graphe_struct graphe_t, char* nom_auteur_1, char* nom_auteur_2)
 {
     //verification de la presence de a1 et a2 dans le graphe
 
@@ -355,38 +355,47 @@ void free_Dijkstra(graphe_struct* graphe_struct, plus_court_chemin_struct *pcc_p
         free(graphe_struct->graphe[k]->ptr_auteur_predecesseur_pcc);
     }
 
+    free(graphe_struct->graphe);
+
     
 
 
 }
 
+
+
+void print_chemins_auteur_et_Artice(plus_court_chemin_struct* pcc)
+{
+    if(pcc!=NULL)
+    {
+        printf("chemin auteur: \n");
+        for(int i=0; i< pcc->size_pcc_auteur; i++)
+        {
+            printf("%s\n", pcc->pcc_tab_ptr_auteur[i]->nom_auteur);
+        }
+        printf("\n\n chemin Article\n");
+        for(int i=0; i< pcc->size_pcc_Article; i++)
+        {
+            printf("%s\n", pcc->pcc_tab_ptr_Article[i]->nom_Article);
+        }
+    }
+}
+
 //je test Dijkstra sur mon graphe test en affichant les noms des auteurs du plus court chemin de a0 a a9
 int main(void)
 {   
-    FILE* graphe_test_Katie= fopen("DATA/test_graphe_fil.xml", "r");
+    FILE* graphe_test_Katie= fopen("DATA/test_Katie.xml", "r");
 
     graphe_struct mon_graphe= faire_graphe_ptr_auteur(graphe_test_Katie);
 
     fclose(graphe_test_Katie);
     
     
-    plus_court_chemin_struct* plus_court_chemin=  Dijkstra(mon_graphe,"a0", "a5");
+    plus_court_chemin_struct* plus_court_chemin=  do_Dijkstra(mon_graphe,"a4", "a9");
 
-    if(plus_court_chemin!=NULL)
-    {
-        printf("chemin auteur: \n");
-        for(int i=0; i< plus_court_chemin->size_pcc_auteur; i++)
-        {
-            printf("%s\n", plus_court_chemin->pcc_tab_ptr_auteur[i]->nom_auteur);
-        }
-        printf("\n\n chemin Article\n");
-        for(int i=0; i< plus_court_chemin->size_pcc_Article; i++)
-        {
-            printf("%s\n", plus_court_chemin->pcc_tab_ptr_Article[i]->nom_Article);
-        }
-    }
+    print_chemins_auteur_et_Artice(plus_court_chemin);
 
-    //free_Dijkstra(&mon_graphe, plus_court_chemin);
+    free_Dijkstra(&mon_graphe, plus_court_chemin);
     
     
 

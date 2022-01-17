@@ -6,7 +6,7 @@
 #include "list.h"
 #include <stdlib.h>
 #include "fonctions_graphe.h"
-#include<string.h>
+#include <string.h>
 
 typedef enum comparaison_auteur_1
 {
@@ -37,8 +37,10 @@ typedef struct plus_court_chemin_struct
 }plus_court_chemin_struct;
 
 
-plus_court_chemin_struct* Dijkstra(graphe_struct graphe_t, char* nom_auteur_1, char* nom_auteur_2);
+plus_court_chemin_struct* do_Dijkstra(graphe_struct graphe_t, char* nom_auteur_1, char* nom_auteur_2);
 
 void free_Dijkstra(graphe_struct* graphe_t, plus_court_chemin_struct *pcc_ptr);
+
+void print_chemins_auteur_et_Artice(plus_court_chemin_struct* pcc);
 
 #endif
