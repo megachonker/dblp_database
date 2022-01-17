@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "fonctions_graphe.h"
 #include "unwrap.h"
-
+#include "fonctions_graphe.h"
 
 
 
@@ -42,6 +41,74 @@ graphe_struct faire_graphe_ptr_auteur(FILE *file_xml)
     return graphe_struct;
 }
 
+
+//Je vérifie que les auteurs du chemin sont bien voisins 2 à 2 dans l'ordre du chemin
+//et que les Articles du pcc sont bien cohérent avec le pcc auteur
+void verifier_do_Dijkstra(plus_court_chemin_struct* pcc)
+{
+    pcc_struct_verification pcc_verif;
+    pcc_verif.tab_verif_auteur= malloc(sizeof(char*)*pcc->size_pcc_auteur);
+    pcc_verif.tab_verif_Article= malloc(sizeof(char*)*pcc->size_pcc_Article);
+    
+   
+    pcc_verif.tab_verif_auteur[0]= "OK";
+
+    for(int k=0; k< pcc->size_pcc_auteur-1; k++) //pour tout les auteurs ak du pcc
+    {
+
+        comparaison_auteur trouver_ou_pas_1= auteur_pas_trouver;
+        comparaison_Article trouver_ou_pas_2= Article_pas_trouver;
+
+        auteur_struct* ak_ptr= pcc->pcc_tab_ptr_auteur[k];
+        auteur_struct* prochain_ak_ptr= pcc->pcc_tab_ptr_auteur[k+1];
+
+        
+        for(int l=0; l< ak_ptr->size; l++) //pour tout les Articles Al de ak
+        {
+            
+            Article_struct* Al_ptr= ak_ptr->tab_ptr_Article[l];
+
+            if(Al_ptr== pcc->pcc_tab_ptr_Article[k])
+            {
+                trouver_ou_pas_2= Article_trouver;
+                pcc_verif.tab_verif_Article[k]= "OK";
+            }
+                
+            for(int v=0; v< Al_ptr->nombre_auteur; v++)
+            {
+                auteur_struct* voisin_de_ak_ptr= Al_ptr->tab_ptr_auteur[v];
+                if(voisin_de_ak_ptr== prochain_ak_ptr)
+                {
+                    trouver_ou_pas_1= auteur_trouver;
+                    pcc_verif.tab_verif_auteur[k+1]= "OK";
+                }
+
+
+            }
+        }
+        if(trouver_ou_pas_2== Article_pas_trouver)
+            pcc_verif.tab_verif_Article[k]= "NON";
+        if(trouver_ou_pas_1== auteur_pas_trouver)
+            pcc_verif.tab_verif_auteur[k]= "NON";
+
+    }
+
+    printf("%s\n", "elements de pcc auteur:");
+    for(int i=0; i< pcc->size_pcc_auteur; i++)
+    {
+        printf("[%s]\n", pcc_verif.tab_verif_auteur[i]);
+    }
+
+    printf("%s\n", "elements de pcc Article:");
+    for(int i=0; i< pcc->size_pcc_Article; i++)
+    {
+        printf("[%s]\n", pcc_verif.tab_verif_Article[i]);
+    }
+
+
+    free(pcc_verif.tab_verif_auteur);
+    free(pcc_verif.tab_verif_Article);
+}
 
 
 

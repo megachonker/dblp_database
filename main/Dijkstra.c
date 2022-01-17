@@ -1,9 +1,11 @@
+
+
 #include <stdio.h>
 #include "unwrap.h"
 #include <stdlib.h>
 #include <string.h>
-#include "Dijkstra.h"
 #include "fonctions_graphe.h"
+#include "Dijkstra.h"
 
 void print_pile_courante(int* pile_indice, int size, auteur_struct** graphe)
 {
@@ -167,9 +169,9 @@ void traitement_auteur_courant_et_mise_a_jour_pile_suivante(int* pile_suivante, 
 plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcourir(auteur_struct* ptr_auteur_depart, auteur_struct* ptr_auteur_destination, char* nom_auteur_depart, graphe_struct graphe_t)
 {
     //les piles, sont des tableau d'indice d'auteur, indice dans le graphe
-    int* pile_auteur_a_traiter_etape_courante= malloc(sizeof(int)*1000000);
+    int* pile_auteur_a_traiter_etape_courante= malloc(sizeof(int)*1000000000);
     exitIfNull(pile_auteur_a_traiter_etape_courante, "echec malloc pile_auteur_a_traiter_etape_courante");
-    int* pile_suivante= malloc(sizeof(int)*1000000);
+    int* pile_suivante= malloc(sizeof(int)*1000000000);
     exitIfNull(pile_suivante, "echec malloc pile_suivante");
 
     pile_auteur_a_traiter_etape_courante[0]= ptr_auteur_depart->indice_dans_le_graphe;
@@ -378,16 +380,24 @@ void print_chemins_auteur_et_Artice(plus_court_chemin_struct* pcc)
 //je test Dijkstra sur mon graphe test en affichant les noms des auteurs du plus court chemin de a0 a a9
 int main(void)
 {   
-    FILE* graphe_test_Katie= fopen("DATA/test_Katie.xml", "r");
+    FILE* graphe_test_Katie= fopen("DATA", "r");
 
     graphe_struct mon_graphe= faire_graphe_ptr_auteur(graphe_test_Katie);
 
     fclose(graphe_test_Katie);
     
+    //char* nom_auteur_depart= mon_graphe.graphe[1344]->nom_auteur;
+    //printf("nom auteur_depart: %s\n", nom_auteur_depart);
+    //char* nom_auteur_destination= mon_graphe.graphe[8888]->nom_auteur;
+    //printf("nom auteur_destination: %s\n", nom_auteur_destination);
     
-    plus_court_chemin_struct* plus_court_chemin=  do_Dijkstra(mon_graphe,"a4", "a9");
+
+
+    plus_court_chemin_struct* plus_court_chemin=  do_Dijkstra(mon_graphe, "a4", "a9");
 
     print_chemins_auteur_et_Artice(plus_court_chemin);
+
+    verifier_do_Dijkstra(plus_court_chemin);
 
    //free_Dijkstra(&mon_graphe, plus_court_chemin);
     
