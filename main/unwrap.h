@@ -37,7 +37,6 @@ typedef struct auteur_struct
     //ajoue d'Katie de ce qui est utile pour Dijkstra
     struct auteur_struct* ptr_auteur_predecesseur_pcc; //auteur predecesseur dans le plus court chemin
     struct Article_struct* ptr_Article_predecesseur_pcc; //auteur predecesseur dans le plus court chemin
-    int size_pcc_auteur; //taille du plus court chemin (pcc) en auteur, allant jusqu'a l'auteur en
     int indice_dans_le_graphe; //graphe: tableau de pointeur utilisé dans Dijkstra
     int size_pcc_auteur; // distance en nombre d'auteur pour passer de l'auteur de depart a l'auteur d'arriver
     
