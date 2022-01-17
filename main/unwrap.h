@@ -30,6 +30,10 @@ typedef struct auteur_struct
     fiche_minimale ** tab_ptr_fiche_min;///<tableaux dynamique d'adresse pointant sur des structure contenant oeuvre
     int size;                           ///<taille du tableaux dynamique
     
+
+    struct auteur_struct * auteur_parent;
+
+
     //ajoue d'Katie de ce qui est utile pour Dijkstra
     struct auteur_struct* ptr_auteur_predecesseur_pcc; //auteur predecesseur dans le plus court chemin
     struct Article_struct* ptr_Article_predecesseur_pcc; //auteur predecesseur dans le plus court chemin
