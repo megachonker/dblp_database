@@ -66,7 +66,7 @@ plus_court_chemin_struct reconstitution_du_pcc_apres_parcours(int* taille_pcc_pt
     //printf("%d\n", *taille_pcc_ptr);
 
     plus_court_chemin.pcc_tab_ptr_auteur= malloc(sizeof(auteur_struct*)**taille_pcc_ptr);
-    printf("p: %p\n", plus_court_chemin.pcc_tab_ptr_auteur);
+    //printf("p: %p\n", plus_court_chemin.pcc_tab_ptr_auteur);
 
     exitIfNull(plus_court_chemin.pcc_tab_ptr_auteur,"echec malloc pcc_tab_ptr_auteur"); 
 
@@ -169,9 +169,9 @@ void traitement_auteur_courant_et_mise_a_jour_pile_suivante(int* pile_suivante, 
 plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcourir(auteur_struct* ptr_auteur_depart, auteur_struct* ptr_auteur_destination, char* nom_auteur_depart, graphe_struct graphe_t)
 {
     //les piles, sont des tableau d'indice d'auteur, indice dans le graphe
-    int* pile_auteur_a_traiter_etape_courante= malloc(sizeof(int)*1000000000);
+    int* pile_auteur_a_traiter_etape_courante= malloc(sizeof(int)*1000000);
     exitIfNull(pile_auteur_a_traiter_etape_courante, "echec malloc pile_auteur_a_traiter_etape_courante");
-    int* pile_suivante= malloc(sizeof(int)*1000000000);
+    int* pile_suivante= malloc(sizeof(int)*1000000);
     exitIfNull(pile_suivante, "echec malloc pile_suivante");
 
     pile_auteur_a_traiter_etape_courante[0]= ptr_auteur_depart->indice_dans_le_graphe;
@@ -362,13 +362,10 @@ void free_Dijkstra(graphe_struct* graphe_struct, plus_court_chemin_struct *pcc_p
 
 void print_chemins_auteur_et_Artice(plus_court_chemin_struct* pcc)
 {
-    if(pcc!=NULL)
-//je test Dijkstra sur mon graphe test en affichant les noms des auteurs du plus court chemin de a0 a a9
-int main(void)
-{   
+    
     graphe_struct mon_graphe= faire_graphe_ptr_auteur();
     
-    plus_court_chemin_struct* plus_court_chemin=  Dijkstra(mon_graphe," algorithm.", "Azzedine Boukerche");
+    plus_court_chemin_struct* plus_court_chemin= do_Dijkstra( mon_graphe," algorithm.", "Azzedine Boukerche");
 
     if(plus_court_chemin!=NULL)
     {
@@ -399,13 +396,18 @@ int main(void)
     //char* nom_auteur_destination= mon_graphe.graphe[8888]->nom_auteur;
     //printf("nom auteur_destination: %s\n", nom_auteur_destination);
     
+    char* nom_auteur_depart= mon_graphe.graphe[1234]->nom_auteur;
+    char* nom_auteur_destination= mon_graphe.graphe[1234]->nom_auteur;
 
+    plus_court_chemin_struct* plus_court_chemin=  do_Dijkstra(mon_graphe, nom_auteur_depart, nom_auteur_destination);
 
-    plus_court_chemin_struct* plus_court_chemin=  do_Dijkstra(mon_graphe, "a4", "a9");
+    
+    if(plus_court_chemin!= NULL)
+    {
+        print_chemins_auteur_et_Artice(plus_court_chemin);
 
-    print_chemins_auteur_et_Artice(plus_court_chemin);
-
-    verifier_do_Dijkstra(plus_court_chemin);
+        verifier_do_Dijkstra(plus_court_chemin);
+    }
 
    //free_Dijkstra(&mon_graphe, plus_court_chemin);
     
