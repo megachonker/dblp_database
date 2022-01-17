@@ -1,7 +1,10 @@
-#ifndef UNWRAP
-#define UNWRAP
+#ifndef UNWRAP_H
+#define UNWRAP_H
 #include "parsing.h"
 #include "macro.h"
+
+
+
 
 /**
  * @brief couple nom_auteur <=> oeuvre
@@ -187,7 +190,5 @@ tab_Article_struct * convertTab_auteur2Article(const tab_auteur_struct * Malista
 tab_auteur_struct * gen_tab_auteur_from_xml(FILE * dbinput);
 
 void test_exploration_Article(const tab_Article_struct * mesarticle);
-
-tab_auteur_struct * gen_tab_auteur_from_xml_et_liaison_article(FILE * dbinput);
 
 #endif

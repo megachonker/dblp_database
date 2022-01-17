@@ -10,7 +10,11 @@ enum{
     dblp,
     smalldblp,
     customdb,
-    Katie des argument preselectioner pour toute les fonction 1 defaut dblp 2 dblp1000 3 custom
+    Katie    lecture,
+    ecriture
+};
+
+//fair des argument preselectioner pour toute les fonction 1 defaut dblp 2 dblp1000 3 custom
 
 /* Liste Des Fonction TEST a Appeler */
 
@@ -227,106 +231,160 @@ void bench_all(){
 
 /* Selection de la fonction */
 
+typedef struct listeFichier
+{
+    FILE * XML;
+    FILE * DBficheLecture;
+    FILE * DBauteurLecture;
+    FILE * DBArticleLecture;
+    FILE * DBficheEcriture;
+    FILE * DBauteurEcriture;
+    FILE * DBArticleEcriture;
+    int mode;
+}listeFichier;
+
+void closeall(listeFichier fichiers){
+    fclose(fichiers.XML);
+    if (fichiers.mode == lecture)
+    {
+        fclose(fichiers.DBficheLecture);
+        fclose(fichiers.DBauteurLecture);
+        fclose(fichiers.DBArticleLecture);
+    }else{
+        fclose(fichiers.DBficheEcriture);
+        fclose(fichiers.DBauteurEcriture);
+        fclose(fichiers.DBArticleEcriture);
+    }
+}
+
+listeFichier openDB(int type,int mode){
+    listeFichier listefile;
+    listefile.XML = NULL;
+    listefile.DBficheLecture = NULL;
+    listefile.DBauteurLecture = NULL;
+    listefile.DBArticleLecture = NULL;
+    listefile.DBficheEcriture = NULL;
+    listefile.DBauteurEcriture = NULL;
+    listefile.DBArticleEcriture = NULL;
+    listefile.mode=mode;
+    
+    switch (type)
+    {
+    case dblp:
+
+    listefile.XML               = fopen(origineXML      ,"r");        
+        if(mode == ecriture){
+            listefile.DBficheEcriture   = fopen(cache_fiche     ,"w");
+            listefile.DBauteurEcriture  = fopen(auteur_cache    ,"w");
+            listefile.DBArticleEcriture = fopen(Article_cache   ,"w");
+        }
+        else{
+            listefile.DBficheLecture    = fopen(cache_fiche     ,"r");
+            listefile.DBauteurLecture   = fopen(auteur_cache    ,"r");
+            listefile.DBArticleLecture  = fopen(Article_cache   ,"r");
+        }
+        break;
+    case smalldblp:
+        listefile.XML               = fopen(smallorigineXML    ,"r");
+        if(mode == ecriture){
+            listefile.DBficheEcriture   = fopen(small_fiche_cache  ,"w");
+            listefile.DBauteurEcriture  = fopen(small_auteur_cache ,"w");
+            listefile.DBArticleEcriture = fopen(small_Article_cache,"w");
+        }
+        else{
+            listefile.DBficheLecture    = fopen(small_fiche_cache  ,"r");
+            listefile.DBauteurLecture   = fopen(small_auteur_cache ,"r");
+            listefile.DBArticleLecture  = fopen(small_Article_cache,"r");
+        }
+        break;
+    case customdb:
+        listefile.XML               = fopen(customXML              ,"r");
+        if(mode == ecriture){
+            listefile.DBficheEcriture   = fopen(custom_fiche_cache     ,"w");
+            listefile.DBauteurEcriture  = fopen(custom_auteur_cache    ,"w");
+            listefile.DBArticleEcriture = fopen(custom_Article_cache   ,"w");
+        }
+        else{
+            listefile.DBficheLecture    = fopen(custom_fiche_cache     ,"r");
+            listefile.DBauteurLecture   = fopen(custom_auteur_cache    ,"r");
+            listefile.DBArticleLecture  = fopen(custom_Article_cache   ,"r");
+        }
+        break;
+    case Katie:
+        listefile.XML               = fopen(Katie      ,"r");
+        if(mode == ecriture){
+            listefile.DBficheEcriture   = fopen(cache_ficheO     ,"w");
+            listefile.DBauteurEcriture  = fopen(auteur_cacheO    ,"w");
+            listefile.DBArticleEcriture = fopen(Article_cacheO   ,"w");
+        }
+        else{
+            listefile.DBficheLecture    = fopen(cache_ficheO     ,"r");
+            listefile.DBauteurLecture   = fopen(auteur_cacheO    ,"r");
+            listefile.DBArticleLecture  = fopen(Article_cacheO   ,"r");
+        }
+        break;   
+    default:
+        ERROR("mauvais mode de base")
+        break;
+    }
+        exitIfNull(listefile.XML              ,"erreur ouverture bd %s.",origineXML);
+    if (mode == lecture)
+    {
+        exitIfNull(listefile.DBficheLecture   ,"erreur ouverture bd %s.",cache_fiche);
+        exitIfNull(listefile.DBauteurLecture  ,"erreur ouverture bd %s.",auteur_cache);
+        exitIfNull(listefile.DBArticleLecture ,"erreur ouverture bd %s.",Article_cache);
+    }else{
+        exitIfNull(listefile.DBficheEcriture  ,"erreur ouverture bd %s.",cache_fiche);
+        exitIfNull(listefile.DBauteurEcriture ,"erreur ouverture bd %s.",auteur_cache);
+        exitIfNull(listefile.DBArticleEcriture,"erreur ouverture bd %s.",Article_cache);
+    }
+    return listefile;
+}
+
 int main(int argc, char const *argv[])
 {
     const char * compstr = argv[1];
 
     if (argc == 3)
     {
-        FILE * XML                  = NULL ;
-        FILE * DBficheLecture       = NULL ;
-        FILE * DBauteurLecture      = NULL ;
-        FILE * DBArticleLecture     = NULL ;
-        FILE * DBficheEcriture      = NULL ;
-        FILE * DBauteurEcriture     = NULL ;
-        FILE * DBArticleEcriture    = NULL ;
+        int basenb = atoi(argv[2]);
 
+        //Faire un switch
+        if(strcmp("sg",compstr)==0){
+            listeFichier mesfichier = openDB(basenb,ecriture);
+            serialise_Graph(gen_Graph_from_XML(mesfichier.XML),
+                mesfichier.DBficheEcriture,
+                mesfichier.DBauteurEcriture,
+                mesfichier.DBArticleEcriture);
+            closeall(mesfichier);
+        }
 
-        switch (atoi(argv[2]))
+        if (strcmp("graph_xml",compstr)==0)
         {
-        case dblp:
-            XML               = fopen(origineXML      ,"r");
-            DBficheLecture    = fopen(cache_fiche     ,"r");
-            DBauteurLecture   = fopen(auteur_cache    ,"r");
-            DBArticleLecture  = fopen(Article_cache   ,"r");
-            // DBficheEcriture   = fopen(cache_fiche     ,"w");
-            // DBauteurEcriture  = fopen(auteur_cache    ,"w");
-            // DBArticleEcriture = fopen(Article_cache   ,"w");
-            break;
-        case smalldblp:
-            XML               = fopen(smallorigineXML     ,"r");
-            DBficheLecture    = fopen(small_fiche_cache  ,"r");
-            DBauteurLecture   = fopen(small_auteur_cache ,"r");
-            DBArticleLecture  = fopen(small_Article_cache,"r");
-            DBficheEcriture   = fopen(small_fiche_cache  ,"w");
-            DBauteurEcriture  = fopen(small_auteur_cache ,"w");
-            DBArticleEcriture = fopen(small_Article_cache,"w");
-            break;
-        case customdb:
-            XML               = fopen(customXML              ,"r");
-            DBficheLecture    = fopen(custom_fiche_cache     ,"r");
-            DBauteurLecture   = fopen(custom_auteur_cache    ,"r");
-            DBArticleLecture  = fopen(custom_Article_cache   ,"r");
-            DBficheEcriture   = fopen(custom_fiche_cache     ,"w");
-            DBauteurEcriture  = fopen(custom_auteur_cache    ,"w");
-            DBArticleEcriture = fopen(custom_Article_cache   ,"w");
-            break;
-        case Katie:
-            XML               = fopen(Katie      ,"r");
-            DBficheLecture    = fopen(cache_fiche     ,"r");
-            DBauteurLecture   = fopen(auteur_cache    ,"r");
-            DBArticleLecture  = fopen(Article_cache   ,"r");
-            DBficheEcriture   = fopen(cache_fiche     ,"w");
-            DBauteurEcriture  = fopen(auteur_cache    ,"w");
-            DBArticleEcriture = fopen(Article_cache   ,"w");
-            break;   
-        default:
-            break;
+            listeFichier mesfichier = openDB(basenb,lecture);
+            printList_Article(gen_Graph_from_XML(mesfichier.XML).tab_Article_struct);
+            closeall(mesfichier);
         }
-        exitIfNull(XML              ,"erreur ouverture bd %s.",origineXML)
-
-
-        exitIfNull(DBficheEcriture  ,"erreur ouverture bd %s.",cache_fiche)
-        exitIfNull(DBauteurEcriture ,"erreur ouverture bd %s.",auteur_cache)
-        exitIfNull(DBArticleEcriture,"erreur ouverture bd %s.",Article_cache)
-
+        
         //Faire un switch
-        if(strcmp("serialize_graph",compstr)==0){
-            serialise_Graph(gen_Graph_from_XML(XML),
-                DBficheEcriture,
-                DBauteurEcriture,
-                DBArticleEcriture);
-        }
-
-        exitIfNull(DBficheLecture   ,"erreur ouverture bd %s.",cache_fiche)
-        exitIfNull(DBauteurLecture  ,"erreur ouverture bd %s.",auteur_cache)
-        exitIfNull(DBArticleLecture ,"erreur ouverture bd %s.",Article_cache)
-
-        //Faire un switch
-        if(strcmp("deserialize_graph",compstr)==0){
+        if(strcmp("dg",compstr)==0){
+            listeFichier mesfichier = openDB(basenb,lecture);
             deserialise_Graph(
-                DBficheEcriture,
-                DBauteurEcriture,
-                DBArticleEcriture);
+                mesfichier.DBficheLecture,
+                mesfichier.DBauteurLecture,
+                mesfichier.DBArticleLecture);
+            closeall(mesfichier);
         }
 
         CLRLINE()
-
-        // fclose(DBficheEcriture);
-        // fclose(DBauteurEcriture);
-        // fclose(DBArticleEcriture);
-        // fclose(DBficheEcriture);
-        // fclose(DBauteurEcriture);
-        // fclose(DBArticleEcriture);
-
         return 0;
+
     }else if (argc != 2)
     {
         //laide qui vien de abench
         printf("PAS BIEN OPTION");
         return 1;
     }
-
 
     //Faire un switch
     if(strcmp("readb",compstr)==0){

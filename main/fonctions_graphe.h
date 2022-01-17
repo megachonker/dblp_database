@@ -47,7 +47,7 @@ typedef struct pcc_struct_verification
 
 void verifier_do_Dijkstra(struct plus_court_chemin_struct* pcc);
 
-graphe_struct faire_graphe_ptr_auteur(FILE *file_xml);
+graphe_struct faire_graphe_ptr_auteur();
 
 
 

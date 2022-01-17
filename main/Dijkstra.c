@@ -363,6 +363,14 @@ void free_Dijkstra(graphe_struct* graphe_struct, plus_court_chemin_struct *pcc_p
 void print_chemins_auteur_et_Artice(plus_court_chemin_struct* pcc)
 {
     if(pcc!=NULL)
+//je test Dijkstra sur mon graphe test en affichant les noms des auteurs du plus court chemin de a0 a a9
+int main(void)
+{   
+    graphe_struct mon_graphe= faire_graphe_ptr_auteur();
+    
+    plus_court_chemin_struct* plus_court_chemin=  Dijkstra(mon_graphe," algorithm.", "Azzedine Boukerche");
+
+    if(plus_court_chemin!=NULL)
     {
         printf("chemin auteur: \n");
         for(int i=0; i< pcc->size_pcc_auteur; i++)

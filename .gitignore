@@ -1454,3 +1454,9 @@ main/LcovRapport/main/search.c.gcov.html
 main/Dijkstra.gcda
 main/Dijkstra.gcno
 main/Dijkstra.o
+main/DATA/SerializedStrucArticleKatie.data
+main/DATA/SerializedStrucInverseKatie.data
+main/DATA/SerializedStrucInverseSmall.data
+main/DATA/SerializedStrucKatie.data
+main/DATA/SerialzedSmall.data
+main/DATA/dblpSmall.xml
