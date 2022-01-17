@@ -3,7 +3,7 @@
 #include "macro.h"
 #include "search.h"
 #include <string.h>
-// unwrap_Graph_struct * graph;
+// Graph_struct * graph;
 
 
 // search(char * auteurA, char * auteurB){
@@ -74,7 +74,7 @@ tab_auteur_struct get_top_auteur(const tab_auteur_struct * tout_auteur,int topX)
     return top_auteur;
 }
 
-void scoarboard(const unwrap_Graph_struct * mongraph ,const int getwhat ,const int nbentrer){
+void scoarboard(const Graph_struct * mongraph ,const int getwhat ,const int nbentrer){
     switch (getwhat)
     {
     case TOP_Article:
@@ -134,7 +134,7 @@ void printPile(const pille_auteur * pile){
     }
     GREEN();printf("+");repchar('-',largeurmax-2);printf("+\n\n\n\n");CLRCOLOR();
 }
-
+                                                //passer une 2eme
 void explore(auteur_struct * auteurAexplorer, pille_auteur * pille){
     //on visite les article
     for (int i = 0; i < auteurAexplorer->nbArticlecontenue; i++)
@@ -159,7 +159,7 @@ void explore(auteur_struct * auteurAexplorer, pille_auteur * pille){
 
 #define TAILLE_DEPARD 10
 
-void parcour_largeur(const unwrap_Graph_struct graph){
+void parcour_largeur(const Graph_struct graph){
 
     auteur_struct * tabaddresseauteur = calloc(TAILLE_DEPARD,sizeof(pille_auteur*));
     exitIfNull(tabaddresseauteur,"imposible initialiser tableaux addresse")
@@ -179,3 +179,7 @@ void parcour_largeur(const unwrap_Graph_struct graph){
         pile.pointeur++;
     }
 }
+
+
+
+//FAIRE SEARCH

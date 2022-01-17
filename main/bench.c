@@ -171,7 +171,7 @@ void local_deserialise_Graph(){
     fclose(DBArticleLecture);
 }
 
-unwrap_Graph_struct local_gen_Graph_from_XML(){
+Graph_struct local_gen_Graph_from_XML(){
     FILE * XML               = fopen(origineXML      ,"r");
     exitIfNull(XML  ,"erreur ouverture bd")
     return gen_Graph_from_XML(XML);
@@ -180,7 +180,7 @@ unwrap_Graph_struct local_gen_Graph_from_XML(){
 
 void local_serialise_Graph(){
 
-    unwrap_Graph_struct graph = local_gen_Graph_from_XML();
+    Graph_struct graph = local_gen_Graph_from_XML();
 
     FILE * DBficheEcriture   = fopen(cache_fiche     ,"w");
     FILE * DBauteurEcriture  = fopen(auteur_cache    ,"w");
@@ -196,7 +196,7 @@ void local_serialise_Graph(){
 
 }
 
-unwrap_Graph_struct local_gen_custom_Graph_from_XML(){
+Graph_struct local_gen_custom_Graph_from_XML(){
     FILE * XML               = fopen(customXML      ,"r");
     exitIfNull(XML  ,"erreur ouverture bd")
     return gen_Graph_from_XML(XML);
@@ -206,7 +206,7 @@ unwrap_Graph_struct local_gen_custom_Graph_from_XML(){
 
 void local_custom_serialise_Graph(){
 
-    unwrap_Graph_struct graph = local_gen_Graph_from_XML();
+    Graph_struct graph = local_gen_Graph_from_XML();
 
     FILE * DBficheEcriture   = fopen(custom_fiche_cache     ,"w");
     FILE * DBauteurEcriture  = fopen(custom_auteur_cache    ,"w");
@@ -359,10 +359,10 @@ int main(int argc, char const *argv[])
             closeall(mesfichier);
         }
 
-        if (strcmp("graph_xml",compstr)==0)
+        if (strcmp("gxml",compstr)==0)
         {
             listeFichier mesfichier = openDB(basenb,lecture);
-            printList_Article(gen_Graph_from_XML(mesfichier.XML).tab_Article_struct);
+            gen_Graph_from_XML(mesfichier.XML);
             closeall(mesfichier);
         }
         

@@ -25,7 +25,7 @@ graphe_struct faire_graphe_ptr_auteur()
     FILE * DBArticleLecture = fopen(Article_cache   ,"r");
 
 
-    unwrap_Graph_struct mongraph = deserialise_Graph(DBficheLecture
+    Graph_struct mongraph = deserialise_Graph(DBficheLecture
                                     ,DBauteurLecture
                                     ,DBArticleLecture);
 
