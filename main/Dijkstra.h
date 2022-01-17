@@ -1,5 +1,5 @@
-#ifndef _DIJKSTRA_
-#define _DIJKSTRA_
+#ifndef DIJKSTRA_H
+#define DIJKSTRA_H
 
 #include <stdio.h>
 #include "unwrap.h"

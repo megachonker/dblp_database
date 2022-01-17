@@ -363,14 +363,9 @@ void free_Dijkstra(graphe_struct* graphe_struct, plus_court_chemin_struct *pcc_p
 //je test Dijkstra sur mon graphe test en affichant les noms des auteurs du plus court chemin de a0 a a9
 int main(void)
 {   
-    FILE* graphe_test_Katie= fopen("DATA/test_graphe_fil.xml", "r");
-
-    graphe_struct mon_graphe= faire_graphe_ptr_auteur(graphe_test_Katie);
-
-    fclose(graphe_test_Katie);
+    graphe_struct mon_graphe= faire_graphe_ptr_auteur();
     
-    
-    plus_court_chemin_struct* plus_court_chemin=  Dijkstra(mon_graphe,"a0", "a5");
+    plus_court_chemin_struct* plus_court_chemin=  Dijkstra(mon_graphe," algorithm.", "Azzedine Boukerche");
 
     if(plus_court_chemin!=NULL)
     {
