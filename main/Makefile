@@ -1,9 +1,13 @@
 CCA ?= cc -O0
 CFLAGS ?= -Wall -Wextra -g
-LDLIBS ?= -lm -pthread -ftest-coverage -fprofile-arcs
+LDLIBS ?= 
+# -lm -pthread -ftest-coverage -fprofile-arcs
 # -lm -pthread
 
 #gcc -shared -o libfoo.so foo.o
+
+go:	tests custom
+	./tests
 
 explargeur: Dijkstra abench.sh
 	./Dijkstra
@@ -11,14 +15,15 @@ explargeur: Dijkstra abench.sh
 graphe: fonctions_graphe abench.sh
 	./fonctions_graphe
 
-go:	tests abench.sh
-	./tests
+
 
 abench.sh: bench gen_cache_data
 
-val:	abench.sh
+val:	bench 
 	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./bench dg 1
 	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./bench sg 1
+	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./bench gxml 1
+	
 bench:	bench.o parsing.o list.o unwrap.o macro.o
 	$(CCA) -o bench  $^ $(CFLAGS) $(LDLIBS)
 
@@ -41,7 +46,7 @@ main:	main.o parsing.o macro.o
 # 	$(CCA) -o $@ -c $< $(CFLAGS)
 
 raport: bench.c parsing.c unwrap.c macro.c search.c
-	$(CCA) -O0 -o GCOVtests  $^ $(CFLAGS) $(LDLIBS)
+	$(CCA) -O0 -o GCOVtests  $^ $(CFLAGS) -ftest-coverage -fprofile-arcs
 	./GCOVtests graph_xml 1
 	./GCOVtests sg 1
 	./GCOVtests dg 1
@@ -54,9 +59,9 @@ doc:
 	doxygen Doxyfile
 	firefox html/index.html
 
-callgrind:	abench.sh
+callgrind:	bench graphSmall
 	valgrind --dump-instr=yes --collect-jumps=yes --tool=callgrind --callgrind-out-file=callgrind_trace__unwrap_deserialise_Article	./bench sg 1
-	valgrind --dump-instr=yes --collect-jumps=yes --tool=callgrind --callgrind-out-file=callgrind_trace__gen_tab_Article_from_xml	./bench sg 1
+	valgrind --dump-instr=yes --collect-jumps=yes --tool=callgrind --callgrind-out-file=callgrind_trace__gen_tab_Article_from_xml	./bench dg 1
 	kcachegrind callgrind_trace__unwrap_deserialise_Article
 	kcachegrind callgrind_trace__gen_tab_Article_from_xml
 	# rm callgrind_trace_gen_unwrap_Graph
@@ -99,11 +104,11 @@ DATA/dblpSmall.xml: DATA/dblp.xml
 
 # DATA/dblp.xml DATA/SerializedStruc.data DATA/SerializedStrucInverse.data DATA/SerializedStrucArticle.data
 
-gen_cache_data: graphXML graphSmall graphTest graphTest2
+gen_cache_data: graphXML graphSmall custom graphTest2
 
 graphXML: DATA/SerializedStruc.data DATA/SerializedStrucInverse.data DATA/SerializedStrucArticle.data 
 graphSmall: DATA/SerialzedSmall.data DATA/SerializedStrucInverseSmall.data DATA/small_article.data
-graphTest: DATA/customfichecache.data DATA/SerializedStrucInverseCustom.data DATA/SerializedStrucArticleCustom.data
+custom: DATA/customfichecache.data DATA/SerializedStrucInverseCustom.data DATA/SerializedStrucArticleCustom.data
 graphTest2: DATA/SerializedStrucKatie.data DATA/SerializedStrucInverseKatie.data DATA/SerializedStrucArticleKatie.data
 
 DATA/SerializedStruc.data: bench DATA/dblp.xml

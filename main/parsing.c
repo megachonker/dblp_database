@@ -180,6 +180,7 @@ tableaux_fiche parse(FILE * inputDB){
     tableaux_fiche tableaux_allfiche;
     tableaux_allfiche.taille = 0;
     tableaux_allfiche.fiche = NULL;
+    tableaux_allfiche.nbAuteurXarticle = 0;
 
     //premierre fiche
     fiche_minimale * fichelocalM = NULL;
@@ -290,7 +291,7 @@ tableaux_fiche * deserialisation_tableaux_fiche(FILE * input){
 
     //read tailletotal
 
-    tableaux_fiche * tableaux_allfiche = malloc(sizeof(tableaux_fiche));//valgrind leak 
+    tableaux_fiche * tableaux_allfiche = calloc(1,sizeof(tableaux_fiche));//valgrind leak 
     exitIfNull(tableaux_allfiche,"deserialisation:imposible d'alouer le tableaux de toute les fiche\n")
     tableaux_allfiche->taille = 0;//<=  = tailletotal
     tableaux_allfiche->nbAuteurXarticle = 0;

@@ -6,6 +6,7 @@ enum{
     TOP_auteur
 };
 
-void scoarboard(const unwrap_Graph_struct * mongraph ,const int getwhat ,const int nbentrer);
-void parcour_largeur(const unwrap_Graph_struct graph);
+void scoarboard(const Graph_struct * mongraph ,const int getwhat ,const int nbentrer);
+void parcour_largeur(const Graph_struct graph);
+char * find_Article(char * querry, tab_Article_struct * tabarticle);
 #endif
