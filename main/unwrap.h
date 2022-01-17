@@ -24,16 +24,24 @@ struct Article_struct;
 typedef struct auteur_struct
 {
     struct Article_struct ** tab_ptr_Article; ///La magie qui pointe sur  Article_struct
-    int nbelementmagi;      ///<compteur d'élément Article_struct
+    int nbArticlecontenue;      ///<compteur d'élément Article_struct
+    int indiceDeCreation;
     char * nom_auteur;
     fiche_minimale ** tab_ptr_fiche_min;///<tableaux dynamique d'adresse pointant sur des structure contenant oeuvre
     int size;                           ///<taille du tableaux dynamique
     
+
+    struct auteur_struct * auteur_parent;
+
+
     //ajoue d'Katie de ce qui est utile pour Dijkstra
     struct auteur_struct* ptr_auteur_predecesseur_pcc; //auteur predecesseur dans le plus court chemin
     struct Article_struct* ptr_Article_predecesseur_pcc; //auteur predecesseur dans le plus court chemin
     int size_pcc_auteur; //taille du plus court chemin (pcc) en auteur, allant jusqu'a l'auteur en
     int indice_dans_le_graphe; //graphe: tableau de pointeur utilisé dans Dijkstra
+    int size_pcc_auteur; // distance en nombre d'auteur pour passer de l'auteur de depart a l'auteur d'arriver
+    
+    int nbmembreTabarticleALOUER;
 }auteur_struct;
 
 /**

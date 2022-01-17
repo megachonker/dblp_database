@@ -8,7 +8,7 @@ LDLIBS ?= -lm -pthread -ftest-coverage -fprofile-arcs
 Dijkstra: Dijkstra
 	./Dijkstra
 
-fonctions_graphe: fonctions_graphe
+graphe: fonctions_graphe
 	./fonctions_graphe
 
 go:	tests abench.sh
@@ -22,7 +22,7 @@ val:	abench.sh
 bench:	bench.o parsing.o list.o unwrap.o macro.o
 	$(CCA) -o bench  $^ $(CFLAGS) $(LDLIBS)
 
-tests:	tests.o parsing.o list.o unwrap.o macro.o
+tests:	tests.o parsing.o list.o unwrap.o macro.o search.o
 	$(CCA) -o tests  $^ $(CFLAGS) $(LDLIBS)
 
 Dijkstra: Dijkstra.o unwrap.o parsing.o macro.o fonctions_graphe.o
@@ -40,15 +40,12 @@ main:	main.o parsing.o macro.o
 # %.gcno: %.c
 # 	$(CCA) -o $@ -c $< $(CFLAGS)
 
-raport: bench.c parsing.c list.c unwrap.c
+raport: bench.c parsing.c unwrap.c macro.c search.c
 	$(CCA) -O0 -o GCOVtests  $^ $(CFLAGS) $(LDLIBS)
-	./GCOVtests unwrwap_deserialise
-	./GCOVtests serialized
-	./GCOVtests unwrwap_gen_cache
-	./GCOVtests serializedsmall
-	./GCOVtests unwrwap_gen_cache_small
-	./GCOVtests unwrwap_gen_cache_small
-	gcov -abcfu bench.c parsing.c list.c unwrap.c
+	./GCOVtests gen_graph_from_XML
+	./GCOVtests serialise_Graph
+	./GCOVtests deserialise_Graph
+	gcov -abcfu bench.c parsing.c unwrap.c macro.c search.c
 	lcov --capture --directory . --output-file coverage.info
 	genhtml coverage.info --output-directory LcovRapport
 	firefox LcovRapport/main/index.html
@@ -58,8 +55,8 @@ doc:
 	firefox html/index.html
 
 callgrind:	abench.sh
-	valgrind --dump-instr=yes --collect-jumps=yes --tool=callgrind --callgrind-out-file=callgrind_trace__unwrap_deserialise_Article	./bench unwrap_deserialise_Article
-	valgrind --dump-instr=yes --collect-jumps=yes --tool=callgrind --callgrind-out-file=callgrind_trace__gen_tab_Article_from_xml	./bench gen_tab_Article_from_xml
+	valgrind --dump-instr=yes --collect-jumps=yes --tool=callgrind --callgrind-out-file=callgrind_trace__unwrap_deserialise_Article	./bench serialise_Graph
+	valgrind --dump-instr=yes --collect-jumps=yes --tool=callgrind --callgrind-out-file=callgrind_trace__gen_tab_Article_from_xml	./bench deserialise_Graph
 	kcachegrind callgrind_trace__unwrap_deserialise_Article
 	kcachegrind callgrind_trace__gen_tab_Article_from_xml
 	# rm callgrind_trace_gen_unwrap_Graph
