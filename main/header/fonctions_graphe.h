@@ -2,8 +2,8 @@
 #define FONCTIONS_GRAPHE
 
 #include <stdio.h>
-#include "unwrap.h"
-#include "list.h"
+#include "../header/unwrap.h"
+#include "../header/list.h"
 #include <stdlib.h>
 #include <string.h>
 

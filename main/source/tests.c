@@ -1,15 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "unwrap.h"
+#include "../header/unwrap.h"
 
 #include <string.h>
 // #include <pthread.h>
 #include <assert.h>
 
 
-#include "macro.h"
+#include "../header/macro.h"
 
-#include "search.h"
+#include "../header/search.h"
 
 //écrire des int dans un fichier
 
@@ -39,7 +39,7 @@ int main()
 
     // FILE * XML               = fopen(origineXML      ,"r");
     // exitIfNull(XML  ,"erreur ouverture bd")
-    // unwrap_Graph_struct graph= gen_Graph_from_XML(XML);
+    // Graph_struct graph= gen_Graph_from_XML(XML);
     // fclose(XML);
 
     // INFO("tests:Serialisation")
@@ -58,12 +58,12 @@ int main()
 
     INFO("tests:deserialisation")
 
-    FILE * DBficheLecture   = fopen(cache_fiche     ,"r");
-    FILE * DBauteurLecture  = fopen(auteur_cache    ,"r");
-    FILE * DBArticleLecture = fopen(Article_cache   ,"r");
+    FILE * DBficheLecture   = fopen(custom_fiche_cache     ,"r");
+    FILE * DBauteurLecture  = fopen(custom_auteur_cache    ,"r");
+    FILE * DBArticleLecture = fopen(custom_Article_cache   ,"r");
 
 
-    unwrap_Graph_struct graph1 = deserialise_Graph(DBficheLecture
+    Graph_struct graph = deserialise_Graph(DBficheLecture
                                     ,DBauteurLecture
                                     ,DBArticleLecture);
 
@@ -82,7 +82,11 @@ int main()
 
     // printList_auteur(graph1.tab_auteur_struct);
 
+    
 
+    find_Article("A",graph.tab_Article_struct);
+
+    parcour_largeur(graph);
     // test_exploration_Article(graph1.tab_Article_struct);
 
 

@@ -1,4 +1,4 @@
-#include "macro.h"
+#include "../header/macro.h"
 
 #include <stdio.h>
 #include <stdlib.h>

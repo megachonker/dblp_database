@@ -1,19 +1,8 @@
 #include <stdio.h>
-#include "unwrap.h"
-#include "macro.h"
-#include "search.h"
+#include "../header/unwrap.h"
+#include "../header/macro.h"
+#include "../header/search.h"
 #include <string.h>
-// unwrap_Graph_struct * graph;
-
-
-// search(char * auteurA, char * auteurB){
-
-// }
-
-// sort(){
-
-// }
-
 
 /**
  * @brief Get the top Article object
@@ -35,7 +24,7 @@ tab_Article_struct get_top_Article(const tab_Article_struct * tout_article,int t
 
     for (int i = 0; i < tout_article->nombre_Article; i++)
     {
-        progressbar(i,tout_article->nombre_Article);
+        PROGRESSBAR(i,tout_article->nombre_Article);
         if (pile[indicepill%topX].nombre_auteur < tout_article->tab_Article[i].nombre_auteur)
         {
             indicepill++;
@@ -61,7 +50,7 @@ tab_auteur_struct get_top_auteur(const tab_auteur_struct * tout_auteur,int topX)
 
     for (int i = 0; i < tout_auteur->nombre_auteur; i++)
     {
-        progressbar(i,tout_auteur->nombre_auteur);
+        PROGRESSBAR(i,tout_auteur->nombre_auteur);
         if (pile[indicepill%topX].size < tout_auteur->tab_auteur[i].size)
         {
             indicepill++;
@@ -74,7 +63,7 @@ tab_auteur_struct get_top_auteur(const tab_auteur_struct * tout_auteur,int topX)
     return top_auteur;
 }
 
-void scoarboard(const unwrap_Graph_struct * mongraph ,const int getwhat ,const int nbentrer){
+void scoarboard(const Graph_struct * mongraph ,const int getwhat ,const int nbentrer){
     switch (getwhat)
     {
     case TOP_Article:
@@ -134,12 +123,13 @@ void printPile(const pille_auteur * pile){
     }
     GREEN();printf("+");repchar('-',largeurmax-2);printf("+\n\n\n\n");CLRCOLOR();
 }
-
+                                                //passer une 2eme
 void explore(auteur_struct * auteurAexplorer, pille_auteur * pille){
     //on visite les article
     for (int i = 0; i < auteurAexplorer->nbArticlecontenue; i++)
     {
         //on visite les auteur
+        WARNING("Auteur: %s",auteurAexplorer->tab_ptr_Article[i]->nom_Article);
         for (int u = 0; u < auteurAexplorer->tab_ptr_Article[i]->nombre_auteur; u++)
         {
             DEBUG("exploration de: %s",auteurAexplorer->tab_ptr_Article[i]->tab_ptr_auteur[u]->nom_auteur)
@@ -148,6 +138,8 @@ void explore(auteur_struct * auteurAexplorer, pille_auteur * pille){
                 break;
             //on marque comme visiter
             auteurAexplorer->tab_ptr_Article[i]->tab_ptr_auteur[u]->auteur_parent = auteurAexplorer;
+            DEBUG("parent=>%s\n\tenfant:%s",auteurAexplorer->nom_auteur,auteurAexplorer->tab_ptr_Article[i]->tab_ptr_auteur[u]->auteur_parent->nom_auteur);
+            DEBUG("marquage:%p<=%p",auteurAexplorer->tab_ptr_Article[i]->tab_ptr_auteur[u]->auteur_parent,auteurAexplorer);
             //on ajoute a la pille
             pille->auteur[pille->pointeur] = auteurAexplorer->tab_ptr_Article[i]->tab_ptr_auteur[u];
             pille->nmemb_auteur++;
@@ -159,7 +151,9 @@ void explore(auteur_struct * auteurAexplorer, pille_auteur * pille){
 
 #define TAILLE_DEPARD 10
 
-void parcour_largeur(const unwrap_Graph_struct graph){
+//fonction pour réalouer 
+
+void parcour_largeur(const Graph_struct graph){
 
     auteur_struct * tabaddresseauteur = calloc(TAILLE_DEPARD,sizeof(pille_auteur*));
     exitIfNull(tabaddresseauteur,"imposible initialiser tableaux addresse")
@@ -170,12 +164,46 @@ void parcour_largeur(const unwrap_Graph_struct graph){
     pille_auteur pile ={.auteur=&tabaddresseauteur,
                         .nmemb_alouer=TAILLE_DEPARD,
                         .nmemb_auteur=1};
-
-    for (int i = 0; i < pile.nmemb_auteur; i++)
+    printPile(&pile);
+    for (size_t i = 0; i < pile.nmemb_auteur; i++)
     {
         explore(pile.auteur[i],&pile);
         //on libere l'emplacement dans la pille
         pile.auteur[i] = NULL;
         pile.pointeur++;
+        DEBUG("on avance de 1")
+        printPile(&pile);
     }
 }
+
+
+
+char * find_Article(char * querry, tab_Article_struct * tabarticle){
+    INFO("FIND Article:")
+    char out[BALISESIZE];
+    char machaine[BALISESIZE] = ".*";
+    strcat(machaine,querry);
+    DEBUG("querry: %s machaine %s",querry,machaine);
+    strcat(machaine,".*");
+    DEBUG("machaine: %s",machaine);
+
+    printList_Article(tabarticle);
+    // for (int i = 0; i < tabarticle->nombre_Article; i++)
+    // {
+    //     printf("%s %i %i",tabarticle->tab_article[i]->,i,tabarticle->nombre_Article);
+    //     // PROGRESSBAR(i,10000);
+    //     // if (sscanf(tabarticle->tab_Article[i].nom_Article,machaine,out)){
+                // printf("%out")
+    //     // }
+    //         // DEBUG("%s constenue dans %s",machaine,tabarticle->tab_Article[i].nom_Article)
+    // }
+    
+
+}
+// char * find_auteur(const char * querry, const tab_auteur_struct * tabauteur){
+//     for (int i = 0; i < tabauteur->nombre_auteur; i++)
+//     {
+//         sscanf(tabauteur->tab_auteur[i].nom_auteur,querry);
+//     }
+    
+// }

@@ -4,10 +4,10 @@
 #define _DIJKSTRA_H
 
 #include <stdio.h>
-#include "unwrap.h"
-#include "list.h"
+#include "../header/unwrap.h"
+#include "../header/list.h"
 #include <stdlib.h>
-#include "fonctions_graphe.h"
+#include "../header/fonctions_graphe.h"
 #include <string.h>
 
 typedef enum comparaison_auteur_1

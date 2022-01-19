@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "unwrap.h"
-#include "fonctions_graphe.h"
+#include "../header/unwrap.h"
+#include "../header/fonctions_graphe.h"
 
 
 
@@ -25,7 +25,8 @@ graphe_struct faire_graphe_ptr_auteur()
     FILE * DBArticleLecture = fopen(Article_cache   ,"r");
 
 
-    unwrap_Graph_struct mon_graph = deserialise_Graph(DBficheLecture
+    //ancienne ligne: unwrap_Graph_struct mon_graph = deserialise_Graph(DBficheLecture
+    Graph_struct mon_graph = deserialise_Graph(DBficheLecture
                                     ,DBauteurLecture
                                     ,DBArticleLecture);
 

@@ -11,7 +11,7 @@
  * 
  * 
  */
-typedef struct fiche_minimale
+typedef struct free_tab_fiche
 {
     char * titre;           ///< renomer par article ?
     //< date de création ?
@@ -96,6 +96,6 @@ tableaux_fiche * deserialisation_tableaux_fiche(FILE * input);
  * 
  * @param DEGAGE 
  */
-void parsing_free(tableaux_fiche * DEGAGE);
+void free_tab_fiche(tableaux_fiche * DEGAGE);
 
 #endif

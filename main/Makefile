@@ -1,51 +1,58 @@
 CCA ?= cc -O0
 CFLAGS ?= -Wall -Wextra -g
-LDLIBS ?= -lm -pthread -ftest-coverage -fprofile-arcs
+LDLIBS ?= 
+
+PATH_BIN	?= bin/
+PATH_HEADER	?= header/
+PATH_SOURCE	?= source/
+PATH_BUILD	?= build/
+# -lm -pthread -ftest-coverage -fprofile-arcs
 # -lm -pthread
 
 #gcc -shared -o libfoo.so foo.o
 
-explargeur: Dijkstra abench.sh
-	./Dijkstra
+# go:	tests custom
+# 	./tests
 
-graphe: fonctions_graphe abench.sh
-	./fonctions_graphe
+# explargeur: Dijkstra abench.sh
+# 	./Dijkstra
 
-go:	tests abench.sh
-	./tests
+# graphe: fonctions_graphe abench.sh
+# 	./fonctions_graphe
+# $(PATH_HEADER)
 
-abench.sh: bench gen_cache_data
 
-val:	abench.sh
-	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./bench dg 1
-	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./bench sg 1
-bench:	bench.o parsing.o list.o unwrap.o macro.o
-	$(CCA) -o bench  $^ $(CFLAGS) $(LDLIBS)
+abench.sh: $(PATH_BIN)bench gen_cache_data
 
-tests:	tests.o parsing.o list.o unwrap.o macro.o search.o
-	$(CCA) -o tests  $^ $(CFLAGS) $(LDLIBS)
-
-Dijkstra: Dijkstra.o unwrap.o parsing.o macro.o fonctions_graphe.o
-	$(CCA) -o Dijkstra $^ $(CFLAGS) $(LDLIBS)
+val:	bench gsmall
+	# valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./$(PATH_BIN)bench dg 2
+	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./$(PATH_BIN)bench sg 2
+	# valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./$(PATH_BIN)bench gxml 2
 	
-fonctions_graphe: fonctions_graphe.o unwrap.o  parsing.o macro.o
-	$(CCA) -o fonctions_graphe $^ $(CFLAGS) $(LDLIBS)
+$(PATH_BIN)bench:	$(PATH_BUILD)bench.o $(PATH_BUILD)parsing.o $(PATH_BUILD)list.o $(PATH_BUILD)unwrap.o $(PATH_BUILD)macro.o
+	$(CCA) -o $(PATH_BIN)bench  $^ $(CFLAGS) $(LDLIBS)
 
-main:	main.o parsing.o macro.o
-	$(CCA) -o main  $^ $(CFLAGS) $(LDLIBS)
+$(PATH_BIN)tests:	$(PATH_BUILD)tests.o $(PATH_BUILD)parsing.o $(PATH_BUILD)list.o $(PATH_BUILD)unwrap.o $(PATH_BUILD)macro.o $(PATH_BUILD)search.o
+	$(CCA) -o $(PATH_BIN)tests  $^ $(CFLAGS) $(LDLIBS)
 
-%.o: %.c
+$(PATH_BIN)Dijkstra: $(PATH_BUILD)Dijkstra.o $(PATH_BUILD)unwrap.o $(PATH_BUILD)parsing.o $(PATH_BUILD)macro.o $(PATH_BUILD)fonctions_graphe.o
+	$(CCA) -o $(PATH_BIN)Dijkstra $^ $(CFLAGS) $(LDLIBS)
+	
+$(PATH_BIN)fonctions_graphe: $(PATH_BUILD)fonctions_graphe.o $(PATH_BUILD)unwrap.o  $(PATH_BUILD)parsing.o macro.o
+	$(CCA) -o $(PATH_BIN)fonctions_graphe $^ $(CFLAGS) $(LDLIBS)
+
+$(PATH_BIN)main:	$(PATH_BUILD)main.o $(PATH_BUILD)parsing.o $(PATH_BUILD)macro.o
+	$(CCA) -o $(PATH_BIN)main  $^ $(CFLAGS) $(LDLIBS)
+
+$(PATH_BUILD)%.o: $(PATH_SOURCE)%.c
 	$(CCA) -o $@ -c $< $(CFLAGS) $(LDLIBS)
 
-# %.gcno: %.c
-# 	$(CCA) -o $@ -c $< $(CFLAGS)
-
-raport: bench.c parsing.c unwrap.c macro.c search.c
-	$(CCA) -O0 -o GCOVtests  $^ $(CFLAGS) $(LDLIBS)
+raport: $(PATH_SOURCE)bench.c $(PATH_SOURCE)parsing.c $(PATH_SOURCE)unwrap.c $(PATH_SOURCE)macro.c $(PATH_SOURCE)search.c
+	$(CCA) -O0 -o GCOVtests  $^ $(CFLAGS) -ftest-coverage -fprofile-arcs
 	./GCOVtests graph_xml 1
 	./GCOVtests sg 1
 	./GCOVtests dg 1
-	gcov -abcfu bench.c parsing.c unwrap.c macro.c search.c
+	gcov -abcfu $(PATH_SOURCE)bench.c $(PATH_SOURCE)parsing.c $(PATH_SOURCE)unwrap.c $(PATH_SOURCE)macro.c $(PATH_SOURCE)search.c
 	lcov --capture --directory . --output-file coverage.info
 	genhtml coverage.info --output-directory LcovRapport
 	firefox LcovRapport/main/index.html
@@ -54,9 +61,9 @@ doc:
 	doxygen Doxyfile
 	firefox html/index.html
 
-callgrind:	abench.sh
-	valgrind --dump-instr=yes --collect-jumps=yes --tool=callgrind --callgrind-out-file=callgrind_trace__unwrap_deserialise_Article	./bench sg 1
-	valgrind --dump-instr=yes --collect-jumps=yes --tool=callgrind --callgrind-out-file=callgrind_trace__gen_tab_Article_from_xml	./bench sg 1
+callgrind:	bench gsmall
+	valgrind --dump-instr=yes --collect-jumps=yes --tool=callgrind --callgrind-out-file=callgrind_trace__unwrap_deserialise_Article	./$(PATH_BIN)bench sg 1
+	valgrind --dump-instr=yes --collect-jumps=yes --tool=callgrind --callgrind-out-file=callgrind_trace__gen_tab_Article_from_xml	./$(PATH_BIN)bench dg 1
 	kcachegrind callgrind_trace__unwrap_deserialise_Article
 	kcachegrind callgrind_trace__gen_tab_Article_from_xml
 	# rm callgrind_trace_gen_unwrap_Graph
@@ -77,71 +84,75 @@ DATA/dblpSmall.xml: DATA/dblp.xml
 
 # #regénère tout les fichier lier a bench quand un .o change Ces regretabkle donc on enleve bench par .O
 # DATA/SerializedStruc.data:	DATA/dblp.xml parsing.o
-# 	./bench serialized
+# 	./$(PATH_BIN)benchserialized
 
 # DATA/SerialzedSmall.data: 	DATA/dblpSmall.xml parsing.o
-# 	./bench serializedsmall
+# 	./$(PATH_BIN)benchserializedsmall
 
 # DATA/SerializedStrucInverseSmall.data:	DATA/SerialzedSmall.data 
 # #unwrap.o
-# 	./bench unwrwap_gen_cache_small
+# 	./$(PATH_BIN)benchunwrwap_gen_cache_small
 
 # #LA
 # DATA/SerializedStrucInverse.data: DATA/SerializedStruc.data 
 # #unwrap.o
-# 	./bench unwrwap_gen_cache
+# 	./$(PATH_BIN)benchunwrwap_gen_cache
 
 # DATA/SerializedStrucArticle.data: DATA/SerializedStruc.data 
 # #unwrap.o
-# 	./bench unwrap_serialise_Article
+# 	./$(PATH_BIN)benchunwrap_serialise_Article
 
 # gen_cache_data: DATA/dblp.xml DATA/dblpSmall.xml DATA/SerializedStrucInverse.data DATA/SerialzedSmall.data DATA/SerializedStruc.data DATA/SerializedStrucInverseSmall.data DATA/SerializedStrucArticle.data
 
 # DATA/dblp.xml DATA/SerializedStruc.data DATA/SerializedStrucInverse.data DATA/SerializedStrucArticle.data
 
-gen_cache_data: graphXML graphSmall graphTest graphTest2
+gen_cache_data: graphXML gsmall custom graphTest2
 
-graphXML: DATA/SerializedStruc.data DATA/SerializedStrucInverse.data DATA/SerializedStrucArticle.data 
-graphSmall: DATA/SerialzedSmall.data DATA/SerializedStrucInverseSmall.data DATA/small_article.data
-graphTest: DATA/customfichecache.data DATA/SerializedStrucInverseCustom.data DATA/SerializedStrucArticleCustom.data
+graphXML: 	DATA/SerializedStruc.data DATA/SerializedStrucInverse.data DATA/SerializedStrucArticle.data 
+gsmall: 	DATA/SerialzedSmall.data DATA/SerializedStrucInverseSmall.data DATA/small_article.data
+custom: 	DATA/customfichecache.data DATA/SerializedStrucInverseCustom.data DATA/SerializedStrucArticleCustom.data
 graphTest2: DATA/SerializedStrucKatie.data DATA/SerializedStrucInverseKatie.data DATA/SerializedStrucArticleKatie.data
 
-DATA/SerializedStruc.data: bench DATA/dblp.xml
-	./bench sg 0
-DATA/SerializedStrucInverse.data: bench
-	./bench sg 0
-DATA/SerializedStrucArticle.data: bench
-	./bench sg 0
+DATA/SerializedStruc.data: $(PATH_BIN)bench DATA/dblp.xml 
+	./$(PATH_BIN)bench sg 0
+DATA/SerializedStrucInverse.data: $(PATH_BIN)bench DATA/SerializedStruc.data
+	./$(PATH_BIN)bench sg 0
+DATA/SerializedStrucArticle.data: $(PATH_BIN)bench DATA/SerializedStrucInverse.data
+	./$(PATH_BIN)bench sg 0
 
-DATA/SerialzedSmall.data: DATA/dblpSmall.xml bench
-	./bench sg 1
-DATA/SerializedStrucInverseSmall.data: bench
-	./bench sg 1
-DATA/small_article.data: bench
-	./bench sg 1
+DATA/SerialzedSmall.data: DATA/dblpSmall.xml $(PATH_BIN)bench
+	./$(PATH_BIN)bench sg 1
+DATA/SerializedStrucInverseSmall.data: $(PATH_BIN)bench DATA/SerialzedSmall.data
+	./$(PATH_BIN)bench sg 1
+DATA/small_article.data: $(PATH_BIN)bench DATA/SerializedStrucInverseSmall.data
+	./$(PATH_BIN)bench sg 1
 
-DATA/customfichecache.data: bench DATA/custom.xml
-	./bench sg 2
-DATA/SerializedStrucInverseCustom.data: bench
-	./bench sg 2
-DATA/SerializedStrucArticleCustom.data: bench
-	./bench sg 2
+DATA/customfichecache.data: $(PATH_BIN)bench DATA/custom.xml
+	./$(PATH_BIN)bench sg 2
+DATA/SerializedStrucInverseCustom.data: $(PATH_BIN)bench DATA/customfichecache.data
+	./$(PATH_BIN)bench sg 2
+DATA/SerializedStrucArticleCustom.data: $(PATH_BIN)bench DATA/SerializedStrucInverseCustom.data
+	./$(PATH_BIN)bench sg 2
 
-DATA/SerializedStrucKatie.data: bench DATA/test_Katie.xml
-	./bench sg 3
-DATA/SerializedStrucInverseKatie.data: bench
-	./bench sg 3
-DATA/SerializedStrucArticleKatie.data: bench
-	./bench sg 3
+DATA/SerializedStrucKatie.data: $(PATH_BIN)bench DATA/test_Katie.xml
+	./$(PATH_BIN)bench sg 3
+DATA/SerializedStrucInverseKatie.data: $(PATH_BIN)bench DATA/SerializedStrucKatie.data
+	./$(PATH_BIN)bench sg 3
+DATA/SerializedStrucArticleKatie.data: $(PATH_BIN)bench DATA/SerializedStrucInverseKatie.data
+	./$(PATH_BIN)bench sg 3
 
 r:	clean go
 rr:	cleanall go
+c:clean
+cc:cleanall
+
 clean:
-	rm -f  *.o *.so *.gcno *.gcda *.gch *.gcov coverage.info vgcore.*
-	rm -fr tests bench main GCOVtests LcovRapport html latex
+	rm -f  $(PATH_BUILD)*.o $(PATH_BUILD)*.so $(PATH_BUILD)*.gcno $(PATH_BUILD)*.gcda $(PATH_BUILD)*.gch $(PATH_BUILD)*.gcov coverage.info vgcore.*
+	rm -fr bench tests bench main GCOVtests LcovRapport html latex Dijkstra
 # Update
 cleanall: clean 
-	rm -f 	DATA/SerializedStruc.data\
+	rm -f 	DATA/dblpSmall.xml\
+			DATA/SerializedStruc.data\
 			DATA/SerializedStrucInverse.data\
 			DATA/SerializedStrucArticle.data\
 			DATA/SerialzedSmall.data\
