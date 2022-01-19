@@ -24,7 +24,7 @@ PATH_BUILD	?= build/
 
 abench.sh: $(PATH_BIN)bench gen_cache_data
 
-val:	bench gsmall
+val:	$(PATH_BIN)bench gsmall
 	# valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./$(PATH_BIN)bench dg 2
 	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./$(PATH_BIN)bench sg 2
 	# valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./$(PATH_BIN)bench gxml 2
