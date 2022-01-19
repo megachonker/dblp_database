@@ -197,15 +197,19 @@ plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcour
     ptr_auteur_depart->size_pcc_auteur= 0;
     
     
+    int compteurprofondeur = 0;
     
     int taille_pcc=1; //=profondeur du parcour en largeur (à la fin, =taille du plus court chemin)
     int* taille_pcc_ptr= &taille_pcc;
+    DEBUG("Exploration profondeur: ")
     while(pile_auteur_a_traiter_etape_courante[0]!= -1)
     {
-        
-        printf("rentrer dans le while\n");    
+        fprintf(stderr,"\033[100D\t\t");
+        GREEN();fprintf(stderr,"couche %d...",compteurprofondeur);
+        // printf("rentrer dans le while\n");    
         //printf("%d\n", *taille_pcc_ptr);
-        
+                compteurprofondeur++;
+
         for(int i=0; i< *haut_de_pile_courante_ptr; i++)
         {
             //printf("%s\n", "rentrer dans le for");
@@ -227,6 +231,7 @@ plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcour
 
 
                 //printf("à la base: %d\n", *taille_pcc_ptr);
+                // réelment nécesaire de faire un maloc ?
                 plus_court_chemin_struct* pcc_ptr= malloc(sizeof(plus_court_chemin_struct));
                 exitIfNull(pcc_ptr, "echec malloc pcc_ptr");
                 *pcc_ptr= reconstitution_du_pcc_apres_parcours(taille_pcc_ptr, ptr_auteur_destination);
@@ -280,20 +285,11 @@ plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcour
         //    printf("val %d pile_courante: %d\n", k, pile_auteur_a_traiter_etape_courante[k]);
         //}
         //printf("fin d'une étape profondeur\n");
-        
-        
-        
-         
-
-        
-       
-            
-
     
     }
     free(pile_auteur_a_traiter_etape_courante);
     free(pile_suivante);
-    printf("Il n'y a pas de chemin entre %s et %s\n", nom_auteur_depart, ptr_auteur_destination->nom_auteur);
+    WARNING("Il n'y a pas de chemin entre %s et %s\n", nom_auteur_depart, ptr_auteur_destination->nom_auteur);
     return NULL;
 }
 
@@ -366,9 +362,9 @@ plus_court_chemin_struct* do_Dijkstra(graphe_struct_Katie graphe_t, char* nom_au
 
 
 
-void free_Dijkstra(graphe_struct_Katie* graphe_struct, plus_court_chemin_struct *pcc_ptr)
+void free_Dijkstra(graphe_struct_Katie graphe_struct, plus_court_chemin_struct *pcc_ptr)
 {
-    
+    INFO("Free Dijkstra ")
     if(pcc_ptr!= NULL)
     {  
         free(pcc_ptr->pcc_tab_ptr_auteur);
@@ -377,14 +373,11 @@ void free_Dijkstra(graphe_struct_Katie* graphe_struct, plus_court_chemin_struct 
     }
 
 
-    for(int k=0; k< graphe_struct->size_graphe; k++)
-    {
-        free(graphe_struct->graphe[k]->ptr_Article_predecesseur_pcc);
-        free(graphe_struct->graphe[k]->ptr_auteur_predecesseur_pcc);
-    }
-
-    free(graphe_struct->graphe);
-
+    // for(int k=0; k< graphe_struct.size_graphe; k++)
+    // {
+    //     free(graphe_struct.graphe[k]->ptr_Article_predecesseur_pcc);
+    //     free(graphe_struct.graphe[k]->ptr_auteur_predecesseur_pcc);
+    // }
 
 
 }
@@ -398,15 +391,15 @@ void print_chemins_auteur_et_Artice(plus_court_chemin_struct* pcc)
 
     if(pcc!=NULL)
     {
-        printf("chemin auteur: \n");
+        WARNING("chemin auteur:");
         for(int i=0; i< pcc->size_pcc_auteur; i++)
         {
-            printf("%s\n", pcc->pcc_tab_ptr_auteur[i]->nom_auteur);
+            GREY();fprintf(stderr,"\t\t\t%s\n", pcc->pcc_tab_ptr_auteur[i]->nom_auteur);CLRCOLOR();
         }
-        printf("\n\n chemin Article\n");
+        WARNING("chemin Article");
         for(int i=0; i< pcc->size_pcc_Article; i++)
         {
-            printf("%s\n", pcc->pcc_tab_ptr_Article[i]->nom_Article);
+            GREY();fprintf(stderr,"\t\t\t%s\n", pcc->pcc_tab_ptr_Article[i]->nom_Article);CLRCOLOR();
         }
     }
 }

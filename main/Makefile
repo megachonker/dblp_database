@@ -19,22 +19,23 @@ abench.sh: genfolder $(PATH_BIN)bench gen_cache_data
 go:	genfolder $(PATH_BIN)tests custom
 	./$(PATH_BIN)tests
 
-Dijkstra: abench.sh $(PATH_BIN)Dijkstra
-	./$(PATH_BIN)Dijkstra
+Dijkstra: genfolder $(PATH_BIN)bench
+	./$(PATH_BIN)bench dik 1 15
 
 val:	genfolder $(PATH_BIN)bench
 	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./$(PATH_BIN)bench sg 1
 	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./$(PATH_BIN)bench dg 1
 
-	
-raport: $(PATH_SOURCE)bench.c $(PATH_SOURCE)parsing.c $(PATH_SOURCE)unwrap.c $(PATH_SOURCE)macro.c $(PATH_SOURCE)search.c $(PATH_SOURCE)Dijkstra.c $(PATH_SOURCE)fonctions_graphe.c
+raport:	genfolder rp
+rp: $(PATH_SOURCE)bench.c $(PATH_SOURCE)parsing.c $(PATH_SOURCE)unwrap.c $(PATH_SOURCE)macro.c $(PATH_SOURCE)search.c $(PATH_SOURCE)Dijkstra.c $(PATH_SOURCE)fonctions_graphe.c
 	$(CCA) -O0 -o $(PATH_DEBUG)GCOVtests  $^ $(CFLAGS) -ftest-coverage -fprofile-arcs
 	./$(PATH_DEBUG)GCOVtests sg 1
 	./$(PATH_DEBUG)GCOVtests dg 1
+	./$(PATH_DEBUG)GCOVtests dik 1 1
 	gcov -abcfu $(PATH_SOURCE)bench.c $(PATH_SOURCE)parsing.c $(PATH_SOURCE)unwrap.c $(PATH_SOURCE)macro.c $(PATH_SOURCE)search.c
 	lcov --capture --directory $(PATH_DEBUG) --output-file $(PATH_DEBUG)coverage.info
 	genhtml $(PATH_DEBUG)coverage.info --output-directory $(PATH_DEBUG)LcovRapport
-	firefox $(PATH_DEBUG)LcovRapport/main/index.html
+	firefox $(PATH_DEBUG)LcovRapport/index.html
 
 doc:
 	doxygen Doxyfile
@@ -54,8 +55,9 @@ $(PATH_BIN)bench:	$(PATH_BUILD)bench.o $(PATH_BUILD)parsing.o $(PATH_BUILD)list.
 $(PATH_BIN)tests:	$(PATH_BUILD)tests.o $(PATH_BUILD)parsing.o $(PATH_BUILD)list.o $(PATH_BUILD)unwrap.o $(PATH_BUILD)macro.o $(PATH_BUILD)search.o
 	$(CCA) -o $(PATH_BIN)tests  $^ $(CFLAGS) $(LDLIBS)
 
-$(PATH_BIN)Dijkstra: $(PATH_BUILD)Dijkstra.o $(PATH_BUILD)unwrap.o $(PATH_BUILD)parsing.o $(PATH_BUILD)macro.o $(PATH_BUILD)fonctions_graphe.o
-	$(CCA) -o $(PATH_BIN)Dijkstra $^ $(CFLAGS) $(LDLIBS)
+# ces un lib maintenan...
+# $(PATH_BIN)Dijkstra: $(PATH_BUILD)Dijkstra.o $(PATH_BUILD)unwrap.o $(PATH_BUILD)parsing.o $(PATH_BUILD)macro.o $(PATH_BUILD)fonctions_graphe.o
+# 	$(CCA) -o $(PATH_BIN)Dijkstra $^ $(CFLAGS) $(LDLIBS)
 	
 $(PATH_BIN)main:	$(PATH_BUILD)main.o $(PATH_BUILD)parsing.o $(PATH_BUILD)macro.o
 	$(CCA) -o $(PATH_BIN)main  $^ $(CFLAGS) $(LDLIBS)
@@ -141,7 +143,7 @@ c:clean
 cc:cleanall
 
 
-genfolder: $(PATH_BIN) $(PATH_BUILD) $(PATH_DEBUG)
+genfolder: $(PATH_BIN) $(PATH_BUILD) $(PATH_DEBUG) DATA/dblpSmall.xml
 $(PATH_BIN):
 	mkdir -p $(PATH_BIN)
 $(PATH_BUILD):

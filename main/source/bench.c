@@ -365,26 +365,32 @@ listeFichier openDB(int type,int mode){
  * @param nbtime 
  */
 void testgraph(Graph_struct graphe_Konqui,int nbtime){
-    INFO("testsgraph")
+    INFO("Test Graph")
     srand(time(NULL));
-    
-    graphe_struct_Katie graphe_Katie= faire_graphe_ptr_auteur(graphe_Konqui);
 
     for (int i = 0; i < nbtime; i++)
     {
-        char* nom_auteur_depart     = graphe_Katie.graphe[rand()%graphe_Konqui.tab_auteur_struct.nombre_article]->nom_auteur;
-        char* nom_auteur_destination= graphe_Katie.graphe[rand()%graphe_Konqui.tab_auteur_struct.nombre_article]->nom_auteur;
-        DEBUG("depar %s arriver %s",nom_auteur_depart,nom_auteur_destination)
-
+        PROGRESSBAR(i,nbtime);
+        DEBUG("%d sur %d",i,nbtime)
+        graphe_struct_Katie graphe_Katie = faire_graphe_ptr_auteur(graphe_Konqui);
+        int a,b;
+        a = rand()%graphe_Konqui.tab_auteur_struct.nombre_auteur;
+        b = rand()%graphe_Konqui.tab_auteur_struct.nombre_auteur;
+        char* nom_auteur_depart     = graphe_Katie.graphe[a]->nom_auteur;
+        char* nom_auteur_destination= graphe_Katie.graphe[b]->nom_auteur;
+        WARNING("depar  : %s ",nom_auteur_depart)
+        WARNING("arriver: %s",nom_auteur_destination)
         plus_court_chemin_struct* plus_court_chemin= do_Dijkstra(graphe_Katie, nom_auteur_depart, nom_auteur_destination);
         if(plus_court_chemin!= NULL)
         {
             print_chemins_auteur_et_Artice(plus_court_chemin);
 
             verifier_do_Dijkstra(plus_court_chemin);
+        }else{
+            ERROR("PAS CHEMAIN")
         }
+        free_Dijkstra(graphe_Katie, plus_court_chemin);
 
-    free_Dijkstra(&graphe_Katie, plus_court_chemin);
     }
 
 }
@@ -428,7 +434,6 @@ int main(int argc, char const *argv[])
             nbtest = atoi(argv[3]);
         
         }
-                    DEBUG("nbtest %d",nbtest);
 
         listeFichier mesfichier;
         

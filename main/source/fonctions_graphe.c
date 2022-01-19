@@ -36,28 +36,35 @@ graphe_struct_Katie faire_graphe_ptr_auteur( Graph_struct graphe_Konqui)
     int size_graphe= graphe_Konqui.tab_auteur_struct.nombre_auteur;
     graphe_struct_Katie graphe_struct;
     graphe_struct.graphe= malloc(sizeof(auteur_struct*)*size_graphe);
-    printf("malloc du graphe réussi\n");
+    exitIfNull(graphe_struct.graphe,"faire_graphe_ptr_auteur:Echec du mallc ")
     graphe_struct.size_graphe= size_graphe;
 
     for(int i=0; i<size_graphe; i++)
     {
         auteur_struct* ai_ptr= &(graphe_Konqui.tab_auteur_struct.tab_auteur[i]);
-        ai_ptr->size_pcc_auteur= -1;
+        ai_ptr->size_pcc_auteur= -1;           //WTF ? ces un troue a mémoir ?? ? ?? 
         ai_ptr->ptr_Article_predecesseur_pcc= malloc(8);
         ai_ptr->ptr_Article_predecesseur_pcc= NULL;
         ai_ptr->ptr_auteur_predecesseur_pcc= malloc(8);
         ai_ptr->ptr_auteur_predecesseur_pcc= NULL;
         graphe_struct.graphe[i]= ai_ptr;
     }
-    printf("malloc set up des attributs d'auteur réussi\n");
+    YOLO("malloc set up des attributs d'auteur réussi\n");
     return graphe_struct;
 }
 
 
-//Je vérifie que les auteurs du chemin sont bien voisins 2 à 2 dans l'ordre du chemin
-//et que les Articles du pcc sont bien cohérent avec le pcc auteur
+
+/**
+ * @brief  Vérification plus cour chemain ?
+ * Je vérifie que les auteurs du chemin sont bien voisins 2 à 2 dans l'ordre du chemin
+ * et que les Articles du pcc sont bien cohérent avec le pcc auteur
+ * @param pcc 
+ */
 void verifier_do_Dijkstra(plus_court_chemin_struct* pcc)
 {
+    INFO("Verrifier Dikstra")
+
     pcc_struct_verification pcc_verif;
     pcc_verif.tab_verif_auteur= malloc(sizeof(char*)*pcc->size_pcc_auteur);
     pcc_verif.tab_verif_Article= malloc(sizeof(char*)*pcc->size_pcc_Article);
@@ -105,16 +112,16 @@ void verifier_do_Dijkstra(plus_court_chemin_struct* pcc)
 
     }
 
-    printf("%s\n", "elements de pcc auteur:");
+    DEBUG("%s\n", "elements de pcc auteur:");
     for(int i=0; i< pcc->size_pcc_auteur; i++)
     {
-        printf("[%s]\n", pcc_verif.tab_verif_auteur[i]);
+        GREY();printf("[%s]\n", pcc_verif.tab_verif_auteur[i]);CLRCOLOR();
     }
 
-    printf("%s\n", "elements de pcc Article:");
+    DEBUG("%s\n", "elements de pcc Article:");
     for(int i=0; i< pcc->size_pcc_Article; i++)
     {
-        printf("[%s]\n", pcc_verif.tab_verif_Article[i]);
+        GREY();printf("[%s]\n", pcc_verif.tab_verif_Article[i]);CLRCOLOR();
     }
 
 
