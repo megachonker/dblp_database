@@ -715,6 +715,7 @@ void free_tab_Article(tab_Article_struct afree){
 }
 
 void free_Graph_struct(Graph_struct afree){
+    //les 3 peuve être faite en paralèle
     free_tab_fiche(afree.tableaux_de_fiche);
     free_tab_auteur(afree.tab_auteur_struct);
     free_tab_Article(afree.tab_Article_struct);

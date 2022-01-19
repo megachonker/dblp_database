@@ -33,7 +33,7 @@ Graph_struct faire_graphe_Konqui(char * DBfiche, char * DBauteur, char * DBArtic
 graphe_struct_Katie faire_graphe_ptr_auteur( Graph_struct graphe_Konqui)
 {
 
-    int size_graphe= graphe_Konqui.tab_auteur_struct->nombre_auteur;
+    int size_graphe= graphe_Konqui.tab_auteur_struct.nombre_auteur;
     graphe_struct_Katie graphe_struct;
     graphe_struct.graphe= malloc(sizeof(auteur_struct*)*size_graphe);
     printf("malloc du graphe réussi\n");
@@ -41,7 +41,7 @@ graphe_struct_Katie faire_graphe_ptr_auteur( Graph_struct graphe_Konqui)
 
     for(int i=0; i<size_graphe; i++)
     {
-        auteur_struct* ai_ptr= &(graphe_Konqui.tab_auteur_struct->tab_auteur[i]);
+        auteur_struct* ai_ptr= &(graphe_Konqui.tab_auteur_struct.tab_auteur[i]);
         ai_ptr->size_pcc_auteur= -1;
         ai_ptr->ptr_Article_predecesseur_pcc= malloc(8);
         ai_ptr->ptr_Article_predecesseur_pcc= NULL;
@@ -50,9 +50,6 @@ graphe_struct_Katie faire_graphe_ptr_auteur( Graph_struct graphe_Konqui)
         graphe_struct.graphe[i]= ai_ptr;
     }
     printf("malloc set up des attributs d'auteur réussi\n");
-
-    free(graphe_Konqui.tab_auteur_struct);
-
     return graphe_struct;
 }
 

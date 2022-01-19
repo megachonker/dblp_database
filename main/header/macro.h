@@ -85,6 +85,8 @@ if (!p)\
     exit(1);\
 }
 
+#define STR(string) }else if(strcmp(string,compstr)==0){
+
 /**
  * @brief affiche une bar de progression
  * 
@@ -120,6 +122,12 @@ void tabulation(int nombre);
  * @param nb 
  */
 void repchar(char carac,size_t nb);
+
+
+// typedef struct cache
+// {
+    
+// };
 
 
 #endif

@@ -1,7 +1,9 @@
 #include "../header/parsing.h"
 #include "../header/unwrap.h"
+#include "../header/Dijkstra.h"
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 
 
 #include "../header/macro.h"
@@ -13,6 +15,20 @@ enum{
     Katie    lecture,
     ecriture
 };
+
+
+
+typedef struct listeFichier
+{
+    FILE * XML;
+    FILE * DBficheLecture;
+    FILE * DBauteurLecture;
+    FILE * DBArticleLecture;
+    FILE * DBficheEcriture;
+    FILE * DBauteurEcriture;
+    FILE * DBArticleEcriture;
+    int mode;
+}listeFichier;
 
 //fair des argument preselectioner pour toute les fonction 1 defaut dblp 2 dblp1000 3 custom
 
@@ -225,7 +241,6 @@ void local_custom_serialise_Graph(){
     fclose(DBficheEcriture);
     fclose(DBauteurEcriture);
     fclose(DBArticleEcriture);
-
 }
 
 // soucis de free?
@@ -236,19 +251,10 @@ void bench_all(){
     deserialise_tab_auteur(0);
 }
 
+
 /* Selection de la fonction */
 
-typedef struct listeFichier
-{
-    FILE * XML;
-    FILE * DBficheLecture;
-    FILE * DBauteurLecture;
-    FILE * DBArticleLecture;
-    FILE * DBficheEcriture;
-    FILE * DBauteurEcriture;
-    FILE * DBArticleEcriture;
-    int mode;
-}listeFichier;
+
 
 void closeall(listeFichier fichiers){
     fclose(fichiers.XML);
@@ -349,43 +355,124 @@ listeFichier openDB(int type,int mode){
     return listefile;
 }
 
+
+
+
+/**
+ * @brief génération du graph est lancement du dikstra
+ * 
+ * @param graphe_Konqui 
+ * @param nbtime 
+ */
+void testgraph(Graph_struct graphe_Konqui,int nbtime){
+    INFO("testsgraph")
+    srand(time(NULL));
+    
+    graphe_struct_Katie graphe_Katie= faire_graphe_ptr_auteur(graphe_Konqui);
+
+    for (int i = 0; i < nbtime; i++)
+    {
+        char* nom_auteur_depart     = graphe_Katie.graphe[rand()%graphe_Konqui.tab_auteur_struct.nombre_article]->nom_auteur;
+        char* nom_auteur_destination= graphe_Katie.graphe[rand()%graphe_Konqui.tab_auteur_struct.nombre_article]->nom_auteur;
+        DEBUG("depar %s arriver %s",nom_auteur_depart,nom_auteur_destination)
+
+        plus_court_chemin_struct* plus_court_chemin= do_Dijkstra(graphe_Katie, nom_auteur_depart, nom_auteur_destination);
+        if(plus_court_chemin!= NULL)
+        {
+            print_chemins_auteur_et_Artice(plus_court_chemin);
+
+            verifier_do_Dijkstra(plus_court_chemin);
+        }
+
+    free_Dijkstra(&graphe_Katie, plus_court_chemin);
+    }
+
+}
+
+
+
+/**
+ * @brief lance sérialisation du graphe est 100 test de dikstra
+ * 
+ * @param mode 
+ */
+void all(int mode ){
+    listeFichier mesfichierWrite = openDB(mode,ecriture);
+    Graph_struct legraphW = gen_Graph_from_XML(mesfichierWrite.XML);
+    serialise_Graph(legraphW,
+        mesfichierWrite.DBficheEcriture,
+        mesfichierWrite.DBauteurEcriture,
+        mesfichierWrite.DBArticleEcriture);
+    closeall(mesfichierWrite);
+    free_Graph_struct(legraphW);
+    listeFichier mesfichier = openDB(mode,ecriture);
+    Graph_struct legraph =  deserialise_Graph(
+                                mesfichier.DBficheLecture,
+                                mesfichier.DBauteurLecture,
+                                mesfichier.DBArticleLecture);
+    testgraph(legraph,100);  
+    free_Graph_struct(legraph);
+}
+
+
+
+
 int main(int argc, char const *argv[])
 {
     const char * compstr = argv[1];
-
-    if (argc == 3)
+    if (argc >= 3)
     {
+        int nbtest= 1;
+        if (argc == 4)
+        {
+            nbtest = atoi(argv[3]);
+        
+        }
+                    DEBUG("nbtest %d",nbtest);
+
+        listeFichier mesfichier;
+        
         int basenb = atoi(argv[2]);
+        if (strcmp("sg",compstr)!=0)
+        {
+            mesfichier = openDB(basenb,lecture);
+        }
+        
 
         //Faire un switch
         if(strcmp("sg",compstr)==0){
-            listeFichier mesfichier = openDB(basenb,ecriture);
-            Graph_struct legraph = gen_Graph_from_XML(mesfichier.XML);
+            listeFichier mesfichierWrite = openDB(basenb,ecriture);
+            Graph_struct legraph = gen_Graph_from_XML(mesfichierWrite.XML);
             serialise_Graph(legraph,
-                mesfichier.DBficheEcriture,
-                mesfichier.DBauteurEcriture,
-                mesfichier.DBArticleEcriture);
-            closeall(mesfichier);
+                mesfichierWrite.DBficheEcriture,
+                mesfichierWrite.DBauteurEcriture,
+                mesfichierWrite.DBArticleEcriture);
+            closeall(mesfichierWrite);
             free_Graph_struct(legraph);
-        }
-
-        if (strcmp("gxml",compstr)==0)
-        {
-            listeFichier mesfichier = openDB(basenb,lecture);
+        STR("gxml")
             Graph_struct legraph = gen_Graph_from_XML(mesfichier.XML);
             free_Graph_struct(legraph);
-            closeall(mesfichier);
-        }
-        
-        //Faire un switch
-        if(strcmp("dg",compstr)==0){
-            listeFichier mesfichier = openDB(basenb,lecture);
+        STR("dg")
             Graph_struct legraph =  deserialise_Graph(
                                         mesfichier.DBficheLecture,
                                         mesfichier.DBauteurLecture,
                                         mesfichier.DBArticleLecture);
-        free_Graph_struct(legraph);
-        closeall(mesfichier);
+            free_Graph_struct(legraph);
+        STR("dik")
+            Graph_struct legraph =  deserialise_Graph(
+                                        mesfichier.DBficheLecture,
+                                        mesfichier.DBauteurLecture,
+                                        mesfichier.DBArticleLecture);
+            testgraph(legraph,nbtest);
+            free_Graph_struct(legraph);
+        
+        STR("all")
+            all(basenb);
+        }
+
+        if (strcmp("sg",compstr)!=0)
+        {
+            closeall(mesfichier); 
         }
 
         CLRLINE()
@@ -500,27 +587,35 @@ int main(int argc, char const *argv[])
     //     deserialisation_tab_auteur_structt();
     // }
     else{
-        fprintf(stderr,"PAS BON TEST!\n");
-        fprintf(stderr,"\
-    \n- readb\
-    \n- readsmaldb\
-    \n- serialized\
-    \n- serializedsmall\
-    \n- deserialisedb\
-    \n- deserialisesmalldb\
-    \n- swap\
-    \n- swaprint\
-    \n- unwrwap_gen_cache\
-    \n- tab_auteur_from_file\
-    \n- deserialise_tab_auteur\
-    \n- unwrwap_gen_cache_small\
-    \n- deserialise_Graph\
-    \n- gen_tab_Article_from_xml\
-    \n- unwrap_deserialise_Article\
-    \n- gen_graph_from_XML\
-    \n- serialise_Graph\
-    \n- ALL");
+        fprintf(stderr,"PAS BON TEST!\n\n\n");
+        fprintf(stderr,"\tOption a 1 arument\n\
+            \n - readb\
+            \n - readsmaldb\
+            \n - serialized\
+            \n - serializedsmall\
+            \n - deserialisedb\
+            \n - deserialisesmalldb\
+            \n - swap\
+            \n - swaprint\
+            \n - unwrwap_gen_cache\
+            \n - tab_auteur_from_file\
+            \n - deserialise_tab_auteur\
+            \n - unwrwap_gen_cache_small\
+            \n - deserialise_Graph\
+            \n - gen_tab_Article_from_xml\
+            \n - unwrap_deserialise_Article\
+            \n - gen_graph_from_XML\
+            \n - serialise_Graph\
+            \n - ALL");
+        fprintf(stderr,"\n\
+        \toption a 2 argument:\n\
+        \n - sg (sérialisation du graph)\
+        \n - dg (désérialisation du graph)\
+        \n - all (benchmark tout)\
+        \n - dik (dikstra test)\
+        \n - gxml (désérialisation sans cache)");
     }
+
     CLRLINE()
     return 0;
 }
