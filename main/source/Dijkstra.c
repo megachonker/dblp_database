@@ -411,6 +411,8 @@ int main(void)
 
     char* nom_auteur_depart= mon_graphe.graphe[1234]->nom_auteur;
     char* nom_auteur_destination= mon_graphe.graphe[1234]->nom_auteur;
+
+    //voir convention pour ecrire les accents: https://sites.psu.edu/symbolcodes/codehtml/#accent
     plus_court_chemin_struct* plus_court_chemin=  do_Dijkstra(mon_graphe, nom_auteur_depart, nom_auteur_destination);
 
     
