@@ -3,12 +3,10 @@
 #include <stdio.h>
 
 /**
- * @brief Titre && liste des auteur 
- * 
- * Fiche extraite de parse(FILE * inputDB)
+ * @brief Entrée DBLP Titre et liste des auteur 
  * 
  * au long terme devra contenire tout les champs
- * 
+ * structure étant alouer dynamiquement pour pouvoir être utiliser par plusieur autre structure
  * 
  */
 typedef struct fiche_minimale
@@ -25,19 +23,16 @@ typedef struct fiche_minimale
 /**
  * @brief Contien toute les fiche_minimale
  * 
- * une fiche a une ADDResse
- * les addresse sont utilise pour retrouver l'index 
- * 
- * tableaux 
+ * Chaque addresse fiche_minimale est contenu dans un tableaux dynamique
+ * nbAuteurXarticle est utiliser pour retrouver l'index quand on désérialise
  * 
  * @struct tableaux_fiche
  */
 typedef struct tableaux_fiche
 {
-    fiche_minimale ** fiche; ///< tableaux des fiche_minimale utiliser
-    // int * ADDR;               ///<UNE FICHE UNE ADDRESS
+    fiche_minimale ** fiche; ///< tableaux d'adresse pointant ver des adrese dynamique contenant fiche_minimale 
     int taille;             ///<taille tableaux
-    int nbAuteurXarticle;
+    int nbAuteurXarticle;   //< index reflétant l'ordre de création
 }tableaux_fiche;
 
 

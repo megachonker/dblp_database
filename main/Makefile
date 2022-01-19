@@ -29,8 +29,8 @@ Dijkstra: graphTest2 genfolder $(PATH_BIN)Dijkstra
 	./$(PATH_BIN)Dijkstra
 
 val:	genfolder $(PATH_BIN)bench gsmall
-	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./$(PATH_BIN)bench gxml 1
 	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./$(PATH_BIN)bench dg 1
+	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./$(PATH_BIN)bench gxml 1
 	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./$(PATH_BIN)bench sg 1
 
 	

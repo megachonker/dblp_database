@@ -239,3 +239,82 @@ int main(void)
     return 0;
 }
 */
+
+
+// #define PROFONDEUREXP 5
+
+// void exploreauteur(const auteur_struct * monauteur,int profondeur);
+
+// void explorearticle(const Article_struct * monarticle, int profondeur){
+//     // INFO("Exploration Article")
+//     if (profondeur > PROFONDEUREXP)
+//     {
+//         return;
+//     }
+    
+//     // BLUE()
+//     // tabulation(profondeur);
+//     // printf("%s\n",monarticle->nom_Article);
+//     profondeur++;
+//     for (int i = 0; i < monarticle->nombre_auteur; i++)
+//     {
+//         // GREEN()
+//         // tabulation(profondeur);
+//         // printf("%s\n",monarticle->tab_ptr_auteur[i]->nom_auteur);
+//         //  CLRCOLOR()
+
+//         exploreauteur(monarticle->tab_ptr_auteur[i],profondeur);
+//     }
+    
+// }
+
+// void exploreauteur(const auteur_struct * monauteur,int profondeur){
+//     // INFO("Exploration auteur")
+//     if (profondeur > PROFONDEUREXP)
+//     {
+//         return;
+//     }
+//     GREEN()
+//     tabulation(profondeur);
+//     printf("%s\n",monauteur->nom_auteur);
+//     CLRCOLOR()
+//     profondeur++;
+//     for (int i = 0; i < monauteur->nbArticlecontenue; i++)
+//     {
+//         // BLUE()
+//         // tabulation(profondeur);
+//         // printf("%s\n",monauteur->tab_ptr_Article[i]->nom_Article);
+//         // CLRCOLOR()
+//         explorearticle(monauteur->tab_ptr_Article[i],profondeur);
+//     }
+    
+// }
+
+// void test_exploration_Article(const tab_Article_struct * mesarticle){
+//     for (int i = 0; i < mesarticle->nombre_Article; i++)
+//     {
+//         explorearticle(&mesarticle->tab_Article[i],0);
+//     }
+    
+//     // for (int i = 0; i < mesarticle->nombre_Article ; i++)
+//     // {
+//     //     BLUE()
+//     //     printf("%s ==> %d\n",mesarticle->tab_Article[i].nom_Article, mesarticle->tab_Article[i].nombre_auteur);
+//     //     for (int u = 0; u < mesarticle->tab_Article[i].nombre_auteur; u++)
+//     //     {
+//     //         GREEN()
+//     //         printf("\t%s ==> %d\n",mesarticle->tab_Article[i].tab_ptr_auteur[u]->nom_auteur,mesarticle->tab_Article[i].tab_ptr_auteur[u]->nbArticlecontenue);
+//     //         // for (int pp = 0; pp < mesarticle->tab_Article[i].tab_ptr_auteur[u]->nbArticlecontenue; pp++)
+//     //         // {
+//     //         //     BLUE()
+//     //         //     printf("\t\t%s ==> %d\n",mesarticle->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nom_Article,mesarticle->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nombre_auteur); 
+//     //         //     for (int UI = 0; UI < mesarticle->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nombre_auteur; UI++)
+//     //         //     {
+//     //         //         GREEN()
+//     //         //         printf("\t\t\t%s\n",mesarticle->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->tab_ptr_auteur[UI]->nom_auteur);
+//     //         //         // exploreauteur(mesarticle->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->tab_ptr_auteur[UI],3);
+//     //         //     }
+//     //         // }           
+//     //     }
+//     // }
+// }

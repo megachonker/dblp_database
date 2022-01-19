@@ -235,6 +235,8 @@ tableaux_fiche parse(FILE * inputDB){ /// a besoin detre un pointeur pour le fre
             fichelocalM->nombre_auteur = 0;
         }        
     }
+
+    free(fichelocalM);
     //WARNING
     // printTabmeaux(tableaux_allfiche);
 
@@ -287,17 +289,12 @@ tableaux_fiche deserialisation_tableaux_fiche(FILE * input){
     INFO("\tDeserialisation tableaux fiche DBXML")
 
     PROGRESSBAR_DECL(input);
-
-    //INFO début de la désérialisation
     char ligne[BALISESIZE];
 
     //valide read du checksum
-
     //read tailletotal
 
     tableaux_fiche tableaux_allfiche;
-    //  = calloc(1,sizeof(tableaux_fiche));//valgrind leak 
-    // exitIfNull(tableaux_allfiche,"deserialisation:imposible d'alouer le tableaux de toute les fiche\n")
     tableaux_allfiche.taille = 0;//<=  = tailletotal
     tableaux_allfiche.nbAuteurXarticle = 0;
     //AFAIRE un soeule maloc tableaux_allfiche.taille*sizeof !!
@@ -305,6 +302,7 @@ tableaux_fiche deserialisation_tableaux_fiche(FILE * input){
 
 
     fiche_minimale * fichelocalM = calloc(1,sizeof(fiche_minimale));//valgrind
+    exitIfNull(fichelocalM,"calloc imposible")
     fichelocalM->nombre_auteur = 0;
 
 
@@ -335,7 +333,7 @@ tableaux_fiche deserialisation_tableaux_fiche(FILE * input){
         fichelocalM->nombre_auteur = 0;
         indice++;
     }
-
+    free(fichelocalM);
     DEBUG("Deseraialisation %d FAIRE UN MALOC",indice);
     return tableaux_allfiche;
 }

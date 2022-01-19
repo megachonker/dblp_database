@@ -63,7 +63,7 @@ void deserialisesmalldb(){
     deserialisation_tableaux_fiche(fichier);
 }
 
-tab_auteur_struct * unwrap_from_filE(){ //E pas inspi
+tab_auteur_struct unwrap_from_filE(){ //E pas inspi
     FILE * inputDB = fopen(cache_fiche,"r");
     exitIfNull(inputDB,"imposible d'ouvrire "cache_fiche)
     return tab_auteur_from_file(inputDB);
@@ -71,8 +71,8 @@ tab_auteur_struct * unwrap_from_filE(){ //E pas inspi
 void unwrwap_gen_cache(){
     FILE * ouputDB = fopen(auteur_cache,"w");
     exitIfNull(ouputDB,"imposible d'ouvrire "auteur_cache)
-    tab_auteur_struct * malistauteur = unwrap_from_filE(); //80%
-    serialise_tab_auteur_struct(malistauteur,ouputDB);           //18%
+    tab_auteur_struct malistauteur = unwrap_from_filE(); //80%
+    serialise_tab_auteur_struct(&malistauteur,ouputDB);           //18%
     free_tab_auteur(malistauteur);
 }
 void unwrwap_gen_cache_small(){
@@ -80,17 +80,17 @@ void unwrwap_gen_cache_small(){
     exitIfNull(ouputDB,"imposible d'ouvrire "small_auteur_cache)
     FILE * inputDB = fopen(small_fiche_cache,"r");
     exitIfNull(inputDB,"imposible d'ouvrire "small_fiche_cache)
-    tab_auteur_struct * malistauteur = tab_auteur_from_file(inputDB);
-    serialise_tab_auteur_struct(malistauteur,ouputDB);
+    tab_auteur_struct malistauteur = tab_auteur_from_file(inputDB);
+    serialise_tab_auteur_struct(&malistauteur,ouputDB);
     free_tab_auteur(malistauteur);
 }
-tab_auteur_struct * deserialise_tab_auteur(int print){
+tab_auteur_struct deserialise_tab_auteur(int print){
     FILE * input = fopen(auteur_cache,"r");
     exitIfNull(input,"imposible d'ouvrire "auteur_cache)
     FILE * fichier = fopen(cache_fiche,"r");
     exitIfNull(fichier,"imposible d'ouvrire "cache_fiche);
-    tableaux_fiche azer = deserialisation_tableaux_fiche(fichier);
-    tab_auteur_struct * malistauteur =  deserialise_tab_auteur_struct(&azer,input);
+    tableaux_fiche tableaux_des_fiche = deserialisation_tableaux_fiche(fichier);
+    tab_auteur_struct malistauteur =  deserialise_tab_auteur_struct(&tableaux_des_fiche,input);
     if(print == 1){
         printList_auteur(malistauteur);
     }
@@ -108,27 +108,32 @@ void ggen_unwrap_Graph(){
 void uunwrap_ListArticle_from_xml(int a){
     // plusieuyr pour la taille ?
     FILE * DBxml = fopen(origineXML,"r");   
-    tab_Article_struct * montab = gen_tab_Article_from_xml(DBxml);
+    tab_Article_struct montab = gen_tab_Article_from_xml(DBxml);
     if (a)
     {
         printList_Article(montab);
     }
 }
-tab_Article_struct * gen_article(){
-    FILE * DBxmll = fopen(cache_fiche,"r");
+tab_Article_struct gen_article(){
+    FILE * DBxmll     = fopen(cache_fiche,"r");
     FILE * DBinversee = fopen(auteur_cache,"r");
     exitIfNull(DBxmll,"INPUT PAS CHEMAIN")
     exitIfNull(DBinversee,"INPUT PAS CHEMAIN")
     tableaux_fiche matablefiche = deserialisation_tableaux_fiche(DBxmll);
-    tab_auteur_struct * malistaauteur =   deserialise_tab_auteur_struct(&matablefiche,DBinversee);
-    tab_Article_struct * malistearticle = convertTab_auteur2Article(malistaauteur);
+    tab_auteur_struct  malistaauteur = deserialise_tab_auteur_struct(&matablefiche,DBinversee);
+    tab_Article_struct malistearticle = convertTab_auteur2Article(&malistaauteur);
+
+    free_tab_fiche(matablefiche);
+    free_tab_auteur(malistaauteur);
     return malistearticle;
 }
 
 void serialisation_tab_Article_structt(){
     FILE * DBarticle = fopen(Article_cache,"w");
     exitIfNull(DBarticle,"INPUT PAS CHEMAIN");
-    serialisation_tab_Article_struct(gen_article(),DBarticle);
+    tab_Article_struct monarticle = gen_article();
+    serialisation_tab_Article_struct(&monarticle,DBarticle);
+    free_tab_Article(monarticle);
 }
 
 void deserialisation_tab_Article_structt(){
@@ -136,19 +141,20 @@ void deserialisation_tab_Article_structt(){
     FILE * DBinverse = fopen(Article_cache,"r");
     exitIfNull(DBxml,"INPUT PAS CHEMAIN")
     exitIfNull(DBinverse,"INPUT PAS CHEMAIN")
-    tab_auteur_struct * matablefiche = deserialise_tab_auteur(0);
-    deserialisation_tab_Article_struct(matablefiche,DBinverse);
+    tab_auteur_struct matablefiche = deserialise_tab_auteur(0);
+    free_tab_Article(deserialisation_tab_Article_struct(&matablefiche,DBinverse));
+    free_tab_auteur(matablefiche);
 }
 
 void swap(int print){
     FILE * inputDB = fopen("DATA/SerializedStruc.data","r");
     exitIfNull(inputDB,"INPUT PAS CHEMAIN")
-    tab_auteur_struct * malistedauteur = tab_auteur_from_file(inputDB);
-
+    tab_auteur_struct malistedauteur = tab_auteur_from_file(inputDB);
     if (print==1)
     {
         printList_auteur(malistedauteur);
     }
+    free_tab_auteur(malistedauteur);
 }
 
 

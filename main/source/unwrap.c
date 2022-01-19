@@ -6,6 +6,11 @@
 #include "../header/macro.h"
 
 
+enum{
+    from_XML,
+    from_deserialisation
+};
+
 /**
  * @brief Compare le titre de 2 article
  * 
@@ -132,90 +137,6 @@ void add_titre_to_auteur(auteur_struct * list,const Paire_auteur_oeuvre HtH){//c
     list->size++;
 }
 
-#define PROFONDEUREXP 5
-
-void exploreauteur(const auteur_struct * monauteur,int profondeur);
-
-void explorearticle(const Article_struct * monarticle, int profondeur){
-    // INFO("Exploration Article")
-    if (profondeur > PROFONDEUREXP)
-    {
-        return;
-    }
-    
-    // BLUE()
-    // tabulation(profondeur);
-    // printf("%s\n",monarticle->nom_Article);
-    profondeur++;
-    for (int i = 0; i < monarticle->nombre_auteur; i++)
-    {
-        // GREEN()
-        // tabulation(profondeur);
-        // printf("%s\n",monarticle->tab_ptr_auteur[i]->nom_auteur);
-        //  CLRCOLOR()
-
-        exploreauteur(monarticle->tab_ptr_auteur[i],profondeur);
-    }
-    
-}
-
-void exploreauteur(const auteur_struct * monauteur,int profondeur){
-    // INFO("Exploration auteur")
-    if (profondeur > PROFONDEUREXP)
-    {
-        return;
-    }
-    GREEN()
-    tabulation(profondeur);
-    printf("%s\n",monauteur->nom_auteur);
-    CLRCOLOR()
-    profondeur++;
-    for (int i = 0; i < monauteur->nbArticlecontenue; i++)
-    {
-        // BLUE()
-        // tabulation(profondeur);
-        // printf("%s\n",monauteur->tab_ptr_Article[i]->nom_Article);
-        // CLRCOLOR()
-        explorearticle(monauteur->tab_ptr_Article[i],profondeur);
-    }
-    
-}
-
-
-// parcoureProfondeur(Graph_struct){
-
-// }
-
-
-void test_exploration_Article(const tab_Article_struct * mesarticle){
-    for (int i = 0; i < mesarticle->nombre_Article; i++)
-    {
-        explorearticle(&mesarticle->tab_Article[i],0);
-    }
-    
-    // for (int i = 0; i < mesarticle->nombre_Article ; i++)
-    // {
-    //     BLUE()
-    //     printf("%s ==> %d\n",mesarticle->tab_Article[i].nom_Article, mesarticle->tab_Article[i].nombre_auteur);
-    //     for (int u = 0; u < mesarticle->tab_Article[i].nombre_auteur; u++)
-    //     {
-    //         GREEN()
-    //         printf("\t%s ==> %d\n",mesarticle->tab_Article[i].tab_ptr_auteur[u]->nom_auteur,mesarticle->tab_Article[i].tab_ptr_auteur[u]->nbArticlecontenue);
-    //         // for (int pp = 0; pp < mesarticle->tab_Article[i].tab_ptr_auteur[u]->nbArticlecontenue; pp++)
-    //         // {
-    //         //     BLUE()
-    //         //     printf("\t\t%s ==> %d\n",mesarticle->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nom_Article,mesarticle->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nombre_auteur); 
-    //         //     for (int UI = 0; UI < mesarticle->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nombre_auteur; UI++)
-    //         //     {
-    //         //         GREEN()
-    //         //         printf("\t\t\t%s\n",mesarticle->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->tab_ptr_auteur[UI]->nom_auteur);
-    //         //         // exploreauteur(mesarticle->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->tab_ptr_auteur[UI],3);
-    //         //     }
-    //         // }           
-    //     }
-    // }
-}
-
 
 /**
  * @brief génère tab_auteur_struct
@@ -228,14 +149,13 @@ void test_exploration_Article(const tab_Article_struct * mesarticle){
  * @param [in] sizeHauteurHeuvre 
  * @return tab_auteur_struct* 
  */
-tab_auteur_struct* gen_List_auteur(const Paire_auteur_oeuvre * liste,int sizeHauteurHeuvre){
+tab_auteur_struct gen_List_auteur(const Paire_auteur_oeuvre * liste,int sizeHauteurHeuvre){
     INFO("gen_List_auteur:")
-    tab_auteur_struct * listes_Auteur_arrTitre = malloc(sizeof(tab_auteur_struct));
-    exitIfNull(listes_Auteur_arrTitre,"Erreur création liste de tab_auteur_struct\n")
-    int * nb_auteur = &listes_Auteur_arrTitre->nombre_auteur; 
+    tab_auteur_struct listes_Auteur_arrTitre;
+    int * nb_auteur = &listes_Auteur_arrTitre.nombre_auteur; 
 
-    listes_Auteur_arrTitre->nombre_auteur = 0;
-    listes_Auteur_arrTitre->tab_auteur = NULL;
+    listes_Auteur_arrTitre.nombre_auteur = 0;
+    listes_Auteur_arrTitre.tab_auteur = NULL;
 
     int id = 0;
     int posTabPaireaA = 0;
@@ -244,18 +164,18 @@ tab_auteur_struct* gen_List_auteur(const Paire_auteur_oeuvre * liste,int sizeHau
     {
         PROGRESSBAR(posTabPaireaA,sizeHauteurHeuvre);
 
-        auteur_struct * tb_Somet_h = reallocarray(listes_Auteur_arrTitre->tab_auteur,(*nb_auteur)+1,sizeof(auteur_struct));//fasink alocate error
+        auteur_struct * tb_Somet_h = reallocarray(listes_Auteur_arrTitre.tab_auteur,(*nb_auteur)+1,sizeof(auteur_struct));//fasink alocate error
         exitIfNull(tb_Somet_h,"Erreur création de auteur_struct\n")
-        listes_Auteur_arrTitre->tab_auteur = tb_Somet_h;
+        listes_Auteur_arrTitre.tab_auteur = tb_Somet_h;
             
         //initialisation de l'auteur crée
-        listes_Auteur_arrTitre->tab_auteur[(*nb_auteur)].size=0                         ;
-        listes_Auteur_arrTitre->tab_auteur[(*nb_auteur)].nbArticlecontenue = 0              ;
-        listes_Auteur_arrTitre->tab_auteur[(*nb_auteur)].nom_auteur = NULL              ;
-        listes_Auteur_arrTitre->tab_auteur[(*nb_auteur)].tab_ptr_Article = NULL         ;    //ducoup malloc le code 
-        listes_Auteur_arrTitre->tab_auteur[(*nb_auteur)].tab_ptr_fiche_min = NULL       ;
-        listes_Auteur_arrTitre->tab_auteur[(*nb_auteur)].nom_auteur=liste[posTabPaireaA].nom_auteur ;
-        listes_Auteur_arrTitre->tab_auteur[(*nb_auteur)].indiceDeCreation = id; //id qui est utilise le graph pour explorer 
+        listes_Auteur_arrTitre.tab_auteur[(*nb_auteur)].size=0                         ;
+        listes_Auteur_arrTitre.tab_auteur[(*nb_auteur)].nbArticlecontenue = 0              ;
+        listes_Auteur_arrTitre.tab_auteur[(*nb_auteur)].nom_auteur = NULL              ;
+        listes_Auteur_arrTitre.tab_auteur[(*nb_auteur)].tab_ptr_Article = NULL         ;    //ducoup malloc le code 
+        listes_Auteur_arrTitre.tab_auteur[(*nb_auteur)].tab_ptr_fiche_min = NULL       ;
+        listes_Auteur_arrTitre.tab_auteur[(*nb_auteur)].nom_auteur=liste[posTabPaireaA].nom_auteur ;
+        listes_Auteur_arrTitre.tab_auteur[(*nb_auteur)].indiceDeCreation = id; //id qui est utilise le graph pour explorer 
         id++;
 
         int noArticle = 0;
@@ -263,7 +183,7 @@ tab_auteur_struct* gen_List_auteur(const Paire_auteur_oeuvre * liste,int sizeHau
         while (posTabPaireaA+noArticle < sizeHauteurHeuvre &&
             strcmp(liste[posTabPaireaA].nom_auteur,liste[posTabPaireaA+noArticle].nom_auteur) == 0)//ordre important
         {
-            add_titre_to_auteur(&listes_Auteur_arrTitre->tab_auteur[(*nb_auteur)],liste[posTabPaireaA+noArticle]);
+            add_titre_to_auteur(&listes_Auteur_arrTitre.tab_auteur[(*nb_auteur)],liste[posTabPaireaA+noArticle]);
             noArticle++;
         }
         //on passe les noArticle auteur au posTabPaireaA article  dans le tableaux Paire_auteur_oeuvre
@@ -272,7 +192,6 @@ tab_auteur_struct* gen_List_auteur(const Paire_auteur_oeuvre * liste,int sizeHau
         (*nb_auteur)++;
         
     }
-    DEBUG("Pareil ?? NOMBRE sizeHauteurHeuvre %d, listes_Auteur_arrTitre->taille %d", sizeHauteurHeuvre, listes_Auteur_arrTitre->nombre_auteur)
     return listes_Auteur_arrTitre;
 }
 
@@ -284,18 +203,17 @@ tab_auteur_struct* gen_List_auteur(const Paire_auteur_oeuvre * liste,int sizeHau
  * @param [in] nombretotalarticle nombre d'article total
  * @return tab_Article_struct* 
  */
-tab_Article_struct* assemble_tab_Article(Paire_Article_auteur * liste,int sizeArticleHauteur,int nombretotalarticle){
+tab_Article_struct assemble_tab_Article(Paire_Article_auteur * liste,int sizeArticleHauteur,int nombretotalarticle){
     INFO("Génération Liste Article")
 
-    tab_Article_struct * ListDesArticle = malloc(sizeof(tab_Article_struct));
-    exitIfNull(ListDesArticle,"Erreur création liste de tab_Article_struct\n")
-    int * nbarticle =  &ListDesArticle->nombre_Article;
+    tab_Article_struct ListDesArticle;
+    int * nbarticle =  &ListDesArticle.nombre_Article;
 
     //combien d'article je doit faire ?
-    ListDesArticle->tab_Article = NULL;
+    ListDesArticle.tab_Article = NULL;
     DEBUG("Génération tableaux de %lu octer",nombretotalarticle*sizeof(Article_struct))
-    ListDesArticle->tab_Article = malloc(nombretotalarticle*sizeof(Article_struct));
-    exitIfNull(ListDesArticle->tab_Article,"genarticlelist: Imposible d'allouer tout les tableaux ")
+    ListDesArticle.tab_Article = malloc(nombretotalarticle*sizeof(Article_struct));
+    exitIfNull(ListDesArticle.tab_Article,"genarticlelist: Imposible d'allouer tout les tableaux ")
     (*nbarticle) = 0;
 
     int posTabPairAa = 0;
@@ -307,19 +225,19 @@ tab_Article_struct* assemble_tab_Article(Paire_Article_auteur * liste,int sizeAr
         #endif
 
         //on add le premier nom_Article
-        ListDesArticle->tab_Article[(*nbarticle)].nombre_auteur=0;
-        ListDesArticle->tab_Article[(*nbarticle)].nom_Article=liste[posTabPairAa].article;
-        ListDesArticle->tab_Article[(*nbarticle)].tab_ptr_auteur = NULL;
+        ListDesArticle.tab_Article[(*nbarticle)].nombre_auteur=0;
+        ListDesArticle.tab_Article[(*nbarticle)].nom_Article=liste[posTabPairAa].article;
+        ListDesArticle.tab_Article[(*nbarticle)].tab_ptr_auteur = NULL;
 
 
-        Article_struct * dernierarticle = &ListDesArticle->tab_Article[(*nbarticle)];
+        Article_struct * dernierarticle = &ListDesArticle.tab_Article[(*nbarticle)];
         int * nb_auteur  = &dernierarticle->nombre_auteur;  //utiliser un compteur local pourgagner du temps ?
 
         //tant le prochain auteur et le meme et que on attein pas la fin de la liste
         while (posTabPairAa+(*nb_auteur) < sizeArticleHauteur && 
             strcmp(liste[posTabPairAa].article,liste[posTabPairAa+(*nb_auteur)].article) == 0)  //ordre important
         {
-            YOLO("dernierarticle:%p %p\n",dernierarticle,&ListDesArticle->tab_Article[(*nbarticle)]);
+            YOLO("dernierarticle:%p %p\n",dernierarticle,&ListDesArticle.tab_Article[(*nbarticle)]);
 
             //création d'auteur struct
             auteur_struct * temparray = reallocarray(dernierarticle->tab_ptr_auteur,(*nb_auteur)+1,8); //8 taille d'un pointeur 
@@ -370,17 +288,17 @@ tab_Article_struct* assemble_tab_Article(Paire_Article_auteur * liste,int sizeAr
     return ListDesArticle;
 }
 
-void printList_auteur(tab_auteur_struct * OwO){
-    DEBUG("il y a %d auteur a print ", OwO->nombre_auteur)
-    for (int i = 0; i < OwO->nombre_auteur; i++)
+void printList_auteur(tab_auteur_struct OwO){
+    DEBUG("il y a %d auteur a print ", OwO.nombre_auteur)
+    for (int i = 0; i < OwO.nombre_auteur; i++)
     {
-        PROGRESSBAR(i,OwO->nombre_auteur);
+        PROGRESSBAR(i,OwO.nombre_auteur);
         BLUE()
-        printf("%s (%d):\n",OwO->tab_auteur[i].nom_auteur,OwO->tab_auteur[i].size);    
+        printf("%s (%d):\n",OwO.tab_auteur[i].nom_auteur,OwO.tab_auteur[i].size);    
         GREY()
-        for (int j = 0; j < OwO->tab_auteur[i].size; j++)
+        for (int j = 0; j < OwO.tab_auteur[i].size; j++)
         {
-            printf("\t%s\n",OwO->tab_auteur[i].tab_ptr_fiche_min[j]->titre);
+            printf("\t%s\n",OwO.tab_auteur[i].tab_ptr_fiche_min[j]->titre);
         }
         printf("\n");
     }
@@ -388,17 +306,17 @@ void printList_auteur(tab_auteur_struct * OwO){
 }
 
 
-void printList_Article(tab_Article_struct * OwO){
-    DEBUG("il y a %d article a print ", OwO->nombre_Article)
-    for (int i = 0; i < OwO->nombre_Article; i++)
+void printList_Article(tab_Article_struct OwO){
+    DEBUG("il y a %d article a print ", OwO.nombre_Article)
+    for (int i = 0; i < OwO.nombre_Article; i++)
     {
         BLUE()
-        printf("%s (%d):\n",OwO->tab_Article[i].nom_Article,OwO->tab_Article[i].nombre_auteur);    
+        printf("%s (%d):\n",OwO.tab_Article[i].nom_Article,OwO.tab_Article[i].nombre_auteur);    
         GREY()
-        // DEBUG("Print: %d/%d",i,OwO->nombre_Article)
-        for (int j = 0; j < OwO->tab_Article[i].nombre_auteur; j++)
+        // DEBUG("Print: %d/%d",i,OwO.nombre_Article)
+        for (int j = 0; j < OwO.tab_Article[i].nombre_auteur; j++)
         {
-            printf("\t%s\n",OwO->tab_Article[i].tab_ptr_auteur[j]->nom_auteur);
+            printf("\t%s\n",OwO.tab_Article[i].tab_ptr_auteur[j]->nom_auteur);
         }
         printf("\n");
     }
@@ -465,129 +383,116 @@ void serialise_tab_auteur_struct(const tab_auteur_struct * List_des_Auteur, FILE
  * @param [in] input fichier binaire 
  * @return tab_auteur_struct* 
  */
-tab_auteur_struct * deserialise_tab_auteur_struct(const tableaux_fiche * tableaux_fiche,FILE * input){
+tab_auteur_struct deserialise_tab_auteur_struct(const tableaux_fiche * tableaux_fiche,FILE * input){
     INFO("\tdeserialise tab auteur")
 
     char ligne[BALISESIZE];
-    tab_auteur_struct * master_List_Auteur = malloc(sizeof(tab_auteur_struct)); // sert a rien? 
-    master_List_Auteur->nombre_auteur=0;
+    tab_auteur_struct master_List_Auteur = {.origine=from_deserialisation,
+                                            .nombre_auteur=0};
 
     fgets(ligne,BALISESIZE,input);
-    master_List_Auteur->nombre_auteur = atoi(ligne);
-    exitIfNull(master_List_Auteur->nombre_auteur,"nombre d'auteur ilisible")
-    DEBUG("Il y a %d auteur unique",master_List_Auteur->nombre_auteur)
+    master_List_Auteur.nombre_auteur = atoi(ligne);
+    exitIfNull(master_List_Auteur.nombre_auteur,"nombre d'auteur ilisible")
+    DEBUG("Il y a %d auteur unique",master_List_Auteur.nombre_auteur)
 
-    DEBUG("Malloc de %lu octer",sizeof(auteur_struct)*master_List_Auteur->nombre_auteur)
-    auteur_struct * Sommet_Auteur_Tableaux =  calloc(master_List_Auteur->nombre_auteur,sizeof(auteur_struct));
+    DEBUG("Malloc de %lu octer",sizeof(auteur_struct)*master_List_Auteur.nombre_auteur)
+    auteur_struct * Sommet_Auteur_Tableaux =  calloc(master_List_Auteur.nombre_auteur,sizeof(auteur_struct));
     exitIfNull(Sommet_Auteur_Tableaux, "deserialise_tab_auteur_struct: maloc echouer")
-    master_List_Auteur->tab_auteur = Sommet_Auteur_Tableaux;
+    master_List_Auteur.tab_auteur = Sommet_Auteur_Tableaux;
 
     int nbauteur = 0;
     while (fgets(ligne,BALISESIZE,input))
     {
+        PROGRESSBAR(nbauteur,master_List_Auteur.nombre_auteur);
+
         enlever_retour_a_la_ligne(ligne);
-        master_List_Auteur->tab_auteur[nbauteur].nom_auteur = strdup(ligne);
+        //on génère le noms
+        master_List_Auteur.tab_auteur[nbauteur].nom_auteur = strdup(ligne);
 
         // on initialise le compteur d'élément 
-        master_List_Auteur->tab_auteur[nbauteur].nbArticlecontenue = 0;
-        // master_List_Auteur->tab_auteur[nbauteur].nbmembreTabarticleALOUER = 0;
-        master_List_Auteur->tab_auteur[nbauteur].tab_ptr_Article = NULL;
+        master_List_Auteur.tab_auteur[nbauteur].nbArticlecontenue = 0;
+        // master_List_Auteur.tab_auteur[nbauteur].nbmembreTabarticleALOUER = 0;
+        master_List_Auteur.tab_auteur[nbauteur].tab_ptr_Article = NULL;
 
         fgets(ligne,BALISESIZE,input);
-        master_List_Auteur->tab_auteur[nbauteur].size = atoi(ligne);
-        exitIfNull(master_List_Auteur->tab_auteur[nbauteur].size,"nombre d'auteur incorect !")
+        master_List_Auteur.tab_auteur[nbauteur].size = atoi(ligne);
+        exitIfNull(master_List_Auteur.tab_auteur[nbauteur].size,"nombre d'auteur incorect !")
 
-        #ifdef WARN_ON
-        PROGRESSBAR(nbauteur,master_List_Auteur->nombre_auteur);
-        #endif
+        master_List_Auteur.tab_auteur[nbauteur].tab_ptr_fiche_min = calloc(master_List_Auteur.tab_auteur[nbauteur].size,sizeof(auteur_struct)); //<= bon type ?
+        exitIfNull(master_List_Auteur.tab_auteur[nbauteur].tab_ptr_fiche_min,"allocation master_List_Auteur.tab_auteur[nbauteur].tab_ptr_fiche_min echouser...");
 
-        master_List_Auteur->tab_auteur[nbauteur].tab_ptr_fiche_min = calloc(master_List_Auteur->tab_auteur[nbauteur].size,sizeof(auteur_struct)); //<= bon type ?
-        exitIfNull(master_List_Auteur->tab_auteur[nbauteur].tab_ptr_fiche_min,"allocation master_List_Auteur->tab_auteur[nbauteur].tab_ptr_fiche_min echouser...");
-
-        for (int u = 0; u < master_List_Auteur->tab_auteur[nbauteur].size; u++)
+        for (int u = 0; u < master_List_Auteur.tab_auteur[nbauteur].size; u++)
         {
             fgets(ligne,BALISESIZE,input);
             enlever_retour_a_la_ligne(ligne);
             int indiceFiche = atoi(ligne);
             exitIfNull(tableaux_fiche->fiche[indiceFiche],"serialise index pointeur sur nom_auteur introuvable\n")
-            master_List_Auteur->tab_auteur[nbauteur].tab_ptr_fiche_min[u] = tableaux_fiche->fiche[indiceFiche]; //On n'es pas obliger de lire la fiche
+            master_List_Auteur.tab_auteur[nbauteur].tab_ptr_fiche_min[u] = tableaux_fiche->fiche[indiceFiche]; //On n'es pas obliger de lire la fiche
         }
         nbauteur++;
     }
-    master_List_Auteur->nombre_article = tableaux_fiche->taille;
+    master_List_Auteur.nombre_article = tableaux_fiche->taille;
     return master_List_Auteur;
 }
 
-// //PABIEN
-// #define MAXarraySIZE 21143793
-// Paire_auteur_oeuvre HauteurHeuvre[MAXarraySIZE];
 
-tab_auteur_struct * gen_tab_auteur_from_xml(FILE * dbinput){
+
+tab_auteur_struct convertTab_fiche2auteur(tableaux_fiche mesfiche);
+
+tab_auteur_struct gen_tab_auteur_from_xml(FILE * dbinput){
     INFO("Generation Tab auteur:")
-    tableaux_fiche mesfiche =  parse(dbinput);// ici au parisng
-    Paire_auteur_oeuvre * HauteurHeuvre = calloc(mesfiche.nbAuteurXarticle,sizeof(Paire_auteur_oeuvre));
-    exitIfNull(HauteurHeuvre,"Malloc imposible")
-        // DEBUG("MAX %d vs CONTER %d",MAXarraySIZE,mesfiche.nbAuteurXarticle);
-    int sizeHauteurHeuvre = deplier_fiche(mesfiche,HauteurHeuvre);
-    // DEBUG("Taille du tableaux MAXarraySIZE %d, %d",MAXarraySIZE,sizeHauteurHeuvre);
-    INFO("Trie:")
-    sort_tableaux_auteur(HauteurHeuvre,sizeHauteurHeuvre);
-    tab_auteur_struct * malistedauteur = gen_List_auteur(HauteurHeuvre,sizeHauteurHeuvre);
-    malistedauteur->nombre_article = mesfiche.taille;
-    // DEBUG("tab auteur str ?? %d et %d",malistedauteur->taille,*nbauteur);
-    free(HauteurHeuvre);
-    return malistedauteur;
+    return convertTab_fiche2auteur(parse(dbinput));
 }
 
-tab_auteur_struct * tab_auteur_from_file(FILE * inputFile){
+tab_auteur_struct tab_auteur_from_file(FILE * inputFile){
     INFO("Génération tableaux auteur FROMFILE")
-    tableaux_fiche mesfiches = deserialisation_tableaux_fiche(inputFile);
-    Paire_auteur_oeuvre * HauteurHeuvre = calloc(mesfiches.nbAuteurXarticle,sizeof(Paire_auteur_oeuvre));
-    exitIfNull(HauteurHeuvre,"Malloc imposible")
-        // DEBUG("MAX %d vs CONTER %d",MAXarraySIZE,mesfiches->nbAuteurXarticle);
-
-    int sizeHauteurHeuvre = deplier_fiche(mesfiches,HauteurHeuvre);
-    // DEBUG("DEBUGGG ARRAY %d, %d",MAXarraySIZE,sizeHauteurHeuvre);    
-    sort_tableaux_auteur(HauteurHeuvre,sizeHauteurHeuvre);
-    tab_auteur_struct * malistedauteur = gen_List_auteur(HauteurHeuvre,sizeHauteurHeuvre);
-    free(HauteurHeuvre);
-    return malistedauteur;
+    return convertTab_fiche2auteur(deserialisation_tableaux_fiche(inputFile));
 }
 
+tab_auteur_struct convertTab_fiche2auteur(tableaux_fiche mesfiche){
+    INFO("Convert tableaux fiche to auteur")
 
-tab_auteur_struct * convertTab_fiche2auteur(tableaux_fiche mesfiche){
-    INFO("Convert fiche to auteur")
-    DEBUG("nombre %d size %lu",mesfiche.nbAuteurXarticle,sizeof(Paire_auteur_oeuvre)*mesfiche.nbAuteurXarticle)
-    Paire_auteur_oeuvre * HauteurHeuvre = calloc(mesfiche.nbAuteurXarticle,sizeof(Paire_auteur_oeuvre));
-    exitIfNull(HauteurHeuvre,"Malloc imposible")
-        // DEBUG("MAX %d vs CONTER %d",MAXarraySIZE,mesfiche.nbAuteurXarticle);
-    //passer tableaux tab_auteur_struct avec la taille directement ?
+    int nbPaire_auteur_oeuvre = mesfiche.nbAuteurXarticle;
+    DEBUG("%d auteur*Article, size %lu",nbPaire_auteur_oeuvre,sizeof(Paire_auteur_oeuvre)*mesfiche.nbAuteurXarticle)
+
+    Paire_auteur_oeuvre * HauteurHeuvre = calloc(nbPaire_auteur_oeuvre,sizeof(Paire_auteur_oeuvre));
+    exitIfNull(HauteurHeuvre,"caloc imposible")
+
     int sizeHauteurHeuvre = deplier_fiche(mesfiche,HauteurHeuvre);
     sort_tableaux_auteur(HauteurHeuvre,sizeHauteurHeuvre);
-    tab_auteur_struct * malistedauteur = gen_List_auteur(HauteurHeuvre,sizeHauteurHeuvre);
-    malistedauteur->nombre_article = mesfiche.taille;
+
+    tab_auteur_struct malistedauteur = gen_List_auteur(HauteurHeuvre,sizeHauteurHeuvre);
+    malistedauteur.nombre_article = mesfiche.taille;
+    malistedauteur.origine        = from_XML;
+
     free(HauteurHeuvre);
     return malistedauteur;
 }
 
-tab_Article_struct * convertTab_auteur2Article(const tab_auteur_struct * Malistauteur){
-    //compte le nombre de structure pour le maloc
-    INFO("Convertion des auteur en Article :")
+int count_NeedednbPaire_auteur_oeuvre(const tab_auteur_struct * Malistauteur){
+    DEBUG("compte le nombre de structure pour le maloc")
     int nbstructure = 0;
     for (int i = 0; i < Malistauteur->nombre_auteur; i++)
     {
         PROGRESSBAR(i,Malistauteur->nombre_auteur);
-        nbstructure+=Malistauteur->tab_auteur[i].size;/// lerreur etait la
+        nbstructure+=Malistauteur->tab_auteur[i].size;
     }
-
     DEBUG("il y a %d structure a générée",nbstructure)
+    return nbstructure;
+}
+
+tab_Article_struct convertTab_auteur2Article(const tab_auteur_struct * Malistauteur){
+    INFO("Convertion des auteur en Article :")
+
+    int nbstructure = count_NeedednbPaire_auteur_oeuvre(Malistauteur);
     DEBUG("Calloc de %lu octer",nbstructure*sizeof(Article_struct))
     Paire_Article_auteur * Paire_auteur_oeuvre = calloc(nbstructure,sizeof(Article_struct));
-
     exitIfNull(Paire_auteur_oeuvre,"imposible de crée Paire_auteur_oeuvre");
+
     int sizeHauteurHeuvre = deplier_auteur(Malistauteur,Paire_auteur_oeuvre);
     sort_tableaux_Article(Paire_auteur_oeuvre,sizeHauteurHeuvre);
-    tab_Article_struct * malistedauteur = assemble_tab_Article(Paire_auteur_oeuvre,sizeHauteurHeuvre,Malistauteur->nombre_article);
+    tab_Article_struct malistedauteur = assemble_tab_Article(Paire_auteur_oeuvre,sizeHauteurHeuvre,Malistauteur->nombre_article);
+
     free(Paire_auteur_oeuvre);
     return malistedauteur;
 }
@@ -630,16 +535,6 @@ void serialisation_tab_Article_struct(tab_Article_struct * inputlist, FILE * out
  * @param monArticle 
  */
 void ajout_Article_in_auteur(auteur_struct * monauteur,Article_struct * monArticle){
-    // Check doublon
-    // for (int i = 0; i < monauteur->nbArticlecontenue; i++)
-    // {
-    //     // DEBUG("%p !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! %p",monauteur->tab_ptr_Article[i],monArticle)
-    //     if(strcmp(monauteur->tab_ptr_Article[i]->nom_Article,monArticle->nom_Article)){
-    //         // DEBUG("HIT %p",monArticle)
-    //         return;
-    //     }
-    // }
-            // DEBUG("ALOUER %d DEMANDER %d",monauteur->nbmembreTabarticleALOUER,monauteur->nbArticlecontenue)
 
     if (monauteur->nbmembreTabarticleALOUER<=monauteur->nbArticlecontenue)
     {
@@ -651,34 +546,35 @@ void ajout_Article_in_auteur(auteur_struct * monauteur,Article_struct * monArtic
 
     monauteur->tab_ptr_Article[monauteur->nbArticlecontenue] = monArticle;
     monauteur->nbArticlecontenue++;
-    // DEBUG("\t\t tableauxd d'article %p nb element %d ",monauteur->tab_ptr_Article,monauteur->nbArticlecontenue)
-    // DEBUG("%d",monauteur->nbArticlecontenue)
+    YOLO("\t\t tableauxd d'article %p nb element %d ",monauteur->tab_ptr_Article,monauteur->nbArticlecontenue)
+    YOLO("%d",monauteur->nbArticlecontenue)
 }
 
 //faire une interface pour sérialiser deserialiser ?
-tab_Article_struct * deserialisation_tab_Article_struct(tab_auteur_struct * mesauteur, FILE * inputfile){
+tab_Article_struct deserialisation_tab_Article_struct(tab_auteur_struct * mesauteur, FILE * inputfile){
     INFO("\tdeserailisation Article")
+
     char ligne[BALISESIZE];
-    tab_Article_struct * mon_tab_Article_struct = calloc(1,sizeof(tab_Article_struct));
-    mon_tab_Article_struct->nombre_Article=0;
-    int * nombretotalarticle = & mon_tab_Article_struct->nombre_Article; 
+    tab_Article_struct mon_tab_Article_struct;
+    mon_tab_Article_struct.nombre_Article=0;
+    int * nombretotalarticle = & mon_tab_Article_struct.nombre_Article;
+
     fgets(ligne,BALISESIZE,inputfile);
     *nombretotalarticle = atoi(ligne);
-    exitIfNull(*nombretotalarticle,"nombre de structure manquand ...")
+
     DEBUG("il y a %d Article",*nombretotalarticle)
     DEBUG("Malloc de %luocter",sizeof(Article_struct)**nombretotalarticle)
 
     //optimiser car on alloue tout en un malloc ! par contre ça peut echouer a voir
     Article_struct * listedesArticle =  malloc(sizeof(Article_struct)**nombretotalarticle);
     exitIfNull(listedesArticle, "creation des sommet auteur tableaxD malloc null")
-    mon_tab_Article_struct->tab_Article = listedesArticle;
+    mon_tab_Article_struct.tab_Article = listedesArticle;
 
     for (int j = 0; j < *nombretotalarticle; j++)
     {
-        Article_struct * monArticle = &mon_tab_Article_struct->tab_Article[j];
-        #ifdef WARN_ON
         PROGRESSBAR(j,*nombretotalarticle);
-        #endif
+
+        Article_struct * monArticle = &mon_tab_Article_struct.tab_Article[j];
         
         //pas si utile .... Peut faire autrement
         fgets(ligne,BALISESIZE,inputfile);
@@ -712,19 +608,9 @@ tab_Article_struct * deserialisation_tab_Article_struct(tab_auteur_struct * mesa
             //je cherche dans le tab auteur en fc de l'index trouver
             structauteur[i] = &(mesauteur->tab_auteur[indexmagie]);
             YOLO("noms de l'auteur %s",structauteur[i]->nom_auteur)
-
-            //je doit  associer a mon auteur de quoi joindre mon article
-
-            //pas obligatoir
-            // structauteur[i].nbArticlecontenue = indexmagie;
-            // DEBUG("size %d nombre element maj %d", structauteur[i].size,structauteur[i].nbArticlecontenue)
-            // YOLO("hauteur: %s",structauteur[i].nom_auteur);
-            // DEBUG("Ajout de l'article a  %s",monArticle->nom_Article)
             ajout_Article_in_auteur(structauteur[i],monArticle);
-            // DEBUG("!!! addresse %p, nombre d'article contenue %d, %s",structauteur[i].tab_ptr_Article,structauteur[i].nbArticlecontenue,structauteur[i].nom_auteur)
         }
 
-        // le réalock fout la merde 
         #ifdef YOLO_ON
         INFO("Noms article %s",monArticle->nom_Article)
         INFO("Nombre d'article %d",monArticle->nombre_auteur)
@@ -734,16 +620,8 @@ tab_Article_struct * deserialisation_tab_Article_struct(tab_auteur_struct * mesa
             DEBUG("\tNoms auteur %s",monArticle->tab_ptr_auteur[i]->nom_auteur)
             WARNING("-----")
         }
-        #endif
-        
-        
+        #endif 
     }
-
-    //tester ici? 
-
-
-
-
     return mon_tab_Article_struct;
 }
 
@@ -753,10 +631,10 @@ tab_Article_struct * deserialisation_tab_Article_struct(tab_auteur_struct * mesa
  * @param dbinput 
  * @return tab_Article_struct* 
  */
-tab_Article_struct * gen_tab_Article_from_xml(FILE * dbinput){
+tab_Article_struct gen_tab_Article_from_xml(FILE * dbinput){
     INFO("gen_tab_Article_from_xml:")
-    tab_auteur_struct * malistauteur = gen_tab_auteur_from_xml(dbinput);//la
-    tab_Article_struct * malistaarticle = convertTab_auteur2Article(malistauteur);
+    tab_auteur_struct   malistauteur   = gen_tab_auteur_from_xml(dbinput);//la
+    tab_Article_struct  malistaarticle = convertTab_auteur2Article(&malistauteur);
     INFO("tab_Article_struct générée")
     return malistaarticle ;
 }
@@ -772,62 +650,68 @@ tab_Article_struct * gen_tab_Article_from_xml(FILE * dbinput){
  */
 Graph_struct deserialise_Graph(FILE * dbxmlCache, FILE * auteurCache, FILE * ArticleCache){
     INFO("Désérialisation du Graph:")
-    tableaux_fiche matablefiche =         deserialisation_tableaux_fiche(dbxmlCache);
-    tab_auteur_struct * malistaauteur =   deserialise_tab_auteur_struct(&matablefiche,auteurCache);
-    tab_Article_struct * malistearticle = deserialisation_tab_Article_struct(malistaauteur,ArticleCache);
-    Graph_struct graph  = {malistaauteur, malistearticle,matablefiche};
+    tableaux_fiche      mesfiche    =   deserialisation_tableaux_fiche(dbxmlCache);
+    tab_auteur_struct   mes_auteur   =   deserialise_tab_auteur_struct(&mesfiche,auteurCache);
+    tab_Article_struct  mes_Article  =   deserialisation_tab_Article_struct(&mes_auteur,ArticleCache);
+    mes_Article.origine = from_deserialisation;
+    Graph_struct graph  = {mes_auteur, mes_Article,mesfiche};
     return graph;
 }
 
 Graph_struct gen_Graph_from_XML(FILE * dbxmlCache){
     INFO("Génération du graph (XML)")
-    tableaux_fiche mesfiche =  parse(dbxmlCache);
-    tab_auteur_struct * malistedauteur = convertTab_fiche2auteur(mesfiche);
-    tab_Article_struct * malistaarticle = convertTab_auteur2Article(malistedauteur);
-    Graph_struct graph  = {malistedauteur, malistaarticle,mesfiche};
+    tableaux_fiche      mesfiche    = parse(dbxmlCache);
+    tab_auteur_struct   mes_auteur  = convertTab_fiche2auteur(mesfiche);
+    tab_Article_struct  mes_Article = convertTab_auteur2Article(&mes_auteur);
+    mes_Article.origine = from_XML;
+    Graph_struct graph  = {mes_auteur, mes_Article,mesfiche};
     return graph;
 }
 
 void serialise_Graph(Graph_struct graph, FILE * dbxmlCache, FILE * auteurCache, FILE * ArticleCache){
     INFO("Sérialisation du graph:")
     serialisation_tableaux_fiche(graph.tableaux_de_fiche,dbxmlCache);
-    serialise_tab_auteur_struct(graph.tab_auteur_struct,auteurCache);
-    serialisation_tab_Article_struct(graph.tab_Article_struct,ArticleCache);
+    serialise_tab_auteur_struct(&graph.tab_auteur_struct,auteurCache);
+    serialisation_tab_Article_struct(&graph.tab_Article_struct,ArticleCache);
 }
 
 
-void free_auteur(auteur_struct auteur){
+void free_auteur(auteur_struct auteur,int contexte){
+    if (contexte == from_deserialisation)
+    {
+        free(auteur.nom_auteur); 
+    }
     free(auteur.tab_ptr_Article);
     free(auteur.tab_ptr_fiche_min);
 }
 
-void free_tab_auteur(tab_auteur_struct * afree){
-    INFO("Free tab auteur")
-    for (int i = 0; i < afree->nombre_auteur; i++)
+void free_Article(Article_struct Article, int contexte){
+    if (contexte == from_deserialisation)
     {
-        free_auteur(afree->tab_auteur[i]);
+        //le strdup n'es pas lier au fiche
+        free(Article.nom_Article); 
     }
-    free(afree->tab_auteur);
-    free(afree);
-}
-
-
-
-void free_Article(Article_struct Article){
-    // free(Article.nom_Article);//deserialisation ou pas ??? 
     free(Article.tab_ptr_auteur);
 }
 
-
-void free_tab_Article(tab_Article_struct * afree){
-    INFO("Free tab Article")
-    for (int i = 0; i < afree->nombre_Article; i++)
+void free_tab_auteur(tab_auteur_struct afree){
+    INFO("Free tab auteur")
+    for (int i = 0; i < afree.nombre_auteur; i++)
     {
-        PROGRESSBAR(i,afree->nombre_Article);
-        free_Article(afree->tab_Article[i]);
+        PROGRESSBAR(i,afree.nombre_auteur);
+        free_auteur(afree.tab_auteur[i],afree.origine);
     }
-    free(afree->tab_Article);
-    // free(afree);
+    free(afree.tab_auteur);
+}
+
+void free_tab_Article(tab_Article_struct afree){
+    INFO("Free tab Article")
+    for (int i = 0; i < afree.nombre_Article; i++)
+    {
+        PROGRESSBAR(i,afree.nombre_Article);
+        free_Article(afree.tab_Article[i],afree.origine);
+    }
+    free(afree.tab_Article);
 }
 
 void free_Graph_struct(Graph_struct afree){
