@@ -1,0 +1,13 @@
+-a la relecture de tout, on pourra mettre #coding:utf-8 au debut de chaque fichier et mettre tous les accents aux lettres qui en ont besoin
+
+-corriger free_Dijkstra
+
+-expliquer à Konqui Dijkstra.c
+
+-Tout lire et comprendre
+
+-faire la docu
+
+-enlever dblp.xml de l'historique github
+
+-dire à Bramas d'ecrire les noms en respectant les conventions expliqué là: https://sites.psu.edu/symbolcodes/codehtml/#accent

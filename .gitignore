@@ -1471,3 +1471,11 @@ main/build/list.o
 main/build/macro.o
 main/build/parsing.o
 main/build/unwrap.o
+main/bin/tests
+main/build/search.o
+main/build/tests.o
+main/build/search.o
+main/build/tests.o
+main/bin/Dijkstra
+main/build/Dijkstra.o
+main/build/fonctions_graphe.o

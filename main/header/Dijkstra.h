@@ -1,5 +1,4 @@
 
-
 #ifndef _DIJKSTRA_H
 #define _DIJKSTRA_H
 
@@ -23,9 +22,9 @@ typedef enum comparaison_auteur_2
 }comparaison_auteur_2;
 
 
-plus_court_chemin_struct* do_Dijkstra(graphe_struct graphe_t, char* nom_auteur_1, char* nom_auteur_2);
+plus_court_chemin_struct* do_Dijkstra(graphe_struct_Katie graphe_t, char* nom_auteur_1, char* nom_auteur_2);
 
-void free_Dijkstra(graphe_struct* graphe_t, plus_court_chemin_struct *pcc_ptr);
+void free_Dijkstra(graphe_struct_Katie* graphe_t, plus_court_chemin_struct *pcc_ptr);
 
 
 #endif

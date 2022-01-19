@@ -7,13 +7,11 @@
 
 
 
-//renomer
-void printM_titre(fiche_minimale OwO){
+void print_titre_fiche_minimal(fiche_minimale OwO){
     printf("titre:    %s",OwO.titre);
 }
 
-//renomer
-void printM_liste_auteur(fiche_minimale UwU){
+void print_liste_auteur_fiche_minimal(fiche_minimale UwU){
     printf("auteurs:\n\t");
     for (int i = 0; i < UwU.nombre_auteur; i++)
     {
@@ -24,19 +22,17 @@ void printM_liste_auteur(fiche_minimale UwU){
     printf("\n");
 }
 
-//renomer
-void printM(fiche_minimale OwU){
-    printM_titre(OwU);
+void print_fiche_minimal(fiche_minimale OwU){
+    print_titre_fiche_minimal(OwU);
     printf("\n");
-    printM_liste_auteur(OwU);   
+    print_liste_auteur_fiche_minimal(OwU);   
 }
 
-//renomer
 void printTabmeaux(tableaux_fiche UwO){
 
     for (int i = 0; i < UwO.taille; i++)
     {
-        printM(*(UwO.fiche[i]));
+        print_fiche_minimal(*(UwO.fiche[i]));
     }
 }
 
@@ -234,7 +230,7 @@ tableaux_fiche parse(FILE * inputDB){ /// a besoin detre un pointeur pour le fre
             && strcmp(fichelocalM->titre,"")!=0)//ces con mais fichelocalM->titre ou fichelocalM->titre != '' devrais fonctioner..
             {
                 //DEGUG ajout de 
-                // printM_titre(*fichelocalM);
+                // print_titre_fiche_minimal(*fichelocalM);
                 appendTabmeaux(&tableaux_allfiche,fichelocalM);
             }else{
                 free_fiche_minimale(fichelocalM);
