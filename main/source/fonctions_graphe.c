@@ -3,17 +3,6 @@
 #include "../header/unwrap.h"
 #include "../header/fonctions_graphe.h"
 
-
-
-
-typedef enum a_mettre_dans_voisins_ou_pas
-{
-    a_ne_pas_mettre,
-    a_mettre
-
-}a_mettre_dans_voisins_ou_pas;
-
-
 //on appelera "graphe" le tableau des ptr vers les auteurs contenues dans malistauteur
 graphe_struct faire_graphe_ptr_auteur()
 {
@@ -131,6 +120,94 @@ void verifier_do_Dijkstra(plus_court_chemin_struct* pcc)
     free(pcc_verif.tab_verif_Article);
 }
 
+
+void voir_si_un_auteur_est_dans_le_graphe_et_donner_un_Article_ou_il_apparait(graphe_struct graphe_struct, char* nom_auteur)
+{
+    comparaison_auteur trouver_ou_pas= auteur_pas_trouver;
+    auteur_struct* ptr_auteur= NULL;
+    
+    for(int i=0; i<graphe_struct.size_graphe; i++)
+    {
+        if(strcmp(nom_auteur, graphe_t.graphe[i]->nom_auteur)==0)
+        {
+            trouver_ou_pas= auteur_trouver;
+            ptr_auteur= graphe_t.graphe[i];
+            
+        }
+    }
+    if(trouver_ou_pas== auteur_pas_trouver)
+    {
+        printf("%s n'apparait dans aucun Article\n", nom_auteur);   
+    }
+    else 
+    {
+        printf("%s apparait dans le graphe, il est par exemple l'auteur de l'Article: %s\n", nom_auteur, ptr_auteur->tab_ptr_Article[0]->nom_Article);        
+    }
+}
+
+void donner_tous_les_Articles_de_auteur(graphe_struct graphe_struct, char* nom_auteur)
+{
+    comparaison_auteur trouver_ou_pas= auteur_pas_trouver;
+    auteur_struct* ptr_auteur= NULL;
+    
+    for(int i=0; i<graphe_struct.size_graphe; i++)
+    {
+        if(strcmp(nom_auteur, graphe_t.graphe[i]->nom_auteur)==0)
+        {
+            trouver_ou_pas= auteur_trouver;
+            ptr_auteur= graphe_t.graphe[i];
+            
+        }
+    }
+    if(trouver_ou_pas== auteur_pas_trouver)
+    {
+        printf("%s n'apparait dans aucun Article\n", nom_auteur);   
+    }
+    else
+    {
+        printf("%s apparait dans le graphe, il est l'auteur des l'Articles: %s\n", nom_auteur);
+        for(int k=0, k< ptr_auteur->size; k++)
+        {
+            printf("%s\n", ptr_auteur->tab_ptr_Article[k]->nom_Article);
+        }
+    }
+}
+
+void donner_tous_ceux_qui_ont_travalle_avec_auteur(graphe_struct graphe_struct, char* nom_auteur)
+{
+    comparaison_auteur trouver_ou_pas= auteur_pas_trouver;
+    auteur_struct* ptr_auteur= NULL;
+    
+    for(int i=0; i<graphe_struct.size_graphe; i++)
+    {
+        if(strcmp(nom_auteur, graphe_t.graphe[i]->nom_auteur)==0)
+        {
+            trouver_ou_pas= auteur_trouver;
+            ptr_auteur= graphe_t.graphe[i];
+            
+        }
+    }
+    if(trouver_ou_pas== auteur_pas_trouver)
+    {
+        printf("%s n'apparait dans aucun Article\n", nom_auteur);   
+    }
+    else
+    {
+        printf("%s a déjà écrit un Article avec:\n");
+    
+        for(int l=0; l< ptr_auteur->size; l++)
+        {
+
+            Article_struct* ptr_Al= ptr_auteur->tab_ptr_Article[l];
+
+            for(int k=0; k< ptr_Al->nombre_auteur; k++)
+            {
+                auteur_struct* ptr_collegue= ptr_Article_l->tab_ptr_auteur[k];
+                printf("%s\n", ptr_collegue->nom_auteur);
+
+            }
+        }
+}
 
 
 /*

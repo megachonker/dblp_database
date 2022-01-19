@@ -1,10 +1,8 @@
--a la relecture de tout, on pourra mettre #coding:utf-8 auu debut de chaque fichier et mettre tous les accents aux lettres qui en ont besoin
+-a la relecture de tout, on pourra mettre #coding:utf-8 au debut de chaque fichier et mettre tous les accents aux lettres qui en ont besoin
 
--au lieu de faire une grosse pile_auteur_a_traiter_courant/ pile_suivante,  recréer en une de a bonne taille à chaque étape
+-corriger free_Dijkstra
 
--faire un free pour Dijkstra
-
--expliquer à Konqui Dijkstra.ca
+-expliquer à Konqui Dijkstra.c
 
 -Tout lire et comprendre
 
@@ -12,4 +10,3 @@
 
 -enlever dblp.xml de l'historique github
 
--faire des dossiers pour ranger les .h ensemble, les .c ensemble, les .o ensemble etc...
