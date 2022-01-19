@@ -25,7 +25,7 @@ graphe_struct faire_graphe_ptr_auteur()
     FILE * DBArticleLecture = fopen(Article_cache   ,"r");
 
 
-    unwrap_Graph_struct mongraph = deserialise_Graph(DBficheLecture
+    unwrap_Graph_struct mon_graph = deserialise_Graph(DBficheLecture
                                     ,DBauteurLecture
                                     ,DBArticleLecture);
 
@@ -38,14 +38,15 @@ graphe_struct faire_graphe_ptr_auteur()
     fclose(DBArticleLecture);
 
 
-    int size_graphe= mongraph.tab_auteur_struct->nombre_auteur;
+    int size_graphe= mon_graph.tab_auteur_struct->nombre_auteur;
     graphe_struct graphe_struct;
     graphe_struct.graphe= malloc(sizeof(auteur_struct*)*size_graphe);
+    printf("malloc du graphe réussi\n");
     graphe_struct.size_graphe= size_graphe;
 
     for(int i=0; i<size_graphe; i++)
     {
-        auteur_struct* ai_ptr= &(mongraph.tab_auteur_struct->tab_auteur[i]);
+        auteur_struct* ai_ptr= &(mon_graph.tab_auteur_struct->tab_auteur[i]);
         ai_ptr->size_pcc_auteur= -1;
         ai_ptr->ptr_Article_predecesseur_pcc= malloc(8);
         ai_ptr->ptr_Article_predecesseur_pcc= NULL;
@@ -53,8 +54,9 @@ graphe_struct faire_graphe_ptr_auteur()
         ai_ptr->ptr_auteur_predecesseur_pcc= NULL;
         graphe_struct.graphe[i]= ai_ptr;
     }
+    printf("malloc set up des attributs d'auteur réussi\n");
 
-    free(mongraph.tab_auteur_struct);
+    free(mon_graph.tab_auteur_struct);
 
     return graphe_struct;
 }

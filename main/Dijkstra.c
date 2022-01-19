@@ -106,7 +106,7 @@ plus_court_chemin_struct reconstitution_du_pcc_apres_parcours(int* taille_pcc_pt
 
 
 //"traiter l'auteur courant" siginifie mettre a jour la size_pcc_auteur de tous ses voisins
-void traitement_auteur_courant_et_mise_a_jour_pile_suivante(int* pile_suivante, auteur_struct* ptr_auteur_courant, int* haut_de_pile_suivante_ptr, int* taille_pcc_ptr)
+void traitement_auteur_courant_et_mise_a_jour_pile_suivante(auteur_struct* ptr_auteur_courant, int* haut_de_pile_suivante_ptr, int* taille_pcc_ptr, int* taille_piles_ptr, int* pile_auteur_a_traiter_etape_courante, int* pile_suivante)
 {
     //printf("%s::::: \n", ptr_auteur_courant->nom_auteur);
     for(int l=0; l< ptr_auteur_courant->size; l++)
@@ -135,6 +135,12 @@ void traitement_auteur_courant_et_mise_a_jour_pile_suivante(int* pile_suivante, 
                 pile_suivante[*haut_de_pile_suivante_ptr]= ptr_voisin_k->indice_dans_le_graphe;
                 //printf("indice_auteur_a_mettre_dans_suivante:%d\n", ptr_voisin_k->indice_dans_le_graphe);
                 *haut_de_pile_suivante_ptr= *haut_de_pile_suivante_ptr+1;
+                if(*haut_de_pile_suivante_ptr> *taille_piles_ptr)
+                {
+                    pile_suivante= realloc(pile_suivante, sizeof(int)*(*taille_piles_ptr)*2);
+                    pile_auteur_a_traiter_etape_courante= realloc(pile_auteur_a_traiter_etape_courante, sizeof(int)*(*taille_piles_ptr)*2);
+                    *taille_piles_ptr= (*taille_piles_ptr)*2;
+                }
             
                 
                 //print_pile_courante(pile_auteur_a_traiter_etape_courante, *haut_de_pile_courante_ptr, graphe);
@@ -160,6 +166,7 @@ void traitement_auteur_courant_et_mise_a_jour_pile_suivante(int* pile_suivante, 
         }
         
     }
+    printf("haut_de_pile_suivante:%d\n", *haut_de_pile_suivante_ptr);
     
 }
 
@@ -171,8 +178,13 @@ plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcour
     //les piles, sont des tableau d'indice d'auteur, indice dans le graphe
     int* pile_auteur_a_traiter_etape_courante= malloc(sizeof(int)*1000000);
     exitIfNull(pile_auteur_a_traiter_etape_courante, "echec malloc pile_auteur_a_traiter_etape_courante");
+    
     int* pile_suivante= malloc(sizeof(int)*1000000);
     exitIfNull(pile_suivante, "echec malloc pile_suivante");
+    
+    int taille_piles= 1000000;
+    int* taille_piles_ptr= &taille_piles;
+    
 
     pile_auteur_a_traiter_etape_courante[0]= ptr_auteur_depart->indice_dans_le_graphe;
     int haut_de_pile_courante=1;
@@ -189,7 +201,7 @@ plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcour
     while(pile_auteur_a_traiter_etape_courante[0]!= -1)
     {
         
-        //printf("%s\n", "rentrer dans le while");
+        printf("%s\n", "commencement d'une étape de parcours en largeur");
         //printf("%d\n", *taille_pcc_ptr);
         for(int i=0; i< *haut_de_pile_courante_ptr; i++)
         {
@@ -214,7 +226,7 @@ plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcour
             }
 
             //printf("%s\n", "on va jusqu'à, juste avent le traitement");
-            traitement_auteur_courant_et_mise_a_jour_pile_suivante(pile_suivante, ptr_auteur_courant, haut_de_pile_suivante_ptr, taille_pcc_ptr);
+            traitement_auteur_courant_et_mise_a_jour_pile_suivante(ptr_auteur_courant, haut_de_pile_suivante_ptr, taille_pcc_ptr, taille_piles_ptr, pile_auteur_a_traiter_etape_courante, pile_suivante);
             
            
         }
@@ -393,12 +405,12 @@ int main(void)
     
     //char* nom_auteur_depart= mon_graphe.graphe[1344]->nom_auteur;
     //printf("nom auteur_depart: %s\n", nom_auteur_depart);
+
     //char* nom_auteur_destination= mon_graphe.graphe[8888]->nom_auteur;
     //printf("nom auteur_destination: %s\n", nom_auteur_destination);
-    
+
     char* nom_auteur_depart= mon_graphe.graphe[1234]->nom_auteur;
     char* nom_auteur_destination= mon_graphe.graphe[1234]->nom_auteur;
-
     plus_court_chemin_struct* plus_court_chemin=  do_Dijkstra(mon_graphe, nom_auteur_depart, nom_auteur_destination);
 
     
@@ -409,7 +421,7 @@ int main(void)
         verifier_do_Dijkstra(plus_court_chemin);
     }
 
-   //free_Dijkstra(&mon_graphe, plus_court_chemin);
+   free_Dijkstra(&mon_graphe, plus_court_chemin);
     
     
 
