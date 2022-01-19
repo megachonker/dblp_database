@@ -469,7 +469,7 @@ tab_auteur_struct * deserialise_tab_auteur_struct(const tableaux_fiche * tableau
     INFO("\tdeserialise tab auteur")
 
     char ligne[BALISESIZE];
-    tab_auteur_struct * master_List_Auteur = malloc(sizeof(tab_auteur_struct));
+    tab_auteur_struct * master_List_Auteur = malloc(sizeof(tab_auteur_struct)); // sert a rien? 
     master_List_Auteur->nombre_auteur=0;
 
     fgets(ligne,BALISESIZE,input);
@@ -796,19 +796,16 @@ void serialise_Graph(Graph_struct graph, FILE * dbxmlCache, FILE * auteurCache, 
 }
 
 
-void free_auteur(auteur_struct * auteur){
-    // free(auteur->nom_auteur);
-    for (int i = 0; i < auteur->size; i++)
-    {
-        free_fiche_minimale(auteur->tab_ptr_fiche_min[i]);
-    }
+void free_auteur(auteur_struct auteur){
+    free(auteur.tab_ptr_Article);
+    free(auteur.tab_ptr_fiche_min);
 }
 
 void free_tab_auteur(tab_auteur_struct * afree){
     INFO("Free tab auteur")
     for (int i = 0; i < afree->nombre_auteur; i++)
     {
-        free_auteur(&afree->tab_auteur[i]);
+        free_auteur(afree->tab_auteur[i]);
     }
     free(afree->tab_auteur);
     free(afree);
@@ -817,11 +814,7 @@ void free_tab_auteur(tab_auteur_struct * afree){
 
 
 void free_Article(Article_struct Article){
-    free(Article.nom_Article);
-    for (int i = 0; i < Article.nombre_auteur; i++)
-    {
-        free_auteur(Article.tab_ptr_auteur[i]);
-    }
+    // free(Article.nom_Article);//deserialisation ou pas ??? 
     free(Article.tab_ptr_auteur);
 }
 
@@ -838,8 +831,7 @@ void free_tab_Article(tab_Article_struct * afree){
 }
 
 void free_Graph_struct(Graph_struct afree){
-    // free_tab_Article(afree.tab_Article_struct);
-    // free_Article(afree.tab_Article_struct);
     free_tab_fiche(afree.tableaux_de_fiche);
-    // free_tab_auteur(afree.tab_auteur_struct);
+    free_tab_auteur(afree.tab_auteur_struct);
+    free_tab_Article(afree.tab_Article_struct);
 }

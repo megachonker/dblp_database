@@ -225,7 +225,7 @@ void local_custom_serialise_Graph(){
 // soucis de free?
 void bench_all(){
     tableaux_fiche a = deserialisedb();
-    free_tab_fiche(&a);
+    free_tab_fiche(a);
     unwrwap_gen_cache();
     deserialise_tab_auteur(0);
 }
