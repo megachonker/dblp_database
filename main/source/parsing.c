@@ -83,7 +83,7 @@ char * getanchor(char * recherche, char * ligne){
  * @param [in] nomsauteur addrese de la chaine de caractere
  */
 void appendAuteurM(fiche_minimale * mafiche,char * nomsauteur){
-    char ** addrListeauteur = NULL;
+    char ** addrListeauteur = NULL;                                                         //des char? ?? ? ?? 
     addrListeauteur = reallocarray(mafiche->liste_auteur,(mafiche->nombre_auteur+1),sizeof(fiche_minimale));//MALOC
 
     exitIfNull(addrListeauteur,"appendAuteurM: allocation imposible")
@@ -236,8 +236,10 @@ tableaux_fiche parse(FILE * inputDB){ /// a besoin detre un pointeur pour le fre
                 //DEGUG ajout de 
                 // printM_titre(*fichelocalM);
                 appendTabmeaux(&tableaux_allfiche,fichelocalM);
-            }
+            }else{
+                free_fiche_minimale(fichelocalM);
 
+            }
             fichelocalM = calloc(1,sizeof(fiche_minimale));//maloc ?
             fichelocalM->nombre_auteur = 0;
         }        
@@ -290,7 +292,7 @@ void serialisation_tableaux_fiche(const tableaux_fiche mastertab, FILE * output)
  * @param [in] input générée par serialisation_tableaux_fiche 
  * @return pointeur ver tableaux_fiche 
  */
-tableaux_fiche * deserialisation_tableaux_fiche(FILE * input){
+tableaux_fiche deserialisation_tableaux_fiche(FILE * input){
     INFO("\tDeserialisation tableaux fiche DBXML")
 
     PROGRESSBAR_DECL(input);
@@ -302,12 +304,13 @@ tableaux_fiche * deserialisation_tableaux_fiche(FILE * input){
 
     //read tailletotal
 
-    tableaux_fiche * tableaux_allfiche = calloc(1,sizeof(tableaux_fiche));//valgrind leak 
-    exitIfNull(tableaux_allfiche,"deserialisation:imposible d'alouer le tableaux de toute les fiche\n")
-    tableaux_allfiche->taille = 0;//<=  = tailletotal
-    tableaux_allfiche->nbAuteurXarticle = 0;
-    //AFAIRE un soeule maloc tableaux_allfiche->taille*sizeof !!
-    tableaux_allfiche->fiche = NULL;
+    tableaux_fiche tableaux_allfiche;
+    //  = calloc(1,sizeof(tableaux_fiche));//valgrind leak 
+    // exitIfNull(tableaux_allfiche,"deserialisation:imposible d'alouer le tableaux de toute les fiche\n")
+    tableaux_allfiche.taille = 0;//<=  = tailletotal
+    tableaux_allfiche.nbAuteurXarticle = 0;
+    //AFAIRE un soeule maloc tableaux_allfiche.taille*sizeof !!
+    tableaux_allfiche.fiche = NULL;
 
 
     fiche_minimale * fichelocalM = calloc(1,sizeof(fiche_minimale));//valgrind
@@ -333,9 +336,9 @@ tableaux_fiche * deserialisation_tableaux_fiche(FILE * input){
             fgets(ligne,BALISESIZE,input);
             enlever_retour_a_la_ligne(ligne);
             appendAuteurM(fichelocalM,strdup(ligne));// ICI on doit réloc pour iren VALGRINND
-            tableaux_allfiche->nbAuteurXarticle++;
+            tableaux_allfiche.nbAuteurXarticle++;
         }
-        appendTabmeaux(tableaux_allfiche,fichelocalM);
+        appendTabmeaux(&tableaux_allfiche,fichelocalM);
         fichelocalM = calloc(1,sizeof(fiche_minimale));//MLOC
         exitIfNull(fichelocalM, "new calloc null")
         fichelocalM->nombre_auteur = 0;
@@ -349,11 +352,12 @@ tableaux_fiche * deserialisation_tableaux_fiche(FILE * input){
 
 
 void free_fiche_minimale(fiche_minimale * fiche){
+    free(fiche->titre);
     for (int u = 0; u < fiche->nombre_auteur; u++)
     {
-        //desaloc un tableaux de char : stupide ?       
         free(fiche->liste_auteur[u]);
     }
+    free(fiche->liste_auteur);
     free(fiche);
 }
 
@@ -363,13 +367,13 @@ void free_fiche_minimale(fiche_minimale * fiche){
  * 
  * @param DEGAGE 
  */
-void free_tab_fiche(tableaux_fiche * DEGAGE){
+void free_tab_fiche(tableaux_fiche DEGAGE){
     INFO("Free parsing")
-    for (int i = 0; i < DEGAGE->taille; i++)
+    for (int i = 0; i < DEGAGE.taille; i++)
     {
-        PROGRESSBAR(i,DEGAGE->taille);
-        free_fiche_minimale(DEGAGE->fiche[i]);
+        PROGRESSBAR(i,DEGAGE.taille);
+        free_fiche_minimale(DEGAGE.fiche[i]);
     }
-    // free(DEGAGE);
+    free(DEGAGE.fiche);
 }
 

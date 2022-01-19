@@ -183,5 +183,4 @@ tab_Article_struct * convertTab_auteur2Article(const tab_auteur_struct * Malista
 tab_auteur_struct * gen_tab_auteur_from_xml(FILE * dbinput);
 
 void test_exploration_Article(const tab_Article_struct * mesarticle);
-
 #endif

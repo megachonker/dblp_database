@@ -24,11 +24,12 @@ PATH_BUILD	?= build/
 
 abench.sh: $(PATH_BIN)bench gen_cache_data
 
-val:	bench gsmall
-	# valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./$(PATH_BIN)bench dg 2
-	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./$(PATH_BIN)bench sg 2
-	# valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./$(PATH_BIN)bench gxml 2
-	
+val:	$(PATH_BIN)bench gsmall
+	clear
+	valgrind --track-origins=yes --leak-check=full -s ./$(PATH_BIN)bench gxml 1
+	valgrind --track-origins=yes --leak-check=full -s ./$(PATH_BIN)bench dg 1
+	valgrind --track-origins=yes --leak-check=full -s ./$(PATH_BIN)bench sg 1
+
 $(PATH_BIN)bench:	$(PATH_BUILD)bench.o $(PATH_BUILD)parsing.o $(PATH_BUILD)list.o $(PATH_BUILD)unwrap.o $(PATH_BUILD)macro.o
 	$(CCA) -o $(PATH_BIN)bench  $^ $(CFLAGS) $(LDLIBS)
 
@@ -61,7 +62,7 @@ doc:
 	doxygen Doxyfile
 	firefox html/index.html
 
-callgrind:	bench gsmall
+callgrind:	$(PATH_BIN)bench gsmall
 	valgrind --dump-instr=yes --collect-jumps=yes --tool=callgrind --callgrind-out-file=callgrind_trace__unwrap_deserialise_Article	./$(PATH_BIN)bench sg 1
 	valgrind --dump-instr=yes --collect-jumps=yes --tool=callgrind --callgrind-out-file=callgrind_trace__gen_tab_Article_from_xml	./$(PATH_BIN)bench dg 1
 	kcachegrind callgrind_trace__unwrap_deserialise_Article

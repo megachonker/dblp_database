@@ -11,7 +11,7 @@
  * 
  * 
  */
-typedef struct free_tab_fiche
+typedef struct fiche_minimale
 {
     char * titre;           ///< renomer par article ?
     //< date de création ?
@@ -88,7 +88,7 @@ void serialisation_tableaux_fiche(tableaux_fiche mastertab, FILE * outfichier);
  * @param [in] input générée par serialisation_tableaux_fiche 
  * @return pointeur ver tableaux_fiche 
  */
-tableaux_fiche * deserialisation_tableaux_fiche(FILE * input);
+tableaux_fiche deserialisation_tableaux_fiche(FILE * input);
 
 //renomer
 /**
@@ -96,6 +96,6 @@ tableaux_fiche * deserialisation_tableaux_fiche(FILE * input);
  * 
  * @param DEGAGE 
  */
-void free_tab_fiche(tableaux_fiche * DEGAGE);
-
+void free_tab_fiche(tableaux_fiche DEGAGE);
+void free_fiche_minimale(fiche_minimale * fiche);
 #endif

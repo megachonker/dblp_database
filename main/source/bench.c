@@ -51,7 +51,7 @@ void serializedsmall(){
 }
 //serialise small db manque 
 
-tableaux_fiche * deserialisedb(){
+tableaux_fiche deserialisedb(){
     FILE * fichier = fopen(cache_fiche,"r");
     exitIfNull(fichier,"imposible d'ouvrire "cache_fiche);
     return deserialisation_tableaux_fiche(fichier);    
@@ -89,8 +89,8 @@ tab_auteur_struct * deserialise_tab_auteur(int print){
     exitIfNull(input,"imposible d'ouvrire "auteur_cache)
     FILE * fichier = fopen(cache_fiche,"r");
     exitIfNull(fichier,"imposible d'ouvrire "cache_fiche);
-    tableaux_fiche * azer = deserialisation_tableaux_fiche(fichier);
-    tab_auteur_struct * malistauteur =  deserialise_tab_auteur_struct(azer,input);
+    tableaux_fiche azer = deserialisation_tableaux_fiche(fichier);
+    tab_auteur_struct * malistauteur =  deserialise_tab_auteur_struct(&azer,input);
     if(print == 1){
         printList_auteur(malistauteur);
     }
@@ -119,8 +119,8 @@ tab_Article_struct * gen_article(){
     FILE * DBinversee = fopen(auteur_cache,"r");
     exitIfNull(DBxmll,"INPUT PAS CHEMAIN")
     exitIfNull(DBinversee,"INPUT PAS CHEMAIN")
-    tableaux_fiche * matablefiche = deserialisation_tableaux_fiche(DBxmll);
-    tab_auteur_struct * malistaauteur =   deserialise_tab_auteur_struct(matablefiche,DBinversee);
+    tableaux_fiche matablefiche = deserialisation_tableaux_fiche(DBxmll);
+    tab_auteur_struct * malistaauteur =   deserialise_tab_auteur_struct(&matablefiche,DBinversee);
     tab_Article_struct * malistearticle = convertTab_auteur2Article(malistaauteur);
     return malistearticle;
 }
@@ -224,7 +224,8 @@ void local_custom_serialise_Graph(){
 
 // soucis de free?
 void bench_all(){
-    free_tab_fiche(deserialisedb());
+    tableaux_fiche a = deserialisedb();
+    free_tab_fiche(&a);
     unwrwap_gen_cache();
     deserialise_tab_auteur(0);
 }
@@ -410,7 +411,7 @@ int main(int argc, char const *argv[])
     }
     else if(strcmp("deserialisedbprint",compstr)==0){// N
         // printf("deserialisedb\n");
-        printTabmeaux(*deserialisedb());
+        printTabmeaux(deserialisedb());
     }
     else if(strcmp("readsmaldb",compstr)==0){
         // printf("readsmaldb\n");
