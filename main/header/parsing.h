@@ -11,7 +11,7 @@
  * 
  * 
  */
-typedef struct free_tab_fiche
+typedef struct fiche_minimale
 {
     char * titre;           ///< renomer par article ?
     //< date de création ?
