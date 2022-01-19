@@ -148,12 +148,7 @@ void gen_id_fiche(tableaux_fiche * tableaux_allfiche){
  * @return int indice utilser par quicksort
  */
 static int cmptabfiche(const void * maficheA,const void * maficheB){
-    //MAGIE NOIIIIIIIIIIIIIIIIIIIIIREEE
-    fiche_minimale* maficheAA = *(fiche_minimale**) maficheA;
-    fiche_minimale* maficheBB = *(fiche_minimale**) maficheB;
-    // DEBUG => printf("%s <=> %s\n",maficheAA->titre,maficheAA->titre);
-    return strcmp(maficheAA->titre,maficheBB->titre);
-}
+    return strcmp(((fiche_minimale*)maficheA)->titre,((fiche_minimale*)maficheB)->titre);}
 
 void sortlist(tableaux_fiche * mesfiche ){
     DEBUG("trie des liste parsing")
