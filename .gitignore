@@ -1476,3 +1476,6 @@ main/build/search.o
 main/build/tests.o
 main/build/search.o
 main/build/tests.o
+main/bin/Dijkstra
+main/build/Dijkstra.o
+main/build/fonctions_graphe.o

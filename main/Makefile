@@ -25,7 +25,8 @@ go:	genfolder $(PATH_BIN)tests custom
 # 	./fonctions_graphe
 # $(PATH_HEADER)
 
-
+Dijkstra: graphTest2 genfolder $(PATH_BIN)Dijkstra
+	./$(PATH_BIN)Dijkstra
 
 val:	genfolder $(PATH_BIN)bench gsmall
 	# valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./$(PATH_BIN)bench dg 2

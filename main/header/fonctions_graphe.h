@@ -19,12 +19,12 @@ typedef struct plus_court_chemin_struct
 }plus_court_chemin_struct;
 
 
-typedef struct graphe_struct
+typedef struct graphe_struct_Katie
 {
     auteur_struct ** graphe;
     int size_graphe;
 
-}graphe_struct;
+}graphe_struct_Katie;
 
 typedef enum comparaison_auteur
 {
@@ -48,13 +48,15 @@ typedef struct pcc_struct_verification
 
 void verifier_do_Dijkstra(struct plus_court_chemin_struct* pcc);
 
-graphe_struct faire_graphe_ptr_auteur();
+Graph_struct faire_graphe_Konqui();
 
-void voir_si_un_auteur_est_dans_le_graphe_et_donner_un_Article_ou_il_apparait(graphe_struct graphe_struct, char* nom_auteur);
+graphe_struct_Katie faire_graphe_ptr_auteur( Graph_struct graphe_Konqui);
 
-void donner_tous_les_Articles_de_auteur(graphe_struct graphe_struct, char* nom_auteur);
+void voir_si_un_auteur_est_dans_le_graphe_et_donner_un_Article_ou_il_apparait(graphe_struct_Katie graphe_struct, char* nom_auteur);
 
-void donner_tous_ceux_qui_ont_travalle_avec_auteur(graphe_struct graphe_struct, char* nom_auteur);
+void donner_tous_les_Articles_de_auteur(graphe_struct_Katie graphe_struct, char* nom_auteur);
+
+void donner_tous_ceux_qui_ont_travalle_avec_auteur(graphe_struct_Katie graphe_struct, char* nom_auteur);
 
 void print_chemins_auteur_et_Artice(plus_court_chemin_struct* pcc);
 

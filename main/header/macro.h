@@ -66,7 +66,7 @@
 #define YOLO(...);
 #endif
 #ifdef PROGRESSBAR_ON
-#define PROGRESSBAR(...)            progressbar(__VA_ARGS__)
+#define PROGRESSBAR(...)            progressbar(__VA_ARGS__);
 #define PROGRESSBAR_FILE_PRINT(fichier) progressbar((int)ftell(fichier)>>4&0x0FFFFFFF,nombreligne);
 #define PROGRESSBAR_DECL(fichier)       fseek(fichier,0,SEEK_END); int nombreligne = (int)ftell(fichier)>>4&0x0FFFFFFF; fseek(fichier,0,SEEK_SET);
 #else

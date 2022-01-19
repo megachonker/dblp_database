@@ -137,9 +137,11 @@ void traitement_auteur_courant_et_mise_a_jour_pile_suivante(auteur_struct* ptr_a
                 *haut_de_pile_suivante_ptr= *haut_de_pile_suivante_ptr+1;
                 if(*haut_de_pile_suivante_ptr> *taille_piles_ptr)
                 {
-                    pile_suivante= realloc(pile_suivante, sizeof(int)*(*taille_piles_ptr)*2);
-                    pile_auteur_a_traiter_etape_courante= realloc(pile_auteur_a_traiter_etape_courante, sizeof(int)*(*taille_piles_ptr)*2);
-                    *taille_piles_ptr= (*taille_piles_ptr)*2;
+                    pile_suivante= realloc(pile_suivante, sizeof(int)*(*taille_piles_ptr)*10);
+                    exitIfNull(pile_suivante,"pile suivante erreur realock")
+                    pile_auteur_a_traiter_etape_courante= realloc(pile_auteur_a_traiter_etape_courante, sizeof(int)*(*taille_piles_ptr)*10);
+                    exitIfNull(pile_auteur_a_traiter_etape_courante,"realock pile_auteur_a_traiter_etape_courante echouer")
+                    *taille_piles_ptr= (*taille_piles_ptr)*10;
                 }
             
                 
@@ -166,23 +168,23 @@ void traitement_auteur_courant_et_mise_a_jour_pile_suivante(auteur_struct* ptr_a
         }
         
     }
-    printf("haut_de_pile_suivante:%d\n", *haut_de_pile_suivante_ptr);
-    
+    //printf("haut_de_pile_suivante:%d\n", *haut_de_pile_suivante_ptr);
+    //printf("indice d'auteur: %d\n", pile_auteur_a_traiter_etape_courante[]);
 }
 
 
 
 // "traiter l'auteur courant" siginifie mettre a jour les attributs de tous ses voisins
-plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcourir(auteur_struct* ptr_auteur_depart, auteur_struct* ptr_auteur_destination, char* nom_auteur_depart, graphe_struct graphe_t)
+plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcourir(auteur_struct* ptr_auteur_depart, auteur_struct* ptr_auteur_destination, char* nom_auteur_depart, graphe_struct_Katie graphe_t)
 {
     //les piles, sont des tableau d'indice d'auteur, indice dans le graphe
-    int* pile_auteur_a_traiter_etape_courante= malloc(sizeof(int)*1000000);
+    int* pile_auteur_a_traiter_etape_courante= malloc(sizeof(int)* 2984804);
     exitIfNull(pile_auteur_a_traiter_etape_courante, "echec malloc pile_auteur_a_traiter_etape_courante");
     
-    int* pile_suivante= malloc(sizeof(int)*1000000);
+    int* pile_suivante= malloc(sizeof(int)* 2984804);
     exitIfNull(pile_suivante, "echec malloc pile_suivante");
     
-    int taille_piles= 1000000;
+    int taille_piles=  2984804;
     int* taille_piles_ptr= &taille_piles;
     
 
@@ -201,12 +203,18 @@ plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcour
     while(pile_auteur_a_traiter_etape_courante[0]!= -1)
     {
         
-        printf("%s\n", "commencement d'une étape de parcours en largeur");
+        printf("rentrer dans le while\n");    
         //printf("%d\n", *taille_pcc_ptr);
+        
         for(int i=0; i< *haut_de_pile_courante_ptr; i++)
         {
             //printf("%s\n", "rentrer dans le for");
+            
+            //printf("indice de la pile courante à appeler:%d\n", i);
+            //printf("avant %d\n", *haut_de_pile_courante_ptr);
+            //printf("indice d'auteur: %d\n", pile_auteur_a_traiter_etape_courante[i]);
             auteur_struct* ptr_auteur_courant= graphe_t.graphe[pile_auteur_a_traiter_etape_courante[i]];
+            //printf("après, i: %d\n", i);
             //printf("%s\n", ptr_auteur_courant->nom_auteur);
             //printf("%s\n", ptr_auteur_destination->nom_auteur);
 
@@ -252,8 +260,8 @@ plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcour
             for(int t=0; t< *haut_de_pile_suivante_ptr; t++)
             {
                 pile_auteur_a_traiter_etape_courante[t]= pile_suivante[t];
-                (*haut_de_pile_courante_ptr)++;
             }
+            *haut_de_pile_courante_ptr= *haut_de_pile_suivante_ptr;
         }
         //print_pile_courante(pile_auteur_a_traiter_etape_courante, *haut_de_pile_courante_ptr, graphe);
         //print_pile_suivante(pile_suivante, *haut_de_pile_suivante_ptr, graphe);   
@@ -266,7 +274,17 @@ plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcour
         //print_pile_courante(pile_auteur_a_traiter_etape_courante, *haut_de_pile_courante_ptr, graphe);
         *haut_de_pile_suivante_ptr=0;
         (*taille_pcc_ptr)++;
-            
+       
+        //for(int k=0; k< *haut_de_pile_courante_ptr; k++)
+        //{
+        //    printf("val %d pile_courante: %d\n", k, pile_auteur_a_traiter_etape_courante[k]);
+        //}
+        //printf("fin d'une étape profondeur\n");
+        
+        
+        
+         
+
         
        
             
@@ -284,9 +302,9 @@ plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcour
 
 
 //renvoie le tableau des ptr vers les auteur_struct du chemin de auteur_1 (a1) a auteur_2 (a2)
-plus_court_chemin_struct* do_Dijkstra(graphe_struct graphe_t, char* nom_auteur_1, char* nom_auteur_2)
+plus_court_chemin_struct* do_Dijkstra(graphe_struct_Katie graphe_t, char* nom_auteur_1, char* nom_auteur_2)
 {
-    //verification de la presence de a1 et a2 dans le graphe
+    INFO("verification de la presence de a1 et a2 dans le graphe")
 
     comparaison_auteur_1 trouver_ou_pas_1= auteur_1_pas_trouver;
     comparaison_auteur_2 trouver_ou_pas_2= auteur_2_pas_trouver;
@@ -296,6 +314,7 @@ plus_court_chemin_struct* do_Dijkstra(graphe_struct graphe_t, char* nom_auteur_1
 
     for(int i=0; i<graphe_t.size_graphe; i++)
     {
+        PROGRESSBAR(i,graphe_t.size_graphe);
         graphe_t.graphe[i]->indice_dans_le_graphe= i;
         //printf("ce que je met dans les indice d'auteur-> %s:%d\n", graphe_t.graphe[i]->nom_auteur, i);
 
@@ -347,7 +366,7 @@ plus_court_chemin_struct* do_Dijkstra(graphe_struct graphe_t, char* nom_auteur_1
 
 
 
-void free_Dijkstra(graphe_struct* graphe_struct, plus_court_chemin_struct *pcc_ptr)
+void free_Dijkstra(graphe_struct_Katie* graphe_struct, plus_court_chemin_struct *pcc_ptr)
 {
     
     if(pcc_ptr!= NULL)
@@ -375,11 +394,9 @@ void free_Dijkstra(graphe_struct* graphe_struct, plus_court_chemin_struct *pcc_p
 void print_chemins_auteur_et_Artice(plus_court_chemin_struct* pcc)
 {
     
-    graphe_struct mon_graphe= faire_graphe_ptr_auteur();
-    
-    plus_court_chemin_struct* plus_court_chemin= do_Dijkstra( mon_graphe," algorithm.", "Azzedine Boukerche");
+    //graphe_struct_Katie mon_graphe= faire_graphe_ptr_auteur();
 
-    if(plus_court_chemin!=NULL)
+    if(pcc!=NULL)
     {
         printf("chemin auteur: \n");
         for(int i=0; i< pcc->size_pcc_auteur; i++)
@@ -397,11 +414,23 @@ void print_chemins_auteur_et_Artice(plus_court_chemin_struct* pcc)
 //je test Dijkstra sur mon graphe test en affichant les noms des auteurs du plus court chemin de a0 a a9
 int main(void)
 {   
-    FILE* graphe_test_Katie= fopen("DATA", "r");
+    //FILE* graphe_test_Katie= fopen("DATA", "r");
 
-    graphe_struct mon_graphe= faire_graphe_ptr_auteur(graphe_test_Katie);
 
-    fclose(graphe_test_Katie);
+    //cache_ficheO  ;
+    //auteur_cacheO ;
+    //Article_cacheO;
+
+    //cache_fiche 
+    //auteur_cache
+    //Article_cache
+
+
+    Graph_struct graphe_Konqui= faire_graphe_Konqui(cache_fiche, auteur_cache, Article_cache);
+
+    graphe_struct_Katie graphe_Katie= faire_graphe_ptr_auteur(graphe_Konqui);
+
+    //fclose(graphe_test_Katie);
     
     //char* nom_auteur_depart= mon_graphe.graphe[1344]->nom_auteur;
     //printf("nom auteur_depart: %s\n", nom_auteur_depart);
@@ -409,11 +438,10 @@ int main(void)
     //char* nom_auteur_destination= mon_graphe.graphe[8888]->nom_auteur;
     //printf("nom auteur_destination: %s\n", nom_auteur_destination);
 
-    char* nom_auteur_depart= mon_graphe.graphe[1234]->nom_auteur;
-    char* nom_auteur_destination= mon_graphe.graphe[1234]->nom_auteur;
-
+    char* nom_auteur_depart= graphe_Katie.graphe[1234]->nom_auteur;
+    char* nom_auteur_destination= graphe_Katie.graphe[8888]->nom_auteur;
     //voir convention pour ecrire les accents: https://sites.psu.edu/symbolcodes/codehtml/#accent
-    plus_court_chemin_struct* plus_court_chemin=  do_Dijkstra(mon_graphe, nom_auteur_depart, nom_auteur_destination);
+    plus_court_chemin_struct* plus_court_chemin=  do_Dijkstra(graphe_Katie, nom_auteur_depart, nom_auteur_destination);
 
     
     if(plus_court_chemin!= NULL)
@@ -423,7 +451,7 @@ int main(void)
         verifier_do_Dijkstra(plus_court_chemin);
     }
 
-   free_Dijkstra(&mon_graphe, plus_court_chemin);
+   free_Dijkstra(&graphe_Katie, plus_court_chemin);
     
     
 
