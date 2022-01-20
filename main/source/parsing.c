@@ -269,7 +269,7 @@ void serialisation_tableaux_fiche(const tableaux_fiche mastertab, FILE * output)
  * @return pointeur ver tableaux_fiche 
  */
 tableaux_fiche deserialisation_tableaux_fiche(FILE * input){
-    INFO("Deserialisation tableaux fiche DBXML")
+    INFO("\tDeserialisation tableaux fiche DBXML")
 
     tableaux_fiche tableaux_allfiche;
     tableaux_allfiche.nbAuteurXarticle = 0;
