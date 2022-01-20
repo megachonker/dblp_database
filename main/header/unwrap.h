@@ -16,10 +16,10 @@ struct Article_struct;
  */
 typedef struct auteur_struct
 {
+    char * nom_auteur;                          ///< strdup de xml ou decerialisation
     struct Article_struct ** tab_ptr_Article;   ///La magie qui pointe sur  Article_struct
     int nbArticlecontenue;                      ///<compteur d'élément Article_struct
     int indiceDeCreation;                       ///< ordre dans lequelle la structure est générée
-    char * nom_auteur;                          ///< strdup de xml ou decerialisation
     fiche_minimale ** tab_ptr_fiche_min;        ///<tableaux dynamique d'adresse pointant sur des structure contenant oeuvre
     int size;                                   ///<taille du tableaux dynamique
     

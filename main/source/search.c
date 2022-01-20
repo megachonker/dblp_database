@@ -4,6 +4,11 @@
 #include "../header/search.h"
 #include <string.h>
 
+#include "../header/list.h"
+
+#include <regex.h>
+#include <sys/types.h>
+
 /**
  * @brief Get the top Article object
  * chaque etape je compare avec le premier element de ma pille
@@ -176,56 +181,88 @@ void parcour_largeur(const graphe_struct_Konqui graph){
     }
 }
 
-#include <regex.h>
-#include <sys/types.h>
 
-
-
-// void scoarboard(const Graph_struct * mongraph ,const int getwhat ,const int nbentrer){
-//     switch (getwhat)
-//     {
-//     case TOP_Article:
-//         INFO("Top %d des Article",nbentrer)
-//         tab_Article_struct monTopArticle = get_top_Article(&mongraph->tab_Article_struct,nbentrer);
-//         printList_Article(monTopArticle);
-//         break;
-//     case TOP_auteur:
-//         INFO("Top %d des auteur",nbentrer)
-//         tab_auteur_struct monTopauteur = get_top_auteur(&mongraph->tab_auteur_struct,nbentrer);
-//         printList_auteur(monTopauteur);
-//         break;
-
-//     default:
-//         break;
-//     }
-// }
-
-char * find_Article(char * querry, tab_Article_struct * tabarticle){
+ll_list * find_Article(const char * querry,const tab_Article_struct * tabarticle){
     INFO("FIND Article:")
     regex_t r;
     regcomp(&r,querry,0);
+    
+    ll_list * list = ll_create();
+
     for (int i = 0; i < tabarticle->nombre_Article; i++)
     {
         PROGRESSBAR(i,tabarticle->nombre_Article);
         if(!regexec(&r,tabarticle->tab_Article[i].nom_Article,0,NULL,0)){
-            WARNING("FounD: %s",tabarticle->tab_Article[i].nom_Article);
+            // WARNING("FounD: %s",tabarticle->tab_Article[i].nom_Article);
+            ll_append(list,&tabarticle->tab_Article[i]);
         }
     }
-    // regfree()
-    return NULL;
+    return list;
 }
 
-char * find_auteur(char * querry, tab_auteur_struct * tabauteur){
+ll_list * find_auteur(const char* querry, const tab_auteur_struct * tabauteur){
     INFO("FIND auteur:")
     regex_t r;
+    ll_list * list = ll_create();
     regcomp(&r,querry,REG_ICASE);
     for (int i = 0; i < tabauteur->nombre_auteur; i++)
     {
         PROGRESSBAR(i,tabauteur->nombre_auteur);
         if(!regexec(&r,tabauteur->tab_auteur[i].nom_auteur,0,NULL,0)){
-            WARNING("FounD: %s",tabauteur->tab_auteur[i].nom_auteur);
+            // WARNING("FounD: %s",tabauteur->tab_auteur[i].nom_auteur);
+            ll_append(list,&tabauteur->tab_auteur[i]);
         }
     }
-    // regfree()
+    return list;
+}
+
+ll_list * stringSearch(const graphe_struct_Konqui * mongraph ,const int getwhat ,const char * inputstr){
+    switch (getwhat)
+    {
+    case searchArticle:
+        INFO("Recherche %s dans les Article",inputstr)
+        ll_list * ListeArticle = find_Article(inputstr,&mongraph->tab_Article_struct);
+        return ListeArticle;
+    case searchauteur:
+        INFO("Recherche %s dans les auteur",inputstr)
+        ll_list * Listeauteur = find_auteur(inputstr,&mongraph->tab_auteur_struct);
+        return Listeauteur;
+    default:
+        ERROR(" pas bon mode")
+        break;
+    }
     return NULL;
+}
+
+
+
+void printSearch(ll_list * listchainer,int verbositer){
+    if (listchainer->type == typeArticle)
+    {
+        WARNING("SELECTION Article:")
+        for (size_t i = 0; i < listchainer->size; i++)
+        {
+            Article_struct * article = ll_get(listchainer,i);
+            INFO("%s",article->nom_Article)
+            if (verbositer == silence)
+                continue;
+            for (int U = 0; U < article->nombre_auteur; U++)
+            {
+                DEBUG("%s",article->tab_ptr_auteur[U]->nom_auteur);
+            }
+        }
+    }else{
+        WARNING("SELECTION auteur:")
+        for (size_t i = 0; i < listchainer->size; i++)
+        {
+            auteur_struct * auteur = ll_get(listchainer,i);
+            INFO("%s",auteur->nom_auteur)
+            if (verbositer == silence)
+                continue;
+            for (int U = 0; U < auteur->nbArticlecontenue; U++)
+            {
+                DEBUG("%s",auteur->tab_ptr_Article[U]->nom_Article);
+            }
+        }
+    }
 }

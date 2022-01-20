@@ -577,6 +577,9 @@ tab_Article_struct deserialisation_tab_Article_struct(tab_auteur_struct * mesaut
         exitIfNull(nbauteur,"il y a 0 article")
         YOLO("nombre dauteur %d",nbauteur);
 
+        
+        monArticle->nombre_auteur = nbauteur;
+
 
         monArticle->tab_ptr_auteur = NULL;
         auteur_struct ** structauteur = calloc(sizeof(auteur_struct*),nbauteur);
@@ -588,10 +591,10 @@ tab_Article_struct deserialisation_tab_Article_struct(tab_auteur_struct * mesaut
         {
             int indexmagie = 0;
             fread(&indexmagie,sizeof(int),1,inputfile);
-            YOLO("nombre ID auteur %d",indexmagie)
+            YOLO("\tnombre ID auteur %d",indexmagie)
             //je cherche dans le tab auteur en fc de l'index trouver
             structauteur[i] = &(mesauteur->tab_auteur[indexmagie]);
-            YOLO("noms de l'auteur %s",structauteur[i]->nom_auteur)
+            YOLO("\tnoms de l'auteur %s",structauteur[i]->nom_auteur)
             ajout_Article_in_auteur(structauteur[i],monArticle);
         }
 

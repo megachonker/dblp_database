@@ -248,6 +248,11 @@ void ll_free(ll_list *list) {
 }
 
 void ll_print_list_as_char(ll_list *list){
+    if (!list->size)
+    {
+        return;
+    }
+    
     ll_node *it = list->first;
     char * noms = it->value;
 

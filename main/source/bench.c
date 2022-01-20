@@ -112,14 +112,24 @@ tab_auteur_struct deserialise_tab_auteur(int print){
     }
     return malistauteur;
 }
-void ggen_unwrap_Graph(){
+graphe_struct_Konqui ggen_unwrap_Graph(){
     FILE * DBxml = fopen(cache_fiche,"r");
     FILE * DBinverse = fopen(auteur_cache,"r");
     FILE * DBarticle = fopen(Article_cache,"r");
+
+
     exitIfNull(DBxml,"INPUT PAS CHEMAIN")
     exitIfNull(DBinverse,"INPUT PAS CHEMAIN")
     exitIfNull(DBarticle,"INPUT PAS CHEMAIN")
-    deserialise_Graph(DBxml,DBinverse,DBarticle);
+
+
+
+    graphe_struct_Konqui graph = deserialise_Graph(DBxml,DBinverse,DBarticle);
+    if (!graph.tab_Article_struct.nombre_Article||!graph.tab_auteur_struct.nombre_auteur||!graph.tableaux_de_fiche.taille)
+    {
+        exitIfNull(0,"Une des base de donnée est vide");
+    }
+    return graph;
 }
 void uunwrap_ListArticle_from_xml(int a){
     // plusieuyr pour la taille ?

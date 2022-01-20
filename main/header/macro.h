@@ -5,6 +5,11 @@
 #include <stdio.h>
 
 
+enum{
+    silence,
+    verbeux
+};
+
 //taille de la bar de chargement
 #define SIZEBAR 30
 //taille balise max pour fgets

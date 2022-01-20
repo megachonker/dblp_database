@@ -11,6 +11,8 @@
 
 #include "../header/search.h"
 
+#include "../header/list.h"
+
 //écrire des int dans un fichier
 
 //bench la vitese des comparaison een fonction de la taille des var
@@ -79,12 +81,19 @@ int main()
     fclose(DBArticleLecture);
 
 
+    ll_list * retour = stringSearch(&graph,searchauteur,"a");
+    if (retour->size == 0)
+    {
+        ERROR("recherche echouer");
+    }
+    printSearch(retour,silence);
+
     // scoarboard(&graph1,TOP_auteur,5);
     // scoarboard(&graph1,TOP_Article,5);
     // printList_Article(graph1.tab_Article_struct);
 
-    printList_auteur(graph.tab_auteur_struct);
-    printList_Article(graph.tab_Article_struct);
+    // printList_auteur(graph.tab_auteur_struct);
+    // printList_Article(graph.tab_Article_struct);
 
     
 
