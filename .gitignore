@@ -1488,3 +1488,4 @@ main/debug/GCOVtests-macro.gcno
 main/debug/GCOVtests-parsing.gcno
 main/debug/GCOVtests-search.gcno
 main/debug/GCOVtests-unwrap.gcno
+main/source/fonctions_graphe.o

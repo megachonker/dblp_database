@@ -138,7 +138,7 @@ void donner_tous_ceux_qui_ont_travalle_avec_auteur(graphe_struct_Katie graphe_st
     }
 }
 
-int print_noms_des_voisins(graphe_struct_Katie graphe_t, char* nom_auteur)
+void print_noms_des_voisins(graphe_struct_Katie graphe_t, char* nom_auteur)
 {
 
     comparaison_auteur trouver_ou_pas= auteur_pas_trouver;
@@ -173,26 +173,9 @@ int print_noms_des_voisins(graphe_struct_Katie graphe_t, char* nom_auteur)
 
     }
 
-    return 0;
 }
 
 
-//test
-int main(void)
-{
-
-    graphe_struct_Konqui graphe_Konqui= faire_graphe_Konqui(cache_fiche, auteur_cache, Article_cache);
-
-    graphe_struct_Katie graphe_Katie= faire_graphe_ptr_auteur(graphe_Konqui);
-
-    char* nom_auteur= "Ernst M. Gabidulin";
-
-    int zero= print_noms_des_voisins(graphe_Katie, nom_auteur);
-    
-    
-    
-    return 0;
-}
 
 
 

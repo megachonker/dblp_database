@@ -48,7 +48,7 @@ typedef struct pcc_struct_verification
 
 void verifier_do_Dijkstra(struct plus_court_chemin_struct* pcc);
 
-graphe_struct_Konqui faire_graphe_Konqui();
+graphe_struct_Konqui faire_graphe_Konqui(char * DBfiche, char * DBauteur, char * DBArticle);
 
 graphe_struct_Katie faire_graphe_ptr_auteur( graphe_struct_Konqui graphe_Konqui);
 
@@ -59,6 +59,8 @@ void donner_tous_les_Articles_de_auteur(graphe_struct_Katie graphe_struct, char*
 void donner_tous_ceux_qui_ont_travalle_avec_auteur(graphe_struct_Katie graphe_struct, char* nom_auteur);
 
 void print_chemins_auteur_et_Article(plus_court_chemin_struct* pcc);
+
+void print_noms_des_voisins(graphe_struct_Katie graphe_t, char* nom_auteur);
 
 
 #endif

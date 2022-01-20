@@ -16,9 +16,8 @@ abench.sh: genfolder $(PATH_BIN)bench gen_cache_data
 
 #gcc -shared -o libfoo.so foo.o
 
-fonctions_graphe: 
 
-go:	genfolder $(PATH_BIN)tests custom
+go:	genfolder $(PATH_BIN)tests abench.sh
 	./$(PATH_BIN)tests
 
 Dijkstra: abench.sh
@@ -54,13 +53,9 @@ callgrind:	genfolder $(PATH_BIN)bench
 $(PATH_BIN)bench:	$(PATH_BUILD)bench.o $(PATH_BUILD)parsing.o $(PATH_BUILD)list.o $(PATH_BUILD)unwrap.o $(PATH_BUILD)macro.o $(PATH_BUILD)fonctions_graphe.o $(PATH_BUILD)Dijkstra.o
 	$(CCA) -o $(PATH_BIN)bench  $^ $(CFLAGS) $(LDLIBS)
 
-$(PATH_BIN)tests:	$(PATH_BUILD)tests.o $(PATH_BUILD)parsing.o $(PATH_BUILD)list.o $(PATH_BUILD)unwrap.o $(PATH_BUILD)macro.o $(PATH_BUILD)search.o
+$(PATH_BIN)tests:	$(PATH_BUILD)tests.o $(PATH_BUILD)parsing.o $(PATH_BUILD)list.o $(PATH_BUILD)unwrap.o $(PATH_BUILD)macro.o $(PATH_BUILD)search.o  $(PATH_BUILD)fonctions_graphe.o $(PATH_BUILD)Dijkstra.o
 	$(CCA) -o $(PATH_BIN)tests  $^ $(CFLAGS) $(LDLIBS)
 
-# ces un lib maintenan...
-# $(PATH_BIN)Dijkstra: $(PATH_BUILD)Dijkstra.o $(PATH_BUILD)unwrap.o $(PATH_BUILD)parsing.o $(PATH_BUILD)macro.o $(PATH_BUILD)fonctions_graphe.o
-# 	$(CCA) -o $(PATH_BIN)Dijkstra $^ $(CFLAGS) $(LDLIBS)
-	
 $(PATH_BIN)main:	$(PATH_BUILD)main.o $(PATH_BUILD)parsing.o $(PATH_BUILD)macro.o
 	$(CCA) -o $(PATH_BIN)main  $^ $(CFLAGS) $(LDLIBS)
 
