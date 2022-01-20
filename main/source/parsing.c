@@ -131,6 +131,7 @@ void appendTabmeaux(tableaux_fiche * table, fiche_minimale * a_ajouter){
  * @param [in,out] tableaux_allfiche 
  */
 void gen_id_fiche(tableaux_fiche * tableaux_allfiche){
+    DEBUG("début de genereation des id:");
     for (int i = 0; i < tableaux_allfiche->taille; i++)
     {
         PROGRESSBAR(i,tableaux_allfiche->taille);
@@ -139,7 +140,6 @@ void gen_id_fiche(tableaux_fiche * tableaux_allfiche){
     }
 }
 
-//renomer les variable
 /**
  * @brief fonction comparer les fiches utilser par sortlist
  * 
@@ -155,7 +155,6 @@ void sortlist(tableaux_fiche * mesfiche ){
     qsort(mesfiche->fiche,mesfiche->taille,sizeof(mesfiche->fiche),cmptabfiche);   
 }
 
-//on retourne pas l'original mais une copie ? <= pourquoi ?? ?
 /**
  * @brief Parse un fichier XML DBLP
  * 
@@ -237,12 +236,7 @@ tableaux_fiche parse(FILE * inputDB){ /// a besoin detre un pointeur pour le fre
     }
 
     free(fichelocalM);
-    //WARNING
-    // printTabmeaux(tableaux_allfiche);
-
-    DEBUG("début du trie:");
     sortlist(&tableaux_allfiche);
-    DEBUG("début de genereation des id:");
     gen_id_fiche(&tableaux_allfiche);
     return tableaux_allfiche;
 }
