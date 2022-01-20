@@ -530,6 +530,9 @@ void serialisation_tab_Article_struct(tab_Article_struct * inputlist, FILE * out
  */
 void ajout_Article_in_auteur(auteur_struct * monauteur,Article_struct * monArticle){
 
+    if (monauteur->nbArticlecontenue > 1 && monauteur->tab_ptr_Article[monauteur->nbArticlecontenue-1]==monArticle)
+        return;
+
     if (monauteur->nbmembreTabarticleALOUER<=monauteur->nbArticlecontenue)
     {
         monauteur->nbmembreTabarticleALOUER=(monauteur->nbArticlecontenue+2)*2;
