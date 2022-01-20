@@ -376,8 +376,8 @@ void testgraph(graphe_struct_Konqui graphe_Konqui,int nbtime){
         b = rand()%graphe_Konqui.tab_auteur_struct.nombre_auteur;
         char* nom_auteur_depart     = graphe_Katie.graphe[a]->nom_auteur;
         char* nom_auteur_destination= graphe_Katie.graphe[b]->nom_auteur;
-        WARNING("depart  : %s ",nom_auteur_depart)
-        WARNING("arriver: %s",nom_auteur_destination)
+        WARNING("depart\t: %s ",nom_auteur_depart)
+        WARNING("arriver\t: %s",nom_auteur_destination)
         plus_court_chemin_struct* plus_court_chemin_ptr= do_Dijkstra(graphe_Katie, nom_auteur_depart, nom_auteur_destination);
         if(plus_court_chemin_ptr!= NULL)
         {

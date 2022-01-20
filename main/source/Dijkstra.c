@@ -80,7 +80,7 @@ void print_chemins_auteur_et_Article(plus_court_chemin_struct* pcc)
 //renvoie le tableau des ptr vers les auteur_struct du chemin de auteur_1 (a1) a auteur_2 (a2)
 plus_court_chemin_struct* do_Dijkstra(graphe_struct_Katie graphe_t, char* nom_auteur_depart, char* nom_auteur_destination)
 {
-    INFO("verification de la presence de auteur_depart et de auteur_destination dans le graphe")
+    INFO("verification existance de la paire d'auteur dans le graph")
 
     comparaison_auteur trouver_ou_pas_1= auteur_pas_trouver;
     comparaison_auteur trouver_ou_pas_2= auteur_pas_trouver;
@@ -134,10 +134,10 @@ plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcour
 {
     //les piles, sont des tableau d'indice d'auteur, (indice dans le graphe)
     //les piles vont accueillir les auteurs à traiter à chaque étape du parcours en largeur.
-    int* pile_auteur_a_traiter_etape_courante= calloc(2984804,sizeof(int)); //2984804 est le nombre d'auteur totale dans le graphe, avec cette taille, pas de soucis
+    int* pile_auteur_a_traiter_etape_courante= calloc(graphe_t.nb_auteurMax,sizeof(int));
     exitIfNull(pile_auteur_a_traiter_etape_courante, "echec malloc pile_auteur_a_traiter_etape_courante");
     
-    int* pile_suivante= calloc(2984804,sizeof(int));
+    int* pile_suivante= calloc(graphe_t.nb_auteurMax,sizeof(int));
     exitIfNull(pile_suivante, "echec malloc pile_suivante");
     
     pile_auteur_a_traiter_etape_courante[0]= ptr_auteur_depart->indice_dans_le_graphe;
@@ -153,7 +153,7 @@ plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcour
     
     int taille_pcc=1; //=profondeur du parcour en largeur (à la fin, =taille du plus court chemin)
     int* taille_pcc_ptr= &taille_pcc;
-    DEBUG("Exploration profondeur: ")
+    INFO("Exploration profondeur: ")
     while(pile_auteur_a_traiter_etape_courante[0]!= -1)
     {
         fprintf(stderr,"\033[100D\t\t");
@@ -174,6 +174,7 @@ plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcour
                 plus_court_chemin_struct* pcc_ptr= calloc(1,sizeof(plus_court_chemin_struct));
                 plus_court_chemin_struct pcc= reconstitution_du_pcc_apres_parcours(taille_pcc_ptr, ptr_auteur_destination);
                 *pcc_ptr= pcc;
+                fprintf(stderr,"\n");
                 return pcc_ptr;
             }
             traitement_auteur_courant_et_mise_a_jour_pile_suivante(ptr_auteur_courant, haut_de_pile_suivante_ptr, taille_pcc_ptr, pile_suivante);   

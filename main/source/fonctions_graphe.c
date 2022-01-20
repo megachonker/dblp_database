@@ -45,6 +45,7 @@ graphe_struct_Katie faire_graphe_ptr_auteur( graphe_struct_Konqui graphe_Konqui)
         ai_ptr->size_pcc_auteur= -1;
         graphe_struct.graphe[i]= ai_ptr;           
     }
+    graphe_struct.nb_auteurMax = graphe_Konqui.tab_auteur_struct.nombre_auteur;
     return graphe_struct;
 }
 
