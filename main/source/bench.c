@@ -381,14 +381,14 @@ void testgraph(graphe_struct_Konqui graphe_Konqui,int nbtime){
         WARNING("depart  : %s ",nom_auteur_depart)
         WARNING("arriver: %s",nom_auteur_destination)
         plus_court_chemin_struct* plus_court_chemin_ptr= do_Dijkstra(graphe_Katie, nom_auteur_depart, nom_auteur_destination);
-        if(plus_court_chemin_ptr->pcc_tab_ptr_auteur!= NULL)
+        if(plus_court_chemin_ptr!= NULL)
         {
             print_chemins_auteur_et_Article(plus_court_chemin_ptr);
 
         }else{
-            ERROR("PAS CHEMAIN")
+            ERROR("PAS DE CHEMIN")
         }
-        free_pcc(plus_court_chemin_ptr);
+        free_Dijkstra(graphe_Katie,plus_court_chemin_ptr);
 
     }
 

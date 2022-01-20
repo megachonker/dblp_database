@@ -16,21 +16,23 @@ abench.sh: genfolder $(PATH_BIN)bench gen_cache_data
 
 #gcc -shared -o libfoo.so foo.o
 
+fonctions_graphe: 
+
 go:	genfolder $(PATH_BIN)tests custom
 	./$(PATH_BIN)tests
 
-Dijkstra: genfolder $(PATH_BIN)bench
-	./$(PATH_BIN)bench dik 1 2
+Dijkstra: abench.sh
+	./$(PATH_BIN)bench dik 0 15
 
 val:	genfolder $(PATH_BIN)bench
 	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./$(PATH_BIN)bench sg 1
-	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./$(PATH_BIN)bench dg 1
+	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./$(PATH_BIN)bench dik 1 5
+
 
 raport:	genfolder rp
 rp: $(PATH_SOURCE)bench.c $(PATH_SOURCE)parsing.c $(PATH_SOURCE)unwrap.c $(PATH_SOURCE)macro.c $(PATH_SOURCE)search.c $(PATH_SOURCE)Dijkstra.c $(PATH_SOURCE)fonctions_graphe.c
 	$(CCA) -O0 -o $(PATH_DEBUG)GCOVtests  $^ $(CFLAGS) -ftest-coverage -fprofile-arcs
 	./$(PATH_DEBUG)GCOVtests sg 1
-	./$(PATH_DEBUG)GCOVtests dg 1
 	./$(PATH_DEBUG)GCOVtests dik 1 1
 	gcov -abcfu $(PATH_SOURCE)bench.c $(PATH_SOURCE)parsing.c $(PATH_SOURCE)unwrap.c $(PATH_SOURCE)macro.c $(PATH_SOURCE)search.c
 	lcov --capture --directory $(PATH_DEBUG) --output-file $(PATH_DEBUG)coverage.info
@@ -43,7 +45,7 @@ doc:
 
 callgrind:	genfolder $(PATH_BIN)bench
 	valgrind --dump-instr=yes --collect-jumps=yes --tool=callgrind --callgrind-out-file=$(PATH_DEBUG)callgrind_trace__SerialiseGraph	./$(PATH_BIN)bench sg 0
-	valgrind --dump-instr=yes --collect-jumps=yes --tool=callgrind --callgrind-out-file=$(PATH_DEBUG)callgrind_trace__deSerialiseGraph	./$(PATH_BIN)bench dg 0
+	valgrind --dump-instr=yes --collect-jumps=yes --tool=callgrind --callgrind-out-file=$(PATH_DEBUG)callgrind_trace__deSerialiseGraph	./$(PATH_BIN)bench dik 1 10
 	kcachegrind $(PATH_DEBUG)callgrind_trace__SerialiseGraph
 	kcachegrind $(PATH_DEBUG)callgrind_trace__deSerialiseGraph
 

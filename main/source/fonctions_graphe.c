@@ -138,30 +138,62 @@ void donner_tous_ceux_qui_ont_travalle_avec_auteur(graphe_struct_Katie graphe_st
     }
 }
 
+int print_noms_des_voisins(graphe_struct_Katie graphe_t, char* nom_auteur)
+{
 
-/*
-//test: affichage des voisins des auteurs dans e graphe de ptr d'auteur généré par faire_graphe_ptr_auteur
+    comparaison_auteur trouver_ou_pas= auteur_pas_trouver;
+    auteur_struct* auteur_ptr= NULL;
+
+    for(int i=0; i<graphe_t.size_graphe; i++)
+    {
+        graphe_t.graphe[i]->indice_dans_le_graphe= i;
+
+        if(strcmp(nom_auteur, graphe_t.graphe[i]->nom_auteur)==0)
+        {
+            trouver_ou_pas= auteur_trouver;
+            auteur_ptr= graphe_t.graphe[i];
+        }
+    }
+
+    if(trouver_ou_pas== auteur_pas_trouver)
+        printf("%s %s %s\n", "l'auteur", nom_auteur, "ne figure dans aucun Article");
+
+
+    printf("voisins de %s\n", auteur_ptr->nom_auteur);
+
+    for(int l=0; l< auteur_ptr->size; l++)
+    {
+        Article_struct* Al_ptr= auteur_ptr->tab_ptr_Article[l];
+
+        for(int k=0; k< Al_ptr->nombre_auteur; k++)
+        {
+            auteur_struct* voisin_ptr= Al_ptr->tab_ptr_auteur[k];
+            printf("%s\n", voisin_ptr->nom_auteur);
+        }
+
+    }
+
+    return 0;
+}
+
+
+//test
 int main(void)
 {
 
-    FILE* graphe_test_Katie= fopen(dbtestKatie "r");
+    graphe_struct_Konqui graphe_Konqui= faire_graphe_Konqui(cache_fiche, auteur_cache, Article_cache);
 
-    graphe_struct_Katie mon_graphe= faire_graphe_ptr_auteur(graphe_test_Katie);
+    graphe_struct_Katie graphe_Katie= faire_graphe_ptr_auteur(graphe_Konqui);
 
-    fclose(graphe_test_Katie);
+    char* nom_auteur= "Ernst M. Gabidulin";
 
-  
-    for(int k=0; k <mon_graphe.size_graphe; k++)
-    {
-        printf("%s\n",  mon_graphe.graphe[k]->nom_auteur);
-    }
+    int zero= print_noms_des_voisins(graphe_Katie, nom_auteur);
     
-    free(mon_graphe.graphe);
     
     
     return 0;
 }
-*/
+
 
 
 // #define PROFONDEUREXP 5

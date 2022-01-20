@@ -134,10 +134,10 @@ plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcour
 {
     //les piles, sont des tableau d'indice d'auteur, (indice dans le graphe)
     //les piles vont accueillir les auteurs à traiter à chaque étape du parcours en largeur.
-    int* pile_auteur_a_traiter_etape_courante= malloc(sizeof(int)* 2984804); //2984804 est le nombre d'auteur totale dans le graphe, avec cette taille, pas de soucis
+    int* pile_auteur_a_traiter_etape_courante= calloc(2984804,sizeof(int)); //2984804 est le nombre d'auteur totale dans le graphe, avec cette taille, pas de soucis
     exitIfNull(pile_auteur_a_traiter_etape_courante, "echec malloc pile_auteur_a_traiter_etape_courante");
     
-    int* pile_suivante= malloc(sizeof(int)* 2984804);
+    int* pile_suivante= calloc(2984804,sizeof(int));
     exitIfNull(pile_suivante, "echec malloc pile_suivante");
     
     pile_auteur_a_traiter_etape_courante[0]= ptr_auteur_depart->indice_dans_le_graphe;
@@ -159,7 +159,7 @@ plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcour
         fprintf(stderr,"\033[100D\t\t");
         GREEN();fprintf(stderr,"couche %d...",compteurprofondeur);
 
-                compteurprofondeur++;
+            compteurprofondeur++;
 
         for(int i=0; i< *haut_de_pile_courante_ptr; i++)
         {
@@ -304,7 +304,7 @@ comparaison_auteur trouver_ou_pas_dans_pile(int* haut_de_pile_suivante, int* pil
 
 
 
-void free_pcc(plus_court_chemin_struct *pcc_ptr)
+void free_Dijkstra(graphe_struct_Katie graphe_struct, plus_court_chemin_struct *pcc_ptr)
 {
     INFO("Free Dijkstra ")
     if(pcc_ptr!= NULL)
@@ -313,6 +313,7 @@ void free_pcc(plus_court_chemin_struct *pcc_ptr)
         free(pcc_ptr->pcc_tab_ptr_Article);
         free(pcc_ptr);
     }
+    free(graphe_struct.graphe);
 
 
     // for(int k=0; k< graphe_struct.size_graphe; k++)

@@ -20,7 +20,7 @@ void traitement_auteur_courant_et_mise_a_jour_pile_suivante(auteur_struct* ptr_a
 plus_court_chemin_struct reconstitution_du_pcc_apres_parcours(int* taille_pcc_ptr, auteur_struct* ptr_auteur_destination);
 
 
-void free_pcc(plus_court_chemin_struct *pcc_ptr);
+void free_Dijkstra(graphe_struct_Katie graphe_struct, plus_court_chemin_struct *pcc_ptr);
 
 
 #endif
