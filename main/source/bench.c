@@ -341,17 +341,17 @@ listeFichier openDB(int type,int mode){
         break;
     }
     //les message derreur sont claquer
-    exitIfNull(listefile.XML              ,"erreur ouverture bd %s.",origineXML);
-    if (mode == lecture)
-    {
-        exitIfNull(listefile.DBficheLecture   ,"erreur ouverture bd %s.",cache_fiche);
-        exitIfNull(listefile.DBauteurLecture  ,"erreur ouverture bd %s.",auteur_cache);
-        exitIfNull(listefile.DBArticleLecture ,"erreur ouverture bd %s.",Article_cache);
-    }else{
-        exitIfNull(listefile.DBficheEcriture  ,"erreur ouverture bd %s.",cache_fiche);
-        exitIfNull(listefile.DBauteurEcriture ,"erreur ouverture bd %s.",auteur_cache);
-        exitIfNull(listefile.DBArticleEcriture,"erreur ouverture bd %s.",Article_cache);
-    }
+    // exitIfNull(listefile.XML              ,"erreur ouverture bd %s.",origineXML);
+    // if (mode == lecture)
+    // {
+    //     exitIfNull(listefile.DBficheLecture   ,"erreur ouverture bd %s.",cache_fiche);
+    //     exitIfNull(listefile.DBauteurLecture  ,"erreur ouverture bd %s.",auteur_cache);
+    //     exitIfNull(listefile.DBArticleLecture ,"erreur ouverture bd %s.",Article_cache);
+    // }else{
+    //     exitIfNull(listefile.DBficheEcriture  ,"erreur ouverture bd %s.",cache_fiche);
+    //     exitIfNull(listefile.DBauteurEcriture ,"erreur ouverture bd %s.",auteur_cache);
+    //     exitIfNull(listefile.DBArticleEcriture,"erreur ouverture bd %s.",Article_cache);
+    // }
     return listefile;
 }
 

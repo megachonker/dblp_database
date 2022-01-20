@@ -124,6 +124,10 @@ void tabulation(int nombre);
 void repchar(char carac,size_t nb);
 
 
+void writestrfile(char * str, FILE * fichier);
+char * readstrfile(FILE * fichier);
+
+
 // typedef struct cache
 // {
     

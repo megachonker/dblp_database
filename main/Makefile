@@ -20,9 +20,9 @@ go:	genfolder $(PATH_BIN)tests custom
 	./$(PATH_BIN)tests
 
 Dijkstra: abench.sh
-	./$(PATH_BIN)bench dik 1 15
+	./$(PATH_BIN)bench dik 0 10
 
-val:	genfolder $(PATH_BIN)bench
+val:	abench.sh
 	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./$(PATH_BIN)bench sg 1
 	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./$(PATH_BIN)bench dik 1 5
 

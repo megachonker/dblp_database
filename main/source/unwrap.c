@@ -54,10 +54,10 @@ int deplier_fiche(tableaux_fiche input, Paire_auteur_oeuvre * arrayout ){
     int indice = 0;
     for (int i = 0; i < input.taille; i++){
         PROGRESSBAR(i,input.taille);
-        for (int u = 0; u < input.fiche[i]->nombre_auteur; u++)
+        for (int u = 0; u < input.fiche[i].nombre_auteur; u++)
         {   
-            arrayout[indice].oeuvre = input.fiche[i];
-            arrayout[indice].nom_auteur = input.fiche[i]->liste_auteur[u];
+            arrayout[indice].oeuvre = &input.fiche[i];
+            arrayout[indice].nom_auteur = input.fiche[i].liste_auteur[u];
             indice++;
         }
     }
@@ -426,8 +426,8 @@ tab_auteur_struct deserialise_tab_auteur_struct(const tableaux_fiche * tableaux_
             fgets(ligne,BALISESIZE,input);
             enlever_retour_a_la_ligne(ligne);
             int indiceFiche = atoi(ligne);
-            exitIfNull(tableaux_fiche->fiche[indiceFiche],"serialise index pointeur sur nom_auteur introuvable\n")
-            master_List_Auteur.tab_auteur[nbauteur].tab_ptr_fiche_min[u] = tableaux_fiche->fiche[indiceFiche]; //On n'es pas obliger de lire la fiche
+            exitIfNull(&tableaux_fiche->fiche[indiceFiche],"serialise index pointeur sur nom_auteur introuvable\n")
+            master_List_Auteur.tab_auteur[nbauteur].tab_ptr_fiche_min[u] = &tableaux_fiche->fiche[indiceFiche]; //On n'es pas obliger de lire la fiche
         }
         nbauteur++;
     }
