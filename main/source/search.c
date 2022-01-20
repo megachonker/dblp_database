@@ -176,34 +176,56 @@ void parcour_largeur(const Graph_struct graph){
     }
 }
 
+#include <regex.h>
+#include <sys/types.h>
 
+
+
+// void scoarboard(const Graph_struct * mongraph ,const int getwhat ,const int nbentrer){
+//     switch (getwhat)
+//     {
+//     case TOP_Article:
+//         INFO("Top %d des Article",nbentrer)
+//         tab_Article_struct monTopArticle = get_top_Article(&mongraph->tab_Article_struct,nbentrer);
+//         printList_Article(monTopArticle);
+//         break;
+//     case TOP_auteur:
+//         INFO("Top %d des auteur",nbentrer)
+//         tab_auteur_struct monTopauteur = get_top_auteur(&mongraph->tab_auteur_struct,nbentrer);
+//         printList_auteur(monTopauteur);
+//         break;
+
+//     default:
+//         break;
+//     }
+// }
 
 char * find_Article(char * querry, tab_Article_struct * tabarticle){
     INFO("FIND Article:")
-    // char out[BALISESIZE];
-    char machaine[BALISESIZE] = ".*";
-    strcat(machaine,querry);
-    DEBUG("querry: %s machaine %s",querry,machaine);
-    strcat(machaine,".*");
-    DEBUG("machaine: %s",machaine);
-
-    // printList_Article(*tabarticle);
+    regex_t r;
+    regcomp(&r,querry,0);
     for (int i = 0; i < tabarticle->nombre_Article; i++)
     {
-        printf("%s %i %i",tabarticle->tab_Article[i].nom_Article,i,tabarticle->nombre_Article);
         PROGRESSBAR(i,tabarticle->nombre_Article);
-        // if (sscanf(tabarticle->tab_Article[i].nom_Article,machaine,out)){
-                // printf("%out")
-        // }
-            // DEBUG("%s constenue dans %s",machaine,tabarticle->tab_Article[i].nom_Article)
+        if(!regexec(&r,tabarticle->tab_Article[i].nom_Article,0,NULL,0)){
+            WARNING("FounD: %s",tabarticle->tab_Article[i].nom_Article);
+        }
     }
-    
+    // regfree()
     return NULL;
 }
-// char * find_auteur(const char * querry, const tab_auteur_struct * tabauteur){
-//     for (int i = 0; i < tabauteur->nombre_auteur; i++)
-//     {
-//         sscanf(tabauteur->tab_auteur[i].nom_auteur,querry);
-//     }
-    
-// }
+
+char * find_auteur(char * querry, tab_auteur_struct * tabauteur){
+    INFO("FIND auteur:")
+    regex_t r;
+    regcomp(&r,querry,REG_ICASE);
+    for (int i = 0; i < tabauteur->nombre_auteur; i++)
+    {
+        PROGRESSBAR(i,tabauteur->nombre_auteur);
+        if(!regexec(&r,tabauteur->tab_auteur[i].nom_auteur,0,NULL,0)){
+            WARNING("FounD: %s",tabauteur->tab_auteur[i].nom_auteur);
+        }
+    }
+    // regfree()
+    return NULL;
+}
