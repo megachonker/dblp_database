@@ -23,7 +23,7 @@ typedef struct graphe_struct_Katie
 {
     auteur_struct ** graphe;
     int size_graphe;
-
+    int nb_auteurMax;
 }graphe_struct_Katie;
 
 typedef enum comparaison_auteur
