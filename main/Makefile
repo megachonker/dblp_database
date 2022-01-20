@@ -24,8 +24,8 @@ Dijkstra: abench.sh
 	./$(PATH_BIN)bench dik 0 15
 
 val:	abench.sh
-	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./$(PATH_BIN)bench sg 1
-	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./$(PATH_BIN)bench dik 1 5
+	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./$(PATH_BIN)bench sg  2
+	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./$(PATH_BIN)bench dik 2 5
 
 
 raport:	genfolder rp

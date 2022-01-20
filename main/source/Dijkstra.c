@@ -159,7 +159,7 @@ plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcour
         fprintf(stderr,"\033[100D\t\t");
         GREEN();fprintf(stderr,"couche %d...",compteurprofondeur);
 
-            compteurprofondeur++;
+        compteurprofondeur++;
 
         for(int i=0; i< *haut_de_pile_courante_ptr; i++)
         {
@@ -171,7 +171,7 @@ plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcour
                 free(pile_suivante);
 
 
-                plus_court_chemin_struct* pcc_ptr= malloc(sizeof(plus_court_chemin_struct));
+                plus_court_chemin_struct* pcc_ptr= calloc(1,sizeof(plus_court_chemin_struct));
                 plus_court_chemin_struct pcc= reconstitution_du_pcc_apres_parcours(taille_pcc_ptr, ptr_auteur_destination);
                 *pcc_ptr= pcc;
                 return pcc_ptr;
@@ -220,7 +220,7 @@ plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcour
 
     free(pile_auteur_a_traiter_etape_courante);
     free(pile_suivante);
-    WARNING("Il n'y a pas de chemin entre %s et %s\n", nom_auteur_depart, ptr_auteur_destination->nom_auteur);
+    WARNING("\nIl n'y a pas de chemin entre %s et %s\n", nom_auteur_depart, ptr_auteur_destination->nom_auteur);
     return NULL;
 }
 
@@ -267,12 +267,12 @@ plus_court_chemin_struct reconstitution_du_pcc_apres_parcours(int* taille_pcc_pt
     plus_court_chemin.size_pcc_auteur= (*taille_pcc_ptr);
     plus_court_chemin.size_pcc_Article= (*taille_pcc_ptr)-1;
 
-    plus_court_chemin.pcc_tab_ptr_auteur= malloc(sizeof(auteur_struct*)**taille_pcc_ptr);
+    plus_court_chemin.pcc_tab_ptr_auteur= calloc(*taille_pcc_ptr,sizeof(auteur_struct*));
 
-    exitIfNull(plus_court_chemin.pcc_tab_ptr_auteur,"echec malloc pcc_tab_ptr_auteur"); 
+    exitIfNull(plus_court_chemin.pcc_tab_ptr_auteur,"echec calloc pcc_tab_ptr_auteur"); 
 
-    plus_court_chemin.pcc_tab_ptr_Article= malloc(sizeof(Article_struct*)*((*taille_pcc_ptr)-1));
-    exitIfNull(plus_court_chemin.pcc_tab_ptr_Article,"echec malloc pcc_tab_ptr_Article"); 
+    plus_court_chemin.pcc_tab_ptr_Article= calloc(((*taille_pcc_ptr)-1),sizeof(Article_struct*));
+    exitIfNull(plus_court_chemin.pcc_tab_ptr_Article,"echec calloc pcc_tab_ptr_Article"); 
 
     //on remplie le pcc avec les auteurs et Articles emprunté
     plus_court_chemin.pcc_tab_ptr_auteur[(*taille_pcc_ptr)-1]= ptr_auteur_destination;

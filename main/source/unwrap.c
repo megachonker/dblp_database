@@ -558,7 +558,7 @@ tab_Article_struct deserialisation_tab_Article_struct(tab_auteur_struct * mesaut
     DEBUG("Malloc de %luocter",sizeof(Article_struct)**nombretotalarticle)
 
     //optimiser car on alloue tout en un malloc ! par contre ça peut echouer a voir
-    Article_struct * listedesArticle =  malloc(sizeof(Article_struct)**nombretotalarticle);
+    Article_struct * listedesArticle =  calloc(*nombretotalarticle,sizeof(Article_struct));
     exitIfNull(listedesArticle, "creation des sommet auteur tableaxD malloc null")
     mon_tab_Article_struct.tab_Article = listedesArticle;
 
