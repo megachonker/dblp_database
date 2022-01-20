@@ -32,7 +32,7 @@ void printTabmeaux(tableaux_fiche UwO){
 
     for (int i = 0; i < UwO.taille; i++)
     {
-        print_fiche_minimal(*(UwO.fiche[i]));
+        print_fiche_minimal(UwO.fiche[i]);
     }
 }
 
@@ -61,6 +61,10 @@ char * getanchor(char * recherche, char * ligne){
         }
         //on chercher la prochaine acolade ouvrante (donc la fin de la balise)
         int diff = strcspn(start,"<");
+        if (diff == 0)
+        {
+            return NULL;
+        }
         start[diff] = '\0';
         char * out = strdup(start);//<ça fait des duplication
         exitIfNull(out,"getchar: stdrup imposible");
@@ -79,22 +83,14 @@ char * getanchor(char * recherche, char * ligne){
  * @param [in] nomsauteur addrese de la chaine de caractere
  */
 void appendAuteurM(fiche_minimale * mafiche,char * nomsauteur){
-    char ** addrListeauteur = NULL;                                                         //des char? ?? ? ?? 
-    addrListeauteur = reallocarray(mafiche->liste_auteur,(mafiche->nombre_auteur+1),sizeof(fiche_minimale));//MALOC
+    char ** addrListeauteur = NULL;                                                    
+    addrListeauteur = reallocarray(mafiche->liste_auteur,(mafiche->nombre_auteur+1),sizeof(char*));//MALOC
 
     exitIfNull(addrListeauteur,"appendAuteurM: allocation imposible")
 
     if (mafiche->liste_auteur != addrListeauteur){//plus opti que d'assigner dirrectment ?
         YOLO("%p VS %p",mafiche->liste_auteur,addrListeauteur); // WTfu ?        
 
-        // if (mafiche->liste_auteur)
-        // {
-        //     YOLO("AVANT %p VS %p",mafiche->liste_auteur,addrListeauteur); // WTfu ?        
-        //     free(mafiche->liste_auteur);
-        //     YOLO("APRES %p VS %p",mafiche->liste_auteur,addrListeauteur); // WTfu ?        
-
-        // }
-        
         mafiche->liste_auteur = addrListeauteur;
     }
 
@@ -110,14 +106,9 @@ void appendAuteurM(fiche_minimale * mafiche,char * nomsauteur){
  * @param [in,out] table table des fiche 
  * @param [in] a_ajouter nouvelle fiche
  */
-void appendTabmeaux(tableaux_fiche * table, fiche_minimale * a_ajouter){
-    fiche_minimale ** addrListFiche = NULL;
-    addrListFiche = realloc(table->fiche,sizeof(fiche_minimale*)*(table->taille+1));//MLOC
-    exitIfNull(addrListFiche,"appendTabmeaux: allocation imposible")
-
-    if (table->fiche != addrListFiche)  //cout du check de cette fonction ?
-        table->fiche = addrListFiche;
-
+void appendTabmeaux(tableaux_fiche * table, fiche_minimale a_ajouter){
+    table->fiche = realloc(table->fiche,sizeof(fiche_minimale)*(table->taille+1));//MLOC
+    exitIfNull(table->fiche,"appendTabmeaux: allocation imposible")
     table->fiche[table->taille] = a_ajouter;
     table->taille++;   
 }
@@ -135,8 +126,8 @@ void gen_id_fiche(tableaux_fiche * tableaux_allfiche){
     for (int i = 0; i < tableaux_allfiche->taille; i++)
     {
         PROGRESSBAR(i,tableaux_allfiche->taille);
-        tableaux_allfiche->fiche[i]->ADDR = i;
-        tableaux_allfiche->nbAuteurXarticle+=tableaux_allfiche->fiche[i]->nombre_auteur;
+        tableaux_allfiche->fiche[i].ADDR = i;
+        tableaux_allfiche->nbAuteurXarticle+=tableaux_allfiche->fiche[i].nombre_auteur;
     }
 }
 
@@ -148,11 +139,12 @@ void gen_id_fiche(tableaux_fiche * tableaux_allfiche){
  * @return int indice utilser par quicksort
  */
 static int cmptabfiche(const void * maficheA,const void * maficheB){
-    return strcmp(((fiche_minimale*)maficheA)->titre,((fiche_minimale*)maficheB)->titre);}
+    return strcmp(((fiche_minimale*)maficheA)->titre,((fiche_minimale*)maficheB)->titre);
+}
 
 void sortlist(tableaux_fiche * mesfiche ){
     DEBUG("trie des liste parsing")
-    qsort(mesfiche->fiche,mesfiche->taille,sizeof(mesfiche->fiche),cmptabfiche);   
+    qsort(mesfiche->fiche,mesfiche->taille,sizeof(fiche_minimale),cmptabfiche);   
 }
 
 /**
@@ -184,11 +176,11 @@ tableaux_fiche parse(FILE * inputDB){ /// a besoin detre un pointeur pour le fre
     tableaux_allfiche.nbAuteurXarticle = 0;
 
     //premierre fiche
-    fiche_minimale * fichelocalM = NULL;
-    fichelocalM = calloc(1,sizeof(fiche_minimale)); //initialiser a 0 pas opti ?
-    exitIfNull(fichelocalM,"parse: imposible d'alouer crée fichelocalM");
-    fichelocalM->ADDR = 0;
-    fichelocalM->nombre_auteur = 0;
+    fiche_minimale fichelocalM;
+    fichelocalM.ADDR = 0;
+    fichelocalM.nombre_auteur = 0;
+    fichelocalM.titre = NULL;
+    fichelocalM.liste_auteur = NULL;
 
     //chargement
     while (fgets(ligne,BALISESIZE,inputDB))// <================ prend masse temps le remplacer par un buffer ? (simple ici a faire)
@@ -197,21 +189,20 @@ tableaux_fiche parse(FILE * inputDB){ /// a besoin detre un pointeur pour le fre
         PROGRESSBAR_FILE_PRINT(inputDB)
 
         int flagt = 0;
-        exitIfNull(fichelocalM,"création de la zone de mémoir pour ficheloca1m compromis calloc")
-
         //passer une liste des argument interresant est recherer ??
+        // DEBUG("get auteur %s",ligne)
         char * tmpauteur = getanchor("author",ligne);
         if (tmpauteur)
         {
-            appendAuteurM(fichelocalM,tmpauteur);
+            appendAuteurM(&fichelocalM,tmpauteur);
         }else{
-            fichelocalM->titre = getanchor("title",ligne);
-            if (fichelocalM->titre)
+            fichelocalM.titre = getanchor("title",ligne);
+            if (fichelocalM.titre)
             {
                 flagt = 1;
             }
             // else{
-            //     getanchor("date",ligne);
+            //     // getanchor("date",ligne);
             // }
         }
         // DATE!
@@ -219,28 +210,26 @@ tableaux_fiche parse(FILE * inputDB){ /// a besoin detre un pointeur pour le fre
         if (flagt == 1)
         {
             //moche ajouter l'exclusion Preface. Editorial. (faire une blackliste a importer ? voir qand trie)
-            if (strcmp(fichelocalM->titre,"Home Page")!=0 
-            && fichelocalM->nombre_auteur != 0 
-            && strcmp(fichelocalM->titre,"")!=0)//ces con mais fichelocalM->titre ou fichelocalM->titre != '' devrais fonctioner..
+            if (strcmp(fichelocalM.titre,"Home Page")!=0 
+            && fichelocalM.nombre_auteur != 0 
+            && strcmp(fichelocalM.titre,"")!=0)//ces con mais fichelocalM.titre ou fichelocalM->titre != '' devrais fonctioner..
             {
                 //DEGUG ajout de 
                 // print_titre_fiche_minimal(*fichelocalM);
                 appendTabmeaux(&tableaux_allfiche,fichelocalM);
             }else{
                 free_fiche_minimale(fichelocalM);
-
             }
-            fichelocalM = calloc(1,sizeof(fiche_minimale));//maloc ?
-            fichelocalM->nombre_auteur = 0;
+            fichelocalM.ADDR = 0;
+            fichelocalM.nombre_auteur = 0;
+            fichelocalM.titre = NULL;
+            fichelocalM.liste_auteur = NULL;
         }        
     }
-
-    free(fichelocalM);
     sortlist(&tableaux_allfiche);
     gen_id_fiche(&tableaux_allfiche);
     return tableaux_allfiche;
 }
-
 
 //utiliser l'addresse pour pas copier ?
 /**
@@ -253,19 +242,19 @@ tableaux_fiche parse(FILE * inputDB){ /// a besoin detre un pointeur pour le fre
  */
 void serialisation_tableaux_fiche(const tableaux_fiche mastertab, FILE * output){
     INFO("\tSerialisation des fiche")
-    //une sorte de header du fichier ici !
-        //taille de la structure
-        //validitée
+    fwrite(&mastertab.taille,sizeof(int),1,output);
+    DEBUG("Il y a %d fiche",mastertab.taille)
     for (int i = 0; i < mastertab.taille; i++)
     {
         PROGRESSBAR(i,mastertab.taille);
-        fprintf(output,"%s\n",mastertab.fiche[i]->titre);
-        fprintf(output,"%i\n",mastertab.fiche[i]->nombre_auteur); //fusioner les 2 en une écritur ?
-        for (int  u = 0; u < mastertab.fiche[i]->nombre_auteur; u++)//tout concaténée
+        YOLO("Titre: %s",mastertab.fiche[i].titre)
+        writestrfile(mastertab.fiche[i].titre,output);
+        fwrite(&mastertab.fiche[i].nombre_auteur,sizeof(int),1,output);
+        YOLO("nombre auteur: %d",mastertab.fiche[i].nombre_auteur)
+        for (int  u = 0; u < mastertab.fiche[i].nombre_auteur; u++)//tout concaténée
         {
-            fprintf(output,"%s\n",mastertab.fiche[i]->liste_auteur[u]);
+            writestrfile(mastertab.fiche[i].liste_auteur[u],output);
         }
-        //une soeule écriture ici
     }
 }
 
@@ -280,68 +269,45 @@ void serialisation_tableaux_fiche(const tableaux_fiche mastertab, FILE * output)
  * @return pointeur ver tableaux_fiche 
  */
 tableaux_fiche deserialisation_tableaux_fiche(FILE * input){
-    INFO("\tDeserialisation tableaux fiche DBXML")
-
-    PROGRESSBAR_DECL(input);
-    char ligne[BALISESIZE];
-
-    //valide read du checksum
-    //read tailletotal
+    INFO("Deserialisation tableaux fiche DBXML")
 
     tableaux_fiche tableaux_allfiche;
-    tableaux_allfiche.taille = 0;//<=  = tailletotal
     tableaux_allfiche.nbAuteurXarticle = 0;
-    //AFAIRE un soeule maloc tableaux_allfiche.taille*sizeof !!
+    fread(&tableaux_allfiche.taille,sizeof(int),1,input);//verifier?
     tableaux_allfiche.fiche = NULL;
+    DEBUG("il y a %d fiche a calloc",tableaux_allfiche.taille)
 
+    tableaux_allfiche.fiche = calloc(tableaux_allfiche.taille,sizeof(fiche_minimale));
+    exitIfNull(tableaux_allfiche.fiche,"calloc des fiche imposible")
 
-    fiche_minimale * fichelocalM = calloc(1,sizeof(fiche_minimale));//valgrind
-    exitIfNull(fichelocalM,"calloc imposible")
-    fichelocalM->nombre_auteur = 0;
-
-
-    //check la validitée ?
-
-    int indice = 0;
-    while (fgets(ligne,BALISESIZE,input))                           //<============= un soeul gros buffer ?
+    for (int UwU = 0; UwU < tableaux_allfiche.taille; UwU++)
     {
-        PROGRESSBAR_FILE_PRINT(input);
-        
-        enlever_retour_a_la_ligne(ligne);
-        fichelocalM->ADDR = indice;     //<=== explicitée
-        fichelocalM->titre = strdup(ligne);
-
-        fgets(ligne,BALISESIZE,input);
-        enlever_retour_a_la_ligne(ligne);
-        int nbauteur = atoi(ligne);
-        for (int i = 0; i < nbauteur; i++)
+        PROGRESSBAR(UwU,tableaux_allfiche.taille)
+        tableaux_allfiche.fiche[UwU].ADDR = UwU;
+        tableaux_allfiche.fiche[UwU].titre =readstrfile(input);
+        fread(&tableaux_allfiche.fiche[UwU].nombre_auteur,sizeof(int),1,input);
+        YOLO("il y a %d auteur",tableaux_allfiche.fiche[UwU].nombre_auteur)
+        tableaux_allfiche.fiche[UwU].liste_auteur = calloc(tableaux_allfiche.fiche[UwU].nombre_auteur,sizeof(char *));
+        exitIfNull(tableaux_allfiche.fiche[UwU].liste_auteur,"calloc echouer")
+        for (int i = 0; i < tableaux_allfiche.fiche[UwU].nombre_auteur; i++)
         {
-            fgets(ligne,BALISESIZE,input);
-            enlever_retour_a_la_ligne(ligne);
-            appendAuteurM(fichelocalM,strdup(ligne));// ICI on doit réloc pour iren VALGRINND
+            tableaux_allfiche.fiche[UwU].liste_auteur[i] = readstrfile(input);
             tableaux_allfiche.nbAuteurXarticle++;
         }
-        appendTabmeaux(&tableaux_allfiche,fichelocalM);
-        fichelocalM = calloc(1,sizeof(fiche_minimale));//MLOC
-        exitIfNull(fichelocalM, "new calloc null")
-        fichelocalM->nombre_auteur = 0;
-        indice++;
     }
-    free(fichelocalM);
-    DEBUG("Deseraialisation %d FAIRE UN MALOC",indice);
     return tableaux_allfiche;
 }
 
 
 
-void free_fiche_minimale(fiche_minimale * fiche){
-    free(fiche->titre);
-    for (int u = 0; u < fiche->nombre_auteur; u++)
+void free_fiche_minimale(fiche_minimale fiche){
+    free(fiche.titre);
+    for (int i = 0; i < fiche.nombre_auteur; i++)
     {
-        free(fiche->liste_auteur[u]);
+        free(fiche.liste_auteur[i]);
     }
-    free(fiche->liste_auteur);
-    free(fiche);
+    
+    free(fiche.liste_auteur);
 }
 
 //renomer

@@ -30,7 +30,7 @@ typedef struct fiche_minimale
  */
 typedef struct tableaux_fiche
 {
-    fiche_minimale ** fiche; ///< tableaux d'adresse pointant ver des adrese dynamique contenant fiche_minimale 
+    fiche_minimale * fiche; ///< tableaux d'adresse pointant ver des adrese dynamique contenant fiche_minimale 
     int taille;             ///<taille tableaux
     int nbAuteurXarticle;   //< index reflétant l'ordre de création
 }tableaux_fiche;
@@ -92,5 +92,5 @@ tableaux_fiche deserialisation_tableaux_fiche(FILE * input);
  * @param DEGAGE 
  */
 void free_tab_fiche(tableaux_fiche DEGAGE);
-void free_fiche_minimale(fiche_minimale * fiche);
+void free_fiche_minimale(fiche_minimale fiche);
 #endif

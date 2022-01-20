@@ -64,6 +64,24 @@ void repchar(char carac,size_t nb){
         printf("%c",carac);
 }
 
+
+void writestrfile(char * str, FILE * fichier){
+    short size = (short)strlen(str);
+    YOLO("%s!(%d)",str,size)
+    fwrite(&size,sizeof(short),1,fichier);
+    fwrite(str,sizeof(char),size,fichier);
+}
+
+char * readstrfile(FILE * fichier){
+    short taille;
+    fread(&taille,sizeof(short),1,fichier);
+    char * buffer = calloc(taille,sizeof(char));
+    fread(buffer,sizeof(char),taille,fichier);
+    exitIfNull(buffer,"imposible malloc buffer");
+    // buffer[taille]='\0';
+    YOLO("%s!(%d)",buffer,taille);
+    return buffer ;
+}
 //fonction pour convertire
 // int octerToMega(int taille){
 
