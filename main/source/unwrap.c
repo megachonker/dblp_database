@@ -360,6 +360,7 @@ void serialise_tab_auteur_struct(const tab_auteur_struct * List_des_Auteur, FILE
     {
         PROGRESSBAR(i,List_des_Auteur->nombre_auteur);
         if(List_des_Auteur->tab_auteur[i].size > 0){
+            YOLO("Write %s",List_des_Auteur->tab_auteur[i].nom_auteur)
             writestrfile(List_des_Auteur->tab_auteur[i].nom_auteur,output);
             fwrite(&List_des_Auteur->tab_auteur[i].size,1,sizeof(int),output);
             for (int j = 0; j < List_des_Auteur->tab_auteur[i].size; j++)
@@ -396,13 +397,13 @@ tab_auteur_struct deserialise_tab_auteur_struct(const tableaux_fiche * tableaux_
     exitIfNull(Sommet_Auteur_Tableaux, "deserialise_tab_auteur_struct: maloc echouer")
     master_List_Auteur.tab_auteur = Sommet_Auteur_Tableaux;
 
-
     for (int nbauteur = 0; nbauteur < master_List_Auteur.nombre_auteur; nbauteur++)
     {
         PROGRESSBAR(nbauteur,master_List_Auteur.nombre_auteur);
 
         //on génère le noms
         master_List_Auteur.tab_auteur[nbauteur].nom_auteur = readstrfile(input);
+        YOLO("noms auteur %s",master_List_Auteur.tab_auteur[nbauteur].nom_auteur)
 
         // on initialise le compteur d'élément 
         master_List_Auteur.tab_auteur[nbauteur].nbArticlecontenue = 0;
@@ -412,6 +413,7 @@ tab_auteur_struct deserialise_tab_auteur_struct(const tableaux_fiche * tableaux_
 
         fread(&master_List_Auteur.tab_auteur[nbauteur].size,sizeof(int),1,input);
         exitIfNull(master_List_Auteur.tab_auteur[nbauteur].size,"nombre d'auteur incorect !")
+        YOLO("\tnbArticle%d",master_List_Auteur.tab_auteur[nbauteur].size)
 
         master_List_Auteur.tab_auteur[nbauteur].tab_ptr_fiche_min = calloc(master_List_Auteur.tab_auteur[nbauteur].size,sizeof(auteur_struct)); //<= bon type ?
         exitIfNull(master_List_Auteur.tab_auteur[nbauteur].tab_ptr_fiche_min,"allocation master_List_Auteur.tab_auteur[nbauteur].tab_ptr_fiche_min echouser...");
@@ -420,10 +422,10 @@ tab_auteur_struct deserialise_tab_auteur_struct(const tableaux_fiche * tableaux_
         {
             int indiceFiche = 0;
             fread(&indiceFiche,sizeof(int),1,input);
+            YOLO("\t\tindice pointeur %d",indiceFiche)
             exitIfNull(&tableaux_fiche->fiche[indiceFiche],"serialise index pointeur sur nom_auteur introuvable\n")
             master_List_Auteur.tab_auteur[nbauteur].tab_ptr_fiche_min[u] = &tableaux_fiche->fiche[indiceFiche]; //On n'es pas obliger de lire la fiche
         }
-        nbauteur++;
     }
     master_List_Auteur.nombre_article = tableaux_fiche->taille;
     return master_List_Auteur;
@@ -496,25 +498,23 @@ void serialisation_tab_Article_struct(tab_Article_struct * inputlist, FILE * out
     INFO("\tSérialisation des Article:")
     int nombreArticle = inputlist->nombre_Article;
     DEBUG("sérialisation de  %d article",nombreArticle)
-    fprintf(outputfile,"%d\n",inputlist->nombre_Article);
+    fwrite(&nombreArticle,sizeof(int),1,outputfile);
 
     for (int i = 0; i < nombreArticle; i++)
     {
-        #ifdef WARN_ON
         PROGRESSBAR(i,nombreArticle);
-        #endif
 
         Article_struct article = inputlist->tab_Article[i];
         //le noms de l'article sera obtenue a la désérialisation....
-        fprintf(outputfile,"%s\n",article.nom_Article); ///pas glope
+        writestrfile(article.nom_Article,outputfile);
         int nombreauteur = article.nombre_auteur;
         YOLO("%s %d",article.nom_Article,nombreauteur);
-        fprintf(outputfile,"%d\n",nombreauteur);
+        fwrite(&nombreauteur,sizeof(int),1,outputfile);
         for (int u = 0; u < nombreauteur; u++)
         {
             int indiceAuteur = article.tab_ptr_auteur[u]->indiceDeCreation;
             YOLO("%d don? %s",indiceAuteur,article.tab_ptr_auteur[u]->nom_auteur)
-            fprintf(outputfile,"%d\n",indiceAuteur);
+            fwrite(&indiceAuteur,sizeof(int),1,outputfile);
         } 
     }
     INFO("Sérialisation des Article: Terminer")
@@ -548,13 +548,11 @@ void ajout_Article_in_auteur(auteur_struct * monauteur,Article_struct * monArtic
 tab_Article_struct deserialisation_tab_Article_struct(tab_auteur_struct * mesauteur, FILE * inputfile){
     INFO("\tdeserailisation Article")
 
-    char ligne[BALISESIZE];
     tab_Article_struct mon_tab_Article_struct;
     mon_tab_Article_struct.nombre_Article=0;
     int * nombretotalarticle = & mon_tab_Article_struct.nombre_Article;
 
-    fgets(ligne,BALISESIZE,inputfile);
-    *nombretotalarticle = atoi(ligne);
+    fread(nombretotalarticle,sizeof(int),1,inputfile);
 
     DEBUG("il y a %d Article",*nombretotalarticle)
     DEBUG("Malloc de %luocter",sizeof(Article_struct)**nombretotalarticle)
@@ -571,18 +569,12 @@ tab_Article_struct deserialisation_tab_Article_struct(tab_auteur_struct * mesaut
         Article_struct * monArticle = &mon_tab_Article_struct.tab_Article[j];
         
         //pas si utile .... Peut faire autrement
-        fgets(ligne,BALISESIZE,inputfile);
-        enlever_retour_a_la_ligne(ligne);
-        YOLO("ligneNomsarticle=%s",ligne)
-        monArticle->nom_Article = strdup(ligne);
+        monArticle->nom_Article = readstrfile(inputfile);
 
         //nombre d'auteur sur cette structure
-        fgets(ligne,BALISESIZE,inputfile);
         int nbauteur = 0;
-        nbauteur = atoi(ligne);
-        monArticle->nombre_auteur = nbauteur;
+        fread(&nbauteur,sizeof(int),1,inputfile);
         exitIfNull(nbauteur,"il y a 0 article")
-        enlever_retour_a_la_ligne(ligne);
         YOLO("nombre dauteur %d",nbauteur);
 
 
@@ -595,9 +587,7 @@ tab_Article_struct deserialisation_tab_Article_struct(tab_auteur_struct * mesaut
         for (int i = 0; i < nbauteur; i++)
         {
             int indexmagie = 0;
-            fgets(ligne,BALISESIZE,inputfile);
-            enlever_retour_a_la_ligne(ligne);
-            indexmagie = atoi(ligne);
+            fread(&indexmagie,sizeof(int),1,inputfile);
             YOLO("nombre ID auteur %d",indexmagie)
             //je cherche dans le tab auteur en fc de l'index trouver
             structauteur[i] = &(mesauteur->tab_auteur[indexmagie]);

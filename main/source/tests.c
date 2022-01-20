@@ -58,13 +58,13 @@ int main()
 
     INFO("tests:deserialisation")
 
-    // FILE * DBficheLecture   = fopen(custom_fiche_cache     ,"r");
-    // FILE * DBauteurLecture  = fopen(custom_auteur_cache    ,"r");
-    // FILE * DBArticleLecture = fopen(custom_Article_cache   ,"r");
+    FILE * DBficheLecture   = fopen(custom_fiche_cache     ,"r");
+    FILE * DBauteurLecture  = fopen(custom_auteur_cache    ,"r");
+    FILE * DBArticleLecture = fopen(custom_Article_cache   ,"r");
 
-    FILE * DBficheLecture   = fopen(cache_fiche     ,"r");
-    FILE * DBauteurLecture  = fopen(auteur_cache    ,"r");
-    FILE * DBArticleLecture = fopen(Article_cache   ,"r");
+    // FILE * DBficheLecture   = fopen(cache_fiche     ,"r");
+    // FILE * DBauteurLecture  = fopen(auteur_cache    ,"r");
+    // FILE * DBArticleLecture = fopen(Article_cache   ,"r");
 
     Graph_struct graph = deserialise_Graph(DBficheLecture
                                     ,DBauteurLecture
@@ -83,11 +83,12 @@ int main()
     // scoarboard(&graph1,TOP_Article,5);
     // printList_Article(graph1.tab_Article_struct);
 
-    // printList_auteur(graph1.tab_auteur_struct);
+    printList_auteur(graph.tab_auteur_struct);
+    printList_Article(graph.tab_Article_struct);
 
     
 
-    // find_auteur("l&circ",&graph.tab_auteur_struct);
+    // find_auteur("Konqui",&graph.tab_auteur_struct);
 
     // parcour_largeur(graph);
     // test_exploration_Article(graph1.tab_Article_struct);

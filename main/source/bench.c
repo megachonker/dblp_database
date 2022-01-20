@@ -139,8 +139,6 @@ tab_Article_struct gen_article(){
     tab_auteur_struct  malistaauteur = deserialise_tab_auteur_struct(&matablefiche,DBinversee);
     tab_Article_struct malistearticle = convertTab_auteur2Article(&malistaauteur);
 
-    free_tab_fiche(matablefiche);
-    free_tab_auteur(malistaauteur);
     return malistearticle;
 }
 
@@ -592,6 +590,7 @@ int main(int argc, char const *argv[])
     //     deserialisation_tab_auteur_structt();
     // }
     else{
+        //unwrap_serialise_Article
         fprintf(stderr,"PAS BON TEST!\n\n\n");
         fprintf(stderr,"\tOption a 1 arument\n\
             \n - readb\
