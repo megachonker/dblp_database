@@ -4,15 +4,15 @@
 #include "../header/fonctions_graphe.h"
 
 
-Graph_struct faire_graphe_Konqui(char * DBfiche, char * DBauteur, char * DBArticle)
+graphe_struct_Konqui faire_graphe_Konqui(char * DBfiche, char * DBauteur, char * DBArticle)
 {
     INFO("tests:deserialisation")
 
     FILE * DBficheLecture   = fopen(DBfiche     ,"r");
     FILE * DBauteurLecture  = fopen(DBauteur    ,"r");
     FILE * DBArticleLecture = fopen(DBArticle   ,"r");
-    //ancienne ligne: unwrap_Graph_struct mon_graph = deserialise_Graph(DBficheLecture
-    Graph_struct graphe_Konqui = deserialise_Graph(DBficheLecture
+    
+    graphe_struct_Konqui graphe_Konqui = deserialise_Graph(DBficheLecture
                                     ,DBauteurLecture
                                     ,DBArticleLecture);
 
@@ -29,46 +29,41 @@ Graph_struct faire_graphe_Konqui(char * DBfiche, char * DBauteur, char * DBArtic
 
 
 
-//faire le graphe des pointeurs vers les auteurs
-graphe_struct_Katie faire_graphe_ptr_auteur( Graph_struct graphe_Konqui)
+//faire le graphe (tableau) des pointeurs vers les auteurs, ce que je vais appeler ensuite graphe_Katie
+graphe_struct_Katie faire_graphe_ptr_auteur( graphe_struct_Konqui graphe_Konqui)
 {
 
     int size_graphe= graphe_Konqui.tab_auteur_struct->nombre_auteur;
+    
     graphe_struct_Katie graphe_struct;
     graphe_struct.graphe= malloc(sizeof(auteur_struct*)*size_graphe);
-    printf("malloc du graphe réussi\n");
+    exitIfNull(graphe_struct.graphe,"erreur malloc graphe_Katie");
     graphe_struct.size_graphe= size_graphe;
 
     for(int i=0; i<size_graphe; i++)
     {
         auteur_struct* ai_ptr= &(graphe_Konqui.tab_auteur_struct->tab_auteur[i]);
         ai_ptr->size_pcc_auteur= -1;
-        ai_ptr->ptr_Article_predecesseur_pcc= malloc(8);
         ai_ptr->ptr_Article_predecesseur_pcc= NULL;
-        ai_ptr->ptr_auteur_predecesseur_pcc= malloc(8);
         ai_ptr->ptr_auteur_predecesseur_pcc= NULL;
         graphe_struct.graphe[i]= ai_ptr;
     }
-    printf("malloc set up des attributs d'auteur réussi\n");
-
-    free(graphe_Konqui.tab_auteur_struct);
-
     return graphe_struct;
 }
 
 
 //Je vérifie que les auteurs du chemin sont bien voisins 2 à 2 dans l'ordre du chemin
 //et que les Articles du pcc sont bien cohérent avec le pcc auteur
+//si c'est le cas, un "OK" sera affiché à la l'indice de l'auteur / Article
 void verifier_do_Dijkstra(plus_court_chemin_struct* pcc)
 {
     pcc_struct_verification pcc_verif;
     pcc_verif.tab_verif_auteur= malloc(sizeof(char*)*pcc->size_pcc_auteur);
     pcc_verif.tab_verif_Article= malloc(sizeof(char*)*pcc->size_pcc_Article);
     
-   
     pcc_verif.tab_verif_auteur[0]= "OK";
 
-    for(int k=0; k< pcc->size_pcc_auteur-1; k++) //pour tout les auteurs ak du pcc
+    for(int k=0; k< pcc->size_pcc_auteur-1; k++) //pour tout les auteurs ak du pcc (plus court chemin)
     {
 
         comparaison_auteur trouver_ou_pas_1= auteur_pas_trouver;
@@ -77,10 +72,8 @@ void verifier_do_Dijkstra(plus_court_chemin_struct* pcc)
         auteur_struct* ak_ptr= pcc->pcc_tab_ptr_auteur[k];
         auteur_struct* prochain_ak_ptr= pcc->pcc_tab_ptr_auteur[k+1];
 
-        
         for(int l=0; l< ak_ptr->size; l++) //pour tout les Articles Al de ak
         {
-            
             Article_struct* Al_ptr= ak_ptr->tab_ptr_Article[l];
 
             if(Al_ptr== pcc->pcc_tab_ptr_Article[k])
@@ -97,15 +90,12 @@ void verifier_do_Dijkstra(plus_court_chemin_struct* pcc)
                     trouver_ou_pas_1= auteur_trouver;
                     pcc_verif.tab_verif_auteur[k+1]= "OK";
                 }
-
-
             }
         }
         if(trouver_ou_pas_2== Article_pas_trouver)
             pcc_verif.tab_verif_Article[k]= "NON";
         if(trouver_ou_pas_1== auteur_pas_trouver)
             pcc_verif.tab_verif_auteur[k]= "NON";
-
     }
 
     printf("%s\n", "elements de pcc auteur:");
@@ -119,7 +109,6 @@ void verifier_do_Dijkstra(plus_court_chemin_struct* pcc)
     {
         printf("[%s]\n", pcc_verif.tab_verif_Article[i]);
     }
-
 
     free(pcc_verif.tab_verif_auteur);
     free(pcc_verif.tab_verif_Article);
@@ -216,26 +205,3 @@ void donner_tous_ceux_qui_ont_travalle_avec_auteur(graphe_struct_Katie graphe_st
 }
 
 
-/*
-//test: affichage des voisins des auteurs dans e graphe de ptr d'auteur généré par faire_graphe_ptr_auteur
-int main(void)
-{
-
-    FILE* graphe_test_Katie= fopen(dbtestKatie "r");
-
-    graphe_struct_Katie mon_graphe= faire_graphe_ptr_auteur(graphe_test_Katie);
-
-    fclose(graphe_test_Katie);
-
-  
-    for(int k=0; k <mon_graphe.size_graphe; k++)
-    {
-        printf("%s\n",  mon_graphe.graphe[k]->nom_auteur);
-    }
-    
-    free(mon_graphe.graphe);
-    
-    
-    return 0;
-}
-*/

@@ -171,7 +171,7 @@ void local_deserialise_Graph(){
     fclose(DBArticleLecture);
 }
 
-Graph_struct local_gen_Graph_from_XML(){
+graphe_struct_Konqui local_gen_Graph_from_XML(){
     FILE * XML               = fopen(origineXML      ,"r");
     exitIfNull(XML  ,"erreur ouverture bd")
     return gen_Graph_from_XML(XML);
@@ -180,7 +180,7 @@ Graph_struct local_gen_Graph_from_XML(){
 
 void local_serialise_Graph(){
 
-    Graph_struct graph = local_gen_Graph_from_XML();
+    graphe_struct_Konqui graph = local_gen_Graph_from_XML();
 
     FILE * DBficheEcriture   = fopen(cache_fiche     ,"w");
     FILE * DBauteurEcriture  = fopen(auteur_cache    ,"w");
@@ -196,7 +196,7 @@ void local_serialise_Graph(){
 
 }
 
-Graph_struct local_gen_custom_Graph_from_XML(){
+graphe_struct_Konqui local_gen_custom_Graph_from_XML(){
     FILE * XML               = fopen(customXML      ,"r");
     exitIfNull(XML  ,"erreur ouverture bd")
     return gen_Graph_from_XML(XML);
@@ -206,7 +206,7 @@ Graph_struct local_gen_custom_Graph_from_XML(){
 
 void local_custom_serialise_Graph(){
 
-    Graph_struct graph = local_gen_Graph_from_XML();
+    graphe_struct_Konqui graph = local_gen_Graph_from_XML();
 
     FILE * DBficheEcriture   = fopen(custom_fiche_cache     ,"w");
     FILE * DBauteurEcriture  = fopen(custom_auteur_cache    ,"w");
@@ -353,7 +353,7 @@ int main(int argc, char const *argv[])
         //Faire un switch
         if(strcmp("sg",compstr)==0){
             listeFichier mesfichier = openDB(basenb,ecriture);
-            Graph_struct legraph = gen_Graph_from_XML(mesfichier.XML);
+            graphe_struct_Konqui legraph = gen_Graph_from_XML(mesfichier.XML);
             serialise_Graph(legraph,
                 mesfichier.DBficheEcriture,
                 mesfichier.DBauteurEcriture,
@@ -365,7 +365,7 @@ int main(int argc, char const *argv[])
         if (strcmp("gxml",compstr)==0)
         {
             listeFichier mesfichier = openDB(basenb,lecture);
-            Graph_struct legraph = gen_Graph_from_XML(mesfichier.XML);
+            graphe_struct_Konqui legraph = gen_Graph_from_XML(mesfichier.XML);
             free_Graph_struct(legraph);
             closeall(mesfichier);
         }
@@ -373,7 +373,7 @@ int main(int argc, char const *argv[])
         //Faire un switch
         if(strcmp("dg",compstr)==0){
             listeFichier mesfichier = openDB(basenb,lecture);
-            Graph_struct legraph =  deserialise_Graph(
+            graphe_struct_Konqui legraph =  deserialise_Graph(
                                         mesfichier.DBficheLecture,
                                         mesfichier.DBauteurLecture,
                                         mesfichier.DBArticleLecture);

@@ -48,9 +48,9 @@ typedef struct pcc_struct_verification
 
 void verifier_do_Dijkstra(struct plus_court_chemin_struct* pcc);
 
-Graph_struct faire_graphe_Konqui();
+graphe_struct_Konqui faire_graphe_Konqui();
 
-graphe_struct_Katie faire_graphe_ptr_auteur( Graph_struct graphe_Konqui);
+graphe_struct_Katie faire_graphe_ptr_auteur( graphe_struct_Konqui graphe_Konqui);
 
 void voir_si_un_auteur_est_dans_le_graphe_et_donner_un_Article_ou_il_apparait(graphe_struct_Katie graphe_struct, char* nom_auteur);
 

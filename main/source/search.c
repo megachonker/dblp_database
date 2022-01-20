@@ -63,7 +63,7 @@ tab_auteur_struct get_top_auteur(const tab_auteur_struct * tout_auteur,int topX)
     return top_auteur;
 }
 
-void scoarboard(const Graph_struct * mongraph ,const int getwhat ,const int nbentrer){
+void scoarboard(const graphe_struct_Konqui * mongraph ,const int getwhat ,const int nbentrer){
     switch (getwhat)
     {
     case TOP_Article:
@@ -153,7 +153,7 @@ void explore(auteur_struct * auteurAexplorer, pille_auteur * pille){
 
 //fonction pour réalouer 
 
-void parcour_largeur(const Graph_struct graph){
+void parcour_largeur(const graphe_struct_Konqui graph){
 
     auteur_struct * tabaddresseauteur = calloc(TAILLE_DEPARD,sizeof(pille_auteur*));
     exitIfNull(tabaddresseauteur,"imposible initialiser tableaux addresse")

@@ -182,7 +182,7 @@ void exploreauteur(const auteur_struct * monauteur,int profondeur){
 }
 
 
-// parcoureProfondeur(Graph_struct){
+// parcoureProfondeur(graphe_struct_Konqui){
 
 // }
 
@@ -768,27 +768,27 @@ tab_Article_struct * gen_tab_Article_from_xml(FILE * dbinput){
  * 
  * @param dbxmlCache 
  * @param inverted 
- * @return Graph_struct 
+ * @return graphe_struct_Konqui 
  */
-Graph_struct deserialise_Graph(FILE * dbxmlCache, FILE * auteurCache, FILE * ArticleCache){
+graphe_struct_Konqui deserialise_Graph(FILE * dbxmlCache, FILE * auteurCache, FILE * ArticleCache){
     INFO("Désérialisation du Graph:")
     tableaux_fiche * matablefiche =         deserialisation_tableaux_fiche(dbxmlCache);
     tab_auteur_struct * malistaauteur =   deserialise_tab_auteur_struct(matablefiche,auteurCache);
     tab_Article_struct * malistearticle = deserialisation_tab_Article_struct(malistaauteur,ArticleCache);
-    Graph_struct graph  = {malistaauteur, malistearticle,*matablefiche};
+    graphe_struct_Konqui graph  = {malistaauteur, malistearticle,*matablefiche};
     return graph;
 }
 
-Graph_struct gen_Graph_from_XML(FILE * dbxmlCache){
+graphe_struct_Konqui gen_Graph_from_XML(FILE * dbxmlCache){
     INFO("Génération du graph (XML)")
     tableaux_fiche mesfiche =  parse(dbxmlCache);
     tab_auteur_struct * malistedauteur = convertTab_fiche2auteur(mesfiche);
     tab_Article_struct * malistaarticle = convertTab_auteur2Article(malistedauteur);
-    Graph_struct graph  = {malistedauteur, malistaarticle,mesfiche};
+    graphe_struct_Konqui graph  = {malistedauteur, malistaarticle,mesfiche};
     return graph;
 }
 
-void serialise_Graph(Graph_struct graph, FILE * dbxmlCache, FILE * auteurCache, FILE * ArticleCache){
+void serialise_Graph(graphe_struct_Konqui graph, FILE * dbxmlCache, FILE * auteurCache, FILE * ArticleCache){
     INFO("Sérialisation du graph:")
     serialisation_tableaux_fiche(graph.tableaux_de_fiche,dbxmlCache);
     serialise_tab_auteur_struct(graph.tab_auteur_struct,auteurCache);
@@ -827,7 +827,7 @@ void free_tab_Article(tab_Article_struct * afree){
     free(afree);
 }
 
-void free_Graph_struct(Graph_struct afree){
+void free_Graph_struct(graphe_struct_Konqui afree){
     free_tab_Article(afree.tab_Article_struct);
     free_tab_auteur(afree.tab_auteur_struct);
     free_tab_fiche(&afree.tableaux_de_fiche);

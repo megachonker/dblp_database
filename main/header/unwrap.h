@@ -108,12 +108,12 @@ typedef struct tab_auteur_struct
  * 
  * 
  */
-typedef struct Graph_struct
+typedef struct graphe_struct_Konqui
 {
     tab_auteur_struct * tab_auteur_struct;
     tab_Article_struct * tab_Article_struct;
     tableaux_fiche tableaux_de_fiche;
-}Graph_struct;
+}graphe_struct_Konqui;
 
 
 /**
@@ -163,14 +163,14 @@ tab_auteur_struct * deserialise_tab_auteur_struct(const tableaux_fiche * List_de
 
 
 
-Graph_struct deserialise_Graph(FILE * dbxmlCache, FILE * auteurCache, FILE * ArticleCache);
-Graph_struct gen_Graph_from_XML(FILE * dbxmlCache);
+graphe_struct_Konqui deserialise_Graph(FILE * dbxmlCache, FILE * auteurCache, FILE * ArticleCache);
+graphe_struct_Konqui gen_Graph_from_XML(FILE * dbxmlCache);
 
-void serialise_Graph(Graph_struct graph, FILE * dbxmlCache, FILE * auteurCache, FILE * ArticleCache);
+void serialise_Graph(graphe_struct_Konqui graph, FILE * dbxmlCache, FILE * auteurCache, FILE * ArticleCache);
 
 void free_tab_auteur(tab_auteur_struct * free);
 void free_tab_Article(tab_Article_struct * afree);
-void free_Graph_struct(Graph_struct afree);
+void free_Graph_struct(graphe_struct_Konqui afree);
 
 tab_Article_struct * gen_tab_Article_from_xml(FILE * dbinput);
 
