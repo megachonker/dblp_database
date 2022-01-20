@@ -39,7 +39,7 @@ int main()
 
     // FILE * XML               = fopen(origineXML      ,"r");
     // exitIfNull(XML  ,"erreur ouverture bd")
-    // Graph_struct graph= gen_Graph_from_XML(XML);
+    // graphe_struct_Konqui graph= gen_Graph_from_XML(XML);
     // fclose(XML);
 
     // INFO("tests:Serialisation")
@@ -66,7 +66,7 @@ int main()
     // FILE * DBauteurLecture  = fopen(auteur_cache    ,"r");
     // FILE * DBArticleLecture = fopen(Article_cache   ,"r");
 
-    Graph_struct graph = deserialise_Graph(DBficheLecture
+    graphe_struct_Konqui graph = deserialise_Graph(DBficheLecture
                                     ,DBauteurLecture
                                     ,DBArticleLecture);
 

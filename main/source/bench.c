@@ -191,7 +191,7 @@ void local_deserialise_Graph(){
     fclose(DBArticleLecture);
 }
 
-Graph_struct local_gen_Graph_from_XML(){
+graphe_struct_Konqui local_gen_Graph_from_XML(){
     FILE * XML               = fopen(origineXML      ,"r");
     exitIfNull(XML  ,"erreur ouverture bd")
     return gen_Graph_from_XML(XML);
@@ -200,7 +200,7 @@ Graph_struct local_gen_Graph_from_XML(){
 
 void local_serialise_Graph(){
 
-    Graph_struct graph = local_gen_Graph_from_XML();
+    graphe_struct_Konqui graph = local_gen_Graph_from_XML();
 
     FILE * DBficheEcriture   = fopen(cache_fiche     ,"w");
     FILE * DBauteurEcriture  = fopen(auteur_cache    ,"w");
@@ -216,7 +216,7 @@ void local_serialise_Graph(){
 
 }
 
-Graph_struct local_gen_custom_Graph_from_XML(){
+graphe_struct_Konqui local_gen_custom_Graph_from_XML(){
     FILE * XML               = fopen(customXML      ,"r");
     exitIfNull(XML  ,"erreur ouverture bd")
     return gen_Graph_from_XML(XML);
@@ -226,7 +226,7 @@ Graph_struct local_gen_custom_Graph_from_XML(){
 
 void local_custom_serialise_Graph(){
 
-    Graph_struct graph = local_gen_Graph_from_XML();
+    graphe_struct_Konqui graph = local_gen_Graph_from_XML();
 
     FILE * DBficheEcriture   = fopen(custom_fiche_cache     ,"w");
     FILE * DBauteurEcriture  = fopen(custom_auteur_cache    ,"w");
@@ -362,7 +362,7 @@ listeFichier openDB(int type,int mode){
  * @param graphe_Konqui 
  * @param nbtime 
  */
-void testgraph(Graph_struct graphe_Konqui,int nbtime){
+void testgraph(graphe_struct_Konqui graphe_Konqui,int nbtime){
     INFO("Test Graph")
     srand(time(NULL));
 
@@ -376,18 +376,17 @@ void testgraph(Graph_struct graphe_Konqui,int nbtime){
         b = rand()%graphe_Konqui.tab_auteur_struct.nombre_auteur;
         char* nom_auteur_depart     = graphe_Katie.graphe[a]->nom_auteur;
         char* nom_auteur_destination= graphe_Katie.graphe[b]->nom_auteur;
-        WARNING("depar  : %s ",nom_auteur_depart)
+        WARNING("depart  : %s ",nom_auteur_depart)
         WARNING("arriver: %s",nom_auteur_destination)
-        plus_court_chemin_struct* plus_court_chemin= do_Dijkstra(graphe_Katie, nom_auteur_depart, nom_auteur_destination);
-        if(plus_court_chemin!= NULL)
+        plus_court_chemin_struct* plus_court_chemin_ptr= do_Dijkstra(graphe_Katie, nom_auteur_depart, nom_auteur_destination);
+        if(plus_court_chemin_ptr!= NULL)
         {
-            print_chemins_auteur_et_Artice(plus_court_chemin);
+            print_chemins_auteur_et_Article(plus_court_chemin_ptr);
 
-            verifier_do_Dijkstra(plus_court_chemin);
         }else{
-            ERROR("PAS CHEMAIN")
+            ERROR("PAS DE CHEMIN")
         }
-        free_Dijkstra(graphe_Katie, plus_court_chemin);
+        free_Dijkstra(graphe_Katie,plus_court_chemin_ptr);
 
     }
 
@@ -402,7 +401,7 @@ void testgraph(Graph_struct graphe_Konqui,int nbtime){
  */
 void all(int mode ){
     listeFichier mesfichierWrite = openDB(mode,ecriture);
-    Graph_struct legraphW = gen_Graph_from_XML(mesfichierWrite.XML);
+    graphe_struct_Konqui legraphW = gen_Graph_from_XML(mesfichierWrite.XML);
     serialise_Graph(legraphW,
         mesfichierWrite.DBficheEcriture,
         mesfichierWrite.DBauteurEcriture,
@@ -410,7 +409,7 @@ void all(int mode ){
     closeall(mesfichierWrite);
     free_Graph_struct(legraphW);
     listeFichier mesfichier = openDB(mode,ecriture);
-    Graph_struct legraph =  deserialise_Graph(
+    graphe_struct_Konqui legraph =  deserialise_Graph(
                                 mesfichier.DBficheLecture,
                                 mesfichier.DBauteurLecture,
                                 mesfichier.DBArticleLecture);
@@ -445,7 +444,7 @@ int main(int argc, char const *argv[])
         //Faire un switch
         if(strcmp("sg",compstr)==0){
             listeFichier mesfichierWrite = openDB(basenb,ecriture);
-            Graph_struct legraph = gen_Graph_from_XML(mesfichierWrite.XML);
+            graphe_struct_Konqui legraph = gen_Graph_from_XML(mesfichierWrite.XML);
             serialise_Graph(legraph,
                 mesfichierWrite.DBficheEcriture,
                 mesfichierWrite.DBauteurEcriture,
@@ -453,16 +452,16 @@ int main(int argc, char const *argv[])
             closeall(mesfichierWrite);
             free_Graph_struct(legraph);
         STR("gxml")
-            Graph_struct legraph = gen_Graph_from_XML(mesfichier.XML);
+            graphe_struct_Konqui legraph = gen_Graph_from_XML(mesfichier.XML);
             free_Graph_struct(legraph);
         STR("dg")
-            Graph_struct legraph =  deserialise_Graph(
+            graphe_struct_Konqui legraph =  deserialise_Graph(
                                         mesfichier.DBficheLecture,
                                         mesfichier.DBauteurLecture,
                                         mesfichier.DBArticleLecture);
             free_Graph_struct(legraph);
         STR("dik")
-            Graph_struct legraph =  deserialise_Graph(
+            graphe_struct_Konqui legraph =  deserialise_Graph(
                                         mesfichier.DBficheLecture,
                                         mesfichier.DBauteurLecture,
                                         mesfichier.DBArticleLecture);

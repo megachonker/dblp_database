@@ -117,7 +117,7 @@ void sort_tableaux_auteur(Paire_auteur_oeuvre * HauteurHeuvre,int sizeHauteurHeu
  * @param sizeArticleHauteur 
  */
 void sort_tableaux_Article(Paire_Article_auteur * ArticleuHauteur,int sizeArticleHauteur ){
-    DEBUG("QSORT (si echoue visualcode gourmant mémoir)")
+    DEBUG("QSORT (si echoue visualcode gourmand mémoire)")
     qsort(ArticleuHauteur,sizeArticleHauteur ,sizeof(Paire_Article_auteur),qsort_compare_auteur);
 }
 
@@ -630,29 +630,29 @@ tab_Article_struct gen_tab_Article_from_xml(FILE * dbinput){
  * 
  * @param dbxmlCache 
  * @param inverted 
- * @return Graph_struct 
+ * @return graphe_struct_Konqui 
  */
-Graph_struct deserialise_Graph(FILE * dbxmlCache, FILE * auteurCache, FILE * ArticleCache){
+graphe_struct_Konqui deserialise_Graph(FILE * dbxmlCache, FILE * auteurCache, FILE * ArticleCache){
     INFO("Désérialisation du Graph:")
     tableaux_fiche      mesfiche    =   deserialisation_tableaux_fiche(dbxmlCache);
     tab_auteur_struct   mes_auteur   =   deserialise_tab_auteur_struct(&mesfiche,auteurCache);
     tab_Article_struct  mes_Article  =   deserialisation_tab_Article_struct(&mes_auteur,ArticleCache);
     mes_Article.origine = from_deserialisation;
-    Graph_struct graph  = {mes_auteur, mes_Article,mesfiche};
+    graphe_struct_Konqui graph  = {mes_auteur, mes_Article,mesfiche};
     return graph;
 }
 
-Graph_struct gen_Graph_from_XML(FILE * dbxmlCache){
+graphe_struct_Konqui gen_Graph_from_XML(FILE * dbxmlCache){
     INFO("Génération du graph (XML)")
     tableaux_fiche      mesfiche    = parse(dbxmlCache);
     tab_auteur_struct   mes_auteur  = convertTab_fiche2auteur(mesfiche);
     tab_Article_struct  mes_Article = convertTab_auteur2Article(&mes_auteur);
     mes_Article.origine = from_XML;
-    Graph_struct graph  = {mes_auteur, mes_Article,mesfiche};
+    graphe_struct_Konqui graph  = {mes_auteur, mes_Article,mesfiche};
     return graph;
 }
 
-void serialise_Graph(Graph_struct graph, FILE * dbxmlCache, FILE * auteurCache, FILE * ArticleCache){
+void serialise_Graph(graphe_struct_Konqui graph, FILE * dbxmlCache, FILE * auteurCache, FILE * ArticleCache){
     INFO("Sérialisation du graph:")
     serialisation_tableaux_fiche(graph.tableaux_de_fiche,dbxmlCache);
     serialise_tab_auteur_struct(&graph.tab_auteur_struct,auteurCache);
@@ -698,7 +698,7 @@ void free_tab_Article(tab_Article_struct afree){
     free(afree.tab_Article);
 }
 
-void free_Graph_struct(Graph_struct afree){
+void free_Graph_struct(graphe_struct_Konqui afree){
     //les 3 peuve être faite en paralèle
     free_tab_fiche(afree.tableaux_de_fiche);
     free_tab_auteur(afree.tab_auteur_struct);

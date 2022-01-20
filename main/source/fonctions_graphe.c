@@ -4,15 +4,15 @@
 #include "../header/fonctions_graphe.h"
 
 
-Graph_struct faire_graphe_Konqui(char * DBfiche, char * DBauteur, char * DBArticle)
+graphe_struct_Konqui faire_graphe_Konqui(char * DBfiche, char * DBauteur, char * DBArticle)
 {
     INFO("tests:deserialisation")
 
     FILE * DBficheLecture   = fopen(DBfiche     ,"r");
     FILE * DBauteurLecture  = fopen(DBauteur    ,"r");
     FILE * DBArticleLecture = fopen(DBArticle   ,"r");
-    //ancienne ligne: unwrap_Graph_struct mon_graph = deserialise_Graph(DBficheLecture
-    Graph_struct graphe_Konqui = deserialise_Graph(DBficheLecture
+    
+    graphe_struct_Konqui graphe_Konqui = deserialise_Graph(DBficheLecture
                                     ,DBauteurLecture
                                     ,DBArticleLecture);
 
@@ -29,8 +29,8 @@ Graph_struct faire_graphe_Konqui(char * DBfiche, char * DBauteur, char * DBArtic
 
 
 
-//faire le graphe des pointeurs vers les auteurs
-graphe_struct_Katie faire_graphe_ptr_auteur( Graph_struct graphe_Konqui)
+//faire le graphe (tableau) des pointeurs vers les auteurs, ce que je vais appeler ensuite graphe_Katie
+graphe_struct_Katie faire_graphe_ptr_auteur( graphe_struct_Konqui graphe_Konqui)
 {
 
     int size_graphe= graphe_Konqui.tab_auteur_struct.nombre_auteur;
@@ -42,91 +42,10 @@ graphe_struct_Katie faire_graphe_ptr_auteur( Graph_struct graphe_Konqui)
     for(int i=0; i<size_graphe; i++)
     {
         auteur_struct* ai_ptr= &(graphe_Konqui.tab_auteur_struct.tab_auteur[i]);
-        ai_ptr->size_pcc_auteur= -1;           //WTF ? ces un troue a mémoir ?? ? ?? 
-        ai_ptr->ptr_Article_predecesseur_pcc= malloc(8);
-        ai_ptr->ptr_Article_predecesseur_pcc= NULL;
-        ai_ptr->ptr_auteur_predecesseur_pcc= malloc(8);
-        ai_ptr->ptr_auteur_predecesseur_pcc= NULL;
-        graphe_struct.graphe[i]= ai_ptr;
+        ai_ptr->size_pcc_auteur= -1;
+        graphe_struct.graphe[i]= ai_ptr;           
     }
-    YOLO("malloc set up des attributs d'auteur réussi\n");
     return graphe_struct;
-}
-
-
-
-/**
- * @brief  Vérification plus cour chemain ?
- * Je vérifie que les auteurs du chemin sont bien voisins 2 à 2 dans l'ordre du chemin
- * et que les Articles du pcc sont bien cohérent avec le pcc auteur
- * @param pcc 
- */
-void verifier_do_Dijkstra(plus_court_chemin_struct* pcc)
-{
-    INFO("Verrifier Dikstra")
-
-    pcc_struct_verification pcc_verif;
-    pcc_verif.tab_verif_auteur= malloc(sizeof(char*)*pcc->size_pcc_auteur);
-    pcc_verif.tab_verif_Article= malloc(sizeof(char*)*pcc->size_pcc_Article);
-    
-   
-    pcc_verif.tab_verif_auteur[0]= "OK";
-
-    for(int k=0; k< pcc->size_pcc_auteur-1; k++) //pour tout les auteurs ak du pcc
-    {
-
-        comparaison_auteur trouver_ou_pas_1= auteur_pas_trouver;
-        comparaison_Article trouver_ou_pas_2= Article_pas_trouver;
-
-        auteur_struct* ak_ptr= pcc->pcc_tab_ptr_auteur[k];
-        auteur_struct* prochain_ak_ptr= pcc->pcc_tab_ptr_auteur[k+1];
-
-        
-        for(int l=0; l< ak_ptr->size; l++) //pour tout les Articles Al de ak
-        {
-            
-            Article_struct* Al_ptr= ak_ptr->tab_ptr_Article[l];
-
-            if(Al_ptr== pcc->pcc_tab_ptr_Article[k])
-            {
-                trouver_ou_pas_2= Article_trouver;
-                pcc_verif.tab_verif_Article[k]= "OK";
-            }
-                
-            for(int v=0; v< Al_ptr->nombre_auteur; v++)
-            {
-                auteur_struct* voisin_de_ak_ptr= Al_ptr->tab_ptr_auteur[v];
-                if(voisin_de_ak_ptr== prochain_ak_ptr)
-                {
-                    trouver_ou_pas_1= auteur_trouver;
-                    pcc_verif.tab_verif_auteur[k+1]= "OK";
-                }
-
-
-            }
-        }
-        if(trouver_ou_pas_2== Article_pas_trouver)
-            pcc_verif.tab_verif_Article[k]= "NON";
-        if(trouver_ou_pas_1== auteur_pas_trouver)
-            pcc_verif.tab_verif_auteur[k]= "NON";
-
-    }
-
-    DEBUG("%s\n", "elements de pcc auteur:");
-    for(int i=0; i< pcc->size_pcc_auteur; i++)
-    {
-        GREY();printf("[%s]\n", pcc_verif.tab_verif_auteur[i]);CLRCOLOR();
-    }
-
-    DEBUG("%s\n", "elements de pcc Article:");
-    for(int i=0; i< pcc->size_pcc_Article; i++)
-    {
-        GREY();printf("[%s]\n", pcc_verif.tab_verif_Article[i]);CLRCOLOR();
-    }
-
-
-    free(pcc_verif.tab_verif_auteur);
-    free(pcc_verif.tab_verif_Article);
 }
 
 
@@ -219,30 +138,45 @@ void donner_tous_ceux_qui_ont_travalle_avec_auteur(graphe_struct_Katie graphe_st
     }
 }
 
-
-/*
-//test: affichage des voisins des auteurs dans e graphe de ptr d'auteur généré par faire_graphe_ptr_auteur
-int main(void)
+void print_noms_des_voisins(graphe_struct_Katie graphe_t, char* nom_auteur)
 {
 
-    FILE* graphe_test_Katie= fopen(dbtestKatie "r");
+    comparaison_auteur trouver_ou_pas= auteur_pas_trouver;
+    auteur_struct* auteur_ptr= NULL;
 
-    graphe_struct_Katie mon_graphe= faire_graphe_ptr_auteur(graphe_test_Katie);
-
-    fclose(graphe_test_Katie);
-
-  
-    for(int k=0; k <mon_graphe.size_graphe; k++)
+    for(int i=0; i<graphe_t.size_graphe; i++)
     {
-        printf("%s\n",  mon_graphe.graphe[k]->nom_auteur);
+        graphe_t.graphe[i]->indice_dans_le_graphe= i;
+
+        if(strcmp(nom_auteur, graphe_t.graphe[i]->nom_auteur)==0)
+        {
+            trouver_ou_pas= auteur_trouver;
+            auteur_ptr= graphe_t.graphe[i];
+        }
     }
-    
-    free(mon_graphe.graphe);
-    
-    
-    return 0;
+
+    if(trouver_ou_pas== auteur_pas_trouver)
+        printf("%s %s %s\n", "l'auteur", nom_auteur, "ne figure dans aucun Article");
+
+
+    printf("voisins de %s\n", auteur_ptr->nom_auteur);
+
+    for(int l=0; l< auteur_ptr->size; l++)
+    {
+        Article_struct* Al_ptr= auteur_ptr->tab_ptr_Article[l];
+
+        for(int k=0; k< Al_ptr->nombre_auteur; k++)
+        {
+            auteur_struct* voisin_ptr= Al_ptr->tab_ptr_auteur[k];
+            printf("%s\n", voisin_ptr->nom_auteur);
+        }
+
+    }
+
 }
-*/
+
+
+
 
 
 // #define PROFONDEUREXP 5
