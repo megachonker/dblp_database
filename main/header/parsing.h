@@ -3,15 +3,13 @@
 #include <stdio.h>
 
 /**
- * @brief Titre && liste des auteur 
- * 
- * Fiche extraite de parse(FILE * inputDB)
+ * @brief Entrée DBLP Titre et liste des auteur 
  * 
  * au long terme devra contenire tout les champs
- * 
+ * structure étant alouer dynamiquement pour pouvoir être utiliser par plusieur autre structure
  * 
  */
-typedef struct free_tab_fiche
+typedef struct fiche_minimale
 {
     char * titre;           ///< renomer par article ?
     //< date de création ?
@@ -25,19 +23,16 @@ typedef struct free_tab_fiche
 /**
  * @brief Contien toute les fiche_minimale
  * 
- * une fiche a une ADDResse
- * les addresse sont utilise pour retrouver l'index 
- * 
- * tableaux 
+ * Chaque addresse fiche_minimale est contenu dans un tableaux dynamique
+ * nbAuteurXarticle est utiliser pour retrouver l'index quand on désérialise
  * 
  * @struct tableaux_fiche
  */
 typedef struct tableaux_fiche
 {
-    fiche_minimale ** fiche; ///< tableaux des fiche_minimale utiliser
-    // int * ADDR;               ///<UNE FICHE UNE ADDRESS
+    fiche_minimale ** fiche; ///< tableaux d'adresse pointant ver des adrese dynamique contenant fiche_minimale 
     int taille;             ///<taille tableaux
-    int nbAuteurXarticle;
+    int nbAuteurXarticle;   //< index reflétant l'ordre de création
 }tableaux_fiche;
 
 
@@ -88,7 +83,7 @@ void serialisation_tableaux_fiche(tableaux_fiche mastertab, FILE * outfichier);
  * @param [in] input générée par serialisation_tableaux_fiche 
  * @return pointeur ver tableaux_fiche 
  */
-tableaux_fiche * deserialisation_tableaux_fiche(FILE * input);
+tableaux_fiche deserialisation_tableaux_fiche(FILE * input);
 
 //renomer
 /**
@@ -96,6 +91,6 @@ tableaux_fiche * deserialisation_tableaux_fiche(FILE * input);
  * 
  * @param DEGAGE 
  */
-void free_tab_fiche(tableaux_fiche * DEGAGE);
-
+void free_tab_fiche(tableaux_fiche DEGAGE);
+void free_fiche_minimale(fiche_minimale * fiche);
 #endif

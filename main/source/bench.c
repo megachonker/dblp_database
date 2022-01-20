@@ -1,7 +1,9 @@
 #include "../header/parsing.h"
 #include "../header/unwrap.h"
+#include "../header/Dijkstra.h"
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 
 
 #include "../header/macro.h"
@@ -13,6 +15,20 @@ enum{
     Katie    lecture,
     ecriture
 };
+
+
+
+typedef struct listeFichier
+{
+    FILE * XML;
+    FILE * DBficheLecture;
+    FILE * DBauteurLecture;
+    FILE * DBArticleLecture;
+    FILE * DBficheEcriture;
+    FILE * DBauteurEcriture;
+    FILE * DBArticleEcriture;
+    int mode;
+}listeFichier;
 
 //fair des argument preselectioner pour toute les fonction 1 defaut dblp 2 dblp1000 3 custom
 
@@ -51,7 +67,7 @@ void serializedsmall(){
 }
 //serialise small db manque 
 
-tableaux_fiche * deserialisedb(){
+tableaux_fiche deserialisedb(){
     FILE * fichier = fopen(cache_fiche,"r");
     exitIfNull(fichier,"imposible d'ouvrire "cache_fiche);
     return deserialisation_tableaux_fiche(fichier);    
@@ -63,7 +79,7 @@ void deserialisesmalldb(){
     deserialisation_tableaux_fiche(fichier);
 }
 
-tab_auteur_struct * unwrap_from_filE(){ //E pas inspi
+tab_auteur_struct unwrap_from_filE(){ //E pas inspi
     FILE * inputDB = fopen(cache_fiche,"r");
     exitIfNull(inputDB,"imposible d'ouvrire "cache_fiche)
     return tab_auteur_from_file(inputDB);
@@ -71,8 +87,8 @@ tab_auteur_struct * unwrap_from_filE(){ //E pas inspi
 void unwrwap_gen_cache(){
     FILE * ouputDB = fopen(auteur_cache,"w");
     exitIfNull(ouputDB,"imposible d'ouvrire "auteur_cache)
-    tab_auteur_struct * malistauteur = unwrap_from_filE(); //80%
-    serialise_tab_auteur_struct(malistauteur,ouputDB);           //18%
+    tab_auteur_struct malistauteur = unwrap_from_filE(); //80%
+    serialise_tab_auteur_struct(&malistauteur,ouputDB);           //18%
     free_tab_auteur(malistauteur);
 }
 void unwrwap_gen_cache_small(){
@@ -80,17 +96,17 @@ void unwrwap_gen_cache_small(){
     exitIfNull(ouputDB,"imposible d'ouvrire "small_auteur_cache)
     FILE * inputDB = fopen(small_fiche_cache,"r");
     exitIfNull(inputDB,"imposible d'ouvrire "small_fiche_cache)
-    tab_auteur_struct * malistauteur = tab_auteur_from_file(inputDB);
-    serialise_tab_auteur_struct(malistauteur,ouputDB);
+    tab_auteur_struct malistauteur = tab_auteur_from_file(inputDB);
+    serialise_tab_auteur_struct(&malistauteur,ouputDB);
     free_tab_auteur(malistauteur);
 }
-tab_auteur_struct * deserialise_tab_auteur(int print){
+tab_auteur_struct deserialise_tab_auteur(int print){
     FILE * input = fopen(auteur_cache,"r");
     exitIfNull(input,"imposible d'ouvrire "auteur_cache)
     FILE * fichier = fopen(cache_fiche,"r");
     exitIfNull(fichier,"imposible d'ouvrire "cache_fiche);
-    tableaux_fiche * azer = deserialisation_tableaux_fiche(fichier);
-    tab_auteur_struct * malistauteur =  deserialise_tab_auteur_struct(azer,input);
+    tableaux_fiche tableaux_des_fiche = deserialisation_tableaux_fiche(fichier);
+    tab_auteur_struct malistauteur =  deserialise_tab_auteur_struct(&tableaux_des_fiche,input);
     if(print == 1){
         printList_auteur(malistauteur);
     }
@@ -108,27 +124,32 @@ void ggen_unwrap_Graph(){
 void uunwrap_ListArticle_from_xml(int a){
     // plusieuyr pour la taille ?
     FILE * DBxml = fopen(origineXML,"r");   
-    tab_Article_struct * montab = gen_tab_Article_from_xml(DBxml);
+    tab_Article_struct montab = gen_tab_Article_from_xml(DBxml);
     if (a)
     {
         printList_Article(montab);
     }
 }
-tab_Article_struct * gen_article(){
-    FILE * DBxmll = fopen(cache_fiche,"r");
+tab_Article_struct gen_article(){
+    FILE * DBxmll     = fopen(cache_fiche,"r");
     FILE * DBinversee = fopen(auteur_cache,"r");
     exitIfNull(DBxmll,"INPUT PAS CHEMAIN")
     exitIfNull(DBinversee,"INPUT PAS CHEMAIN")
-    tableaux_fiche * matablefiche = deserialisation_tableaux_fiche(DBxmll);
-    tab_auteur_struct * malistaauteur =   deserialise_tab_auteur_struct(matablefiche,DBinversee);
-    tab_Article_struct * malistearticle = convertTab_auteur2Article(malistaauteur);
+    tableaux_fiche matablefiche = deserialisation_tableaux_fiche(DBxmll);
+    tab_auteur_struct  malistaauteur = deserialise_tab_auteur_struct(&matablefiche,DBinversee);
+    tab_Article_struct malistearticle = convertTab_auteur2Article(&malistaauteur);
+
+    free_tab_fiche(matablefiche);
+    free_tab_auteur(malistaauteur);
     return malistearticle;
 }
 
 void serialisation_tab_Article_structt(){
     FILE * DBarticle = fopen(Article_cache,"w");
     exitIfNull(DBarticle,"INPUT PAS CHEMAIN");
-    serialisation_tab_Article_struct(gen_article(),DBarticle);
+    tab_Article_struct monarticle = gen_article();
+    serialisation_tab_Article_struct(&monarticle,DBarticle);
+    free_tab_Article(monarticle);
 }
 
 void deserialisation_tab_Article_structt(){
@@ -136,19 +157,20 @@ void deserialisation_tab_Article_structt(){
     FILE * DBinverse = fopen(Article_cache,"r");
     exitIfNull(DBxml,"INPUT PAS CHEMAIN")
     exitIfNull(DBinverse,"INPUT PAS CHEMAIN")
-    tab_auteur_struct * matablefiche = deserialise_tab_auteur(0);
-    deserialisation_tab_Article_struct(matablefiche,DBinverse);
+    tab_auteur_struct matablefiche = deserialise_tab_auteur(0);
+    free_tab_Article(deserialisation_tab_Article_struct(&matablefiche,DBinverse));
+    free_tab_auteur(matablefiche);
 }
 
 void swap(int print){
     FILE * inputDB = fopen("DATA/SerializedStruc.data","r");
     exitIfNull(inputDB,"INPUT PAS CHEMAIN")
-    tab_auteur_struct * malistedauteur = tab_auteur_from_file(inputDB);
-
+    tab_auteur_struct malistedauteur = tab_auteur_from_file(inputDB);
     if (print==1)
     {
         printList_auteur(malistedauteur);
     }
+    free_tab_auteur(malistedauteur);
 }
 
 
@@ -219,29 +241,20 @@ void local_custom_serialise_Graph(){
     fclose(DBficheEcriture);
     fclose(DBauteurEcriture);
     fclose(DBArticleEcriture);
-
 }
 
 // soucis de free?
 void bench_all(){
-    free_tab_fiche(deserialisedb());
+    tableaux_fiche a = deserialisedb();
+    free_tab_fiche(a);
     unwrwap_gen_cache();
     deserialise_tab_auteur(0);
 }
 
+
 /* Selection de la fonction */
 
-typedef struct listeFichier
-{
-    FILE * XML;
-    FILE * DBficheLecture;
-    FILE * DBauteurLecture;
-    FILE * DBArticleLecture;
-    FILE * DBficheEcriture;
-    FILE * DBauteurEcriture;
-    FILE * DBArticleEcriture;
-    int mode;
-}listeFichier;
+
 
 void closeall(listeFichier fichiers){
     fclose(fichiers.XML);
@@ -342,43 +355,128 @@ listeFichier openDB(int type,int mode){
     return listefile;
 }
 
+
+
+
+/**
+ * @brief génération du graph est lancement du dikstra
+ * 
+ * @param graphe_Konqui 
+ * @param nbtime 
+ */
+void testgraph(graphe_struct_Konqui graphe_Konqui,int nbtime){
+    INFO("Test Graph")
+    srand(time(NULL));
+
+    for (int i = 0; i < nbtime; i++)
+    {
+        PROGRESSBAR(i,nbtime);
+        DEBUG("%d sur %d",i,nbtime)
+        graphe_struct_Katie graphe_Katie = faire_graphe_ptr_auteur(graphe_Konqui);
+        int a,b;
+        a = rand()%graphe_Konqui.tab_auteur_struct.nombre_auteur;
+        b = rand()%graphe_Konqui.tab_auteur_struct.nombre_auteur;
+        char* nom_auteur_depart     = graphe_Katie.graphe[a]->nom_auteur;
+        char* nom_auteur_destination= graphe_Katie.graphe[b]->nom_auteur;
+        WARNING("depart  : %s ",nom_auteur_depart)
+        WARNING("arriver: %s",nom_auteur_destination)
+        plus_court_chemin_struct* plus_court_chemin_ptr= do_Dijkstra(graphe_Katie, nom_auteur_depart, nom_auteur_destination);
+        if(plus_court_chemin_ptr->pcc_tab_ptr_auteur!= NULL)
+        {
+            print_chemins_auteur_et_Article(plus_court_chemin_ptr);
+
+        }else{
+            ERROR("PAS CHEMAIN")
+        }
+        free_pcc(plus_court_chemin_ptr);
+
+    }
+
+}
+
+
+
+/**
+ * @brief lance sérialisation du graphe est 100 test de dikstra
+ * 
+ * @param mode 
+ */
+void all(int mode ){
+    listeFichier mesfichierWrite = openDB(mode,ecriture);
+    graphe_struct_Konqui legraphW = gen_Graph_from_XML(mesfichierWrite.XML);
+    serialise_Graph(legraphW,
+        mesfichierWrite.DBficheEcriture,
+        mesfichierWrite.DBauteurEcriture,
+        mesfichierWrite.DBArticleEcriture);
+    closeall(mesfichierWrite);
+    free_Graph_struct(legraphW);
+    listeFichier mesfichier = openDB(mode,ecriture);
+    graphe_struct_Konqui legraph =  deserialise_Graph(
+                                mesfichier.DBficheLecture,
+                                mesfichier.DBauteurLecture,
+                                mesfichier.DBArticleLecture);
+    testgraph(legraph,100);  
+    free_Graph_struct(legraph);
+}
+
+
+
+
 int main(int argc, char const *argv[])
 {
     const char * compstr = argv[1];
-
-    if (argc == 3)
+    if (argc >= 3)
     {
+        int nbtest= 1;
+        if (argc == 4)
+        {
+            nbtest = atoi(argv[3]);
+        
+        }
+
+        listeFichier mesfichier;
+        
         int basenb = atoi(argv[2]);
+        if (strcmp("sg",compstr)!=0)
+        {
+            mesfichier = openDB(basenb,lecture);
+        }
+        
 
         //Faire un switch
         if(strcmp("sg",compstr)==0){
-            listeFichier mesfichier = openDB(basenb,ecriture);
-            graphe_struct_Konqui legraph = gen_Graph_from_XML(mesfichier.XML);
+            listeFichier mesfichierWrite = openDB(basenb,ecriture);
+            graphe_struct_Konqui legraph = gen_Graph_from_XML(mesfichierWrite.XML);
             serialise_Graph(legraph,
-                mesfichier.DBficheEcriture,
-                mesfichier.DBauteurEcriture,
-                mesfichier.DBArticleEcriture);
-            closeall(mesfichier);
+                mesfichierWrite.DBficheEcriture,
+                mesfichierWrite.DBauteurEcriture,
+                mesfichierWrite.DBArticleEcriture);
+            closeall(mesfichierWrite);
             free_Graph_struct(legraph);
-        }
-
-        if (strcmp("gxml",compstr)==0)
-        {
-            listeFichier mesfichier = openDB(basenb,lecture);
+        STR("gxml")
             graphe_struct_Konqui legraph = gen_Graph_from_XML(mesfichier.XML);
             free_Graph_struct(legraph);
-            closeall(mesfichier);
-        }
-        
-        //Faire un switch
-        if(strcmp("dg",compstr)==0){
-            listeFichier mesfichier = openDB(basenb,lecture);
+        STR("dg")
             graphe_struct_Konqui legraph =  deserialise_Graph(
                                         mesfichier.DBficheLecture,
                                         mesfichier.DBauteurLecture,
                                         mesfichier.DBArticleLecture);
-        free_Graph_struct(legraph);
-        closeall(mesfichier);
+            free_Graph_struct(legraph);
+        STR("dik")
+            graphe_struct_Konqui legraph =  deserialise_Graph(
+                                        mesfichier.DBficheLecture,
+                                        mesfichier.DBauteurLecture,
+                                        mesfichier.DBArticleLecture);
+            testgraph(legraph,nbtest);
+            free_Graph_struct(legraph);
+        
+        STR("all")
+            all(basenb);
+        }
+
+        if (strcmp("sg",compstr)!=0)
+        {
+            closeall(mesfichier); 
         }
 
         CLRLINE()
@@ -410,7 +508,7 @@ int main(int argc, char const *argv[])
     }
     else if(strcmp("deserialisedbprint",compstr)==0){// N
         // printf("deserialisedb\n");
-        printTabmeaux(*deserialisedb());
+        printTabmeaux(deserialisedb());
     }
     else if(strcmp("readsmaldb",compstr)==0){
         // printf("readsmaldb\n");
@@ -493,27 +591,35 @@ int main(int argc, char const *argv[])
     //     deserialisation_tab_auteur_structt();
     // }
     else{
-        fprintf(stderr,"PAS BON TEST!\n");
-        fprintf(stderr,"\
-    \n- readb\
-    \n- readsmaldb\
-    \n- serialized\
-    \n- serializedsmall\
-    \n- deserialisedb\
-    \n- deserialisesmalldb\
-    \n- swap\
-    \n- swaprint\
-    \n- unwrwap_gen_cache\
-    \n- tab_auteur_from_file\
-    \n- deserialise_tab_auteur\
-    \n- unwrwap_gen_cache_small\
-    \n- deserialise_Graph\
-    \n- gen_tab_Article_from_xml\
-    \n- unwrap_deserialise_Article\
-    \n- gen_graph_from_XML\
-    \n- serialise_Graph\
-    \n- ALL");
+        fprintf(stderr,"PAS BON TEST!\n\n\n");
+        fprintf(stderr,"\tOption a 1 arument\n\
+            \n - readb\
+            \n - readsmaldb\
+            \n - serialized\
+            \n - serializedsmall\
+            \n - deserialisedb\
+            \n - deserialisesmalldb\
+            \n - swap\
+            \n - swaprint\
+            \n - unwrwap_gen_cache\
+            \n - tab_auteur_from_file\
+            \n - deserialise_tab_auteur\
+            \n - unwrwap_gen_cache_small\
+            \n - deserialise_Graph\
+            \n - gen_tab_Article_from_xml\
+            \n - unwrap_deserialise_Article\
+            \n - gen_graph_from_XML\
+            \n - serialise_Graph\
+            \n - ALL");
+        fprintf(stderr,"\n\
+        \toption a 2 argument:\n\
+        \n - sg (sérialisation du graph)\
+        \n - dg (désérialisation du graph)\
+        \n - all (benchmark tout)\
+        \n - dik (dikstra test)\
+        \n - gxml (désérialisation sans cache)");
     }
+
     CLRLINE()
     return 0;
 }

@@ -51,22 +51,26 @@ void print_auteur_indice(auteur_struct** graphe, int size)
 }
 
 //afficher le pcc (plus court chemin) en auteur et en Article
-void print_chemins_auteur_et_Artice(plus_court_chemin_struct* pcc)
+void print_chemins_auteur_et_Article(plus_court_chemin_struct* pcc)
 {
+    
+    //graphe_struct_Katie mon_graphe= faire_graphe_ptr_auteur();
+
     if(pcc!=NULL)
     {
-        printf("chemin auteur: \n");
+        WARNING("chemin auteur:");
         for(int i=0; i< pcc->size_pcc_auteur; i++)
         {
-            printf("%s\n", pcc->pcc_tab_ptr_auteur[i]->nom_auteur);
+            GREY();fprintf(stderr,"\t\t\t%s\n", pcc->pcc_tab_ptr_auteur[i]->nom_auteur);CLRCOLOR();
         }
-        printf("\n\n chemin Article\n");
+        WARNING("chemin Article");
         for(int i=0; i< pcc->size_pcc_Article; i++)
         {
-            printf("%s\n", pcc->pcc_tab_ptr_Article[i]->nom_Article);
+            GREY();fprintf(stderr,"\t\t\t%s\n", pcc->pcc_tab_ptr_Article[i]->nom_Article);CLRCOLOR();
         }
     }
 }
+
 
 /*****************************************************************************************************************************************************/
 //A partir d'ici on a la fonction Dijkstra et ses sous fonctions
@@ -76,7 +80,7 @@ void print_chemins_auteur_et_Artice(plus_court_chemin_struct* pcc)
 //renvoie le tableau des ptr vers les auteur_struct du chemin de auteur_1 (a1) a auteur_2 (a2)
 plus_court_chemin_struct* do_Dijkstra(graphe_struct_Katie graphe_t, char* nom_auteur_depart, char* nom_auteur_destination)
 {
-    INFO("verification de la presence de a1 et a2 dans le graphe")
+    INFO("verification de la presence de auteur_depart et de auteur_destination dans le graphe")
 
     comparaison_auteur trouver_ou_pas_1= auteur_pas_trouver;
     comparaison_auteur trouver_ou_pas_2= auteur_pas_trouver;
@@ -144,12 +148,19 @@ plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcour
 
     ptr_auteur_depart->size_pcc_auteur= 0;
     
-    int taille_pcc=1; //taille_pcc= profondeur actuele du parcour en largeur (à la fin, taille_pcc=taille du plus court chemin)
+    
+    int compteurprofondeur = 0;
+    
+    int taille_pcc=1; //=profondeur du parcour en largeur (à la fin, =taille du plus court chemin)
     int* taille_pcc_ptr= &taille_pcc;
+    DEBUG("Exploration profondeur: ")
     while(pile_auteur_a_traiter_etape_courante[0]!= -1)
-    {   
-        printf("rentrer dans le while\n");    
-        
+    {
+        fprintf(stderr,"\033[100D\t\t");
+        GREEN();fprintf(stderr,"couche %d...",compteurprofondeur);
+
+                compteurprofondeur++;
+
         for(int i=0; i< *haut_de_pile_courante_ptr; i++)
         {
             auteur_struct* ptr_auteur_courant= graphe_t.graphe[pile_auteur_a_traiter_etape_courante[i]];
@@ -159,12 +170,12 @@ plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcour
                 free(pile_auteur_a_traiter_etape_courante);
                 free(pile_suivante);
 
+
                 plus_court_chemin_struct* pcc_ptr= malloc(sizeof(plus_court_chemin_struct));
-                exitIfNull(pcc_ptr, "echec malloc pcc_ptr");
-                *pcc_ptr= reconstitution_du_pcc_apres_parcours(taille_pcc_ptr, ptr_auteur_destination);
+                plus_court_chemin_struct pcc= reconstitution_du_pcc_apres_parcours(taille_pcc_ptr, ptr_auteur_destination);
+                *pcc_ptr= pcc;
                 return pcc_ptr;
             }
-
             traitement_auteur_courant_et_mise_a_jour_pile_suivante(ptr_auteur_courant, haut_de_pile_suivante_ptr, taille_pcc_ptr, pile_suivante);   
         }
         
@@ -200,12 +211,16 @@ plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcour
         }
         *haut_de_pile_suivante_ptr=0;
         (*taille_pcc_ptr)++;
+       
+        //    printf("val %d pile_courante: %d\n", k, pile_auteur_a_traiter_etape_courante[k]);
+        //}
+        //printf("fin d'une étape profondeur\n");
+    
     }
 
-    //si on sort du while sans avoir trouvé l'auteur destination, alors il n'y a pas de chemin
     free(pile_auteur_a_traiter_etape_courante);
     free(pile_suivante);
-    printf("Il n'y a pas de chemin entre %s et %s\n", nom_auteur_depart, ptr_auteur_destination->nom_auteur);
+    WARNING("Il n'y a pas de chemin entre %s et %s\n", nom_auteur_depart, ptr_auteur_destination->nom_auteur);
     return NULL;
 }
 
@@ -288,50 +303,88 @@ comparaison_auteur trouver_ou_pas_dans_pile(int* haut_de_pile_suivante, int* pil
 }
 
 
-void free_Dijkstra(graphe_struct_Katie* graphe_struct, plus_court_chemin_struct *pcc_ptr)
+
+void free_pcc(plus_court_chemin_struct *pcc_ptr)
 {
+    INFO("Free Dijkstra ")
     if(pcc_ptr!= NULL)
     {  
         free(pcc_ptr->pcc_tab_ptr_auteur);
         free(pcc_ptr->pcc_tab_ptr_Article);
         free(pcc_ptr);
     }
-    free(graphe_struct->graphe);
+
+
+    // for(int k=0; k< graphe_struct.size_graphe; k++)
+    // {
+    //     free(graphe_struct.graphe[k]->ptr_Article_predecesseur_pcc);
+    //     free(graphe_struct.graphe[k]->ptr_auteur_predecesseur_pcc);
+    // }
+
+
 }
 
 
-//main de test pour Dijkstra
-int main(void)
-{   
-                                               //cache_ficheO  
-    //fichiers en cache d'un petit .xml simple //auteur_cacheO 
-                                               //Article_cacheO
+
+
+
+
+/**
+ * @brief PAS DE MAIN ICI
+ * 
+ * a la compilation il n'y a que un main tolérer hors il faut utilicer cette biblioteque
+ * donc ce programe ne dois pas avoir de main
+ * 
+ */
+
+//je test Dijkstra sur mon graphe test en affichant les noms des auteurs du plus court chemin de a0 a a9
+// int main(void)
+// {   
+//     //FILE* graphe_test_Katie= fopen("DATA", "r");
 
                                                        //cache_fiche 
     //fichiers en cache de la base de donnée en entier //auteur_cache
                                                        //Article_cache
 
+//     //cache_ficheO  ;
+//     //auteur_cacheO ;
+//     //Article_cacheO;
 
-    graphe_struct_Konqui graphe_Konqui= faire_graphe_Konqui(cache_fiche, auteur_cache, Article_cache);
+//     //cache_fiche 
+//     //auteur_cache
+//     //Article_cache
 
-    graphe_struct_Katie graphe_Katie= faire_graphe_ptr_auteur(graphe_Konqui);
+
+//     graphe_struct_Konqui graphe_Konqui= faire_graphe_Konqui(cache_fiche, auteur_cache, Article_cache);
+
+//     graphe_struct_Katie graphe_Katie= faire_graphe_ptr_auteur(graphe_Konqui);
+
+//     //fclose(graphe_test_Katie);
+    
+//     //char* nom_auteur_depart= mon_graphe.graphe[1344]->nom_auteur;
+//     //printf("nom auteur_depart: %s\n", nom_auteur_depart);
+
+//     //char* nom_auteur_destination= mon_graphe.graphe[8888]->nom_auteur;
+//     //printf("nom auteur_destination: %s\n", nom_auteur_destination);
+
+//     char* nom_auteur_depart= graphe_Katie.graphe[1234]->nom_auteur;
+//     char* nom_auteur_destination= graphe_Katie.graphe[8888]->nom_auteur;
+//     //voir convention pour ecrire les accents: https://sites.psu.edu/symbolcodes/codehtml/#accent
+//     plus_court_chemin_struct* plus_court_chemin=  do_Dijkstra(graphe_Katie, nom_auteur_depart, nom_auteur_destination);
 
     
-    //On teste avec le 0ème auteur et le 2 900 000 auteur du graphe_Katie
-    char* nom_auteur_depart= graphe_Katie.graphe[0]->nom_auteur;
-    char* nom_auteur_destination= graphe_Katie.graphe[2900000]->nom_auteur;
+//     if(plus_court_chemin!= NULL)
+//     {
+//         print_chemins_auteur_et_Artice(plus_court_chemin);
+
+//         verifier_do_Dijkstra(plus_court_chemin);
+//     }
+
+//    free_Dijkstra(&graphe_Katie, plus_court_chemin);
     
-    //voir convention pour ecrire les accents: https://sites.psu.edu/symbolcodes/codehtml/#accent
-    plus_court_chemin_struct* plus_court_chemin=  do_Dijkstra(graphe_Katie, nom_auteur_depart, nom_auteur_destination);
-
     
-    if(plus_court_chemin!= NULL)
-    {
-        print_chemins_auteur_et_Artice(plus_court_chemin);
 
-        verifier_do_Dijkstra(plus_court_chemin);
-    }
-
-    free_Dijkstra(&graphe_Katie, plus_court_chemin);
-    return 0;
-}
+   
+    
+//     return 0;
+// }

@@ -33,85 +33,19 @@ graphe_struct_Konqui faire_graphe_Konqui(char * DBfiche, char * DBauteur, char *
 graphe_struct_Katie faire_graphe_ptr_auteur( graphe_struct_Konqui graphe_Konqui)
 {
 
-    int size_graphe= graphe_Konqui.tab_auteur_struct->nombre_auteur;
-    
+    int size_graphe= graphe_Konqui.tab_auteur_struct.nombre_auteur;
     graphe_struct_Katie graphe_struct;
     graphe_struct.graphe= malloc(sizeof(auteur_struct*)*size_graphe);
-    exitIfNull(graphe_struct.graphe,"erreur malloc graphe_Katie");
+    exitIfNull(graphe_struct.graphe,"faire_graphe_ptr_auteur:Echec du mallc ")
     graphe_struct.size_graphe= size_graphe;
 
     for(int i=0; i<size_graphe; i++)
     {
-        auteur_struct* ai_ptr= &(graphe_Konqui.tab_auteur_struct->tab_auteur[i]);
+        auteur_struct* ai_ptr= &(graphe_Konqui.tab_auteur_struct.tab_auteur[i]);
         ai_ptr->size_pcc_auteur= -1;
-        ai_ptr->ptr_Article_predecesseur_pcc= NULL;
-        ai_ptr->ptr_auteur_predecesseur_pcc= NULL;
-        graphe_struct.graphe[i]= ai_ptr;
+        graphe_struct.graphe[i]= ai_ptr;           
     }
     return graphe_struct;
-}
-
-
-//Je vérifie que les auteurs du chemin sont bien voisins 2 à 2 dans l'ordre du chemin
-//et que les Articles du pcc sont bien cohérent avec le pcc auteur
-//si c'est le cas, un "OK" sera affiché à la l'indice de l'auteur / Article
-void verifier_do_Dijkstra(plus_court_chemin_struct* pcc)
-{
-    pcc_struct_verification pcc_verif;
-    pcc_verif.tab_verif_auteur= malloc(sizeof(char*)*pcc->size_pcc_auteur);
-    pcc_verif.tab_verif_Article= malloc(sizeof(char*)*pcc->size_pcc_Article);
-    
-    pcc_verif.tab_verif_auteur[0]= "OK";
-
-    for(int k=0; k< pcc->size_pcc_auteur-1; k++) //pour tout les auteurs ak du pcc (plus court chemin)
-    {
-
-        comparaison_auteur trouver_ou_pas_1= auteur_pas_trouver;
-        comparaison_Article trouver_ou_pas_2= Article_pas_trouver;
-
-        auteur_struct* ak_ptr= pcc->pcc_tab_ptr_auteur[k];
-        auteur_struct* prochain_ak_ptr= pcc->pcc_tab_ptr_auteur[k+1];
-
-        for(int l=0; l< ak_ptr->size; l++) //pour tout les Articles Al de ak
-        {
-            Article_struct* Al_ptr= ak_ptr->tab_ptr_Article[l];
-
-            if(Al_ptr== pcc->pcc_tab_ptr_Article[k])
-            {
-                trouver_ou_pas_2= Article_trouver;
-                pcc_verif.tab_verif_Article[k]= "OK";
-            }
-                
-            for(int v=0; v< Al_ptr->nombre_auteur; v++)
-            {
-                auteur_struct* voisin_de_ak_ptr= Al_ptr->tab_ptr_auteur[v];
-                if(voisin_de_ak_ptr== prochain_ak_ptr)
-                {
-                    trouver_ou_pas_1= auteur_trouver;
-                    pcc_verif.tab_verif_auteur[k+1]= "OK";
-                }
-            }
-        }
-        if(trouver_ou_pas_2== Article_pas_trouver)
-            pcc_verif.tab_verif_Article[k]= "NON";
-        if(trouver_ou_pas_1== auteur_pas_trouver)
-            pcc_verif.tab_verif_auteur[k]= "NON";
-    }
-
-    printf("%s\n", "elements de pcc auteur:");
-    for(int i=0; i< pcc->size_pcc_auteur; i++)
-    {
-        printf("[%s]\n", pcc_verif.tab_verif_auteur[i]);
-    }
-
-    printf("%s\n", "elements de pcc Article:");
-    for(int i=0; i< pcc->size_pcc_Article; i++)
-    {
-        printf("[%s]\n", pcc_verif.tab_verif_Article[i]);
-    }
-
-    free(pcc_verif.tab_verif_auteur);
-    free(pcc_verif.tab_verif_Article);
 }
 
 
@@ -205,3 +139,105 @@ void donner_tous_ceux_qui_ont_travalle_avec_auteur(graphe_struct_Katie graphe_st
 }
 
 
+/*
+//test: affichage des voisins des auteurs dans e graphe de ptr d'auteur généré par faire_graphe_ptr_auteur
+int main(void)
+{
+
+    FILE* graphe_test_Katie= fopen(dbtestKatie "r");
+
+    graphe_struct_Katie mon_graphe= faire_graphe_ptr_auteur(graphe_test_Katie);
+
+    fclose(graphe_test_Katie);
+
+  
+    for(int k=0; k <mon_graphe.size_graphe; k++)
+    {
+        printf("%s\n",  mon_graphe.graphe[k]->nom_auteur);
+    }
+    
+    free(mon_graphe.graphe);
+    
+    
+    return 0;
+}
+*/
+
+
+// #define PROFONDEUREXP 5
+
+// void exploreauteur(const auteur_struct * monauteur,int profondeur);
+
+// void explorearticle(const Article_struct * monarticle, int profondeur){
+//     // INFO("Exploration Article")
+//     if (profondeur > PROFONDEUREXP)
+//     {
+//         return;
+//     }
+    
+//     // BLUE()
+//     // tabulation(profondeur);
+//     // printf("%s\n",monarticle->nom_Article);
+//     profondeur++;
+//     for (int i = 0; i < monarticle->nombre_auteur; i++)
+//     {
+//         // GREEN()
+//         // tabulation(profondeur);
+//         // printf("%s\n",monarticle->tab_ptr_auteur[i]->nom_auteur);
+//         //  CLRCOLOR()
+
+//         exploreauteur(monarticle->tab_ptr_auteur[i],profondeur);
+//     }
+    
+// }
+
+// void exploreauteur(const auteur_struct * monauteur,int profondeur){
+//     // INFO("Exploration auteur")
+//     if (profondeur > PROFONDEUREXP)
+//     {
+//         return;
+//     }
+//     GREEN()
+//     tabulation(profondeur);
+//     printf("%s\n",monauteur->nom_auteur);
+//     CLRCOLOR()
+//     profondeur++;
+//     for (int i = 0; i < monauteur->nbArticlecontenue; i++)
+//     {
+//         // BLUE()
+//         // tabulation(profondeur);
+//         // printf("%s\n",monauteur->tab_ptr_Article[i]->nom_Article);
+//         // CLRCOLOR()
+//         explorearticle(monauteur->tab_ptr_Article[i],profondeur);
+//     }
+    
+// }
+
+// void test_exploration_Article(const tab_Article_struct * mesarticle){
+//     for (int i = 0; i < mesarticle->nombre_Article; i++)
+//     {
+//         explorearticle(&mesarticle->tab_Article[i],0);
+//     }
+    
+//     // for (int i = 0; i < mesarticle->nombre_Article ; i++)
+//     // {
+//     //     BLUE()
+//     //     printf("%s ==> %d\n",mesarticle->tab_Article[i].nom_Article, mesarticle->tab_Article[i].nombre_auteur);
+//     //     for (int u = 0; u < mesarticle->tab_Article[i].nombre_auteur; u++)
+//     //     {
+//     //         GREEN()
+//     //         printf("\t%s ==> %d\n",mesarticle->tab_Article[i].tab_ptr_auteur[u]->nom_auteur,mesarticle->tab_Article[i].tab_ptr_auteur[u]->nbArticlecontenue);
+//     //         // for (int pp = 0; pp < mesarticle->tab_Article[i].tab_ptr_auteur[u]->nbArticlecontenue; pp++)
+//     //         // {
+//     //         //     BLUE()
+//     //         //     printf("\t\t%s ==> %d\n",mesarticle->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nom_Article,mesarticle->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nombre_auteur); 
+//     //         //     for (int UI = 0; UI < mesarticle->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->nombre_auteur; UI++)
+//     //         //     {
+//     //         //         GREEN()
+//     //         //         printf("\t\t\t%s\n",mesarticle->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->tab_ptr_auteur[UI]->nom_auteur);
+//     //         //         // exploreauteur(mesarticle->tab_Article[i].tab_ptr_auteur[u]->tab_ptr_Article[pp]->tab_ptr_auteur[UI],3);
+//     //         //     }
+//     //         // }           
+//     //     }
+//     // }
+// }

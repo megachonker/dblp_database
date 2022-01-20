@@ -1479,3 +1479,12 @@ main/build/tests.o
 main/bin/Dijkstra
 main/build/Dijkstra.o
 main/build/fonctions_graphe.o
+main/debug/callgrind_trace__deSerialiseGraph
+main/debug/callgrind_trace__SerialiseGraph
+main/debug/GCOVtests-bench.gcno
+main/debug/GCOVtests-Dijkstra.gcno
+main/debug/GCOVtests-fonctions_graphe.gcno
+main/debug/GCOVtests-macro.gcno
+main/debug/GCOVtests-parsing.gcno
+main/debug/GCOVtests-search.gcno
+main/debug/GCOVtests-unwrap.gcno
