@@ -58,7 +58,7 @@ void donner_tous_les_Articles_de_auteur(graphe_struct_Katie graphe_struct, char*
 
 void donner_tous_ceux_qui_ont_travalle_avec_auteur(graphe_struct_Katie graphe_struct, char* nom_auteur);
 
-void print_chemins_auteur_et_Artice(plus_court_chemin_struct* pcc);
+void print_chemins_auteur_et_Article(plus_court_chemin_struct* pcc);
 
 
 #endif

@@ -20,7 +20,7 @@ go:	genfolder $(PATH_BIN)tests custom
 	./$(PATH_BIN)tests
 
 Dijkstra: genfolder $(PATH_BIN)bench
-	./$(PATH_BIN)bench dik 1 15
+	./$(PATH_BIN)bench dik 1 2
 
 val:	genfolder $(PATH_BIN)bench
 	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./$(PATH_BIN)bench sg 1
