@@ -32,7 +32,7 @@ DOXYFILE_ENCODING      = UTF-8
 # title of most generated pages and in a few other places.
 # The default value is: My Project.
 
-PROJECT_NAME           = "My Project"
+PROJECT_NAME           = "Parcoure graph"
 
 # The PROJECT_NUMBER tag can be used to enter a project or revision number. This
 # could be handy for archiving the generated documentation or if some version
@@ -860,8 +860,6 @@ FILE_PATTERNS          = *.c \
                          *.cc \
                          *.cxx \
                          *.cpp \
-                         *.c++ \
-                         *.java \
                          *.ii \
                          *.ixx \
                          *.ipp \
@@ -871,10 +869,6 @@ FILE_PATTERNS          = *.c \
                          *.ddl \
                          *.odl \
                          *.h \
-                         *.hh \
-                         *.hxx \
-                         *.hpp \
-                         *.h++ \
                          *.cs \
                          *.d \
                          *.php \

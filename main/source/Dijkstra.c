@@ -75,6 +75,13 @@ void print_chemins_auteur_et_Article(plus_court_chemin_struct* pcc)
 /*****************************************************************************************************************************************************/
 //A partir d'ici on a la fonction Dijkstra et ses sous fonctions
 
+plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcourir(auteur_struct* ptr_auteur_depart, auteur_struct* ptr_auteur_destination, char* nom_auteur_depart, graphe_struct_Katie graphe_t);
+
+void traitement_auteur_courant_et_mise_a_jour_pile_suivante(auteur_struct* ptr_auteur_courant, int* haut_de_pile_suivante_ptr, int* taille_pcc_ptr, int* pile_suivante);
+
+plus_court_chemin_struct reconstitution_du_pcc_apres_parcours(int* taille_pcc_ptr, auteur_struct* ptr_auteur_destination);
+
+
 
 
 //renvoie le tableau des ptr vers les auteur_struct du chemin de auteur_1 (a1) a auteur_2 (a2)
@@ -106,10 +113,10 @@ plus_court_chemin_struct* do_Dijkstra(graphe_struct_Katie graphe_t, char* nom_au
     }
 
     if(trouver_ou_pas_1== auteur_pas_trouver)
-        printf("%s %s %s\n", "l'auteur", nom_auteur_depart, "ne figure dans aucun Article");
+        YELLO()printf("%s %s %s\n", "l'auteur", nom_auteur_depart, "ne figure dans aucun Article");
 
     if(trouver_ou_pas_2== auteur_pas_trouver)
-        printf("%s %s %s\n", "l'auteur", nom_auteur_destination, "ne figure dans aucun Article");
+        YELLO()printf("%s %s %s\n", "l'auteur", nom_auteur_destination, "ne figure dans aucun Article");
 
     //si l'un des auteurs n'est pas dans la base de donnée, on renvoie un chemin NULL
     if(trouver_ou_pas_1== auteur_pas_trouver || trouver_ou_pas_2== auteur_pas_trouver)
@@ -141,6 +148,7 @@ plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcour
     exitIfNull(pile_suivante, "echec malloc pile_suivante");
     
     pile_auteur_a_traiter_etape_courante[0]= ptr_auteur_depart->indice_dans_le_graphe;
+    
     int haut_de_pile_courante=1;
     int haut_de_pile_suivante=0;
     int* haut_de_pile_courante_ptr= &haut_de_pile_courante;
@@ -156,8 +164,8 @@ plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcour
     INFO("Exploration profondeur: ")
     while(pile_auteur_a_traiter_etape_courante[0]!= -1)
     {
-        fprintf(stderr,"\033[100D\t\t");
-        GREEN();fprintf(stderr,"couche %d...",compteurprofondeur);
+        //fprintf(stderr,"\033[100D\t\t");
+        GREEN()printf("couche %d\n",compteurprofondeur);
 
         compteurprofondeur++;
 
