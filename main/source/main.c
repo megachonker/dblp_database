@@ -1,3 +1,23 @@
+/*! \mainpage My Personal Index Page
+ *
+ * \section Introduction
+ *
+ * This is the introduction.
+ *
+ * \section install_sec Installation
+ * \sa <gen_graph>"()"
+ * 
+ * gen_graph()
+ * 
+ *  dans listeChemain on a les chemain
+ * \subsection step1 Step 1: Opening the box
+ *
+ * etc...
+ */
+
+
+
+
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
@@ -106,48 +126,6 @@ listeChemain chose_path(short choix){
     return chemains[choix];
 }
 
-void interactive(){
-    char ligne[BALISESIZE];
-    while (fgets(ligne,BALISESIZE,stdin)){
-        char * arg;
-        scanf(ligne,BALISESIZE);
-        DEBUG("AVANT[%s]",ligne)
-        char * pts = strchr(ligne,'\n');
-        if (pts){
-            *pts='\0';
-            if (pts+1)
-            {
-                arg = pts+1;
-            }
-            DEBUG("arg [%s]",arg)
-        }
-
-        DEBUG("APRES[%s] ",ligne)
-
-        char * compstr = ligne;if(NULL){
-        STR("exit")
-            exit(0);
-        STR("help")
-            dfault();
-        // STR("file")
-
-        // STR("compute")
-        // STR("full")
-        //     test_exploration_Article()
-        //     parsed_option.chemais = chose_path(small);
-        }
-    } 
-}
-void chose_db(char * compstr, listeChemain * chemain){
-    if(NULL){
-    STR("full")
-        *chemain = chose_path(full);
-    STR("custom")
-        *chemain = chose_path(custom);
-    STR("small")
-        *chemain = chose_path(small);}
-}
-
 void find_all(char * search,graphe_struct_Konqui * graph,int verbose){
     ll_list * retoura = stringSearch(graph,searchauteur,search);
     ll_list * retour = stringSearch(graph,searchArticle,search);
@@ -162,6 +140,64 @@ void find_all(char * search,graphe_struct_Konqui * graph,int verbose){
         printSearch(retour,verbose);
     }
 }
+
+void chose_db(char * compstr, listeChemain * chemain){
+    if(NULL){
+    STR("full")
+        *chemain = chose_path(full);
+    STR("custom")
+        *chemain = chose_path(custom);
+    STR("small")
+        *chemain = chose_path(small);}
+}
+void interactive(){
+    char ligne[BALISESIZE];
+    char *arg=ligne;
+    listeChemain chem = chose_path(small);
+    graphe_struct_Konqui graph;
+    int verb = silence;
+    while (fgets(ligne,BALISESIZE,stdin)){
+        char * pts = strchr(ligne,' ');
+        *strchr(ligne,'\n') = '\0';
+        if (pts){
+            *pts='\0';
+            if (pts+1)
+            {
+                arg = pts+1;
+            }else{            *arg = '\0';}
+        }else{
+            *arg = '\0';
+        }
+
+        DEBUG("APRES[%s] et [%s] ",ligne,arg);
+
+        char * compstr = ligne;if(NULL){
+        STR("exit")
+            exit(0);
+        STR("help")
+            dfault();
+        STR("file")
+            chose_db(arg,&chem);
+        STR("compute")
+            graph = gen_graph(chem);
+        STR("v")
+            if (verb == silence)
+            {
+                INFO("verbeux")
+                verb = verbeux;
+            }else if(verb == verbeux){
+                INFO("VraimentTropVerbeux")
+                verb = VraimentTropVerbeux;
+            }else{
+                INFO("silence")
+                verb = silence;
+            }
+        STR("full")
+            find_all(arg,&graph,verb);
+        }
+    } 
+}
+
 
 void djikstrasearch(char * a,char * b,graphe_struct_Konqui graph){
     graphe_struct_Katie graphe_Katie = faire_graphe_ptr_auteur(graph);
