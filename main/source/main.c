@@ -9,6 +9,51 @@
 #include <signal.h>
 #include <stdlib.h>
 
+
+/*! \mainpage My Personal Index Page
+ *
+ * \section Résumé général
+ * **a compléter avec ce que t'as fais**
+ * ...
+ * ...
+ * ...
+ * Une fois que des structures auteur_struct et Article_struct ont été générées et initialisées pour chaque auteur/Article de la base de donnée,
+ * elles sont stockées dans des tableaux dans la structure graphe_struct_Konqui.
+ * 
+ * Ensuite, un tableau de pointeur vers les auteurs_struct est crée (fonctions_garphe.c). 
+ * Ce tableau est stocké dans la structure graphe_Katie.
+ * Les attributs des auteur_struct utiles à Dijkstra sont alors initialisés (comme par exemple la distance à l'auteur_depart, initialisé à -1).
+ * 
+ * Il ne reste plus qu'à appliquer la fonction do_Dijkstra (Dijkstra.c) au graphe_Katie, avec 2 noms d'auteur de la base de donnée.
+ * Pour cela, on relache les arrêtes de tous les auteurs rangés dans un tableau indiquant les auteurs à traiter à l'étape courante du parcours en largeur.
+ * (Ce tableau s'appelant pile_courante)
+ * En ce faisant, on enregistre les auteurs à traiter à l'étape suivante dans un autre tableau (pile_suivante).
+ * De même, on initialise l'attribut auteur_predecesseur et Article_predecesseur de l'auteur en cours de traitement.
+ * A la fin de l'étape courante (une couche du parcours en largeur) on remplace le contenu de pile_courante par celui de pile_suivante et on vide la pile_suivante.
+ * 
+ * En répétant ce procédé jusqu'a trouver l'auteur_destination ou avoir parcouru toute la composante connexe,
+ * il est possible d'enregistrer le plus court chemin dans un tableau en partant de l'auteur_destination et en remontant la chaine des prédecesseurs.
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ *
+ * \section install_sec Installation
+ * \sa <gen_graph>"()"
+ * 
+ * gen_graph()
+ * 
+ *  dans listeChemain on a les chemain
+ * \subsection step1 Step 1: Opening the box
+ *
+ * etc...
+ */
+
+
+
+// #include <stdarg.h>
 typedef struct listeChemain
 {
     char * XML;
