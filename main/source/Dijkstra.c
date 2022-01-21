@@ -96,7 +96,6 @@ plus_court_chemin_struct* do_Dijkstra(graphe_struct_Katie graphe_t, char* nom_au
 
     for(int i=0; i<graphe_t.size_graphe; i++)
     {
-        PROGRESSBAR(i,graphe_t.size_graphe);
         graphe_t.graphe[i]->indice_dans_le_graphe= i;
 
         if(strcmp(nom_auteur_depart, graphe_t.graphe[i]->nom_auteur)==0)
@@ -113,14 +112,20 @@ plus_court_chemin_struct* do_Dijkstra(graphe_struct_Katie graphe_t, char* nom_au
     }
 
     if(trouver_ou_pas_1== auteur_pas_trouver)
+    {
         YELLO()printf("%s %s %s\n", "l'auteur", nom_auteur_depart, "ne figure dans aucun Article");
+    }
 
     if(trouver_ou_pas_2== auteur_pas_trouver)
+    {
         YELLO()printf("%s %s %s\n", "l'auteur", nom_auteur_destination, "ne figure dans aucun Article");
+    }
 
     //si l'un des auteurs n'est pas dans la base de donnée, on renvoie un chemin NULL
     if(trouver_ou_pas_1== auteur_pas_trouver || trouver_ou_pas_2== auteur_pas_trouver)
+    {
         return NULL;
+    }
 
 
     //si les 2 auteurs sont dans le graphe, on applique Dijkstra pour trouver le plus court chemin 
