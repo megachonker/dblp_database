@@ -180,7 +180,7 @@ void print_noms_des_voisins(graphe_struct_Katie graphe_t, char* nom_auteur)
 
 
 
-#define PROFONDEUREXP 5
+#define PROFONDEUREXP 6
 void exploreauteur(const auteur_struct * monauteur,int profondeur);
 
 void explorearticle(const Article_struct * monarticle, int profondeur){

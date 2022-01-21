@@ -6,7 +6,7 @@
 #include "../header/unwrap.h"
 #include "../header/search.h"
 #include "../header/Dijkstra.h"
-#include <stdarg.h>
+// #include <stdarg.h>
 typedef struct listeChemain
 {
     char * XML;
@@ -107,24 +107,36 @@ listeChemain chose_path(short choix){
 }
 
 void interactive(){
-    // char ligne[BALISESIZE];
-    // while (fgets(ligne,BALISESIZE,stdin)){
-    //     char commande[BALISESIZE];
-    //     vscanf(ligne,BALISESIZE);
-    //     strchr(ligne,' ')+1;
-    //     char * compstr = ligne;if(NULL){
-    //     STR("exit")
-    //         return;
-    //     STR("help")
-    //         dfault();
-    //     STR("file")
+    char ligne[BALISESIZE];
+    while (fgets(ligne,BALISESIZE,stdin)){
+        char * arg;
+        scanf(ligne,BALISESIZE);
+        DEBUG("AVANT[%s]",ligne)
+        char * pts = strchr(ligne,'\n');
+        if (pts){
+            *pts='\0';
+            if (pts+1)
+            {
+                arg = pts+1;
+            }
+            DEBUG("arg [%s]",arg)
+        }
 
-    //     STR("compute")
+        DEBUG("APRES[%s] ",ligne)
+
+        char * compstr = ligne;if(NULL){
+        STR("exit")
+            exit(0);
+        STR("help")
+            dfault();
+        // STR("file")
+
+        // STR("compute")
         // STR("full")
-            // test_exploration_Article()
-            // parsed_option.chemais = chose_path(small);
-//         }
-//     } 
+        //     test_exploration_Article()
+        //     parsed_option.chemais = chose_path(small);
+        }
+    } 
 }
 void chose_db(char * compstr, listeChemain * chemain){
     if(NULL){
@@ -319,7 +331,7 @@ int main(int argc, char *argv[]) {
             
             char * aa = ((auteur_struct*)find_auteur(oui.couple_auteur[0], &graph.tab_auteur_struct)->first->value)->nom_auteur;
             char * bb = ((auteur_struct*)find_auteur(oui.couple_auteur[1], &graph.tab_auteur_struct)->first->value)->nom_auteur;
-
+            WARNING("Recherche entre %s et %s",aa,bb)
 
             djikstrasearch(aa,bb,graph);
         }else if (!*oui.couple_auteur[0])

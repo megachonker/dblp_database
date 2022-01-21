@@ -33,7 +33,7 @@ val:	abench.sh
 
 
 raport:	genfolder rp
-rp: $(PATH_SOURCE)bench.c $(PATH_SOURCE)parsing.c $(PATH_SOURCE)unwrap.c $(PATH_SOURCE)macro.c $(PATH_SOURCE)search.c $(PATH_SOURCE)Dijkstra.c $(PATH_SOURCE)fonctions_graphe.c
+rp: $(PATH_SOURCE)bench.c $(PATH_SOURCE)parsing.c $(PATH_SOURCE)unwrap.c $(PATH_SOURCE)macro.c $(PATH_SOURCE)search.c $(PATH_SOURCE)Dijkstra.c $(PATH_SOURCE)fonctions_graphe.c $(PATH_SOURCE)list.c
 	$(CCA) -O0 -o $(PATH_DEBUG)GCOVtests  $^ $(CFLAGS) -ftest-coverage -fprofile-arcs
 	./$(PATH_DEBUG)GCOVtests sg 1
 	./$(PATH_DEBUG)GCOVtests dik 1 1
@@ -102,36 +102,36 @@ DATA/dblpSmall.xml: DATA/dblp.xml
 # gen_cache_data: DATA/dblp.xml DATA/dblpSmall.xml DATA/SerializedStrucInverse.data DATA/SerialzedSmall.data DATA/SerializedStruc.data DATA/SerializedStrucInverseSmall.data DATA/SerializedStrucArticle.data
 
 # DATA/dblp.xml DATA/SerializedStruc.data DATA/SerializedStrucInverse.data DATA/SerializedStrucArticle.data
-
-gen_cache_data: $(PATH_BIN)bench graphXML gsmall custom graphTest2
+# $(PATH_BIN)bench 
+gen_cache_data: graphXML gsmall custom graphTest2
 
 graphXML: 	DATA/SerializedStruc.data DATA/SerializedStrucInverse.data DATA/SerializedStrucArticle.data 
 gsmall: 	DATA/SerialzedSmall.data DATA/SerializedStrucInverseSmall.data DATA/small_article.data
 custom: 	DATA/customfichecache.data DATA/SerializedStrucInverseCustom.data DATA/SerializedStrucArticleCustom.data
 graphTest2: DATA/SerializedStrucKatie.data DATA/SerializedStrucInverseKatie.data DATA/SerializedStrucArticleKatie.data
 
-DATA/SerializedStruc.data: $(PATH_BUILD)unwrap.o DATA/dblp.xml 
+DATA/SerializedStruc.data: $(PATH_BUILD)parsing.o DATA/dblp.xml 
 	./$(PATH_BIN)bench sg 0
 DATA/SerializedStrucInverse.data: $(PATH_BUILD)unwrap.o DATA/SerializedStruc.data
 	./$(PATH_BIN)bench sg 0
 DATA/SerializedStrucArticle.data: $(PATH_BUILD)unwrap.o DATA/SerializedStrucInverse.data
 	./$(PATH_BIN)bench sg 0
 
-DATA/SerialzedSmall.data: $(PATH_BUILD)unwrap.o DATA/dblpSmall.xml
+DATA/SerialzedSmall.data: $(PATH_BUILD)parsing.o DATA/dblpSmall.xml
 	./$(PATH_BIN)bench sg 1
 DATA/SerializedStrucInverseSmall.data: $(PATH_BUILD)unwrap.o DATA/SerialzedSmall.data
 	./$(PATH_BIN)bench sg 1
 DATA/small_article.data: $(PATH_BUILD)unwrap.o DATA/SerializedStrucInverseSmall.data
 	./$(PATH_BIN)bench sg 1
 
-DATA/customfichecache.data: $(PATH_BUILD)unwrap.o DATA/custom.xml
+DATA/customfichecache.data: $(PATH_BUILD)parsing.o DATA/custom.xml
 	./$(PATH_BIN)bench sg 2
 DATA/SerializedStrucInverseCustom.data: $(PATH_BUILD)unwrap.o DATA/customfichecache.data
 	./$(PATH_BIN)bench sg 2
 DATA/SerializedStrucArticleCustom.data: $(PATH_BUILD)unwrap.o DATA/SerializedStrucInverseCustom.data
 	./$(PATH_BIN)bench sg 2
 
-DATA/SerializedStrucKatie.data: $(PATH_BUILD)unwrap.o DATA/test_Katie.xml
+DATA/SerializedStrucKatie.data: $(PATH_BUILD)parsing.o DATA/test_Katie.xml
 	./$(PATH_BIN)bench sg 3
 DATA/SerializedStrucInverseKatie.data: $(PATH_BUILD)unwrap.o DATA/SerializedStrucKatie.data
 	./$(PATH_BIN)bench sg 3
