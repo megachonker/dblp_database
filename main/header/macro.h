@@ -7,7 +7,13 @@
 
 enum{
     silence,
-    verbeux
+    verbeux,
+    VraimentTropVerbeux
+};
+enum{
+    full,
+    small,
+    custom
 };
 
 //taille de la bar de chargement

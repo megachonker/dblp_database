@@ -5,6 +5,8 @@
 #include "../header/macro.h"
 #include "../header/unwrap.h"
 #include "../header/search.h"
+#include "../header/Dijkstra.h"
+#include <stdarg.h>
 typedef struct listeChemain
 {
     char * XML;
@@ -12,7 +14,6 @@ typedef struct listeChemain
     char * DBauteur;
     char * DBArticle;
 }listeChemain;
-
 
 graphe_struct_Konqui gen_graph(listeChemain chemains){
     
@@ -53,7 +54,7 @@ graphe_struct_Konqui gen_graph(listeChemain chemains){
 void dfault(){
     printf("\
 • -c                calculer les composantes connexes & diamètre.\n\
-• -p AUT1;AUT2      plus court chemin auteurs indiqués.\n\
+• -p AUT1,AUT2      plus court chemin auteurs indiqués.\n\
 • -l MOT            Lister les auteurs qui contiennent le mot donné.\n\
 • -a auteur         Fnformations d'un auteur (liste des articles).\n\
 • -a auteur -n N    Liste les co-auteurs à distance N (ou moins) d'un auteur.\n\
@@ -67,34 +68,125 @@ void sdfault(){
 
 typedef struct all_options
 {
-    int caluleadv;
-    int distanceN;
-    char fileInput[100], output[100],auteur_selectioner[100],search[100],lmot[100]; 
+    int caluleadv, distanceN, verbose;
+    char output[100],auteur_selectioner[100],search[100],lmot[100],searchAll[100]; 
     char couple_auteur[2][100];
     struct listeChemain chemais;
 }all_options;
 
-all_options gen_Struct_option(int argc, char *argv[]){
-    all_options parsed_option = {.lmot="", .auteur_selectioner=""};
-    int option;
-    if (argc == 1)
-    {
-        printf("essayer -h pour les option.");
-        sdfault();
-    }
-    
+listeChemain chose_path(short choix){
 
-    listeChemain chemains = {
+    listeChemain chemains[3];
+
+    listeChemain smal = {
         .XML       = smallorigineXML,
         .DBfiche   = small_fiche_cache,
         .DBauteur  = small_auteur_cache,
         .DBArticle = small_Article_cache
     };
 
-    while((option = getopt(argc, argv, "hc:p:l:a:o:f:n")) != -1){
+    listeChemain ful = {
+        .XML       = origineXML,
+        .DBfiche   = cache_fiche,
+        .DBauteur  = auteur_cache,
+        .DBArticle = Article_cache
+    };
+
+    listeChemain cust = {
+        .XML       = customXML,
+        .DBfiche   = custom_fiche_cache,
+        .DBauteur  = custom_auteur_cache,
+        .DBArticle = custom_Article_cache
+    };
+
+    chemains[small] = smal;
+    chemains[full] = ful;
+    chemains[custom] = cust;
+
+    return chemains[choix];
+}
+
+void interactive(){
+    // char ligne[BALISESIZE];
+    // while (fgets(ligne,BALISESIZE,stdin)){
+    //     char commande[BALISESIZE];
+    //     vscanf(ligne,BALISESIZE);
+    //     strchr(ligne,' ')+1;
+    //     char * compstr = ligne;if(NULL){
+    //     STR("exit")
+    //         return;
+    //     STR("help")
+    //         dfault();
+    //     STR("file")
+
+    //     STR("compute")
+        // STR("full")
+            // test_exploration_Article()
+            // parsed_option.chemais = chose_path(small);
+//         }
+//     } 
+}
+void chose_db(char * compstr, listeChemain * chemain){
+    if(NULL){
+    STR("full")
+        *chemain = chose_path(full);
+    STR("custom")
+        *chemain = chose_path(custom);
+    STR("small")
+        *chemain = chose_path(small);}
+}
+
+void find_all(char * search,graphe_struct_Konqui * graph,int verbose){
+    ll_list * retoura = stringSearch(graph,searchauteur,search);
+    ll_list * retour = stringSearch(graph,searchArticle,search);
+    if (retoura->size == 0){
+        ERROR("recherche auteur 0");
+    }else{
+        printSearch(retoura,verbose);
+    }
+    if (retour->size == 0){
+        ERROR("recherche Article 0");
+    }else{
+        printSearch(retour,verbose);
+    }
+}
+
+void djikstrasearch(char * a,char * b,graphe_struct_Konqui graph){
+    graphe_struct_Katie graphe_Katie = faire_graphe_ptr_auteur(graph);
+    plus_court_chemin_struct* plus_court_chemin_ptr= do_Dijkstra(graphe_Katie, a, b);
+    if(plus_court_chemin_ptr!= NULL)
+    {
+        print_chemins_auteur_et_Article(plus_court_chemin_ptr);
+
+    }else{
+        ERROR("PAS DE CHEMIN")
+    }
+    free_Dijkstra(graphe_Katie,plus_court_chemin_ptr);
+}
+
+all_options gen_Struct_option(int argc, char *argv[]){
+    all_options parsed_option = {.lmot="", .auteur_selectioner="",.searchAll="",.couple_auteur[0]="",.couple_auteur[1]=""};
+    int option;
+    if (argc == 1)
+    {
+        printf("essayer -h pour les option.");
+        sdfault();
+    }
+    parsed_option.chemais = chose_path(small);
+    parsed_option.verbose = silence;
+    while((option = getopt(argc, argv, "ihvVc:p:l:a:A:o:f:n")) != -1){
         switch(option){
             case 'h':
                 dfault();
+                break;
+            case 'i':
+                interactive();
+                break;
+            case 'v':
+                parsed_option.verbose = verbeux;
+                break;
+            case 'V':
+                parsed_option.verbose = VraimentTropVerbeux;
                 break;
             case 'n':
                 parsed_option.distanceN = atoi(optarg);
@@ -108,16 +200,19 @@ all_options gen_Struct_option(int argc, char *argv[]){
             case 'a':
                 strcpy(parsed_option.auteur_selectioner,optarg);
                 break;
+            case 'A'://alll
+                strcpy(parsed_option.searchAll,optarg);
+                break;
             case 'p':
                 strcpy(parsed_option.couple_auteur[0],optarg);
-                *strchr(parsed_option.couple_auteur[0],';') = '\0';
-                strcpy(parsed_option.couple_auteur[1],strchr(optarg,';')+1);
+                *strchr(parsed_option.couple_auteur[0],',') = '\0';
+                strcpy(parsed_option.couple_auteur[1],strchr(optarg,',')+1);
                 break;
-            case 'f': //here f is used for some file name
-                strcpy(parsed_option.fileInput,optarg);
+            case 'f':
+                chose_db(optarg,&parsed_option.chemais);
                 break;
             case 'o': //here f is used for some file name
-                strcpy(parsed_option.fileInput,optarg);
+                // strcpy(parsed_option.fileInput,optarg);
                 break;
             case '?': //used for some unknown options
                 switch (optopt)
@@ -126,7 +221,7 @@ all_options gen_Struct_option(int argc, char *argv[]){
                     printf("-c correspond au calcul du nombre de composantes connexes avec leur diamètre.");
                     break;
                 case 'p':
-                    printf("-p AUTEUR1 -p AUTEUR2 permet de calculer un plus court chemin entre les deux auteurs indiqués.");
+                    printf("-p AUTEUR1,AUTEUR2 permet de calculer un plus court chemin entre les deux auteurs indiqués.");
                     break;
                 case 'l':
                     printf("-l MOT permet de lister les auteurs qui contiennent le mot donné.");
@@ -157,8 +252,6 @@ all_options gen_Struct_option(int argc, char *argv[]){
     for(; optind < argc; optind++){ //when some extra arguments are passed
         printf("Given extra arguments: %s\n", argv[optind]);
     }
-
-    parsed_option.chemais = chemains;
     return parsed_option;
 }
 
@@ -170,16 +263,15 @@ void printAll_option(all_options OwI){
     couple_auteur1=%s,\n\
     couple_auteur2=%s\n\
     distanceN=%i\n\
-    fileInput=%s\n\
     output=%s\n\
     search=%s\n"\
-    ,OwI.auteur_selectioner,OwI.caluleadv,OwI.couple_auteur[0],OwI.couple_auteur[1],OwI.distanceN,OwI.fileInput,OwI.output,OwI.search);
+    ,OwI.auteur_selectioner,OwI.caluleadv,OwI.couple_auteur[0],OwI.couple_auteur[1],OwI.distanceN,OwI.output,OwI.search);
 }
 
 
 int main(int argc, char *argv[]) {
     all_options oui = gen_Struct_option(argc,argv);
-
+    
     graphe_struct_Konqui graph = gen_graph(oui.chemais);
     DEBUG("%s",oui.auteur_selectioner)
     if (*oui.auteur_selectioner)
@@ -188,22 +280,58 @@ int main(int argc, char *argv[]) {
         if (retour->size == 0){
             ERROR("recherche echouer");
         }else{
-            printSearch(retour,verbeux);
+            printSearch(retour,oui.verbose);
         }
     }
     DEBUG("%s",oui.lmot)
 
     if (*oui.lmot)
     {
-        ll_list * retour = stringSearch(&graph,searchArticle,oui.auteur_selectioner);
+        ll_list * retour = stringSearch(&graph,searchArticle,oui.lmot);
         if (retour->size == 0){
             ERROR("recherche echouer");
         }else{
-            printSearch(retour,verbeux);
+            printSearch(retour,oui.verbose);
+        }
+    }
+    
+    // if (*oui.searchAll)
+    // {
+    //     ll_list * retoura = stringSearch(&graph,searchauteur,oui.auteur_selectioner);
+    //     ll_list * retour = stringSearch(&graph,searchArticle,oui.lmot);
+    //     if (retour->size == 0){
+    //         ERROR("recherche echouer");
+    //     }else{
+    //         printSearch(retoura,oui.verbose);
+    //         printSearch(retour,oui.verbose);
+    //     }
+    // }
+
+    if (*oui.searchAll)
+    {
+        find_all(oui.searchAll,&graph,oui.verbose);
+    }
+
+    if (*oui.couple_auteur[0]||*oui.couple_auteur[1])
+    {
+        if (*oui.couple_auteur[0]&&*oui.couple_auteur[1])
+        {
+            
+            char * aa = ((auteur_struct*)find_auteur(oui.couple_auteur[0], &graph.tab_auteur_struct)->first->value)->nom_auteur;
+            char * bb = ((auteur_struct*)find_auteur(oui.couple_auteur[1], &graph.tab_auteur_struct)->first->value)->nom_auteur;
+
+
+            djikstrasearch(aa,bb,graph);
+        }else if (!*oui.couple_auteur[0])
+        {
+            ERROR("auteur 1 non set")
+        }else{
+            ERROR("auteur 2 non set")
         }
     }
     
     
-
     return 0;
 }
+
+

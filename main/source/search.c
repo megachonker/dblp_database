@@ -4,6 +4,8 @@
 #include "../header/search.h"
 #include <string.h>
 
+#include "../header/fonctions_graphe.h"
+
 #include "../header/list.h"
 
 #include <regex.h>
@@ -185,7 +187,7 @@ void parcour_largeur(const graphe_struct_Konqui graph){
 ll_list * find_Article(const char * querry,const tab_Article_struct * tabarticle){
     INFO("FIND Article:")
     regex_t r;
-    regcomp(&r,querry,0);
+    regcomp(&r,querry,REG_ICASE);
     
     ll_list * list = ll_create();
 
@@ -250,7 +252,10 @@ void printSearch(ll_list * listchainer,int verbositer){
             {
                 DEBUG("%s",article->tab_ptr_auteur[U]->nom_auteur);
             }
+            if (verbositer == VraimentTropVerbeux)
+                explorearticle(article,3);
         }
+        WARNING("\t %ld Article", listchainer->size)
     }else{
         WARNING("SELECTION auteur:")
         for (size_t i = 0; i < listchainer->size; i++)
@@ -262,7 +267,10 @@ void printSearch(ll_list * listchainer,int verbositer){
             for (int U = 0; U < auteur->nbArticlecontenue; U++)
             {
                 DEBUG("%s",auteur->tab_ptr_Article[U]->nom_Article);
+                if (verbositer == VraimentTropVerbeux)
+                    explorearticle(auteur->tab_ptr_Article[U],3);
             }
         }
+        WARNING("\t %ld auteur", listchainer->size)
     }
 }

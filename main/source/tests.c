@@ -60,13 +60,13 @@ int main()
 
     INFO("tests:deserialisation")
 
-    FILE * DBficheLecture   = fopen(custom_fiche_cache     ,"r");
-    FILE * DBauteurLecture  = fopen(custom_auteur_cache    ,"r");
-    FILE * DBArticleLecture = fopen(custom_Article_cache   ,"r");
+    // FILE * DBficheLecture   = fopen(custom_fiche_cache     ,"r");
+    // FILE * DBauteurLecture  = fopen(custom_auteur_cache    ,"r");
+    // FILE * DBArticleLecture = fopen(custom_Article_cache   ,"r");
 
-    // FILE * DBficheLecture   = fopen(cache_fiche     ,"r");
-    // FILE * DBauteurLecture  = fopen(auteur_cache    ,"r");
-    // FILE * DBArticleLecture = fopen(Article_cache   ,"r");
+    FILE * DBficheLecture   = fopen(cache_fiche     ,"r");
+    FILE * DBauteurLecture  = fopen(auteur_cache    ,"r");
+    FILE * DBArticleLecture = fopen(Article_cache   ,"r");
 
     graphe_struct_Konqui graph = deserialise_Graph(DBficheLecture
                                     ,DBauteurLecture
@@ -80,6 +80,7 @@ int main()
     fclose(DBauteurLecture);
     fclose(DBArticleLecture);
 
+    test_exploration_Article(&graph.tab_Article_struct);
 
     ll_list * retour = stringSearch(&graph,searchauteur,"a");
     if (retour->size == 0)

@@ -403,7 +403,6 @@ void testgraph(graphe_struct_Konqui graphe_Konqui,int nbtime){
 }
 
 
-
 /**
  * @brief lance sérialisation du graphe est 100 test de dikstra
  * 
