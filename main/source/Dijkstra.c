@@ -161,13 +161,12 @@ plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcour
     
     int taille_pcc=1; //=profondeur du parcour en largeur (à la fin, =taille du plus court chemin)
     int* taille_pcc_ptr= &taille_pcc;
-    INFO("Exploration profondeur: ")
+    INFO("Exploration en largeur: ")
     while(pile_courante[0]!= -1)
     {
-        //fprintf(stderr,"\033[100D\t\t");
-        GREEN()printf("couche %d\n",compteurprofondeur);
-
-        compteurprofondeur++;
+        fprintf(stderr,"\033[100D\t\t");
+        GREEN();fprintf(stderr,"couche %d...",compteurprofondeur);
+                compteurprofondeur++;
 
         for(int i=0; i< *haut_de_pile_courante_ptr; i++)
         {
@@ -239,7 +238,7 @@ plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcour
 void traitement_auteur_courant_et_mise_a_jour_pile_suivante(auteur_struct* ptr_auteur_courant, int* haut_de_pile_suivante_ptr, int* taille_pcc_ptr, int* pile_suivante)
 {
     //pour tous les Articles Al de l'auteur_courant
-    for(int l=0; l< ptr_auteur_courant->size; l++)
+    for(int l=0; l< ptr_auteur_courant->nbArticlecontenue; l++)
     { 
         Article_struct* ptr_Article_l= ptr_auteur_courant->tab_ptr_Article[l];
 
