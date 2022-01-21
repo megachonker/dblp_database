@@ -138,6 +138,7 @@ void repchar(char carac,size_t nb);
 void writestrfile(char * str, FILE * fichier);
 char * readstrfile(FILE * fichier);
 
+void init_signal();
 
 // typedef struct cache
 // {
