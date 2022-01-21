@@ -10,10 +10,22 @@
 #include <stdlib.h>
 
 
-/*! \mainpage My Personal Index Page
- *
- * \section Résumé général
- * **a compléter avec ce que t'as fais**
+/**! \mainpage My Personal Index Page
+ * \section fiche_gene Génération fiche
+ * les pointeur fiche_minimale sont contenue dans tableaux_fiche et auteur_struct Article_struct
+ * \subsection parse_xml Parsing XML
+ *  le parsing ce fait en partant du principe qu'il y a **une paire de balise par ligne**
+ *  pour le parsing on ne s'interresse juste au noms de l'article est a ces auteur (pas assez de temps pour traiter les date)
+ *  on remplie la structure fiche_minimale avec les information ainsie que  fiche_minimale.ADDR qui est l'ordre de création car plus tard fiche_minimale sera indépandant de la structure 
+ * tableaux_fiche dans laquelle elle est contenue
+ * \subsection serialisation_xml Sérialisation XML
+ * pour la sérialisation on va utiliser des fwread et fwrite qui sont simplifier avec la macro writestrfile() et readstrfile()
+ * \section generation_auteur Génération auteur
+ * les auteur sont générée a l'aide de 
+ * 
+ * 
+ * \section Résumé général graphe_struct_Konqui
+ * le but principal de unwrap.c est de fournire 
  * ...
  * ...
  * ...
@@ -50,6 +62,8 @@
  *
  * etc...
  */
+
+
 
 
 
@@ -177,9 +191,15 @@ void chose_db(char * compstr, listeChemain * chemain){
     STR("small")
         *chemain = chose_path(small);}
 }
+
+//faire
+
+
+// parse arg
+
 void interactive(){
     char ligne[BALISESIZE];
-    char *arg=ligne;
+    char *arg=&ligne[BALISESIZE];
     listeChemain chem = chose_path(small);
     graphe_struct_Konqui graph;
     int verb = silence;
@@ -192,7 +212,8 @@ void interactive(){
             {
                 arg = pts+1;
             }else{*arg = '\0';}
-        }else{
+        }else
+        {
             *arg = '\0';
         }
 
@@ -219,8 +240,10 @@ void interactive(){
                 INFO("silence")
                 verb = silence;
             }
-        STR("full")
+        STR("flush")
+        STR("search")
             find_all(arg,&graph,verb);
+        STR("")
         }
     } 
 }
@@ -412,3 +435,4 @@ int main(int argc, char *argv[]) {
 }
 
 
+//INTEGRER TOP
