@@ -431,6 +431,9 @@ void all(int mode ){
 
 int main(int argc, char const *argv[])
 {
+
+    init_signal();
+
     const char * compstr = argv[1];
     if (argc >= 3)
     {

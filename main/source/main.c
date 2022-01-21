@@ -1,23 +1,3 @@
-/*! \mainpage My Personal Index Page
- *
- * \section Introduction
- *
- * This is the introduction.
- *
- * \section install_sec Installation
- * \sa <gen_graph>"()"
- * 
- * gen_graph()
- * 
- *  dans listeChemain on a les chemain
- * \subsection step1 Step 1: Opening the box
- *
- * etc...
- */
-
-
-
-
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
@@ -26,7 +6,9 @@
 #include "../header/unwrap.h"
 #include "../header/search.h"
 #include "../header/Dijkstra.h"
-// #include <stdarg.h>
+#include <signal.h>
+#include <stdlib.h>
+
 typedef struct listeChemain
 {
     char * XML;
@@ -164,7 +146,7 @@ void interactive(){
             if (pts+1)
             {
                 arg = pts+1;
-            }else{            *arg = '\0';}
+            }else{*arg = '\0';}
         }else{
             *arg = '\0';
         }
@@ -318,6 +300,9 @@ void printAll_option(all_options OwI){
 
 
 int main(int argc, char *argv[]) {
+
+    init_signal();
+    
     all_options oui = gen_Struct_option(argc,argv);
     
     graphe_struct_Konqui graph = gen_graph(oui.chemais);
@@ -377,8 +362,7 @@ int main(int argc, char *argv[]) {
             ERROR("auteur 2 non set")
         }
     }
-    
-    
+
     return 0;
 }
 

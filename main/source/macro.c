@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <signal.h>
 
 /**
  * @brief progresse bar
@@ -88,6 +89,24 @@ char * readstrfile(FILE * fichier){
     YOLO("%s!(%d)",buffer,taille);
     return buffer ;
 }
+
+
+static void catch_function() {
+    puts("Sure ? [Y/n]: ");
+    if(getc(stdin)=='Y')
+        exit(0);
+    return;
+}
+
+void init_signal(){
+    if (signal(SIGINT, catch_function) == SIG_ERR) {
+        WARNING("Terminal SIG_ERR")
+        exit(1);
+    }
+    return;
+}
+
+
 //fonction pour convertire
 // int octerToMega(int taille){
 
