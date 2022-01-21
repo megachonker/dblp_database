@@ -1,6 +1,6 @@
-#include <string.h>
-
-
+//#include <string.h>
+//
+//
 //int trouver_le_symbole_special(char * nom_illisible)
 //{
 //   char *strstr(const char *haystack, const char *needle); 
