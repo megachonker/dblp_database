@@ -93,7 +93,7 @@ char * readstrfile(FILE * fichier){
 
 static void catch_function() {
     puts("Sure ? [Y/n]: ");
-    if(getc(stdin)=='Y')
+    if(getc(stdin)!='n')
         exit(0);
     return;
 }
