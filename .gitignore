@@ -1492,3 +1492,14 @@ main/source/fonctions_graphe.o
 main/source/tests.c
 main/source/tests.c
 main/source/tests.c
+main/debug/coverage.info
+main/debug/GCOVtests
+main/debug/GCOVtests-bench.gcda
+main/debug/GCOVtests-Dijkstra.gcda
+main/debug/GCOVtests-fonctions_graphe.gcda
+main/debug/GCOVtests-list.gcda
+main/debug/GCOVtests-list.gcno
+main/debug/GCOVtests-macro.gcda
+main/debug/GCOVtests-parsing.gcda
+main/debug/GCOVtests-search.gcda
+main/debug/GCOVtests-unwrap.gcda
