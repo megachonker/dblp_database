@@ -232,6 +232,7 @@ printf("\
 
 void interactive_chort_help(){printf("commande are: help, file, compute, search, top, v, exit\n");}
 
+// BESOIN DE RENVOILLER LES STRUCTURE !
 /**
  * @brief gros switch permetant d'executer un programe en fonction de la ligne entrée par l'utilisateur
  * 
