@@ -17,15 +17,19 @@ abench.sh: genfolder $(PATH_BIN)bench gen_cache_data
 #gcc -shared -o libfoo.so foo.o
 
 
-go:	genfolder $(PATH_BIN)tests abench.sh
+bench:	genfolder $(PATH_BIN)bench
+main: abench.sh $(PATH_BIN)main abench.sh
+	./$(PATH_BIN)main
+
+go:	abench.sh $(PATH_BIN)tests
 	./$(PATH_BIN)tests
 
 Dijkstra: abench.sh
 	./$(PATH_BIN)bench dik 0 15
 
 val:	abench.sh
-	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./$(PATH_BIN)bench sg 1
-	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./$(PATH_BIN)bench dik 1 5
+	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./$(PATH_BIN)bench sg  2
+	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./$(PATH_BIN)bench dik 2 5
 
 
 raport:	genfolder rp
@@ -53,10 +57,10 @@ callgrind:	genfolder $(PATH_BIN)bench
 $(PATH_BIN)bench:	$(PATH_BUILD)bench.o $(PATH_BUILD)parsing.o $(PATH_BUILD)list.o $(PATH_BUILD)unwrap.o $(PATH_BUILD)macro.o $(PATH_BUILD)fonctions_graphe.o $(PATH_BUILD)Dijkstra.o
 	$(CCA) -o $(PATH_BIN)bench  $^ $(CFLAGS) $(LDLIBS)
 
-$(PATH_BIN)tests:	$(PATH_BUILD)tests.o $(PATH_BUILD)parsing.o $(PATH_BUILD)list.o $(PATH_BUILD)unwrap.o $(PATH_BUILD)macro.o $(PATH_BUILD)search.o  $(PATH_BUILD)fonctions_graphe.o $(PATH_BUILD)Dijkstra.o
+$(PATH_BIN)tests:	$(PATH_BUILD)tests.o $(PATH_BUILD)parsing.o $(PATH_BUILD)list.o $(PATH_BUILD)unwrap.o $(PATH_BUILD)macro.o $(PATH_BUILD)search.o  $(PATH_BUILD)fonctions_graphe.o $(PATH_BUILD)Dijkstra.o $(PATH_BUILD)list.o
 	$(CCA) -o $(PATH_BIN)tests  $^ $(CFLAGS) $(LDLIBS)
 
-$(PATH_BIN)main:	$(PATH_BUILD)main.o $(PATH_BUILD)parsing.o $(PATH_BUILD)macro.o
+$(PATH_BIN)main:	$(PATH_BUILD)main.o	$(PATH_BUILD)parsing.o  $(PATH_BUILD)unwrap.o $(PATH_BUILD)macro.o $(PATH_BUILD)search.o  $(PATH_BUILD)fonctions_graphe.o $(PATH_BUILD)Dijkstra.o $(PATH_BUILD)list.o
 	$(CCA) -o $(PATH_BIN)main  $^ $(CFLAGS) $(LDLIBS)
 
 $(PATH_BUILD)%.o: $(PATH_SOURCE)%.c

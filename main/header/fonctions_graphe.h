@@ -23,7 +23,7 @@ typedef struct graphe_struct_Katie
 {
     auteur_struct ** graphe;
     int size_graphe;
-
+    int nb_auteurMax;
 }graphe_struct_Katie;
 
 typedef enum comparaison_auteur
@@ -61,6 +61,6 @@ void donner_tous_ceux_qui_ont_travalle_avec_auteur(graphe_struct_Katie graphe_st
 void print_chemins_auteur_et_Article(plus_court_chemin_struct* pcc);
 
 void print_noms_des_voisins(graphe_struct_Katie graphe_t, char* nom_auteur);
-
-
+void test_exploration_Article(const tab_Article_struct * mesarticle);
+void explorearticle(const Article_struct * monarticle, int profondeur);
 #endif

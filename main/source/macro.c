@@ -66,7 +66,13 @@ void repchar(char carac,size_t nb){
 
 
 void writestrfile(char * str, FILE * fichier){
-    short size = (short)strlen(str);
+    int intlongeur = strlen(str);
+    if (intlongeur > 0x1<<16)
+    {
+        exitIfNull(0,"ERREUR plus long qu'un chort")
+    }
+    
+    short size = (short)intlongeur;
     YOLO("%s!(%d)",str,size)
     fwrite(&size,sizeof(short),1,fichier);
     fwrite(str,sizeof(char),size,fichier);
@@ -75,10 +81,10 @@ void writestrfile(char * str, FILE * fichier){
 char * readstrfile(FILE * fichier){
     short taille;
     fread(&taille,sizeof(short),1,fichier);
-    char * buffer = calloc(taille,sizeof(char));
+    char * buffer = calloc(taille+1,sizeof(char));
     fread(buffer,sizeof(char),taille,fichier);
     exitIfNull(buffer,"imposible malloc buffer");
-    // buffer[taille]='\0';
+    buffer[taille]='\0';
     YOLO("%s!(%d)",buffer,taille);
     return buffer ;
 }

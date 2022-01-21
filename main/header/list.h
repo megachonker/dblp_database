@@ -14,6 +14,7 @@ typedef struct ll_node {
 struct ll_list {
     struct ll_node *first;
     size_t size;
+    short type;
 };
 
 

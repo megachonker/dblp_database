@@ -112,14 +112,24 @@ tab_auteur_struct deserialise_tab_auteur(int print){
     }
     return malistauteur;
 }
-void ggen_unwrap_Graph(){
+graphe_struct_Konqui ggen_unwrap_Graph(){
     FILE * DBxml = fopen(cache_fiche,"r");
     FILE * DBinverse = fopen(auteur_cache,"r");
     FILE * DBarticle = fopen(Article_cache,"r");
+
+
     exitIfNull(DBxml,"INPUT PAS CHEMAIN")
     exitIfNull(DBinverse,"INPUT PAS CHEMAIN")
     exitIfNull(DBarticle,"INPUT PAS CHEMAIN")
-    deserialise_Graph(DBxml,DBinverse,DBarticle);
+
+
+
+    graphe_struct_Konqui graph = deserialise_Graph(DBxml,DBinverse,DBarticle);
+    if (!graph.tab_Article_struct.nombre_Article||!graph.tab_auteur_struct.nombre_auteur||!graph.tableaux_de_fiche.taille)
+    {
+        exitIfNull(0,"Une des base de donnée est vide");
+    }
+    return graph;
 }
 void uunwrap_ListArticle_from_xml(int a){
     // plusieuyr pour la taille ?
@@ -139,8 +149,6 @@ tab_Article_struct gen_article(){
     tab_auteur_struct  malistaauteur = deserialise_tab_auteur_struct(&matablefiche,DBinversee);
     tab_Article_struct malistearticle = convertTab_auteur2Article(&malistaauteur);
 
-    free_tab_fiche(matablefiche);
-    free_tab_auteur(malistaauteur);
     return malistearticle;
 }
 
@@ -378,8 +386,8 @@ void testgraph(graphe_struct_Konqui graphe_Konqui,int nbtime){
         b = rand()%graphe_Konqui.tab_auteur_struct.nombre_auteur;
         char* nom_auteur_depart     = graphe_Katie.graphe[a]->nom_auteur;
         char* nom_auteur_destination= graphe_Katie.graphe[b]->nom_auteur;
-        WARNING("depart  : %s ",nom_auteur_depart)
-        WARNING("arriver: %s",nom_auteur_destination)
+        WARNING("depart\t: %s ",nom_auteur_depart)
+        WARNING("arriver\t: %s",nom_auteur_destination)
         plus_court_chemin_struct* plus_court_chemin_ptr= do_Dijkstra(graphe_Katie, nom_auteur_depart, nom_auteur_destination);
         if(plus_court_chemin_ptr!= NULL)
         {
@@ -393,7 +401,6 @@ void testgraph(graphe_struct_Konqui graphe_Konqui,int nbtime){
     }
 
 }
-
 
 
 /**
@@ -591,6 +598,7 @@ int main(int argc, char const *argv[])
     //     deserialisation_tab_auteur_structt();
     // }
     else{
+        //unwrap_serialise_Article
         fprintf(stderr,"PAS BON TEST!\n\n\n");
         fprintf(stderr,"\tOption a 1 arument\n\
             \n - readb\
