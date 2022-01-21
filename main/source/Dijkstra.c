@@ -106,10 +106,10 @@ plus_court_chemin_struct* do_Dijkstra(graphe_struct_Katie graphe_t, char* nom_au
     }
 
     if(trouver_ou_pas_1== auteur_pas_trouver)
-        printf("%s %s %s\n", "l'auteur", nom_auteur_depart, "ne figure dans aucun Article");
+        YELLO()printf("%s %s %s\n", "l'auteur", nom_auteur_depart, "ne figure dans aucun Article");
 
     if(trouver_ou_pas_2== auteur_pas_trouver)
-        printf("%s %s %s\n", "l'auteur", nom_auteur_destination, "ne figure dans aucun Article");
+        YELLO()printf("%s %s %s\n", "l'auteur", nom_auteur_destination, "ne figure dans aucun Article");
 
     //si l'un des auteurs n'est pas dans la base de donnée, on renvoie un chemin NULL
     if(trouver_ou_pas_1== auteur_pas_trouver || trouver_ou_pas_2== auteur_pas_trouver)
@@ -135,12 +135,13 @@ plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcour
     //les piles, sont des tableau d'indice d'auteur, (indice dans le graphe)
     //les piles vont accueillir les auteurs à traiter à chaque étape du parcours en largeur.
     int* pile_auteur_a_traiter_etape_courante= calloc(2984804,sizeof(int)); //2984804 est le nombre d'auteur totale dans le graphe, avec cette taille, pas de soucis
-    exitIfNull(pile_auteur_a_traiter_etape_courante, "echec malloc pile_auteur_a_traiter_etape_courante");
+    exitIfNull(pile_auteur_a_traiter_etape_courante, "echec calloc pile_auteur_a_traiter_etape_courante");
     
     int* pile_suivante= calloc(2984804,sizeof(int));
-    exitIfNull(pile_suivante, "echec malloc pile_suivante");
+    exitIfNull(pile_suivante, "echec calloc pile_suivante");
     
     pile_auteur_a_traiter_etape_courante[0]= ptr_auteur_depart->indice_dans_le_graphe;
+    
     int haut_de_pile_courante=1;
     int haut_de_pile_suivante=0;
     int* haut_de_pile_courante_ptr= &haut_de_pile_courante;
@@ -156,10 +157,10 @@ plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcour
     DEBUG("Exploration profondeur: ")
     while(pile_auteur_a_traiter_etape_courante[0]!= -1)
     {
-        fprintf(stderr,"\033[100D\t\t");
-        GREEN();fprintf(stderr,"couche %d...",compteurprofondeur);
+        //fprintf(stderr,"\033[100D\t\t");
+        GREEN()printf("couche %d\n",compteurprofondeur);
 
-            compteurprofondeur++;
+        compteurprofondeur++;
 
         for(int i=0; i< *haut_de_pile_courante_ptr; i++)
         {
