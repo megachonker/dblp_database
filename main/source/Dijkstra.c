@@ -141,13 +141,13 @@ plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcour
 {
     //les piles, sont des tableau d'indice d'auteur, (indice dans le graphe)
     //les piles vont accueillir les auteurs à traiter à chaque étape du parcours en largeur.
-    int* pile_auteur_a_traiter_etape_courante= calloc(graphe_t.nb_auteurMax,sizeof(int));
-    exitIfNull(pile_auteur_a_traiter_etape_courante, "echec malloc pile_auteur_a_traiter_etape_courante");
+    int* pile_courante= calloc(graphe_t.nb_auteurMax,sizeof(int));
+    exitIfNull(pile_courante, "echec malloc pile_courante");
     
     int* pile_suivante= calloc(graphe_t.nb_auteurMax,sizeof(int));
     exitIfNull(pile_suivante, "echec malloc pile_suivante");
     
-    pile_auteur_a_traiter_etape_courante[0]= ptr_auteur_depart->indice_dans_le_graphe;
+    pile_courante[0]= ptr_auteur_depart->indice_dans_le_graphe;
     
     int haut_de_pile_courante=1;
     int haut_de_pile_suivante=0;
@@ -162,7 +162,7 @@ plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcour
     int taille_pcc=1; //=profondeur du parcour en largeur (à la fin, =taille du plus court chemin)
     int* taille_pcc_ptr= &taille_pcc;
     INFO("Exploration profondeur: ")
-    while(pile_auteur_a_traiter_etape_courante[0]!= -1)
+    while(pile_courante[0]!= -1)
     {
         //fprintf(stderr,"\033[100D\t\t");
         GREEN()printf("couche %d\n",compteurprofondeur);
@@ -171,11 +171,11 @@ plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcour
 
         for(int i=0; i< *haut_de_pile_courante_ptr; i++)
         {
-            auteur_struct* ptr_auteur_courant= graphe_t.graphe[pile_auteur_a_traiter_etape_courante[i]];
+            auteur_struct* ptr_auteur_courant= graphe_t.graphe[pile_courante[i]];
 
             if(ptr_auteur_courant== ptr_auteur_destination)
             {
-                free(pile_auteur_a_traiter_etape_courante);
+                free(pile_courante);
                 free(pile_suivante);
 
 
@@ -194,7 +194,7 @@ plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcour
 
         for(int j=0; j< *haut_de_pile_courante_ptr; j++)
         {
-            pile_auteur_a_traiter_etape_courante[j]= -1;
+            pile_courante[j]= -1;
         }
         *haut_de_pile_courante_ptr= 0;   
 
@@ -202,13 +202,13 @@ plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcour
         //signe que l'on a traité tous les auteurs de la composante connexe explorée
         if(pile_suivante[0]== -1)
         { 
-            pile_auteur_a_traiter_etape_courante[0]= -1;
+            pile_courante[0]= -1;
         }
         else  //sinon, on remplie la pile courante avec les indice d'auteur de la pile suivante 
         {
             for(int t=0; t< *haut_de_pile_suivante_ptr; t++)
             {
-                pile_auteur_a_traiter_etape_courante[t]= pile_suivante[t];
+                pile_courante[t]= pile_suivante[t];
             }
             *haut_de_pile_courante_ptr= *haut_de_pile_suivante_ptr;
         }
@@ -221,13 +221,13 @@ plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcour
         *haut_de_pile_suivante_ptr=0;
         (*taille_pcc_ptr)++;
        
-        //    printf("val %d pile_courante: %d\n", k, pile_auteur_a_traiter_etape_courante[k]);
+        //    printf("val %d pile_courante: %d\n", k, pile_courante[k]);
         //}
         //printf("fin d'une étape profondeur\n");
     
     }
 
-    free(pile_auteur_a_traiter_etape_courante);
+    free(pile_courante);
     free(pile_suivante);
     WARNING("\nIl n'y a pas de chemin entre %s et %s\n", nom_auteur_depart, ptr_auteur_destination->nom_auteur);
     return NULL;
