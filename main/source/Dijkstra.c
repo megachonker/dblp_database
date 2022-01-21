@@ -75,6 +75,13 @@ void print_chemins_auteur_et_Article(plus_court_chemin_struct* pcc)
 /*****************************************************************************************************************************************************/
 //A partir d'ici on a la fonction Dijkstra et ses sous fonctions
 
+plus_court_chemin_struct* relachement_de_arretes_jusqu_a_trouver_ou_tout_parcourir(auteur_struct* ptr_auteur_depart, auteur_struct* ptr_auteur_destination, char* nom_auteur_depart, graphe_struct_Katie graphe_t);
+
+void traitement_auteur_courant_et_mise_a_jour_pile_suivante(auteur_struct* ptr_auteur_courant, int* haut_de_pile_suivante_ptr, int* taille_pcc_ptr, int* pile_suivante);
+
+plus_court_chemin_struct reconstitution_du_pcc_apres_parcours(int* taille_pcc_ptr, auteur_struct* ptr_auteur_destination);
+
+
 
 
 //renvoie le tableau des ptr vers les auteur_struct du chemin de auteur_1 (a1) a auteur_2 (a2)
