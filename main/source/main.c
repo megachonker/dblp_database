@@ -227,10 +227,21 @@ printf("\
             -   A pour les article\n\
             -   a pour les auteur\n\
     * v       alterne entre les 3 niveaux de verbositer\n\
-    * exit    quite...\n");
+    * exit,q  quite...\n");
 }
 
-void interactive_chort_help(){printf("commande are: help, file, compute, search, top, v, exit\n");}
+void interactive_chort_help(){printf("commande are: help, file, compute, search, top, v, exit/q\n");}
+
+typedef struct total
+{
+    char ligne[BALISESIZE];
+    char *argv[5];
+    graphe_struct_Konqui graph;
+    listeChemain chem;
+    int verb;
+    ll_list * recherche;
+}total;
+
 
 // BESOIN DE RENVOILLER LES STRUCTURE !
 /**
@@ -243,83 +254,103 @@ void interactive_chort_help(){printf("commande are: help, file, compute, search,
  * @param [in] verb verbositer désirer
  * @return int état de la commande
  */
-int switchAndExec(char ** argv, graphe_struct_Konqui graph, listeChemain chem, int verb)
+int switchAndExec(total * variable)
 {
 
-    char *compstr = argv[0];
+    char *compstr = variable->argv[0];
 
     if
     (NULL){
     STR("exit")
         exit(0);
+    STR("q")
+        exit(0);
     STR("help")
         interactive_help();
     STR("file")
-        return chose_db(argv[1], &chem);
+        return chose_db(variable->argv[1], &variable->chem);
     STR("compute")
-        graph = gen_graph(chem);
+        variable->graph = gen_graph(variable->chem);
+    STR("c")
+        variable->graph = gen_graph(variable->chem);
     STR("v")
-        if (verb == silence)
+        if (variable->verb == silence)
         {
             INFO("verbeux")
-            verb = verbeux;
+            variable->verb = verbeux;
         }
-        else if (verb == verbeux)
+        else if (variable->verb == verbeux)
         {
             INFO("VraimentTropVerbeux")
-            verb = VraimentTropVerbeux;
+            variable->verb = VraimentTropVerbeux;
         }
         else
         {
             INFO("silence")
-            verb = silence;
+            variable->verb = silence;
         }
     // STR("flush")
+    // STR("s")
+    //     if (&variable->graph.tab_Article_struct == NULL)
+    //     {
+    //         ERROR("graph vide veuiller le calculer (compute)")
+    //         return 1;
+    //     }
+    STR("p")
+        printSearch(variable->recherche,variable->verb);
     STR("search")
-        if (&graph.tab_Article_struct == NULL)
+        if (&variable->graph.tab_Article_struct == NULL)
         {
             ERROR("graph vide veuiller le calculer (compute)")
             return 1;
         }
-    char *compstr = argv[1];
-        if (NULL)
-        {
-            STR("A")
-            stringSearch(&graph, searchArticle, argv[2]);
-            STR("a")
-            stringSearch(&graph, searchArticle, argv[2]);
-            STR("b")
-            stringSearch(&graph, searchBoth, argv[2]);
-        }
-        else
+        if (variable->argv[1] == NULL)
         {
             WARNING("search: A/a/b Auteur, article, both (les 2)")
+            return 1;
         }
+        if (variable->argv[2] == NULL)
+        {
+            WARNING("rentrer un terme de recherche (regex)")
+            return 1;
+        }
+    char *compstr = variable->argv[1];
+        if (NULL)
+        {
+            
+            STR("A")
+            variable->recherche = stringSearch(&variable->graph, searchArticle, variable->argv[2]);
+            STR("a")
+            variable->recherche = stringSearch(&variable->graph, searchArticle, variable->argv[2]);
+            STR("b")
+            variable->recherche = stringSearch(&variable->graph, searchBoth, variable->argv[2]);
+        }
+
     STR("top")
-        if (graph.tab_Article_struct.nombre_Article == 0)
+        if (variable->graph.tab_Article_struct.nombre_Article == 0)
         {
             ERROR("graph vide veuiller le calculer (compute)")
             return 1;
         }
-        if(argv[1] == NULL){
+        if(variable->argv[1] == NULL){
             ERROR("pas de nombre passer")
             return 1;
         }
-        if (argv[2] == NULL)
+        if (variable->argv[2] == NULL)
         {
-            ERROR("Choisisez A/a/b Article/auteur/both")
+            ERROR("Choisisez A/a Article/auteur")
             return 1;
         }
         
-        int top = atoi(argv[1]);
+        int top = atoi(variable->argv[1]);
 
-        char *compstr = argv[2];
+        char *compstr = variable->argv[2];
         if (NULL)
         {
             STR("A")
-            scoarboard(&graph, TOP_Article, top, verb);
+            scoarboard(&variable->graph, TOP_Article, top, variable->verb);
             STR("a")
-            scoarboard(&graph, TOP_auteur, top, verb);
+            scoarboard(&variable->graph, TOP_auteur, top, variable->verb);
         }
     }else{
         interactive_chort_help();  
@@ -327,17 +358,17 @@ int switchAndExec(char ** argv, graphe_struct_Konqui graph, listeChemain chem, i
     return 0;
 }
 
+
+
 void interactive()
 {
-    char ligne[BALISESIZE];
-    char *argv[5];
-    listeChemain chem = chose_path(small);
-    graphe_struct_Konqui graph;
-    int verb = silence;
-    while (fgets(ligne, BALISESIZE, stdin))
+    init_signal();
+    total variable = {.chem=chose_path(small), .verb=silence};
+    variable.graph = gen_graph(variable.chem);
+    while (fgets(variable.ligne, BALISESIZE, stdin))
     {
 
-        int argc = parse_arg(ligne, argv);
+        int argc = parse_arg(variable.ligne, variable.argv);
         if (argc > 3)
         {
             ERROR("trop d'argument fournis")
@@ -349,7 +380,7 @@ void interactive()
             continue;
         }
 
-        switchAndExec(argv,graph,chem,verb);
+        switchAndExec(&variable);
         // #ifdef DEBUG_ON
         // for (int i = 0; i < argc; i++)
         // {
@@ -559,4 +590,4 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-//INTEGRER TOP
+//INTEGRER TOP  

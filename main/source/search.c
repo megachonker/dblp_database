@@ -73,7 +73,7 @@ tab_auteur_struct get_top_auteur(const tab_auteur_struct *tout_auteur, int topX)
 
 void scoarboard(const graphe_struct_Konqui *mongraph, const int getwhat, const int nbentrer,int verbositer)
 {
-    if (nbentrer > 0)
+    if (nbentrer < 0)
     {
         ERROR("nombre null ou négatif")
     }
@@ -248,10 +248,12 @@ ll_list *stringSearch(const graphe_struct_Konqui *mongraph, const int getwhat, c
     case searchArticle:
         INFO("Recherche %s dans les Article", inputstr)
         ll_list *ListeArticle = find_Article(inputstr, &mongraph->tab_Article_struct);
+        ListeArticle->type = typeArticle;
         return ListeArticle;
     case searchauteur:
         INFO("Recherche %s dans les auteur", inputstr)
         ll_list *Listeauteur = find_auteur(inputstr, &mongraph->tab_auteur_struct);
+        Listeauteur->type = typeauteur;
         return Listeauteur;
     case searchBoth:
         INFO("Recherche %s dans les auteur ET Article", inputstr)
