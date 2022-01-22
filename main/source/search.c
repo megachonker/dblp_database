@@ -271,8 +271,12 @@ ll_list *stringSearch(const graphe_struct_Konqui *mongraph, const int getwhat, c
     return NULL;
 }
 
-void printSearch(ll_list *listchainer, int verbositer)
+int printSearch(ll_list *listchainer, int verbositer)
 {
+    if(listchainer == NULL){
+        WARNING("faire une recherche concluante")
+        return 1;
+    }
     if (listchainer->type == typeArticle)
     {
         WARNING("SELECTION Article:")
@@ -323,6 +327,7 @@ void printSearch(ll_list *listchainer, int verbositer)
             printSearch(ll_get(listchainer, i), silence);
         }
     }
+    return 0;
 }
 
 int parse_arg(char *input, char **output)
@@ -346,3 +351,60 @@ int parse_arg(char *input, char **output)
 
     return counter;
 }
+
+
+ll_list * researchArticle(ll_list * malisteArticle,int action, regex_t r){
+    for (size_t i = 0; i < malisteArticle->size; i++)
+    {
+        PROGRESSBAR(i, malisteArticle->size);
+        Article_struct * monarticle =  ll_get(malisteArticle,i);
+        int match = regexec(&r, monarticle->nom_Article, 0, NULL, 0);
+        if (action == blacklist && !match)
+        {
+            ll_remove(malisteArticle,i);
+        }else if (action == whitelist && match)
+        {
+            ll_remove(malisteArticle,i);
+        }
+    }
+    return malisteArticle;
+}
+
+ll_list * researchauteur(ll_list * malisteauteur,int action, regex_t r){
+    for (size_t i = 0; i < malisteauteur->size; i++)
+    {
+        PROGRESSBAR(i, malisteauteur->size);
+        auteur_struct * monauteur =  ll_get(malisteauteur,i);
+        int match = regexec(&r, monauteur->nom_auteur, 0, NULL, 0);
+        if (action == blacklist && !match)
+        {
+            ll_remove(malisteauteur,i);
+        }else if (action == whitelist && match)
+        {
+            ll_remove(malisteauteur,i);
+        }
+    }
+    return malisteauteur;
+}
+
+void restringSearch(ll_list * mesRecherch, const int typederecherche, const char *inputstr){
+    regex_t r;
+    regcomp(&r, inputstr, REG_ICASE);
+    
+    if (mesRecherch->type == chaineArticleEtauteur)
+    {
+        for (size_t i = 0; i < mesRecherch->size; i++)
+        {
+            restringSearch(ll_get(mesRecherch, i),typederecherche,inputstr);
+        }
+    }else if (mesRecherch->type == typeArticle)
+    {
+        researchArticle(mesRecherch,typederecherche,r);
+    }else{
+        researchauteur(mesRecherch,typederecherche,r);
+    }
+}
+
+
+
+

@@ -24,7 +24,8 @@ void scoarboard(const graphe_struct_Konqui * mongraph ,const int getwhat ,const 
 void parcour_largeur(const graphe_struct_Konqui graph);
 
 ll_list * stringSearch(const graphe_struct_Konqui * mongraph ,const int getwhat ,const char * inputstr);
-void printSearch(ll_list * listchainer,int verbositer);
+int printSearch(ll_list * listchainer,int verbositer);
 ll_list * find_auteur(const char* querry, const tab_auteur_struct * tabauteur);
 int parse_arg(char * input, char ** output);
+void restringSearch(ll_list * mesRecherch, const int typederecherche, const char *inputstr);
 #endif

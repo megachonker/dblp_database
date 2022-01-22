@@ -16,6 +16,17 @@ enum{
     custom
 };
 
+enum{
+    blacklist,
+    whitelist
+};
+
+enum{
+    argumentinvalide,
+    arrayvide
+};
+
+
 //taille de la bar de chargement
 #define SIZEBAR 30
 //taille balise max pour fgets
@@ -97,6 +108,10 @@ if (!p)\
 }
 
 #define STR(string) }else if(strcmp(string,compstr)==0){
+
+#define CHK1ARG(argv,...)   if(!argv[0])                   {WARNING(__VA_ARGS__);return argumentinvalide;};
+#define CHK2ARG(argv,...)   if(!argv[0]||!argv[1])          {WARNING(__VA_ARGS__);return argumentinvalide;};
+#define CHK3ARG(argv,...)   if(!argv[0]||!argv[1]||!argv[2]) {WARNING(__VA_ARGS__);return argumentinvalide;};
 
 /**
  * @brief affiche une bar de progression

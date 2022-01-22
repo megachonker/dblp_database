@@ -71,6 +71,7 @@ typedef struct listeChemain
     char *DBArticle;
 } listeChemain;
 
+
 graphe_struct_Konqui gen_graph(listeChemain chemains)
 {
 
@@ -235,7 +236,7 @@ void interactive_chort_help(){printf("commande are: help, file, compute, search,
 typedef struct total
 {
     char ligne[BALISESIZE];
-    char *argv[5];
+    char * argv[5];
     graphe_struct_Konqui graph;
     listeChemain chem;
     int verb;
@@ -256,7 +257,10 @@ typedef struct total
  */
 int switchAndExec(total * variable)
 {
-
+    DEBUG("[%s] [%s] [%s]",variable->argv[0],variable->argv[1],variable->argv[2])
+    // CHK1ARG(variable->argv,"azerzaerzearzaer")
+    // CHK3ARG(variable->argv,"NIQUE !")
+    // DEBUG("REP: %d",variable->argv[0]&&variable->argv[1]&&variable->argv[2])
     char *compstr = variable->argv[0];
 
     if
@@ -297,9 +301,29 @@ int switchAndExec(total * variable)
     //         return 1;
     //     }
     STR("p")
-        printSearch(variable->recherche,variable->verb);
+        return printSearch(variable->recherche,variable->verb);
+    STR("research")
+        if (variable->recherche == NULL){
+            WARNING("veiller éfectuer une recherche avant de l'affiner")
+            return 1;
+        }
+        CHK3ARG(variable->argv,"pas assez d'argument");
+        char *compstr = variable->argv[1];
+        if (NULL)
+        {
+            STR("s")
+                restringSearch(variable->recherche, whitelist, variable->argv[2]);
+            STR("d")
+                restringSearch(variable->recherche, blacklist, variable->argv[2]);
+            }else{
+                WARNING("S/d Save/delet\n\t\t - d suprime les match\n\t\t - garde les match")
+            }
+        if (variable->verb != silence)
+        {
+            return printSearch(variable->recherche,variable->verb);
+        }
     STR("search")
-        if (&variable->graph.tab_Article_struct == NULL)
+        if (!variable->graph.tab_Article_struct.tab_Article->nom_Article)
         {
             ERROR("graph vide veuiller le calculer (compute)")
             return 1;
@@ -321,11 +345,15 @@ int switchAndExec(total * variable)
             STR("A")
             variable->recherche = stringSearch(&variable->graph, searchArticle, variable->argv[2]);
             STR("a")
-            variable->recherche = stringSearch(&variable->graph, searchArticle, variable->argv[2]);
+            variable->recherche = stringSearch(&variable->graph, searchauteur, variable->argv[2]);
             STR("b")
             variable->recherche = stringSearch(&variable->graph, searchBoth, variable->argv[2]);
         }
-
+        if (variable->verb != silence)
+        {
+            printSearch(variable->recherche,variable->verb);
+        }
+        
     STR("top")
         if (variable->graph.tab_Article_struct.nombre_Article == 0)
         {
@@ -363,7 +391,7 @@ int switchAndExec(total * variable)
 void interactive()
 {
     init_signal();
-    total variable = {.chem=chose_path(small), .verb=silence};
+    total variable = {.chem=chose_path(small), .verb=silence,.recherche=NULL};
     variable.graph = gen_graph(variable.chem);
     while (fgets(variable.ligne, BALISESIZE, stdin))
     {
@@ -374,13 +402,18 @@ void interactive()
             ERROR("trop d'argument fournis")
             continue;
         }
-        else if (argc < 00)
+        else if (argc < 0)
         {
             ERROR("pas assez d'argument")
             continue;
         }
 
         switchAndExec(&variable);
+        // char  * a[5] = {"","","","",""};
+        variable.argv[0] = NULL;
+        variable.argv[1] = NULL;
+        variable.argv[2] = NULL;
+        variable.argv[3] = NULL;
         // #ifdef DEBUG_ON
         // for (int i = 0; i < argc; i++)
         // {
