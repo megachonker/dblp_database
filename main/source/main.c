@@ -112,18 +112,18 @@ graphe_struct_Konqui gen_graph(listeChemain chemains)
 void dfault()
 {
     printf("\
-• -c                calculer les composantes connexes & diamètre.\n\
+// • -c                calculer les composantes connexes & diamètre.\n\
 • -p AUT1,AUT2      plus court chemin auteurs indiqués.\n\
 • -l MOT            Lister les auteurs qui contiennent le mot donné.\n\
 • -a auteur         Fnformations d'un auteur (liste des articles).\n\
-• -a auteur -n N    Liste les co-auteurs à distance N (ou moins) d'un auteur.\n\
-• -f INPUT          cache d\'entrée.\n\
-• -o OUTPUT         Sauvegarder la structure dans un fichier binaire (indiqué avec une option -o OUTPUT_FILE)\n");
+• -A Article        Liste les co-auteurs à distance N (ou moins) d'un auteur.\n\
+• -f INPUT          cache d\'entrée. small full custom \n\
+// • -o OUTPUT         Sauvegarder la structure dans un fichier binaire (indiqué avec une option -o OUTPUT_FILE)\n");
 }
 
 void sdfault()
 {
-    printf("\n -c -p AUT1 AUT2 -l MOT -a auteur -a auteur -n N -f INPUT -o OUTPUT");
+    printf("\n -c -p AUT1,AUT2 -l MOT -a auteur -A article -f INPUT");
 }
 
 typedef struct all_options
@@ -257,7 +257,8 @@ typedef struct total
  */
 int switchAndExec(total * variable)
 {
-    DEBUG("[%s] [%s] [%s]",variable->argv[0],variable->argv[1],variable->argv[2])
+    // DEBUG("[%s] [%s] [%s]",variable->argv[0],variable->argv[1],variable->argv[2])
+    
     // CHK1ARG(variable->argv,"azerzaerzearzaer")
     // CHK3ARG(variable->argv,"NIQUE !")
     // DEBUG("REP: %d",variable->argv[0]&&variable->argv[1]&&variable->argv[2])
@@ -300,6 +301,7 @@ int switchAndExec(total * variable)
     //         ERROR("graph vide veuiller le calculer (compute)")
     //         return 1;
     //     }
+    //DIKstra
     STR("p")
         return printSearch(variable->recherche,variable->verb);
     STR("research")
@@ -307,7 +309,7 @@ int switchAndExec(total * variable)
             WARNING("veiller éfectuer une recherche avant de l'affiner")
             return 1;
         }
-        CHK3ARG(variable->argv,"pas assez d'argument");
+        CHK3ARG(variable->argv,"pas assez d'argument\nS/d Save/delet\n\t\t - d suprime les match\n\t\t - s garde les match");
         char *compstr = variable->argv[1];
         if (NULL)
         {
@@ -316,7 +318,7 @@ int switchAndExec(total * variable)
             STR("d")
                 restringSearch(variable->recherche, blacklist, variable->argv[2]);
             }else{
-                WARNING("S/d Save/delet\n\t\t - d suprime les match\n\t\t - garde les match")
+                WARNING("mauvais argument\nS/d Save/delet\n\t\t - d suprime les match\n\t\t - s garde les match")
             }
         if (variable->verb != silence)
         {
@@ -328,26 +330,19 @@ int switchAndExec(total * variable)
             ERROR("graph vide veuiller le calculer (compute)")
             return 1;
         }
-        if (variable->argv[1] == NULL)
-        {
-            WARNING("search: A/a/b Auteur, article, both (les 2)")
-            return 1;
-        }
-        if (variable->argv[2] == NULL)
-        {
-            WARNING("rentrer un terme de recherche (regex)")
-            return 1;
-        }
+        CHK2ARG(variable->argv,"search: A/a/b Auteur, article, both (les 2)");
+        CHK3ARG(variable->argv,"rentrer un terme de recherche (regex)");
+
     char *compstr = variable->argv[1];
         if (NULL)
         {
             
             STR("A")
-            variable->recherche = stringSearch(&variable->graph, searchArticle, variable->argv[2]);
+                variable->recherche = stringSearch(&variable->graph, searchArticle, variable->argv[2]);
             STR("a")
-            variable->recherche = stringSearch(&variable->graph, searchauteur, variable->argv[2]);
+                variable->recherche = stringSearch(&variable->graph, searchauteur, variable->argv[2]);
             STR("b")
-            variable->recherche = stringSearch(&variable->graph, searchBoth, variable->argv[2]);
+                variable->recherche = stringSearch(&variable->graph, searchBoth, variable->argv[2]);
         }
         if (variable->verb != silence)
         {
