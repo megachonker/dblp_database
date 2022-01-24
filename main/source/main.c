@@ -371,8 +371,10 @@ int switchAndExec(total * variable)
         if (NULL)
         {
             STR("A")
+            // variable->recherche = 
             scoarboard(&variable->graph, TOP_Article, top, variable->verb);
             STR("a")
+            // variable->recherche = 
             scoarboard(&variable->graph, TOP_auteur, top, variable->verb);
         }
     }else{

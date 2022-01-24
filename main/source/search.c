@@ -71,8 +71,10 @@ tab_auteur_struct get_top_auteur(const tab_auteur_struct *tout_auteur, int topX)
     return top_auteur;
 }
 
+// ll_list * 
 void scoarboard(const graphe_struct_Konqui *mongraph, const int getwhat, const int nbentrer,int verbositer)
 {
+    // ll_create();
     if (nbentrer < 0)
     {
         ERROR("nombre null ou négatif")
@@ -82,12 +84,26 @@ void scoarboard(const graphe_struct_Konqui *mongraph, const int getwhat, const i
     case TOP_Article:
         INFO("Top %d des Article", nbentrer)
         tab_Article_struct monTopArticle = get_top_Article(&mongraph->tab_Article_struct, nbentrer);
+        if(verbositer == silence){
+            for (int i = 0; i < monTopArticle.nombre_Article; i++)
+            {
+                DEBUG("%s",monTopArticle.tab_Article[i].nom_Article)
+            }
+        }
         if(verbositer == verbeux)
             printList_Article(monTopArticle);
         break;
     case TOP_auteur:
         INFO("Top %d des auteur", nbentrer)
         tab_auteur_struct monTopauteur = get_top_auteur(&mongraph->tab_auteur_struct, nbentrer);
+        if(verbositer == silence){
+            DEBUG("%dnbentrer vs %dmonTopauteur.nombre_auteur ",nbentrer, monTopauteur.nombre_auteur)
+            for (int i = 0; i < monTopauteur.nombre_auteur; i++)
+            {
+                DEBUG("%s",monTopauteur.tab_auteur[i].nom_auteur)
+            }
+        }
+        // return 
         if (verbositer == verbeux)
             printList_auteur(monTopauteur);
         break;
