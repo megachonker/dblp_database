@@ -210,6 +210,7 @@ ll_list *find_Article(const char *querry, const tab_Article_struct *tabarticle)
     regcomp(&r, querry, REG_ICASE);
 
     ll_list *list = ll_create();
+    list->type = typeArticle;
 
     for (int i = 0; i < tabarticle->nombre_Article; i++)
     {
@@ -228,6 +229,7 @@ ll_list *find_auteur(const char *querry, const tab_auteur_struct *tabauteur)
     INFO("FIND auteur:")
     regex_t r;
     ll_list *list = ll_create();
+    list->type = typeauteur;
     regcomp(&r, querry, REG_ICASE);
     for (int i = 0; i < tabauteur->nombre_auteur; i++)
     {
@@ -248,12 +250,10 @@ ll_list *stringSearch(const graphe_struct_Konqui *mongraph, const int getwhat, c
     case searchArticle:
         INFO("Recherche %s dans les Article", inputstr)
         ll_list *ListeArticle = find_Article(inputstr, &mongraph->tab_Article_struct);
-        ListeArticle->type = typeArticle;
         return ListeArticle;
     case searchauteur:
         INFO("Recherche %s dans les auteur", inputstr)
         ll_list *Listeauteur = find_auteur(inputstr, &mongraph->tab_auteur_struct);
-        Listeauteur->type = typeauteur;
         return Listeauteur;
     case searchBoth:
         INFO("Recherche %s dans les auteur ET Article", inputstr)
@@ -313,19 +313,23 @@ int printSearch(ll_list *listchainer, int verbositer)
         }
         WARNING("\t %ld auteur", listchainer->size)
     }
-    else
+    else if (listchainer->type == chaineArticleEtauteur)
     {
         WARNING("SELECTION Article ET auteur:")
         DEBUG("la chaine contien %i element", (int)listchainer->size)
         for (size_t i = 0; i < listchainer->size; i++)
         {
-            if (!ll_get(listchainer, i))
-            {
-                ERROR("liste chainer %ld vide", i)
-                continue;
-            }
+
+            // if (!ll_get(listchainer, i))
+            // {
+            //     ERROR("liste chainer %ld vide", i)
+            //     continue;
+            // }
+            
             printSearch(ll_get(listchainer, i), silence);
         }
+    }else{
+        DEBUG("JSP ! %d",listchainer->type)
     }
     return 0;
 }
@@ -354,6 +358,7 @@ int parse_arg(char *input, char **output)
 
 
 ll_list * researchArticle(ll_list * malisteArticle,int action, regex_t r){
+    DEBUG("researchArticle")
     for (size_t i = 0; i < malisteArticle->size; i++)
     {
         PROGRESSBAR(i, malisteArticle->size);
@@ -361,16 +366,21 @@ ll_list * researchArticle(ll_list * malisteArticle,int action, regex_t r){
         int match = regexec(&r, monarticle->nom_Article, 0, NULL, 0);
         if (action == blacklist && !match)
         {
+            // DEBUG("researchArticle-blacklist: remove item")
             ll_remove(malisteArticle,i);
+            i--;
         }else if (action == whitelist && match)
         {
+            // DEBUG("researchArticle-whitelist: remove item")
             ll_remove(malisteArticle,i);
+            i--;
         }
     }
     return malisteArticle;
 }
 
 ll_list * researchauteur(ll_list * malisteauteur,int action, regex_t r){
+    DEBUG("researchauteur")
     for (size_t i = 0; i < malisteauteur->size; i++)
     {
         PROGRESSBAR(i, malisteauteur->size);
@@ -378,16 +388,21 @@ ll_list * researchauteur(ll_list * malisteauteur,int action, regex_t r){
         int match = regexec(&r, monauteur->nom_auteur, 0, NULL, 0);
         if (action == blacklist && !match)
         {
+            // DEBUG("researchauteur-blacklist: remove item")
             ll_remove(malisteauteur,i);
+            i--;
         }else if (action == whitelist && match)
         {
+            // DEBUG("researchauteur-whitelist: remove item")
             ll_remove(malisteauteur,i);
+            i--;
         }
     }
     return malisteauteur;
 }
 
 void restringSearch(ll_list * mesRecherch, const int typederecherche, const char *inputstr){
+    DEBUG("restringSearch")
     regex_t r;
     regcomp(&r, inputstr, REG_ICASE);
     
@@ -395,6 +410,7 @@ void restringSearch(ll_list * mesRecherch, const int typederecherche, const char
     {
         for (size_t i = 0; i < mesRecherch->size; i++)
         {
+            DEBUG("Redirection")
             restringSearch(ll_get(mesRecherch, i),typederecherche,inputstr);
         }
     }else if (mesRecherch->type == typeArticle)
