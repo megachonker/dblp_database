@@ -19,7 +19,9 @@
  * tableaux_fiche dans laquelle elle est contenue
  * \subsection serialisation_xml Sérialisation XML
  * pour la sérialisation on va utiliser des fwread et fwrite qui sont simplifier avec la macro writestrfile() et readstrfile()
+ * a 
  * \section generation_auteur Génération auteur
+ * ce déroule dans unwrap.c en désérialisant les fiche on économise le parsage. pour générée tab_auteur_struct qui contien auteur_struct il va falloir dans un premier temps trier tableaux_fiche
  * les auteur sont générée a l'aide de 
  * 
  * 
