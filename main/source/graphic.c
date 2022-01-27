@@ -1,3 +1,5 @@
+//divers test importer depuis le internette mondial
+
 #include <curses.h>
 #include <menu.h>
 #include <stdlib.h>

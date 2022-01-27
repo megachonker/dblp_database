@@ -65,10 +65,8 @@ int deplier_fiche(tableaux_fiche input, Paire_auteur_oeuvre * arrayout ){
 }
 
 /**
- * @brief permer de générée des Paire_Article_auteur
- * 
+ * @brief **PRODUIT CARTESIEN** du tab_auteur_struct et fiche_minimale en conservant que les auteur et les noms d'article 
  *  génère un paire par article
- * 
  * @param [in] input 
  * @param [out] Article_auteur_Array 
  * @return int 
@@ -154,6 +152,8 @@ void add_titre_to_auteur(auteur_struct * list,const Paire_auteur_oeuvre HtH){//c
  *  ajoute tout les article pour le meme auteur a une fiche auteur_struct
  *  ajoute les fiche a tab_auteur_struct
  * 
+ *  jointure interne ces un produit cartésien avec une condition
+ * 
  * @param [in] liste 
  * @param [in] sizeHauteurHeuvre 
  * @return tab_auteur_struct* 
@@ -205,7 +205,7 @@ tab_auteur_struct gen_List_auteur(const Paire_auteur_oeuvre * liste,int sizeHaut
 }
 
 /**
- * @brief generer tab_Article_struct*
+ * @brief generer tab_Article_struct
  * 
  * @param [in] liste 
  * @param [in] sizeArticleHauteur nombre de structure Paire_Article_auteur
@@ -344,6 +344,20 @@ int count_isolate_autor(const tab_auteur_struct * List_des_Auteur){
     return compteur;
 }
 
+
+int count_NeedednbPaire_auteur_oeuvre(const tab_auteur_struct * Malistauteur){
+    DEBUG("compte le nombre de structure pour le maloc")
+    int nbstructure = 0;
+    for (int i = 0; i < Malistauteur->nombre_auteur; i++)
+    {
+        PROGRESSBAR(i,Malistauteur->nombre_auteur);
+        nbstructure+=Malistauteur->tab_auteur[i].size;
+    }
+    DEBUG("il y a %d structure a générée",nbstructure)
+    return nbstructure;
+}
+
+
 /**
  * @brief génère un binaire contenant tab_auteur_struct
  * 
@@ -444,16 +458,41 @@ tab_auteur_struct deserialise_tab_auteur_struct(const tableaux_fiche * tableaux_
 
 tab_auteur_struct convertTab_fiche2auteur(tableaux_fiche mesfiche);
 
+/**
+ * @brief génère directement tab_auteur_struct depuis un FILE de **dblp.xml**
+ * 
+ * n'utilise pas les cache donc plus lent
+ * 
+ * @param dbinput 
+ * @return tab_auteur_struct 
+ */
 tab_auteur_struct gen_tab_auteur_from_xml(FILE * dbinput){
     INFO("Generation Tab auteur:")
     return convertTab_fiche2auteur(parse(dbinput));
 }
 
+/**
+ * @brief génère tab_auteur_struct depuis Le **cache** de tableaux fiche
+ * 
+ * @param inputFile 
+ * @return tab_auteur_struct 
+ */
 tab_auteur_struct tab_auteur_from_file(FILE * inputFile){
     INFO("Génération tableaux auteur FROMFILE")
     return convertTab_fiche2auteur(deserialisation_tableaux_fiche(inputFile));
 }
 
+/**
+ * @brief génère un tab_auteur_struct depuis tableaux_fiche
+ * 
+ * efectue:
+ * -    deplier_fiche
+ * -    sort_tableaux_auteur
+ * -    gen_List_auteur
+ * 
+ * @param mesfiche 
+ * @return tab_auteur_struct 
+ */
 tab_auteur_struct convertTab_fiche2auteur(tableaux_fiche mesfiche){
     INFO("Convert tableaux fiche to auteur")
 
@@ -476,17 +515,6 @@ tab_auteur_struct convertTab_fiche2auteur(tableaux_fiche mesfiche){
     return malistedauteur;
 }
 
-int count_NeedednbPaire_auteur_oeuvre(const tab_auteur_struct * Malistauteur){
-    DEBUG("compte le nombre de structure pour le maloc")
-    int nbstructure = 0;
-    for (int i = 0; i < Malistauteur->nombre_auteur; i++)
-    {
-        PROGRESSBAR(i,Malistauteur->nombre_auteur);
-        nbstructure+=Malistauteur->tab_auteur[i].size;
-    }
-    DEBUG("il y a %d structure a générée",nbstructure)
-    return nbstructure;
-}
 
 tab_Article_struct convertTab_auteur2Article(const tab_auteur_struct * Malistauteur){
     INFO("Convertion des auteur en Article :")

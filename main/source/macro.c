@@ -5,12 +5,16 @@
 #include <string.h>
 #include <signal.h>
 
+
+
 /**
  * @brief progresse bar
  * 
- * utile pour les fonction for
- *  premier carac peut buguer ??
- * Un nouvaux argument TITRE pour avoir le context
+ * SIZEBAR est la longeur de la bar de chargement
+ * 
+ * utile pour les fonction for pour afficher une bare de progression
+ * la bar de chargemnet s'assure de s'aficher SIZEBAR de foit pour pas surcharger la sortie du terminal
+ * la progression est réécrite a chaque foit sur la meme ligne pour crée une animation
  * @param indice 
  * @param total 
  */
@@ -21,7 +25,6 @@ void progressbar(int indice, int total)
     if (total<taille)
         taille = total;
 
-    //check division par zer
     if (indice%(total/taille))
         return;
 

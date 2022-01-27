@@ -31,6 +31,9 @@
  * 
  * 
  * 
+ * 2 mode un mode ligne de commande est un mode interractif
+ * 
+ * 
  * \section Résumé général graphe_struct_Konqui
  * le but principal de unwrap.c est de fournire graphe_struct_Konqui qui fournis tab_auteur_struct tab_Article_struct tableaux_fiche
  * Une fois que des structures auteur_struct et Article_struct ont été générées et initialisées pour chaque auteur/Article de la base de donnée,
@@ -49,11 +52,6 @@
  * 
  * En répétant ce procédé jusqu'a trouver l'auteur_destination ou avoir parcouru toute la composante connexe,
  * il est possible d'enregistrer le plus court chemin dans un tableau en partant de l'auteur_destination et en remontant la chaine des prédecesseurs.
- * 
- * 
- * 
- * 
- * 
  * 
  *
  * \section install_sec Installation

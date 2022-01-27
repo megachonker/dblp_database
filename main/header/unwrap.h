@@ -174,6 +174,6 @@ void printList_Article(tab_Article_struct OwO);
 
 void free_tab_auteur(tab_auteur_struct      free);
 void free_tab_Article(tab_Article_struct    afree);
-void free_Graph_struct(graphe_struct_Konqui         afree);
+void free_Graph_struct(graphe_struct_Konqui  afree);
 
 #endif

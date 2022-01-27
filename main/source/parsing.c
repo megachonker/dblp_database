@@ -87,7 +87,7 @@ void appendAuteurM(fiche_minimale * mafiche,char * nomsauteur){
     exitIfNull(addrListeauteur,"appendAuteurM: allocation imposible")
 
     if (mafiche->liste_auteur != addrListeauteur){//plus opti que d'assigner dirrectment ?
-        YOLO("%p VS %p",mafiche->liste_auteur,addrListeauteur); // WTfu ?        
+        YOLO("%p VS %p",mafiche->liste_auteur,addrListeauteur);     
 
         mafiche->liste_auteur = addrListeauteur;
     }
