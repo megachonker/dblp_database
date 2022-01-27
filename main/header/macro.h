@@ -106,12 +106,20 @@ if (!p)\
     ERROR(__VA_ARGS__)\
     exit(1);\
 }
-
+/**
+ * @brief permet de de faire une comparaisont de char en 3 caractere
+ * 
+ */
 #define STR(string) }else if(strcmp(string,compstr)==0){
 
-#define CHK1ARG(argv,...)   if(!argv[0])                   {WARNING(__VA_ARGS__);return argumentinvalide;};
-#define CHK2ARG(argv,...)   if(!argv[0]||!argv[1])          {WARNING(__VA_ARGS__);return argumentinvalide;};
-#define CHK3ARG(argv,...)   if(!argv[0]||!argv[1]||!argv[2]) {WARNING(__VA_ARGS__);return argumentinvalide;};
+/**
+ * @brief permet de check combien d'argument sont passer pour faire un équivalent a switch strcmp
+ * 
+ */
+#define CHK1ARG(argv,...)   if(!argv[0])                                {WARNING(__VA_ARGS__);return argumentinvalide;};
+#define CHK2ARG(argv,...)   if(!argv[0]||!argv[1])                      {WARNING(__VA_ARGS__);return argumentinvalide;};
+#define CHK3ARG(argv,...)   if(!argv[0]||!argv[1]||!argv[2])            {WARNING(__VA_ARGS__);return argumentinvalide;};
+#define CHK4ARG(argv,...)   if(!argv[0]||!argv[1]||!argv[2]||!argv[3])  {WARNING(__VA_ARGS__);return argumentinvalide;};
 
 /**
  * @brief affiche une bar de progression

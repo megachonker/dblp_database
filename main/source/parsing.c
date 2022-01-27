@@ -5,8 +5,6 @@
 
 #include "../header/macro.h"
 
-
-
 void print_titre_fiche_minimal(fiche_minimale OwO){
     printf("titre:    %s",OwO.titre);
 }
@@ -142,6 +140,11 @@ static int cmptabfiche(const void * maficheA,const void * maficheB){
     return strcmp(((fiche_minimale*)maficheA)->titre,((fiche_minimale*)maficheB)->titre);
 }
 
+/**
+ * @brief quick sort du tableaux de fiche par titre
+ * 
+ * @param mesfiche 
+ */
 void sortlist(tableaux_fiche * mesfiche ){
     DEBUG("trie des liste parsing")
     qsort(mesfiche->fiche,mesfiche->taille,sizeof(fiche_minimale),cmptabfiche);   
@@ -182,8 +185,8 @@ tableaux_fiche parse(FILE * inputDB){ /// a besoin detre un pointeur pour le fre
     fichelocalM.titre = NULL;
     fichelocalM.liste_auteur = NULL;
 
-    //chargement
-    while (fgets(ligne,BALISESIZE,inputDB))// <================ prend masse temps le remplacer par un buffer ? (simple ici a faire)
+    //prend masse temps le remplacer par un buffer ? (simple ici a faire)
+    while (fgets(ligne,BALISESIZE,inputDB))
     {
 
         PROGRESSBAR_FILE_PRINT(inputDB)
@@ -206,7 +209,6 @@ tableaux_fiche parse(FILE * inputDB){ /// a besoin detre un pointeur pour le fre
             // }
         }
         // DATE!
-        //PASBEAUX
         if (flagt == 1)
         {
             //moche ajouter l'exclusion Preface. Editorial. (faire une blackliste a importer ? voir qand trie)
@@ -231,7 +233,6 @@ tableaux_fiche parse(FILE * inputDB){ /// a besoin detre un pointeur pour le fre
     return tableaux_allfiche;
 }
 
-//utiliser l'addresse pour pas copier ?
 /**
  * @brief Sérialisation du XML
  * 
@@ -299,7 +300,11 @@ tableaux_fiche deserialisation_tableaux_fiche(FILE * input){
 }
 
 
-
+/**
+ * @brief free tout char auteur, est la fiche
+ * 
+ * @param fiche 
+ */
 void free_fiche_minimale(fiche_minimale fiche){
     free(fiche.titre);
     for (int i = 0; i < fiche.nombre_auteur; i++)
@@ -310,7 +315,6 @@ void free_fiche_minimale(fiche_minimale fiche){
     free(fiche.liste_auteur);
 }
 
-//renomer
 /**
  * @brief free tableaux_fiche
  * 

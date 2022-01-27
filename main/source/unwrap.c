@@ -64,6 +64,15 @@ int deplier_fiche(tableaux_fiche input, Paire_auteur_oeuvre * arrayout ){
     return indice;
 }
 
+/**
+ * @brief permer de générée des Paire_Article_auteur
+ * 
+ *  génère un paire par article
+ * 
+ * @param [in] input 
+ * @param [out] Article_auteur_Array 
+ * @return int 
+ */
 int deplier_auteur(const tab_auteur_struct * input, Paire_Article_auteur * Article_auteur_Array ){
     DEBUG("deplier_auteur:")
     int indice = 0;
@@ -449,7 +458,9 @@ tab_auteur_struct convertTab_fiche2auteur(tableaux_fiche mesfiche){
     INFO("Convert tableaux fiche to auteur")
 
     int nbPaire_auteur_oeuvre = mesfiche.nbAuteurXarticle;
-    DEBUG("%d auteur*Article, size %lu",nbPaire_auteur_oeuvre,sizeof(Paire_auteur_oeuvre)*mesfiche.nbAuteurXarticle)
+    DEBUG("%d auteur*Article, size a alouter %lu",
+        nbPaire_auteur_oeuvre,
+        sizeof(Paire_auteur_oeuvre)*mesfiche.nbAuteurXarticle)
 
     Paire_auteur_oeuvre * HauteurHeuvre = calloc(nbPaire_auteur_oeuvre,sizeof(Paire_auteur_oeuvre));
     exitIfNull(HauteurHeuvre,"caloc imposible")
@@ -487,7 +498,10 @@ tab_Article_struct convertTab_auteur2Article(const tab_auteur_struct * Malistaut
 
     int sizeHauteurHeuvre = deplier_auteur(Malistauteur,Paire_auteur_oeuvre);
     sort_tableaux_Article(Paire_auteur_oeuvre,sizeHauteurHeuvre);
-    tab_Article_struct malistedauteur = assemble_tab_Article(Paire_auteur_oeuvre,sizeHauteurHeuvre,Malistauteur->nombre_article);
+    tab_Article_struct malistedauteur = assemble_tab_Article(
+        Paire_auteur_oeuvre,
+        sizeHauteurHeuvre,
+        Malistauteur->nombre_article);
 
     free(Paire_auteur_oeuvre);
     return malistedauteur;
@@ -536,7 +550,8 @@ void ajout_Article_in_auteur(auteur_struct * monauteur,Article_struct * monArtic
     if (monauteur->nbmembreTabarticleALOUER<=monauteur->nbArticlecontenue)
     {
         monauteur->nbmembreTabarticleALOUER=(monauteur->nbArticlecontenue+2)*2;
-        Article_struct ** tmptest = reallocarray(monauteur->tab_ptr_Article,monauteur->nbmembreTabarticleALOUER,sizeof(Article_struct*));
+        Article_struct ** tmptest = reallocarray(monauteur->tab_ptr_Article,monauteur->nbmembreTabarticleALOUER,
+                                                    sizeof(Article_struct*));
         exitIfNull(tmptest,"ajout article erreur realockarray")
         monauteur->tab_ptr_Article = tmptest;
     }

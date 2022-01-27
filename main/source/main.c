@@ -9,7 +9,7 @@
 #include <signal.h>
 #include <stdlib.h>
 
-/**! \mainpage My Personal Index Page
+/** \mainpage My Personal Index Page
  * \section fiche_gene Génération fiche
  * les pointeur fiche_minimale sont contenue dans tableaux_fiche et auteur_struct Article_struct
  * \subsection parse_xml Parsing XML
@@ -22,14 +22,17 @@
  * a 
  * \section generation_auteur Génération auteur
  * ce déroule dans unwrap.c en désérialisant les fiche on économise le parsage. pour générée tab_auteur_struct qui contien auteur_struct il va falloir dans un premier temps trier tableaux_fiche
- * les auteur sont générée a l'aide de 
+ * on va ensuite déplier le tableau de fiche pour crée une liste des paire auteur : article
+ * cette liste sera trier par noms d'auteur de magnierre a récupérée tout les article pour chaque auteur
+ * 
+ * \section generation_article Génération Article
+ * générée les article est facile mais il va faloire faire le lien avec les auteur pour ce faire a la création des Article (apres avoir déplier les auteur)
+ * a chaque article crée a l'ajout des auteur on va ajouter l'article parent a l'auteur cible
+ * 
  * 
  * 
  * \section Résumé général graphe_struct_Konqui
- * le but principal de unwrap.c est de fournire 
- * ...
- * ...
- * ...
+ * le but principal de unwrap.c est de fournire graphe_struct_Konqui qui fournis tab_auteur_struct tab_Article_struct tableaux_fiche
  * Une fois que des structures auteur_struct et Article_struct ont été générées et initialisées pour chaque auteur/Article de la base de donnée,
  * elles sont stockées dans des tableaux dans la structure graphe_struct_Konqui.
  * 
@@ -65,6 +68,12 @@
  */
 
 // #include <stdarg.h>
+
+
+/**
+ * @brief permet de conserver tout les chemain des cache
+ * 
+ */
 typedef struct listeChemain
 {
     char *XML;
@@ -74,6 +83,27 @@ typedef struct listeChemain
 } listeChemain;
 
 
+/**
+ * @brief conserve tout les argument pour les passer au fonction
+ * 
+ */
+typedef struct total
+{
+    char ligne[BALISESIZE];
+    char * argv[5];
+    graphe_struct_Konqui graph;
+    listeChemain chem;          ///< tout les chemain 
+    int verb;                   ///< énume de la verbositer
+    ll_list * recherche;        ///< conserve la recherche en coure 
+}total;
+
+
+/**
+ * @brief génère le graph a partire de listeChemain
+ * 
+ * @param chemains 
+ * @return graphe_struct_Konqui 
+ */
 graphe_struct_Konqui gen_graph(listeChemain chemains)
 {
 
@@ -136,6 +166,13 @@ typedef struct all_options
     struct listeChemain chemais;
 } all_options;
 
+
+/**
+ * @brief charge des chemain des fichier a partire des enum
+ * 
+ * @param choix 
+ * @return listeChemain 
+ */
 listeChemain chose_path(short choix)
 {
 
@@ -166,6 +203,13 @@ listeChemain chose_path(short choix)
     return chemains[choix];
 }
 
+/**
+ * @brief fait une regerche 
+ * 
+ * @param search expression regulierre
+ * @param graph  graph pour rechercher
+ * @param verbose énume du degrer de verbositer
+ */
 void find_all(char *search, graphe_struct_Konqui *graph, int verbose)
 {
     ll_list *retoura = stringSearch(graph, searchauteur, search);
@@ -188,6 +232,13 @@ void find_all(char *search, graphe_struct_Konqui *graph, int verbose)
     }
 }
 
+/**
+ * @brief convertie la chaine de caractere en énume
+ * 
+ * @param compstr 
+ * @param chemain 
+ * @return int 
+ */
 int chose_db(char *compstr, listeChemain *chemain)
 {
     if (compstr==NULL)
@@ -217,6 +268,10 @@ int chose_db(char *compstr, listeChemain *chemain)
 
 // parse arg
 
+/**
+ * @brief message d'aide full pour le mode interactif
+ * 
+ */
 void interactive_help(){
 printf("\
     * help    print this help\n\
@@ -235,18 +290,8 @@ printf("\
 
 void interactive_chort_help(){printf("commande are: help, file, compute, search, top, v, exit/q\n");}
 
-typedef struct total
-{
-    char ligne[BALISESIZE];
-    char * argv[5];
-    graphe_struct_Konqui graph;
-    listeChemain chem;
-    int verb;
-    ll_list * recherche;
-}total;
 
 
-// BESOIN DE RENVOILLER LES STRUCTURE !
 /**
  * @brief gros switch permetant d'executer un programe en fonction de la ligne entrée par l'utilisateur
  * 
@@ -259,17 +304,20 @@ typedef struct total
  */
 int switchAndExec(total * variable)
 {
-    // DEBUG("[%s] [%s] [%s]",variable->argv[0],variable->argv[1],variable->argv[2])
-    
-    // CHK1ARG(variable->argv,"azerzaerzearzaer")
-    // CHK3ARG(variable->argv,"NIQUE !")
-    // DEBUG("REP: %d",variable->argv[0]&&variable->argv[1]&&variable->argv[2])
     char *compstr = variable->argv[0];
 
     if
     (NULL){
     STR("exit")
         exit(0);
+    STR("dik")
+        if (variable->graph.tab_Article_struct.nombre_Article == 0)
+        {
+            ERROR("graph vide veuiller le calculer (compute)")
+            return 1;
+        }
+        CHK3ARG(variable->argv,"dik auteur1 auteur2")
+        djikstrasearch(variable->argv[1], variable->argv[2], variable->graph);
     STR("q")
         exit(0);
     STR("help")
@@ -386,7 +434,10 @@ int switchAndExec(total * variable)
 }
 
 
-
+/**
+ * @brief "main" de la partie interactive
+ * 
+ */
 void interactive()
 {
     init_signal();
@@ -396,7 +447,7 @@ void interactive()
     {
 
         int argc = parse_arg(variable.ligne, variable.argv);
-        if (argc > 3)
+        if (argc > 4)
         {
             ERROR("trop d'argument fournis")
             continue;
@@ -408,20 +459,22 @@ void interactive()
         }
 
         switchAndExec(&variable);
-        // char  * a[5] = {"","","","",""};
+
         variable.argv[0] = NULL;
         variable.argv[1] = NULL;
         variable.argv[2] = NULL;
         variable.argv[3] = NULL;
-        // #ifdef DEBUG_ON
-        // for (int i = 0; i < argc; i++)
-        // {
-        //     DEBUG("LUT %s (%d)",argv[i],i);
-        // }
-        // #endif
+
     }
 }
 
+/**
+ * @brief fait une recherche dikstra
+ * 
+ * @param a auteur départ 
+ * @param b auteur d'arriver
+ * @param graph graph en argument
+ */
 void djikstrasearch(char *a, char *b, graphe_struct_Konqui graph)
 {
     graphe_struct_Katie graphe_Katie = faire_graphe_ptr_auteur(graph);
@@ -436,6 +489,7 @@ void djikstrasearch(char *a, char *b, graphe_struct_Konqui graph)
     }
     free_Dijkstra(graphe_Katie, plus_court_chemin_ptr);
 }
+
 
 all_options gen_Struct_option(int argc, char *argv[])
 {
