@@ -9,25 +9,70 @@
 #include <signal.h>
 #include <stdlib.h>
 
+/**
+ * 
+ * 
+ *1ère partie:
+ * -parsing: fonction parse(), retourne tableaux_fiche (fiches contenants chaqu'une un nom d'Article et les noms des auteurs associés)
+ * -serialisation du tableau_fiche (serialisation_tableaux_fiche()).
+ * (la serialisation permet de stocker les informations du parsing pour ne pas à avoir à le refaire)
+ * 
+ * 2ème pt:
+ * -Desserialisation du tableau_fiche (deserialisation_tableaux_fiche())
+ * -Création de la jointure entre les fiches de tableaux_fiche et les noms des auteurs associés (sous condition que l'auteur appartient à la fiche).
+ * -Cette opération pourra être appelée dépliage, et sert à construire le tableau des Paire_auteur_oeuvre (deplier_fiche())
+ * -Ce tableau sera trié par nom d'auteur de manière a récupérer tous les articles pour chaque auteur, on peut alors construire les auteur_struct (gen_List_auteur()).
+ * 
+ * -Ensuite sera opérée une 2ème jointure, cette fois entre les auteurs_struct et les fiches de tableau_fiche, (sous condition que les auteurs soient bien dans les Articles des fiches)
+ * -Ce "dépliage" mène à la création du tableau des Paire_Article_auteur (deplier_auteur()).
+ * -On peut alors génèrer les Article_struct en triant la jointure par nom d'Article en ce faisant, on peut aussi set up le champs tab_ptr_Article des auteurs_struct.
+ *  (convertTab_auteur2Article())
+ * 
+ * -Le tableau des auteur_struct et celui des Article_struct seron stocké dans graphe_struct_Konqui.
+ * -Pour finir, un tableau de pointeur vers les auteurs_struct est crée, et rangé dans graphe_Katie (fonctions_garphe.c). 
+ * -Les attributs des auteur_struct utiles à Dijkstra sont alors initialisés (comme par exemple la distance à l'auteur_depart, initialisé à -1).
+ * 
+ * 
+ *  3ème
+ * -Il ne reste plus qu'à appliquer la fonction do_Dijkstra (Dijkstra.c) au graphe_Katie, avec 2 noms d'auteur de la base de donnée.
+ * -Pour cela, on relache les arrêtes de tous les auteurs rangés dans un tableau indiquant les auteurs à traiter à l'étape courante du parcours en largeur.
+ * (Ce tableau s'appelant pile_courante)
+ * -En ce faisant, on enregistre les auteurs à traiter à l'étape suivante dans un autre tableau (pile_suivante).
+ * -De même, on initialise l'attribut auteur_predecesseur et Article_predecesseur de l'auteur_struct en cours de traitement.
+ * -A la fin de l'étape courante (une couche du parcours en largeur) on remplace le contenu de pile_courante par celui de pile_suivante et on vide la pile_suivante.
+ * 
+ * -En répétant ce procédé jusqu'a trouver l'auteur_destination ou avoir parcouru toute la composante connexe,
+ * il est possible d'enregistrer le plus court chemin dans plus_court_chemin_struct en partant de l'auteur_destination et en remontant la chaine des prédecesseurs.
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ */
+
+
+
+
 /** \mainpage My Personal Index Page
  * \section fiche_gene Génération fiche
- * les pointeur fiche_minimale sont contenue dans tableaux_fiche et auteur_struct Article_struct
+ * Les pointeurs fiche_minimale sont contenus dans tableaux_fiche et auteur_struct Article_struct
  * \subsection parse_xml Parsing XML
- *  le parsing ce fait en partant du principe qu'il y a **une paire de balise par ligne**
- *  pour le parsing on ne s'interresse juste au noms de l'article est a ces auteur (pas assez de temps pour traiter les date)
- *  on remplie la structure fiche_minimale avec les information ainsie que  fiche_minimale.ADDR qui est l'ordre de création car plus tard fiche_minimale sera indépandant de la structure 
+ *  Le parsing se fait en partant du principe qu'il y a **une paire de balise par ligne**.
+ *  Pour le parsing on ne s'interresse qu'au nom de l'article et à ses auteurs. 
+ *  On remplie la structure fiche_minimale avec les informations, ainsi que  fiche_minimale.ADDR qui est l'ordre de création, car plus tard fiche_minimale sera indépandant de la structure 
  * tableaux_fiche dans laquelle elle est contenue
  * \subsection serialisation_xml Sérialisation XML
- * pour la sérialisation on va utiliser des fwread et fwrite qui sont simplifier avec la macro writestrfile() et readstrfile()
- * a 
+ * Pour la sérialisation on va utiliser des fread et fwrite qui sont simplifié avec la macro writestrfile() et readstrfile()
+ * 
  * \section generation_auteur Génération auteur
- * ce déroule dans unwrap.c en désérialisant les fiche on économise le parsage. pour générée tab_auteur_struct qui contien auteur_struct il va falloir dans un premier temps trier tableaux_fiche
- * on va ensuite déplier le tableau de fiche pour crée une liste des paire auteur : article
- * cette liste sera trier par noms d'auteur de magnierre a récupérée tout les article pour chaque auteur
+ * En faisant la désérialisation des fiches on économise le parsage. pour générér tab_auteur_struct qui contient les auteur_struct il va falloir dans un premier temps trier tableaux_fiche.
+ * On va ensuite déplier le tableau de fiche pour crée une liste des paire_auteur_oeuvre,
+ * cette liste sera triée par nom d'auteur de manière a récupérer tous les articles pour chaque auteur
  * 
  * \section generation_article Génération Article
- * générée les article est facile mais il va faloire faire le lien avec les auteur pour ce faire a la création des Article (apres avoir déplier les auteur)
- * a chaque article crée a l'ajout des auteur on va ajouter l'article parent a l'auteur cible
+ * Ensuite, pour générer les Article_struct, il va falloir faire le lien avec les auteur_struct. Pour ce faire a la création des Article (apres avoir déplier les auteur)
+ * a chaque Article crée on ajoute les auteur ET pour chaque auteur on lui atribut un 'article parent
  * 
  * 
  * 
@@ -43,15 +88,18 @@
  * Ce tableau est stocké dans la structure graphe_Katie.
  * Les attributs des auteur_struct utiles à Dijkstra sont alors initialisés (comme par exemple la distance à l'auteur_depart, initialisé à -1).
  * 
+ * 
+ * 
+ * 
  * Il ne reste plus qu'à appliquer la fonction do_Dijkstra (Dijkstra.c) au graphe_Katie, avec 2 noms d'auteur de la base de donnée.
  * Pour cela, on relache les arrêtes de tous les auteurs rangés dans un tableau indiquant les auteurs à traiter à l'étape courante du parcours en largeur.
  * (Ce tableau s'appelant pile_courante)
  * En ce faisant, on enregistre les auteurs à traiter à l'étape suivante dans un autre tableau (pile_suivante).
- * De même, on initialise l'attribut auteur_predecesseur et Article_predecesseur de l'auteur en cours de traitement.
+ * De même, on initialise l'attribut auteur_predecesseur et Article_predecesseur de l'auteur_struct en cours de traitement.
  * A la fin de l'étape courante (une couche du parcours en largeur) on remplace le contenu de pile_courante par celui de pile_suivante et on vide la pile_suivante.
  * 
  * En répétant ce procédé jusqu'a trouver l'auteur_destination ou avoir parcouru toute la composante connexe,
- * il est possible d'enregistrer le plus court chemin dans un tableau en partant de l'auteur_destination et en remontant la chaine des prédecesseurs.
+ * il est possible d'enregistrer le plus court chemin dans plus_court_chemin_struct en partant de l'auteur_destination et en remontant la chaine des prédecesseurs.
  * 
  *
  * \section install_sec Installation
