@@ -4,9 +4,6 @@
 #include "../header/macro.h"
 
 
-
-
-
 struct Article_struct;
 
 /**
@@ -74,12 +71,11 @@ typedef struct tab_auteur_struct
 {
     Article_struct * tab_Article;
     int nombre_Article;
-    char origine;       ///< savoir comment tab_Article est crée pour choisire le bon free
+    char origine;       ///< contextualise le contexte de création pour choisire le bon free
 }tab_Article_struct;
 
 /**
  * @brief Structure contenant toute les structure importante
- * 
  * 
  */
 typedef struct graphe_struct_Konqui
@@ -122,8 +118,6 @@ typedef struct Paire_auteur_oeuvre
 
 /**
  * @brief désérialise une un cache produit par serialise_tab_auteur_struct
- * 
- * 
  * 
  * tableaux_fiche
  * @param [in] List_des_Auteur deserialisation de la bonne fiche l'oeuvre fiche[ADDR] 
@@ -180,6 +174,6 @@ void printList_Article(tab_Article_struct OwO);
 
 void free_tab_auteur(tab_auteur_struct      free);
 void free_tab_Article(tab_Article_struct    afree);
-void free_Graph_struct(graphe_struct_Konqui         afree);
+void free_Graph_struct(graphe_struct_Konqui  afree);
 
 #endif

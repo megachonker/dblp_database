@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-
+//declaration des enume
 enum{
     silence,
     verbeux,
@@ -15,6 +15,17 @@ enum{
     small,
     custom
 };
+
+enum{
+    blacklist,
+    whitelist
+};
+
+enum{
+    argumentinvalide,
+    arrayvide
+};
+
 
 //taille de la bar de chargement
 #define SIZEBAR 30
@@ -78,7 +89,9 @@ enum{
 #endif
 #ifdef PROGRESSBAR_ON
 #define PROGRESSBAR(...)            progressbar(__VA_ARGS__);
+//progresse bar utiliser pour l'avancement de la lecture d'un fichier 
 #define PROGRESSBAR_FILE_PRINT(fichier) progressbar((int)ftell(fichier)>>4&0x0FFFFFFF,nombreligne);
+//permet de déclarer les variable nécésaire pour la progresse bar d'un fichier
 #define PROGRESSBAR_DECL(fichier)       fseek(fichier,0,SEEK_END); int nombreligne = (int)ftell(fichier)>>4&0x0FFFFFFF; fseek(fichier,0,SEEK_SET);
 #else
 #define PROGRESSBAR(...) ;
@@ -95,8 +108,21 @@ if (!p)\
     ERROR(__VA_ARGS__)\
     exit(1);\
 }
-
+/**
+ * @brief permet de de faire une comparaisont de char en 3 caractere
+ *  pour faire un équivalent a switch strcmp
+ * 
+ */
 #define STR(string) }else if(strcmp(string,compstr)==0){
+
+/**
+ * @brief permet de check combien d'argument sont passer
+ * 
+ */
+#define CHK1ARG(argv,...)   if(!argv[0])                                {WARNING(__VA_ARGS__);return argumentinvalide;};
+#define CHK2ARG(argv,...)   if(!argv[0]||!argv[1])                      {WARNING(__VA_ARGS__);return argumentinvalide;};
+#define CHK3ARG(argv,...)   if(!argv[0]||!argv[1]||!argv[2])            {WARNING(__VA_ARGS__);return argumentinvalide;};
+#define CHK4ARG(argv,...)   if(!argv[0]||!argv[1]||!argv[2]||!argv[3])  {WARNING(__VA_ARGS__);return argumentinvalide;};
 
 /**
  * @brief affiche une bar de progression
@@ -139,11 +165,6 @@ void writestrfile(char * str, FILE * fichier);
 char * readstrfile(FILE * fichier);
 
 void init_signal();
-
-// typedef struct cache
-// {
-    
-// };
 
 
 #endif

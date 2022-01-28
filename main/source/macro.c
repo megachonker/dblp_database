@@ -5,12 +5,16 @@
 #include <string.h>
 #include <signal.h>
 
+
+
 /**
  * @brief progresse bar
  * 
- * utile pour les fonction for
- *  premier carac peut buguer ??
- * Un nouvaux argument TITRE pour avoir le context
+ * SIZEBAR est la longeur de la bar de chargement
+ * 
+ * utile pour les fonction for pour afficher une bare de progression
+ * la bar de chargemnet s'assure de s'aficher SIZEBAR de foit pour pas surcharger la sortie du terminal
+ * la progression est réécrite a chaque foit sur la meme ligne pour crée une animation
  * @param indice 
  * @param total 
  */
@@ -21,7 +25,6 @@ void progressbar(int indice, int total)
     if (total<taille)
         taille = total;
 
-    //check division par zer
     if (indice%(total/taille))
         return;
 
@@ -60,6 +63,12 @@ void tabulation(int nombre){
     }
 }
 
+/**
+ * @brief repete nb foit un carac
+ * 
+ * @param carac 
+ * @param nb 
+ */
 void repchar(char carac,size_t nb){
     for (size_t i = 0; i < nb; i++)
         printf("%c",carac);
@@ -93,7 +102,7 @@ char * readstrfile(FILE * fichier){
 
 static void catch_function() {
     puts("Sure ? [Y/n]: ");
-    if(getc(stdin)=='Y')
+    if(getc(stdin)!='n')
         exit(0);
     return;
 }
@@ -105,45 +114,3 @@ void init_signal(){
     }
     return;
 }
-
-
-//fonction pour convertire
-// int octerToMega(int taille){
-
-// }
-
-// #include <unistd.h>
-
-// int main(int argc, char const *argv[])
-// {
-//     DEBUG("moaarr")
-//     for (int b = 0; b < 100000; b++)
-//     {
-//         sleep(0.1);        
-//         progressbar(b,100000);
-//     }
-//     DEBUG("fuck me dady")
-//     return 0;
-// }
-
-// clear   \033[K
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

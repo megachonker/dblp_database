@@ -1,5 +1,5 @@
-CCA ?= cc -O0
-CFLAGS ?= -Wall -Wextra -g
+CCA ?= cc
+CFLAGS ?= -Wall -Wextra -Og -g -ggdb 
 LDLIBS ?= 
 
 PATH_BIN	?= bin/
@@ -154,7 +154,7 @@ $(PATH_DEBUG):
 
 clean:
 	rm -f  coverage.info vgcore.*
-	rm -fr GCOVtests LcovRapport html latex
+	rm -fr GCOVtests $(PATH_DEBUG)LcovRapport html latex
 	rm -rf $(PATH_BUILD) $(PATH_BIN)
 # Update
 cleanall: clean
