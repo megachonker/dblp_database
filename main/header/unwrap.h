@@ -120,8 +120,8 @@ typedef struct Paire_auteur_oeuvre
  * @brief désérialise une un cache produit par serialise_tab_auteur_struct
  * 
  * tableaux_fiche
- * @param [in] List_des_Auteur deserialisation de la bonne fiche l'oeuvre fiche[ADDR] 
- * @param [out] input on va pouvoir trouver ADDR et ne noms de l'auteur 
+ * @param [in] List_des_Auteur deserialisation de la bonne fiche l'oeuvre fiche[id_creation] 
+ * @param [out] input on va pouvoir trouver id_creation et ne noms de l'auteur 
  * @return tab_auteur_struct* 
  */
 tab_auteur_struct deserialise_tab_auteur_struct(const tableaux_fiche * List_des_Auteur, FILE * input);
@@ -154,9 +154,9 @@ void serialisation_tab_Article_struct(tab_Article_struct * inputlist, FILE * out
  * - noms nom_auteur
  * - nombre d'article
  * - indice article 
- * *on va écrire ADDR (l'indice) qui est l'indice pour acceder a fiche_minimal en fesant auteur[ADDR]*
+ * *on va écrire id_creation (l'indice) qui est l'indice pour acceder a fiche_minimal en fesant auteur[id_creation]*
  * 
- * @param [in] List_des_Auteur le titre de l'oeuvre accesible avec tab_auteur_struct=>auteur=>fiche_minimal => ADDR
+ * @param [in] List_des_Auteur le titre de l'oeuvre accesible avec tab_auteur_struct=>auteur=>fiche_minimal => id_creation
  * @param [out] output fichier de sortie 
  */
 
