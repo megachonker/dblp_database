@@ -35,7 +35,7 @@ void printTabmeaux(tableaux_fiche UwO){
 }
 
 /**
- * @brief extrait un string entre les balise
+ * @brief extrait un string entre une balise donnée 
  * 
  * @param [in] recherche noms de balise  
  * @param [in] ligne dans l'aquellle rechercher la balise 
@@ -107,14 +107,14 @@ void appendAuteurM(fiche_minimale * mafiche,char * nomsauteur){
 void appendTabmeaux(tableaux_fiche * table, fiche_minimale a_ajouter){
     table->fiche = realloc(table->fiche,sizeof(fiche_minimale)*(table->taille+1));//MLOC
     exitIfNull(table->fiche,"appendTabmeaux: allocation imposible")
-    table->fiche[table->taille] = a_ajouter;
+    table->fiche[table->taille] = a_ajouter;//on duplique la fiche
     table->taille++;   
 }
 
 /**
- * @brief initialise le champ ADDR de tableaux_fiche
+ * @brief initialise le champ id_creation de tableaux_fiche
  * 
- * permet d'aceder a une fiche avec ADDR comme un inded // MALDI
+ * permet d'aceder a une fiche avec id_creation comme un inded // MALDI
  * l'id est l'indice pour acceder a la fiche dpuis la structure  tableaux_fiche
  * 
  * @param [in,out] tableaux_allfiche 
@@ -124,7 +124,7 @@ void gen_id_fiche(tableaux_fiche * tableaux_allfiche){
     for (int i = 0; i < tableaux_allfiche->taille; i++)
     {
         PROGRESSBAR(i,tableaux_allfiche->taille);
-        tableaux_allfiche->fiche[i].ADDR = i;
+        tableaux_allfiche->fiche[i].id_creation = i;
         tableaux_allfiche->nbAuteurXarticle+=tableaux_allfiche->fiche[i].nombre_auteur;
     }
 }
@@ -158,7 +158,7 @@ void sortlist(tableaux_fiche * mesfiche ){
  * -    auteur
  *  
  *  mais aussi
- *  - génère ADDR de chaque fiche
+ *  - génère id_creation de chaque fiche
  *  - trie les fiche
  *  
  * ## Doit pouvoir utiliser les date !
@@ -170,6 +170,7 @@ tableaux_fiche parse(FILE * inputDB){ /// a besoin detre un pointeur pour le fre
     INFO("début du parsing:");
     char ligne[BALISESIZE];
 
+    //déclare nombreligne
     PROGRESSBAR_DECL(inputDB)
 
     //génère le tablaux
@@ -180,7 +181,7 @@ tableaux_fiche parse(FILE * inputDB){ /// a besoin detre un pointeur pour le fre
 
     //premierre fiche
     fiche_minimale fichelocalM;
-    fichelocalM.ADDR = 0;
+    fichelocalM.id_creation = 0;
     fichelocalM.nombre_auteur = 0;
     fichelocalM.titre = NULL;
     fichelocalM.liste_auteur = NULL;
@@ -222,7 +223,7 @@ tableaux_fiche parse(FILE * inputDB){ /// a besoin detre un pointeur pour le fre
             }else{
                 free_fiche_minimale(fichelocalM);
             }
-            fichelocalM.ADDR = 0;
+            fichelocalM.id_creation = 0;
             fichelocalM.nombre_auteur = 0;
             fichelocalM.titre = NULL;
             fichelocalM.liste_auteur = NULL;
@@ -284,7 +285,7 @@ tableaux_fiche deserialisation_tableaux_fiche(FILE * input){
     for (int UwU = 0; UwU < tableaux_allfiche.taille; UwU++)
     {
         PROGRESSBAR(UwU,tableaux_allfiche.taille)
-        tableaux_allfiche.fiche[UwU].ADDR = UwU;
+        tableaux_allfiche.fiche[UwU].id_creation = UwU;
         tableaux_allfiche.fiche[UwU].titre =readstrfile(input);
         fread(&tableaux_allfiche.fiche[UwU].nombre_auteur,sizeof(int),1,input);
         YOLO("il y a %d auteur",tableaux_allfiche.fiche[UwU].nombre_auteur)

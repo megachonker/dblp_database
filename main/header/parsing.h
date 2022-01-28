@@ -12,10 +12,9 @@
 typedef struct fiche_minimale
 {
     char * titre;           ///< renomer par article ?
-    //< date de création ?
     int nombre_auteur;      ///< nombre d'auteur contenue dans liste_auteur
     char ** liste_auteur;   ///< liste de liste de caractere des noms d'auteur (Trier gain perf ?)
-    int ADDR;               ///< Indice permetant d'acceder a cette fiche_minimale depuis tableaux_fiche.fiche[ADDR] (initialiser a la création) 
+    int id_creation;        ///< Indice permetant d'acceder a cette fiche_minimale depuis tableaux_fiche.fiche[id_creation] (initialiser a la création) 
 }fiche_minimale;
 
 
@@ -44,7 +43,7 @@ typedef struct tableaux_fiche
  * -    auteur
  *  
  *  mais aussi
- *  - génère ADDR de chaque fiche
+ *  - génère id_creation de chaque fiche
  *  - trie les fiche
  *  
  * ## Doit pouvoir utiliser les date !

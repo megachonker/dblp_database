@@ -377,7 +377,6 @@ int count_NeedednbPaire_auteur_oeuvre(const tab_auteur_struct * Malistauteur){
 void serialise_tab_auteur_struct(const tab_auteur_struct * List_des_Auteur, FILE * output){
     INFO("\tsérialisation des auteur:")
     //fonction d'qui fait la moyenne des nom_auteur pour pouvoir fair un maloque que une foit en moyenne
-    // int taille = count_isolate_autor(List_des_Auteur);// est egale a List_des_Auteur->taille
     fwrite(&List_des_Auteur->nombre_auteur,1,sizeof(int),output);
     for (int i = 0; i < List_des_Auteur->nombre_auteur; i++)
     {
@@ -389,7 +388,7 @@ void serialise_tab_auteur_struct(const tab_auteur_struct * List_des_Auteur, FILE
             for (int j = 0; j < List_des_Auteur->tab_auteur[i].size; j++)
             {
                 //indice pour acceder a la fiche minimal a la désérialisation
-                fwrite(&List_des_Auteur->tab_auteur[i].tab_ptr_fiche_min[j]->ADDR,1,sizeof(int),output);
+                fwrite(&List_des_Auteur->tab_auteur[i].tab_ptr_fiche_min[j]->id_creation,1,sizeof(int),output);
             }
         }
 
@@ -430,7 +429,6 @@ tab_auteur_struct deserialise_tab_auteur_struct(const tableaux_fiche * tableaux_
 
         // on initialise le compteur d'élément 
         master_List_Auteur.tab_auteur[nbauteur].nbArticlecontenue = 0;
-        // master_List_Auteur.tab_auteur[nbauteur].nbmembreTabarticleALOUER = 0;
         master_List_Auteur.tab_auteur[nbauteur].tab_ptr_Article = NULL;
 
 
