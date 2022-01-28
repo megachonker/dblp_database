@@ -344,7 +344,9 @@ void printAll_option(all_options OwI){
 }
 
 
-int main(int argc, char *argv[]) {
+
+int main (int argc, char *argv[]))
+{
 
     init_signal();
     
