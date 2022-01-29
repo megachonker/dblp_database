@@ -9,34 +9,37 @@
 #include <signal.h>
 #include <stdlib.h>
 
-/**
+/** \mainpage Document d'information
+ *   
+ * \section Résumé_général Résumé général
+ * **1ère étape**:
  * 
- * 
- *1ère partie:
  * -parsing: fonction parse(), retourne tableaux_fiche (fiches contenants chaqu'une un nom d'Article et les noms des auteurs associés)
  * -serialisation du tableau_fiche (serialisation_tableaux_fiche()).
  * (la serialisation permet de stocker les informations du parsing pour ne pas à avoir à le refaire)
  * 
- * traité dans *paring.c*
+ * traité dans *parsing.c*
  * 
- * 2ème pt:
+ *  **2ème étape**:
+ * 
  * -Desserialisation du tableau_fiche (deserialisation_tableaux_fiche())
  * -Création de la jointure entre les fiches de tableaux_fiche et les noms des auteurs associés (sous condition que l'auteur appartient à la fiche).
  * -Cette opération pourra être appelée dépliage, et sert à construire le tableau des Paire_auteur_oeuvre (deplier_fiche())
  * -Ce tableau sera trié par nom d'auteur de manière a récupérer tous les articles pour chaque auteur, on peut alors construire les auteur_struct (gen_List_auteur()).
  * 
  * -Ensuite sera opérée une 2ème jointure, cette fois entre les auteurs_struct et les fiches de tableau_fiche, (sous condition que les auteurs soient bien dans les Articles des fiches)
- * -Ce "dépliage" mène à la création du tableau des Paire_Article_auteur (deplier_auteur()).
+ * -Ce nouveau "dépliage" mène à la création du tableau des Paire_Article_auteur (deplier_auteur()).
  * -On peut alors génèrer les Article_struct en triant la jointure par nom d'Article en ce faisant, on peut aussi set up le champs tab_ptr_Article des auteurs_struct. (convertTab_auteur2Article())
  * - **l'ordre de création** des fiche_minimale sera un **identifiant unique**
  * 
  * -Le tableau des auteur_struct et celui des Article_struct seron stocké dans graphe_struct_Konqui.
- * -Pour finir, un tableau de pointeur vers les auteurs_struct est crée, et rangé dans graphe_Katie (*fonctions_garphe.c*). 
+ * -Pour finir, un tableau de pointeur vers les auteurs_struct est crée, et rangé dans graphe_Katie (fonction dans *fonctions_garphe.c*). 
  * -Les attributs des auteur_struct utiles à Dijkstra sont alors initialisés (comme par exemple la distance à l'auteur_depart, initialisé à -1).
  * 
  * -Cette partie se déroule dans *unwrap.c*
  * 
- *  3ème
+ *  **3ème étape**:
+ * 
  * -Il ne reste plus qu'à appliquer la fonction do_Dijkstra() (*Dijkstra.c*) au graphe_Katie, avec 2 noms d'auteur de la base de donnée.
  * -Pour cela, on relache les arrêtes de tous les auteurs rangés dans un tableau indiquant les auteurs à traiter à l'étape courante du parcours en largeur.
  * (Ce tableau s'appelant pile_courante)
@@ -45,148 +48,110 @@
  * -A la fin de l'étape courante (une couche du parcours en largeur) on remplace le contenu de pile_courante par celui de pile_suivante et on vide la pile_suivante.
  * 
  * -En répétant ce procédé jusqu'a trouver l'auteur_destination ou avoir parcouru toute la composante connexe,
- * il est possible d'enregistrer le plus court chemin dans plus_court_chemin_struct en partant de l'auteur_destination et en remontant la chaine des prédecesseurs.
+ * il est possible d
  * 
  * 
  * 
+ * \section Pour_plus_de_détailles Pour plus de détailles
  * 
+ * \subsection fiche_gene Génération fiche
+ * la structure fiche_minimale contient les informations d'un Article, elle est aloueée dynamiquement. On peut retrouver les fiche_minimale dans tableaux_fiche et auteur_struct.
  * 
- * 
- */
-
-
-
-
-/** \mainpage My Personal Index Page
- *
- * \section Intro
- * ...
- * 
- * 
- * 
- * 
- *  \section fiche_gene Génération fiche
- * Les pointeurs fiche_minimale sont contenus dans tableaux_fiche et auteur_struct Article_struct
- * \subsection parse_xml Parsing XML
- *  Le parsing se fait en partant du principe qu'il y a **une paire de balise par ligne**.
- *  Pour le parsing on ne s'interresse qu'au nom de l'article et à ses auteurs. 
- *  On remplie la structure fiche_minimale avec les informations, ainsi que  fiche_minimale.ADDR qui est l'ordre de création, car plus tard fiche_minimale sera indépandant de la structure 
- * tableaux_fiche dans laquelle elle est contenue
- * \subsection serialisation_xml Sérialisation XML
- * Pour la sérialisation on va utiliser des fread et fwrite qui sont simplifié avec la macro writestrfile() et readstrfile()
- * 
- * \section generation_auteur Génération auteur
- * En faisant la désérialisation des fiches on économise le parsage. pour générér tab_auteur_struct qui contient les auteur_struct il va falloir dans un premier temps trier tableaux_fiche.
- * On va ensuite déplier le tableau de fiche pour crée une liste des paire_auteur_oeuvre,
- * cette liste sera triée par nom d'auteur de manière a récupérer tous les articles pour chaque auteur
- * 
- * \section generation_article Génération Article
- * Ensuite, pour générer les Article_struct, il va falloir faire le lien avec les auteur_struct. Pour ce faire a la création des Article (apres avoir déplier les auteur)
- * a chaque Article crée on ajoute les auteur ET pour chaque auteur on lui atribut un 'article parent
-/** \mainpage Introduction
- * \section fiche_gene Génération fiche
- * la structure fiche_minimale contien les information pour chaque article elle est alouer dynamiquement  sont contenue dans tableaux_fiche et auteur_struct
- * 
- * traiter dans *paring.c*
- * \subsection parse_xml Parsing XML
+ * traité dans *paring.c*
+ * \subsubsection parse_xml Parsing XML
  *  - le parsing ce fait en admétant qu'il y a **une paire de balise par ligne** (plus rapide et simple sachant que le format du fichier ne changera pas).
- *  - le noms de l'article et les auteur sont garder (pas assez de temps pour traiter les date).
+ *  - le noms de l'Article et les auteur sont gardé.
  *  - **l'ordre de création** des fiche_minimale sera un **identifiant unique** (comme une clef primaire).
- * \subsection serialisation_xml Sérialisation XML
+ * \subsubsection serialisation_xml Sérialisation XML
  * La sérialisation est faite pour avoir un fichier plus petit (tmps de lecture) comportant déja les structure (en binaire) nous utilison fwread et fwrite qui sont simplifier avec la macro writestrfile() et readstrfile() pour gagner en temps est en clartée
- * \section generation_auteur Génération auteur
+ * \subsection generation_auteur Génération auteur
  * 
- * pour générée un tab_auteur_struct qui contien nos auteur_struct il va faloir **joindre** les *fiche_minimale* (j'utilise le terme déplier dans le code) avec les *noms des auteur* de cette magnierre nous généron un couple Paire_auteur_oeuvre
- * nous voulont des auteur unique donc si nous trion notre tableaux Paire_auteur_oeuvre par noms d'auteur nous auron donc tout les même noms d'auteur qui ce suivron !
- * il ne restera plus qu'a associer les X fiche_minimale qui on les mème hauteur.
+ * Pour générer un tab_auteur_struct qui contient nos auteur_struct il va falloir **joindre** les *fiche_minimale*  avec les *noms des auteur* de cette manière les couples Paire_auteur_oeuvre sont générés.
+ * En triant le tableau de Paire_auteur_oeuvre par nom d'auteur, tous les occurences d'un meme nom d'auteur dans la jointure se suivront !
+ * Il ne restera plus qu'a associer les X fiche_minimale qui on les memes auteurs pour se ramener à un tableau d'auteur unique.
  *
- * - **sérialisation** ne pouvant sérialiser les fiche_minimale il me suffit juste d'inscrire l'id de ma fiche (son ordre de création)
- * - **désérialisation** je récupère ma fiche grace a l'id lut (l'id étant l'emplacement dans le tableaux est les tableaux étant de meme taille est de meme donnée) il faut cepandant désérialiser les fiche minimal néamoin il est théoriquement possible de s'en abstenire en utilisant les id qu'au traitement final !
+ * - **sérialisation** ne pouvant sérialiser les fiche_minimale il suffit juste d'inscrire l'id de la fiche (son indice dans l'ordre de création)
+ * - **désérialisation** On récupère ici la fiche, grace a l'id lu (l'id étant l'emplacement dans le tableaux, et les tableaux étant de meme taille est de meme donnée) il faut cependant désérialiser les fiche_minimale.
  * 
- * en désérialisant les fiche on économise le temps de parsage et de lecture.
+ * En désérialisant les fiches on économise le temps de parsage et de lecture.
  * 
- * la relation entre les auteur est les fiche minimal est décrite dans une structure Paire_auteur_oeuvre affain de pouvoir la passer en argument dans la fonction qsort (built in optimiser pour faire un trie rapide)  
+ * La relation entre les noms d'auteur est les fiche_minimale est décrite dans une structure Paire_auteur_oeuvre afin de pouvoir la passer en argument dans la fonction qsort (built in optimiser pour faire un trie rapide).  
+ * On peut ensuite construire les auteur_struct uniques à l'aide de cette relation.
  * 
- * ce déroule dans *unwrap.c*
+ * Se déroule dans *unwrap.c*
  * 
- * \section generation_article Génération Article
- * A présent nous avons une relation tab_auteur_struct vers fiche mais pas le contraire  donc une structure tab_Article_struct modélisera ce lien.
+ * \subsection generation_article Génération Article
+ * A présent nous avons une relation auteur_struct vers fiche_minimale mais pas le contraire,  
+ * la structure Article_struct modélisera ce lien en ayant pour attribut, pour chaque Article_struct, les auteur_struct associés.
  * 
- * la relation n'es pas inscrite dans la structure fiche minimal car supposont que nous stoquon plus d'information comme la date,le cite web ect ce fichier deviendra plus gros est donc plus lent a parser et deviendra le bottleneck
- * il faut donc bien isoler la biblioteque est ces structure structure lier au **parsing** et celle lier au **traitment**.
+ *    ça, ça me semble pas clair        //La relation n'est pas inscrite dans la structure fiche_minimale car supposont que nous stockons plus d'information comme la date,le cite web ect ce fichier deviendra plus gros est donc plus lent a parser et deviendra le bottleneck
+ *    et on peut l'enlever je pense     //il faut donc bien isoler la biblioteque est ses structures liées au **parsing** et celle lier au **traitment**.
  * 
- * a la création des Article_struct (apres avoir join et trier et fusioner Paire_Article_auteur) nous y inscrivon un un id de création
- * a chaque article crée a l'ajout des auteur on va ajouter un pointeur de l' Article_struct parent a auteur_struct cible.
+ * A la création des Article_struct (apres avoir joint, trié et fusioner Paire_Article_auteur) un id de création y est inscrit.
+ * A chaque Article crée, à l'ajout des auteur_struct on va ajouter un pointeur de l'Article_struct parent a auteur_struct cible (on set up auteur_struct.tab_ptr_Article)
  * 
- * il faudra faire attention a ce q'un auteur n'es pas plusieur foit utiliser par le meme article !
+ * Il faudra faire attention a ce q'un auteur_struct ne soit pas plusieurs fois ajouté dans le meme Article_struct !
  * 
- * - **serialisation** on sérialise a la place des l'adresse auteur_struct ces id de création de la structure
- * - **désérialisation** en ayan désérialisser au préalable auteur_struct on peut asocier les pointeur a Article_struct
+ * - **serialisation** on sérialise les id de création de la structure et non les adresses des auteur_struct 
+ * - **désérialisation** en ayant désérialisser au préalable auteur_struct on peut asocier les pointeur a Article_struct
  * 
- * une structure final  graphe_struct_Konqui regroupant toute les structure désérialiser/crée est générée pour simplifier les free et l'utilisation
+ * une structure finale  graphe_struct_Konqui regroupant toutes les structures désérialisées/crées est générée pour simplifier les free et l'utilisation
  * 
+ * \subsection Dijkstra
  * 
- * \section executable programe utilisateur
- * \subsection main Main
- * 2 mode un mode ligne de commande est un mode interractif
- * le mode interactif utilise un library externe de regex mais permer de réefecturer une recherche en ce basant sur les resulat précédent
- * \subsection abenchsh scripte abench
- * permet de cronométrer sur un nombre donner de réexecution est en fait une moyenne permet de savoir rapidement si l'ajout qu'on a fait perde ou gagner en performance
- * 
- * il faut avoir time installer l'ajout des couleur a rendu le script instable
- * 
- * \subsection bench Benchmarking
- * permet d'executer des fonction du programe en fonction des argument pour:
- * -    débuguer
- * -    profiler
- * -    benchmarking
- * -    cache générer a l'apele de make 
- * -    **Tester le programe** avant de commmit.
- * \subsection macro macro
- * utilisant les macro pour la gestion des couleur est des erreur et pour des comparaison j'ai decider d'en faire une partie a part du code est aussi pour certaine fonction que je veux accesible partout. 
- * 
- * 
- * \section makefile make
- * \subsection update updating
- * permet vérifier si la base de donnée utiliser est la dernierre qui a été uploader sur les serveur et de la télécharger en cas échéant
- * \subsection cache generation cache
- * dans la premierre version j'utiliser le programe bench pour regénérée le cache intermediere lier au code source modifier avec une fonction présice, très performant en vérifiant la coérance des cache entre eux je n'ais pas eux besoin de coder cette fonctionaliter
- * 
- * actuelment la génération ce fait en un bloque des fonction généraliste génère les 3 cache en meme temps
- * 
- * \subsection kkachgrind Profiler
- * permet de générer des fichier callgrind pour kcachgrind pour des fonction du programe
- * 
- * j'ai pris l'abitude de profiler le programe au fure de sont avancement pour mieux comprendre le fonctionement est les optimisation
- * \subsection lcoverapport Lcov
- * le rapport est utile pour detecter les parcelle de code inutile 
- * 
- * le raport lcove fonctione sur arch linux mais pas sur ubuntu (erreur imposible a diagnostiquer)
- * 
- * 
- * 
- * \section Résumé général graphe_struct_Konqui
- * le but principal de unwrap.c est de fournire graphe_struct_Konqui qui fournis tab_auteur_struct tab_Article_struct tableaux_fiche
- * Une fois que des structures auteur_struct et Article_struct ont été générées et initialisées pour chaque auteur/Article de la base de donnée,
- * elles sont stockées dans des tableaux dans la structure graphe_struct_Konqui.
- * 
- * Ensuite, un tableau de pointeur vers les auteurs_struct est crée (fonctions_garphe.c). 
- * Ce tableau est stocké dans la structure graphe_Katie.
- * Les attributs des auteur_struct utiles à Dijkstra sont alors initialisés (comme par exemple la distance à l'auteur_depart, initialisé à -1).
- * 
- * 
- * 
- * 
- * Il ne reste plus qu'à appliquer la fonction do_Dijkstra (Dijkstra.c) au graphe_Katie, avec 2 noms d'auteur de la base de donnée.
- * Pour cela, on relache les arrêtes de tous les auteurs rangés dans un tableau indiquant les auteurs à traiter à l'étape courante du parcours en largeur.
+ * do_Dijkstra() s'applique sur un tableau de pointeur vers les auteurs_struct, situé dans graphe_struct_Katie. 
+ * fonctionnement de do_Dijkstra() (*Dijkstra.c*):
+ *  
+ * On relache les arrêtes de tous les auteurs rangés dans un tableau indiquant les auteurs à traiter à l'étape courante du parcours en largeur.
  * (Ce tableau s'appelant pile_courante)
  * En ce faisant, on enregistre les auteurs à traiter à l'étape suivante dans un autre tableau (pile_suivante).
  * De même, on initialise l'attribut auteur_predecesseur et Article_predecesseur de l'auteur_struct en cours de traitement.
  * A la fin de l'étape courante (une couche du parcours en largeur) on remplace le contenu de pile_courante par celui de pile_suivante et on vide la pile_suivante.
  * 
  * En répétant ce procédé jusqu'a trouver l'auteur_destination ou avoir parcouru toute la composante connexe,
- * il est possible d'enregistrer le plus court chemin dans un tableau en partant de l'auteur_destination et en remontant la chaine des prédecesseurs.
-
+ * il est possible d'enregistrer le plus court chemin dans plus_court_chemin_struct en partant de l'auteur_destination et en remontant la chaine des prédecesseurs.
+ * 
+ * \subsection executable programme utilisateur
+ * \subsubsection main Main
+ * 2 mode un mode ligne de commande est un mode interractif
+ * Le mode interactif utilise une librairie externe de regex mais permet de réefectuer une recherche en ce basant sur les resulats précédents.
+ * \subsubsection abenchsh scripte abench
+ * Permet de chronometrer le temps sur un nombre donné de réexecution, et en fait une moyenne.
+ * 
+ * Il faut avoir time installé (l'ajout des couleur a rendu le script instable) //WHAT? le scripte est instable?
+ * 
+ * \subsubsection bench Benchmarking
+ * permet d'executer des fonctions du programme en fonction des arguments pour:
+ * -    débuguer
+ * -    profiler
+ * -    benchmarking
+ * -    cache généré a l'apelle de make 
+ * -    **Tester le programe** avant de commmit.
+ * \subsubsection macro macro
+ * Utilisant les macro pour la gestion des couleurs et des erreurs. 
+ * 
+ * 
+ * \subsection makefile make
+ * \subsubsection update updating
+ * Permet vérifier si la base de donnée utilisée est la dernière qui a été uploadée sur les serveurs et de la télécharger si ce n'est pas le cas.
+ * \subsubsection cache generation cache
+ * Je comprend pas la phrase, il faut reformuler je pense //dans la premierre version j'utiliser le programe bench pour regénérée le cache intermediere lier au code source modifier avec une fonction présice, très performant en vérifiant la coérance des cache entre eux je n'ais pas eux besoin de coder cette fonctionaliter
+ * 
+ * La génération se fait en un bloque, avec des fonctions généralistes générant les 3 caches en meme temps.
+ * 
+ * \subsubsection kkachgrind Profiler
+ * Permet de générer des fichiers callgrind pour kcachgrind pour des fonctions du programme
+ * 
+ *  Tu peux laisser cette phrase mais on est pas sensé raconter ce genre de truc dans le rapport je pense //(Konqui:)j'ai pris l'habitude de profiler le programe au fure et à mesure de sont avancement pour mieux comprendre le fonctionement est les optimisations
+ * \subsubsection lcoverapport Lcov
+ * Le rapport est utile pour detecter les parcelles de code inutiles
+ * 
+ * Le raport lcove fonctionne sur arch linux mais pas sur ubuntu (erreur imposible a diagnostiquer).
+ * 
+ * 
+ * 
+ * 
+ *
  */
 
 
