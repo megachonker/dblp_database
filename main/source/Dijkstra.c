@@ -83,7 +83,7 @@ plus_court_chemin_struct reconstitution_du_pcc_apres_parcours(int* taille_pcc_pt
 
 
 
-
+//Pour les noms passés en argument, il faut respecter les conventions HTML renseignées ici  https://sites.psu.edu/symbolcodes/codehtml/#accent
 //renvoie le tableau des ptr vers les auteur_struct du chemin de auteur_1 (a1) a auteur_2 (a2)
 plus_court_chemin_struct* do_Dijkstra(graphe_struct_Katie graphe_t, char* nom_auteur_depart, char* nom_auteur_destination)
 {

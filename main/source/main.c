@@ -100,6 +100,7 @@
  * \subsection Dijkstra
  * 
  * do_Dijkstra() s'applique sur un tableau de pointeur vers les auteurs_struct, situé dans graphe_struct_Katie. 
+ * (Pour les noms d'auteur passés en argument, veuillez respecter les conventions HTML renseignées ici https://sites.psu.edu/symbolcodes/codehtml/#accent)
  * fonctionnement de do_Dijkstra() (*Dijkstra.c*):
  *  
  * On relache les arrêtes de tous les auteurs rangés dans un tableau indiquant les auteurs à traiter à l'étape courante du parcours en largeur.
