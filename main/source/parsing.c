@@ -275,7 +275,7 @@ tableaux_fiche deserialisation_tableaux_fiche(FILE * input){
 
     tableaux_fiche tableaux_allfiche;
     tableaux_allfiche.nbAuteurXarticle = 0;
-    fread(&tableaux_allfiche.taille,sizeof(int),1,input);//verifier?
+    exitIfNull(fread(&tableaux_allfiche.taille,sizeof(int),1,input),"fread null !");//verifier?
     tableaux_allfiche.fiche = NULL;
     DEBUG("il y a %d fiche a calloc",tableaux_allfiche.taille)
 
@@ -287,7 +287,7 @@ tableaux_fiche deserialisation_tableaux_fiche(FILE * input){
         PROGRESSBAR(UwU,tableaux_allfiche.taille)
         tableaux_allfiche.fiche[UwU].id_creation = UwU;
         tableaux_allfiche.fiche[UwU].titre =readstrfile(input);
-        fread(&tableaux_allfiche.fiche[UwU].nombre_auteur,sizeof(int),1,input);
+        exitIfNull(fread(&tableaux_allfiche.fiche[UwU].nombre_auteur,sizeof(int),1,input),"fread null !");
         YOLO("il y a %d auteur",tableaux_allfiche.fiche[UwU].nombre_auteur)
         tableaux_allfiche.fiche[UwU].liste_auteur = calloc(tableaux_allfiche.fiche[UwU].nombre_auteur,sizeof(char *));
         exitIfNull(tableaux_allfiche.fiche[UwU].liste_auteur,"calloc echouer")
