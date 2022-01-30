@@ -1503,3 +1503,8 @@ main/debug/GCOVtests-macro.gcda
 main/debug/GCOVtests-parsing.gcda
 main/debug/GCOVtests-search.gcda
 main/debug/GCOVtests-unwrap.gcda
+main/search.c.gcov
+main/stdio2.h.gcov
+main/stdlib.h.gcov
+main/string_fortified.h.gcov
+main/macro.c.gcov

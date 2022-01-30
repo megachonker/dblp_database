@@ -1,5 +1,6 @@
 CCA ?= cc
-CFLAGS ?= -Wall -Wextra -Og -g -ggdb 
+CFLAGS ?= -Wall -Wextra -Og -g -ggdb
+# CFLAGS ?= -Wall -Wextra -O3 
 LDLIBS ?= 
 
 PATH_BIN	?= bin/
