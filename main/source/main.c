@@ -157,16 +157,16 @@
 
 
 /**
- * @brief permet de conserver tout les chemain des cache
+ * @brief permet de conserver tout les chemin des cache
  * 
  */
-typedef struct listeChemain
+typedef struct listeChemin
 {
     char *XML;
     char *DBfiche;
     char *DBauteur;
     char *DBArticle;
-} listeChemain;
+} listeChemin;
 
 
 /**
@@ -178,30 +178,30 @@ typedef struct total
     char ligne[BALISESIZE];
     char * argv[5];
     graphe_struct_Konqui graph;
-    listeChemain chem;          ///< tout les chemain 
+    listeChemin chem;          ///< tout les chemin 
     int verb;                   ///< énume de la verbositer
     ll_list * recherche;        ///< conserve la recherche en coure 
 }total;
 
 
 /**
- * @brief génère le graph a partire de listeChemain
+ * @brief génère le graph a partire de listeChemin
  * 
- * @param chemains 
+ * @param chemins 
  * @return graphe_struct_Konqui 
  */
-graphe_struct_Konqui gen_graph(listeChemain chemains)
+graphe_struct_Konqui gen_graph(listeChemin chemins)
 {
 
-    FILE *DBxml = fopen(chemains.XML, "r");
-    FILE *DBinverse = fopen(chemains.DBfiche, "r");
-    FILE *DBauteur = fopen(chemains.DBauteur, "r");
-    FILE *DBarticle = fopen(chemains.DBArticle, "r");
+    FILE *DBxml = fopen(chemins.XML, "r");
+    FILE *DBinverse = fopen(chemins.DBfiche, "r");
+    FILE *DBauteur = fopen(chemins.DBauteur, "r");
+    FILE *DBarticle = fopen(chemins.DBArticle, "r");
 
-    exitIfNull(DBxml, "INPUT PAS CHEMAIN %s", chemains.XML)
-        exitIfNull(DBinverse, "INPUT PAS CHEMAIN %s", chemains.DBfiche)
-            exitIfNull(DBauteur, "INPUT PAS CHEMAIN %s", chemains.DBauteur)
-                exitIfNull(DBarticle, "INPUT PAS CHEMAIN %s", chemains.DBArticle)
+    exitIfNull(DBxml, "INPUT PAS CHEMIN %s", chemins.XML)
+        exitIfNull(DBinverse, "INPUT PAS CHEMIN %s", chemins.DBfiche)
+            exitIfNull(DBauteur, "INPUT PAS CHEMIN %s", chemins.DBauteur)
+                exitIfNull(DBarticle, "INPUT PAS CHEMIN %s", chemins.DBArticle)
 
                     fseek(DBxml, 0, SEEK_END);
     fseek(DBinverse, 0, SEEK_END);
@@ -230,10 +230,10 @@ graphe_struct_Konqui gen_graph(listeChemain chemains)
 void dfault()
 {
     printf("\
-// • -c                calculer les composantes connexes & diamètre.\n\
+// 
 • -p AUT1,AUT2      plus court chemin auteurs indiqués.\n\
 • -l MOT            Lister les auteurs qui contiennent le mot donné.\n\
-• -a auteur         Fnformations d'un auteur (liste des articles).\n\
+• -a auteur         Informations d'un auteur (liste des articles).\n\
 • -A Article        Liste les co-auteurs à distance N (ou moins) d'un auteur.\n\
 • -f INPUT          cache d\'entrée. small full custom \n\
 // • -o OUTPUT         Sauvegarder la structure dans un fichier binaire (indiqué avec une option -o OUTPUT_FILE)\n");
@@ -249,44 +249,44 @@ typedef struct all_options
     int caluleadv, distanceN, verbose;
     char output[100], auteur_selectioner[100], search[100], lmot[100], searchAll[100];
     char couple_auteur[2][100];
-    struct listeChemain chemais;
+    struct listeChemin chemais;
 } all_options;
 
 
 /**
- * @brief charge des chemain des fichier a partire des enum
+ * @brief charge des chemin des fichier a partire des enum
  * 
  * @param choix 
- * @return listeChemain 
+ * @return listeChemin 
  */
-listeChemain chose_path(short choix)
+listeChemin chose_path(short choix)
 {
 
-    listeChemain chemains[3];
+    listeChemin chemins[3];
 
-    listeChemain smal = {
+    listeChemin smal = {
         .XML = smallorigineXML,
         .DBfiche = small_fiche_cache,
         .DBauteur = small_auteur_cache,
         .DBArticle = small_Article_cache};
 
-    listeChemain ful = {
+    listeChemin ful = {
         .XML = origineXML,
         .DBfiche = cache_fiche,
         .DBauteur = auteur_cache,
         .DBArticle = Article_cache};
 
-    listeChemain cust = {
+    listeChemin cust = {
         .XML = customXML,
         .DBfiche = custom_fiche_cache,
         .DBauteur = custom_auteur_cache,
         .DBArticle = custom_Article_cache};
 
-    chemains[small] = smal;
-    chemains[full] = ful;
-    chemains[custom] = cust;
+    chemins[small] = smal;
+    chemins[full] = ful;
+    chemins[custom] = cust;
 
-    return chemains[choix];
+    return chemins[choix];
 }
 
 /**
@@ -322,10 +322,10 @@ void find_all(char *search, graphe_struct_Konqui *graph, int verbose)
  * @brief convertie la chaine de caractere en énume
  * 
  * @param compstr 
- * @param chemain 
+ * @param chemin 
  * @return int 
  */
-int chose_db(char *compstr, listeChemain *chemain)
+int chose_db(char *compstr, listeChemin *chemin)
 {
     if (compstr==NULL)
     {
@@ -336,11 +336,11 @@ int chose_db(char *compstr, listeChemain *chemain)
     if (NULL)
     {
     STR("full")
-    *chemain = chose_path(full);
+    *chemin = chose_path(full);
     STR("custom")
-    *chemain = chose_path(custom);
+    *chemin = chose_path(custom);
     STR("small")
-    *chemain = chose_path(small);
+    *chemin = chose_path(small);
     }else
     {
         ERROR("mauvais choix de base de donner, Essayer:\t\n\t- full\t\n\t- custom\t\n\t- small")
@@ -384,7 +384,7 @@ void interactive_chort_help(){printf("commande are: help, file, compute, search,
  * @param [in] argc nombre d'argument
  * @param [in] argv tableaux d'argument
  * @param [in] graph graph générer ou non
- * @param [in] chem structure de chemain
+ * @param [in] chem structure de chemin
  * @param [in] verb verbositer désirer
  * @return int état de la commande
  */
@@ -649,7 +649,7 @@ all_options gen_Struct_option(int argc, char *argv[])
                 printf("-o sauvegarder la structure dans un fichier binaire (indiqué avec une option -o OUTPUT_FILE).");
                 break;
             case 'f':
-                printf("-f attend un chemain ver un fichier cache.");
+                printf("-f attend un chemin ver un fichier cache.");
                 break;
             default:
                 printf("Option inconue");

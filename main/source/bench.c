@@ -118,9 +118,9 @@ graphe_struct_Konqui ggen_unwrap_Graph(){
     FILE * DBarticle = fopen(Article_cache,"r");
 
 
-    exitIfNull(DBxml,"INPUT PAS CHEMAIN")
-    exitIfNull(DBinverse,"INPUT PAS CHEMAIN")
-    exitIfNull(DBarticle,"INPUT PAS CHEMAIN")
+    exitIfNull(DBxml,"INPUT PAS CHEMIN")
+    exitIfNull(DBinverse,"INPUT PAS CHEMIN")
+    exitIfNull(DBarticle,"INPUT PAS CHEMIN")
 
 
 
@@ -143,8 +143,8 @@ void uunwrap_ListArticle_from_xml(int a){
 tab_Article_struct gen_article(){
     FILE * DBxmll     = fopen(cache_fiche,"r");
     FILE * DBinversee = fopen(auteur_cache,"r");
-    exitIfNull(DBxmll,"INPUT PAS CHEMAIN")
-    exitIfNull(DBinversee,"INPUT PAS CHEMAIN")
+    exitIfNull(DBxmll,"INPUT PAS CHEMIN")
+    exitIfNull(DBinversee,"INPUT PAS CHEMIN")
     tableaux_fiche matablefiche = deserialisation_tableaux_fiche(DBxmll);
     tab_auteur_struct  malistaauteur = deserialise_tab_auteur_struct(&matablefiche,DBinversee);
     tab_Article_struct malistearticle = convertTab_auteur2Article(&malistaauteur);
@@ -154,7 +154,7 @@ tab_Article_struct gen_article(){
 
 void serialisation_tab_Article_structt(){
     FILE * DBarticle = fopen(Article_cache,"w");
-    exitIfNull(DBarticle,"INPUT PAS CHEMAIN");
+    exitIfNull(DBarticle,"INPUT PAS CHEMIN");
     tab_Article_struct monarticle = gen_article();
     serialisation_tab_Article_struct(&monarticle,DBarticle);
     free_tab_Article(monarticle);
@@ -163,8 +163,8 @@ void serialisation_tab_Article_structt(){
 void deserialisation_tab_Article_structt(){
     FILE * DBxml = fopen(cache_fiche,"r");
     FILE * DBinverse = fopen(Article_cache,"r");
-    exitIfNull(DBxml,"INPUT PAS CHEMAIN")
-    exitIfNull(DBinverse,"INPUT PAS CHEMAIN")
+    exitIfNull(DBxml,"INPUT PAS CHEMIN")
+    exitIfNull(DBinverse,"INPUT PAS CHEMIN")
     tab_auteur_struct matablefiche = deserialise_tab_auteur(0);
     free_tab_Article(deserialisation_tab_Article_struct(&matablefiche,DBinverse));
     free_tab_auteur(matablefiche);
@@ -172,7 +172,7 @@ void deserialisation_tab_Article_structt(){
 
 void swap(int print){
     FILE * inputDB = fopen("DATA/SerializedStruc.data","r");
-    exitIfNull(inputDB,"INPUT PAS CHEMAIN")
+    exitIfNull(inputDB,"INPUT PAS CHEMIN")
     tab_auteur_struct malistedauteur = tab_auteur_from_file(inputDB);
     if (print==1)
     {

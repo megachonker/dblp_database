@@ -50,7 +50,7 @@ qsort_compare_auteur(const void * a, const void * b){
  * @return nombre d'élément du tableaux
  */
 int deplier_fiche(tableaux_fiche input, Paire_auteur_oeuvre * arrayout ){
-    INFO("deplier les fiche")
+    INFO("deplier les fiches")
     int indice = 0;
     for (int i = 0; i < input.taille; i++){
         PROGRESSBAR(i,input.taille);
@@ -226,7 +226,7 @@ tab_Article_struct assemble_tab_Article(Paire_Article_auteur * liste,int sizeArt
     (*nbarticle) = 0;
 
     int posTabPairAa = 0;
-    DEBUG("Parcour de la liste des article")
+    DEBUG("Parcour de la liste des articles")
     while (posTabPairAa < sizeArticleHauteur)
     {   
         #ifdef WARN_ON
@@ -557,7 +557,7 @@ void serialisation_tab_Article_struct(tab_Article_struct * inputlist, FILE * out
             fwrite(&indiceAuteur,sizeof(int),1,outputfile);
         } 
     }
-    INFO("Sérialisation des Article: Terminer")
+    INFO("Sérialisation des Article: Terminée")
 }
 
 /**
@@ -619,7 +619,7 @@ tab_Article_struct deserialisation_tab_Article_struct(tab_auteur_struct * mesaut
         int nbauteur = 0;
         fread(&nbauteur,sizeof(int),1,inputfile);
         exitIfNull(nbauteur,"il y a 0 article")
-        YOLO("nombre dauteur %d",nbauteur);
+        YOLO("nombre d'auteur %d",nbauteur);
 
         
         monArticle->nombre_auteur = nbauteur;
@@ -627,7 +627,7 @@ tab_Article_struct deserialisation_tab_Article_struct(tab_auteur_struct * mesaut
 
         monArticle->tab_ptr_auteur = NULL;
         auteur_struct ** structauteur = calloc(sizeof(auteur_struct*),nbauteur);
-        exitIfNull(structauteur,"deserialisation article maloc fail, %dauteur %luocter"
+        exitIfNull(structauteur,"deserialisation article malloc fail, %dauteur %luocter"
         ,nbauteur,sizeof(auteur_struct)*nbauteur)
         monArticle->tab_ptr_auteur = structauteur;//pointer ?
         //je parcoure tout mes auteur
@@ -680,7 +680,7 @@ tab_Article_struct gen_tab_Article_from_xml(FILE * dbinput){
  * @return graphe_struct_Konqui 
  */
 graphe_struct_Konqui deserialise_Graph(FILE * dbxmlCache, FILE * auteurCache, FILE * ArticleCache){
-    INFO("Désérialisation du Graph:")
+    INFO("Désérialisation du Graphe:")
     tableaux_fiche      mesfiche    =   deserialisation_tableaux_fiche(dbxmlCache);
     tab_auteur_struct   mes_auteur   =   deserialise_tab_auteur_struct(&mesfiche,auteurCache);
     tab_Article_struct  mes_Article  =   deserialisation_tab_Article_struct(&mes_auteur,ArticleCache);
@@ -690,7 +690,7 @@ graphe_struct_Konqui deserialise_Graph(FILE * dbxmlCache, FILE * auteurCache, FI
 }
 
 graphe_struct_Konqui gen_Graph_from_XML(FILE * dbxmlCache){
-    INFO("Génération du graph (XML)")
+    INFO("Génération du graphe (XML)")
     tableaux_fiche      mesfiche    = parse(dbxmlCache);
     tab_auteur_struct   mes_auteur  = convertTab_fiche2auteur(mesfiche);
     tab_Article_struct  mes_Article = convertTab_auteur2Article(&mes_auteur);
@@ -700,7 +700,7 @@ graphe_struct_Konqui gen_Graph_from_XML(FILE * dbxmlCache){
 }
 
 void serialise_Graph(graphe_struct_Konqui graph, FILE * dbxmlCache, FILE * auteurCache, FILE * ArticleCache){
-    INFO("Sérialisation du graph:")
+    INFO("Sérialisation du graphe:")
     serialisation_tableaux_fiche(graph.tableaux_de_fiche,dbxmlCache);
     serialise_tab_auteur_struct(&graph.tab_auteur_struct,auteurCache);
     serialisation_tab_Article_struct(&graph.tab_Article_struct,ArticleCache);
