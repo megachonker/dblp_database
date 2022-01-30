@@ -12,42 +12,42 @@
 /** \mainpage Document d'information
  *   
  * \section Résumé_général Résumé général
- * **1ère étape**:
+ * \subsection étape1 1ère étape:
  * 
- * -parsing: fonction parse(), retourne tableaux_fiche (fiches contenants chaqu'une un nom d'Article et les noms des auteurs associés)
- * -serialisation du tableau_fiche (serialisation_tableaux_fiche()).
+ * - parsing: fonction parse(), retourne tableaux_fiche (fiches contenants chaqu'une un nom d'Article et les noms des auteurs associés)
+ * - serialisation du tableau_fiche (serialisation_tableaux_fiche()).
  * (la serialisation permet de stocker les informations du parsing pour ne pas à avoir à le refaire)
  * 
  * traité dans *parsing.c*
  * 
- *  **2ème étape**:
+ *  \subsection étape2 2ème étape:
  * 
- * -Desserialisation du tableau_fiche (deserialisation_tableaux_fiche())
- * -Création de la jointure entre les fiches de tableaux_fiche et les noms des auteurs associés (sous condition que l'auteur appartient à la fiche).
- * -Cette opération pourra être appelée dépliage, et sert à construire le tableau des Paire_auteur_oeuvre (deplier_fiche())
- * -Ce tableau sera trié par nom d'auteur de manière a récupérer tous les articles pour chaque auteur, on peut alors construire les auteur_struct (gen_List_auteur()).
+ * - Desserialisation du tableau_fiche (deserialisation_tableaux_fiche())
+ * - Création de la jointure entre les fiches de tableaux_fiche et les noms des auteurs associés (sous condition que l'auteur appartient à la fiche).
+ * - Cette opération pourra être appelée dépliage, et sert à construire le tableau des Paire_auteur_oeuvre (deplier_fiche())
+ * - Ce tableau sera trié par nom d'auteur de manière a récupérer tous les articles pour chaque auteur, on peut alors construire les auteur_struct (gen_List_auteur()).
  * 
- * -Ensuite sera opérée une 2ème jointure, cette fois entre les auteurs_struct et les fiches de tableau_fiche, (sous condition que les auteurs soient bien dans les Articles des fiches)
- * -Ce nouveau "dépliage" mène à la création du tableau des Paire_Article_auteur (deplier_auteur()).
- * -On peut alors génèrer les Article_struct en triant la jointure par nom d'Article en ce faisant, on peut aussi set up le champs tab_ptr_Article des auteurs_struct. (convertTab_auteur2Article())
- * - **l'ordre de création** des fiche_minimale sera un **identifiant unique**
+ * - Ensuite sera opérée une 2ème jointure, cette fois entre les auteurs_struct et les fiches de tableau_fiche, (sous condition que les auteurs soient bien dans les Articles des fiches)
+ * - Ce nouveau "dépliage" mène à la création du tableau des Paire_Article_auteur (deplier_auteur()).
+ * - On peut alors génèrer les Article_struct en triant la jointure par nom d'Article en ce faisant, on peut aussi set up le champs tab_ptr_Article des auteurs_struct. (convertTab_auteur2Article())
+ * -  **l'ordre de création** des fiche_minimale sera un **identifiant unique**
  * 
- * -Le tableau des auteur_struct et celui des Article_struct seron stocké dans graphe_struct_Konqui.
- * -Pour finir, un tableau de pointeur vers les auteurs_struct est crée, et rangé dans graphe_Katie (fonction dans *fonctions_garphe.c*). 
- * -Les attributs des auteur_struct utiles à Dijkstra sont alors initialisés (comme par exemple la distance à l'auteur_depart, initialisé à -1).
+ * - Le tableau des auteur_struct et celui des Article_struct seron stocké dans graphe_struct_Konqui.
+ * - Pour finir, un tableau de pointeur vers les auteurs_struct est crée, et rangé dans graphe_Katie (fonction dans *fonctions_garphe.c*). 
+ * - Les attributs des auteur_struct utiles à Dijkstra sont alors initialisés (comme par exemple la distance à l'auteur_depart, initialisé à - 1).
  * 
- * -Cette partie se déroule dans *unwrap.c*
+ * Cette partie se déroule dans *unwrap.c*
  * 
- *  **3ème étape**:
+ *  \subsection étape3 3ème étape:
  * 
- * -Il ne reste plus qu'à appliquer la fonction do_Dijkstra() (*Dijkstra.c*) au graphe_Katie, avec 2 noms d'auteur de la base de donnée.
- * -Pour cela, on relache les arrêtes de tous les auteurs rangés dans un tableau indiquant les auteurs à traiter à l'étape courante du parcours en largeur.
+ * - Il ne reste plus qu'à appliquer la fonction do_Dijkstra() (*Dijkstra.c*) au graphe_Katie, avec 2 noms d'auteur de la base de donnée.
+ * - Pour cela, on relache les arrêtes de tous les auteurs rangés dans un tableau indiquant les auteurs à traiter à l'étape courante du parcours en largeur.
  * (Ce tableau s'appelant pile_courante)
- * -En ce faisant, on enregistre les auteurs à traiter à l'étape suivante dans un autre tableau (pile_suivante).
- * -De même, on initialise l'attribut auteur_predecesseur et Article_predecesseur de l'auteur_struct en cours de traitement.
- * -A la fin de l'étape courante (une couche du parcours en largeur) on remplace le contenu de pile_courante par celui de pile_suivante et on vide la pile_suivante.
+ * - En ce faisant, on enregistre les auteurs à traiter à l'étape suivante dans un autre tableau (pile_suivante).
+ * - De même, on initialise l'attribut auteur_predecesseur et Article_predecesseur de l'auteur_struct en cours de traitement.
+ * - A la fin de l'étape courante (une couche du parcours en largeur) on remplace le contenu de pile_courante par celui de pile_suivante et on vide la pile_suivante.
  * 
- * -En répétant ce procédé jusqu'a trouver l'auteur_destination ou avoir parcouru toute la composante connexe,
+ * - En répétant ce procédé jusqu'a trouver l'auteur_destination ou avoir parcouru toute la composante connexe,
  * il est possible d
  * 
  * 
@@ -100,7 +100,7 @@
  * \subsection Dijkstra
  * 
  * do_Dijkstra() s'applique sur un tableau de pointeur vers les auteurs_struct, situé dans graphe_struct_Katie. 
- * (Pour les noms d'auteur passés en argument, veuillez respecter les conventions HTML renseignées ici https://sites.psu.edu/symbolcodes/codehtml/#accent)
+ * (Pour les noms d'auteur passés en argument, veuillez respecter les conventions HTML renseignées [ici](https://sites.psu.edu/symbolcodes/codehtml/#accent)
  * fonctionnement de do_Dijkstra() (*Dijkstra.c*):
  *  
  * On relache les arrêtes de tous les auteurs rangés dans un tableau indiquant les auteurs à traiter à l'étape courante du parcours en largeur.

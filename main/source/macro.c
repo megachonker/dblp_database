@@ -90,9 +90,9 @@ void writestrfile(char * str, FILE * fichier){
 
 char * readstrfile(FILE * fichier){
     short taille;
-    fread(&taille,sizeof(short),1,fichier);
+    exitIfNull(fread(&taille,sizeof(short),1,fichier),"fread null !");
     char * buffer = calloc(taille+1,sizeof(char));
-    fread(buffer,sizeof(char),taille,fichier);
+    exitIfNull(fread(buffer,sizeof(char),taille,fichier),"fread null !");
     exitIfNull(buffer,"imposible malloc buffer");
     buffer[taille]='\0';
     YOLO("%s!(%d)",buffer,taille);

@@ -411,7 +411,7 @@ tab_auteur_struct deserialise_tab_auteur_struct(const tableaux_fiche * tableaux_
     tab_auteur_struct master_List_Auteur = {.origine=from_deserialisation,
                                             .nombre_auteur=0};
 
-    fread(&master_List_Auteur.nombre_auteur,sizeof(int),1,input);
+    exitIfNull(fread(&master_List_Auteur.nombre_auteur,sizeof(int),1,input),"fread null !");
     DEBUG("Il y a %d auteur unique",master_List_Auteur.nombre_auteur)
 
     DEBUG("Malloc de %lu octer",sizeof(auteur_struct)*master_List_Auteur.nombre_auteur)
@@ -432,7 +432,7 @@ tab_auteur_struct deserialise_tab_auteur_struct(const tableaux_fiche * tableaux_
         master_List_Auteur.tab_auteur[nbauteur].tab_ptr_Article = NULL;
 
 
-        fread(&master_List_Auteur.tab_auteur[nbauteur].size,sizeof(int),1,input);
+        exitIfNull(fread(&master_List_Auteur.tab_auteur[nbauteur].size,sizeof(int),1,input),"fread null !");
         exitIfNull(master_List_Auteur.tab_auteur[nbauteur].size,"nombre d'auteur incorect !")
         YOLO("\tnbArticle%d",master_List_Auteur.tab_auteur[nbauteur].size)
 
@@ -442,7 +442,7 @@ tab_auteur_struct deserialise_tab_auteur_struct(const tableaux_fiche * tableaux_
         for (int u = 0; u < master_List_Auteur.tab_auteur[nbauteur].size; u++)
         {
             int indiceFiche = 0;
-            fread(&indiceFiche,sizeof(int),1,input);
+            exitIfNull(fread(&indiceFiche,sizeof(int),1,input),"fread null !");
             YOLO("\t\tindice pointeur %d",indiceFiche)
             exitIfNull(&tableaux_fiche->fiche[indiceFiche],"serialise index pointeur sur nom_auteur introuvable\n")
             master_List_Auteur.tab_auteur[nbauteur].tab_ptr_fiche_min[u] = &tableaux_fiche->fiche[indiceFiche]; //On n'es pas obliger de lire la fiche
@@ -596,7 +596,7 @@ tab_Article_struct deserialisation_tab_Article_struct(tab_auteur_struct * mesaut
     mon_tab_Article_struct.nombre_Article=0;
     int * nombretotalarticle = & mon_tab_Article_struct.nombre_Article;
 
-    fread(nombretotalarticle,sizeof(int),1,inputfile);
+    exitIfNull(fread(nombretotalarticle,sizeof(int),1,inputfile),"fread null !");
 
     DEBUG("il y a %d Article",*nombretotalarticle)
     DEBUG("Malloc de %luocter",sizeof(Article_struct)**nombretotalarticle)
@@ -617,7 +617,7 @@ tab_Article_struct deserialisation_tab_Article_struct(tab_auteur_struct * mesaut
 
         //nombre d'auteur sur cette structure
         int nbauteur = 0;
-        fread(&nbauteur,sizeof(int),1,inputfile);
+        exitIfNull(fread(&nbauteur,sizeof(int),1,inputfile),"fread null !");
         exitIfNull(nbauteur,"il y a 0 article")
         YOLO("nombre d'auteur %d",nbauteur);
 
@@ -634,7 +634,7 @@ tab_Article_struct deserialisation_tab_Article_struct(tab_auteur_struct * mesaut
         for (int i = 0; i < nbauteur; i++)
         {
             int indexmagie = 0;
-            fread(&indexmagie,sizeof(int),1,inputfile);
+            exitIfNull(fread(&indexmagie,sizeof(int),1,inputfile),"fread null !");
             YOLO("\tnombre ID auteur %d",indexmagie)
             //je cherche dans le tab auteur en fc de l'index trouver
             structauteur[i] = &(mesauteur->tab_auteur[indexmagie]);
