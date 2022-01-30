@@ -87,7 +87,7 @@ plus_court_chemin_struct reconstitution_du_pcc_apres_parcours(int* taille_pcc_pt
 //renvoie le tableau des ptr vers les auteur_struct du chemin de auteur_1 (a1) a auteur_2 (a2)
 plus_court_chemin_struct* do_Dijkstra(graphe_struct_Katie graphe_t, char* nom_auteur_depart, char* nom_auteur_destination)
 {
-    INFO("verification existance de la paire d'auteur dans le graph")
+    INFO("verification existance de la paire d'auteur dans le graphe")
 
     comparaison_auteur trouver_ou_pas_1= auteur_pas_trouver;
     comparaison_auteur trouver_ou_pas_2= auteur_pas_trouver;
@@ -327,13 +327,6 @@ void free_Dijkstra(graphe_struct_Katie graphe_struct, plus_court_chemin_struct *
         free(pcc_ptr);
     }
     free(graphe_struct.graphe);
-
-
-    // for(int k=0; k< graphe_struct.size_graphe; k++)
-    // {
-    //     free(graphe_struct.graphe[k]->ptr_Article_predecesseur_pcc);
-    //     free(graphe_struct.graphe[k]->ptr_auteur_predecesseur_pcc);
-    // }
 
 
 }
