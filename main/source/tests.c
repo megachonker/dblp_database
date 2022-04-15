@@ -22,3 +22,4 @@ int main(void)
     graphe_struct_Katie graphe_Katie= faire_graphe_ptr_auteur(graphe_Konqui);
 
     char* nom_auteur= "Abdelouahed Hamdi";
+}
