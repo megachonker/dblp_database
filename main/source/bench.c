@@ -12,7 +12,7 @@ enum{
     dblp,
     smalldblp,
     customdb,
-    Katie    lecture,
+    lecture,
     ecriture
 };
 
