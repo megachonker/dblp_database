@@ -12,6 +12,10 @@ enum{
     dblp,
     smalldblp,
     customdb,
+    Katiedbb,
+};
+
+enum{
     lecture,
     ecriture
 };
@@ -331,7 +335,7 @@ listeFichier openDB(int type,int mode){
             listefile.DBArticleLecture  = fopen(custom_Article_cache   ,"r");
         }
         break;
-    case Katie:
+    case Katiedbb:
         listefile.XML               = fopen(Katie      ,"r");
         if(mode == ecriture){
             listefile.DBficheEcriture   = fopen(cache_ficheO     ,"w");
