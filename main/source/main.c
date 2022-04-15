@@ -230,13 +230,12 @@ graphe_struct_Konqui gen_graph(listeChemin chemins)
 void dfault()
 {
     printf("\
-// 
-• -p AUT1,AUT2      plus court chemin auteurs indiqués.\n\
-• -l MOT            Lister les auteurs qui contiennent le mot donné.\n\
-• -a auteur         Informations d'un auteur (liste des articles).\n\
-• -A Article        Liste les co-auteurs à distance N (ou moins) d'un auteur.\n\
-• -f INPUT          cache d\'entrée. small full custom \n\
-// • -o OUTPUT         Sauvegarder la structure dans un fichier binaire (indiqué avec une option -o OUTPUT_FILE)\n");
+     -p AUT1,AUT2      plus court chemin auteurs indiqués.\n\
+     -l MOT            Lister les auteurs qui contiennent le mot donné.\n\
+     -a auteur         Informations d'un auteur (liste des articles).\n\
+     -A Article        Liste les co-auteurs à distance N (ou moins) d'un auteur.\n\
+     -f INPUT          cache d entrée. small full custom \n\
+//   -o OUTPUT         Sauvegarder la structure dans un fichier binaire (indiqué avec une option -o OUTPUT_FILE)\n");
 }
 
 void sdfault()
